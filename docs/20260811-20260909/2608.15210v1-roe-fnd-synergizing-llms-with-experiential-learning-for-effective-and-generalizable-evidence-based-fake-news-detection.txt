@@ -1,0 +1,831 @@
+Title: RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection
+
+URL Source: https://arxiv.org/pdf/2608.15210v1
+
+Published Time: Tue, 18 Aug 2026 00:47:11 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection 
+
+# Yuzhou Yang 
+
+22110240074@m.fudan.edu.cn Fudan University Shanghai, China 
+
+# Qichao Ying 
+
+shinydotcom@163.com Fudan University Shanghai, China 
+
+# Sheng Li 
+
+lisheng@fudan.edu.cn Fudan University Shanghai, China 
+
+# Zhiying Zhu 
+
+zyzhu@hhu.edu.cn Hohai University Nanjing, China 
+
+# Zhenxing Qian ✉
+
+zxqian@fudan.edu.cn Fudan University Shanghai, China 
+
+# Xinpeng Zhang 
+
+zhangxinpeng@fudan.edu.cn Fudan University Shanghai, China 
+
+## Abstract 
+
+The proliferation of deceptive content in social networks necessi-tates robust Fake News Detection (FND) systems. Existing pipelines either train detectors on labeled data or leverage Large Language Models (LLMs) for their reasoning ability. However, current ap-proaches remain either limited in generalizability or prone to over-commitment to persuasive yet flawed rationales, lacking system-atic experience and mechanisms to expose subtle reasoning errors. We propose RoE-FND (Reason on Experiences FND), an LLM-based framework that combines self-reflective experience building with deliberation through retrieved experiences for FND. RoE-FND builds an experience bank via reflective learning that compares an unconstrained analysis with a label-conditioned analysis using the ground-truth label as posterior supervision, then summarizes their critical divergence into reusable reasoning guidelines. During in-ference, RoE-FND generates two opposing deductions via a flipped pseudo-label provided as posterior, retrieves the most relevant ex-periences for resolving their key disagreement, and adjudicates the better-supported rationale as the final prediction. Experiments across five popular benchmarks, including text-only datasets, i.e., CHEF, Snopes, PolitiFact, and multimedia datasets, i.e., FakeTT, FakeSV, demonstrate that RoE-FND outperforms strong baselines without optimizing LLM parameters on dataset distributions, while exhibiting strong cross-dataset generalization. 
+
+## CCS Concepts 
+
+• Security and privacy → Social network security and privacy .
+
+## Keywords 
+
+Fake News Detection; Social Media; Multi-modal Large Models 
+
+ACM Reference Format: 
+
+Yuzhou Yang, Qichao Ying, Sheng Li, Zhiying Zhu, Zhenxing Qian, and Xin-peng Zhang. 2026. RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection. In 
+
+Proceedings of the 35th ACM International Conference on Information and 
+
+> This work is licensed under a Creative Commons Attribution 4.0 International License.
+> CIKM ’26, Rome, Italy.
+> © 2026 Copyright held by the owner/author(s). ACM ISBN 979-8-4007-2539-5/2026/11 https://doi.org/10.1145/3799682.3840709
+
+Knowledge Management (CIKM ’26), November 7–11, 2026, Rome, Italy. ACM, New York, NY, USA, 12 pages. https://doi.org/10.1145/3799682.3840709 
+
+## 1 Introduction 
+
+Online social platforms increasingly distribute news in a multi-modal form, where short text is paired with images or videos to attract attention and accelerate sharing. Multimodal fake news refers to information that is intentionally fabricated and can be verified as false, yet is packaged with persuasive cross-modal con-tent that makes it harder for users to judge quickly. Its rapid spread can distort public understanding, amplify polarization, and erode trust in institutions and legitimate media, creating real societal harm beyond simple misinformation. Since manual review is costly and slow at platform scale, automatic Fake News Detection (FND) has become essential for identifying suspicious content early and reducing its downstream impact [33]. Existing multi-modal FND schemes can be classified into two categories, namely, content-oriented and evidence-based. While early content-oriented methods mainly rely on shallow textual features like lexical statistics [6] or syntactic patterns [9], in the past decades, deep-learning-based schemes overwhelm the society, which prepare adequate news samples from the real world, and then develop sophisticated detectors to capture semantic patterns of deception [29, 33, 50, 54]. But their decisions are often tied to surface cues and prone to dedicated content editing, and lack ex-plicit grounding mechanism for fact checking. Evidence-based FND schemes additionally verify news against retrieved evidences [43], which typically follow a two-stage pipeline as selecting pertinent evidence through lexical similarity [32] or neural retrievers [48], and learning joint representations of news-evidence pairs to pre-dict [25, 43, 54]. However, high-quality logical reasoning can be challenging for traditional neural networks. In recent years, Large Language Models (LLMs) have become ris-ing star in both academic and industrial society as they offer strong zero-shot generalization for fake news detection even without re-quiring task-specific parameter tuning. Prior works [5, 28] find that when prompted properly, they also exhibit emergent reasoning abil-ity that can be used to analyze claims and synthesize evidence into an explicit rationale. Representative methods guide LLMs to execute explicit reasoning programs, incorporate multi-source retrieval to supply structured knowledge, or generate structured justifications to assist downstream decisions [39, 54]. Despite the substantial arXiv:2608.15210v1 [cs.MM] 15 Aug 2026 CIKM ’26, November 7–11, 2026, Rome, Italy. Yuzhou Yang et al. Training News 
+
+Refined Analysis 
+
+Correct Prediction 
+
+Experiences :
+
+* Should avoid assumption .
+
+* Trust credible sources ... 
+
+RoE -FND 
+
+RoE -FND 
+
+Unfamiliar News 
+
++ Prompts 
+
+Large 
+
+Language Model  Problematic Analysis 
+
+Training News 
+
+Unfamiliar News 
+
+Trained Model 
+
+Trained Model 
+
+Untrained Model 
+
+Wrong Prediction 
+
+(a) Dataset -specific pattern learner 
+
+(b) Generalized LLMs without experiential learning 
+
+(c) The proposed experiential learning framework    
+
+> denotes “tuning model ’s parameters ”.denotes “tuning free ”.
+
+Unfamiliar News 
+
+Figure 1: Paradigm comparison for multi-modal FND. (a) Training-dependent detectors learn dataset-specific events and patterns, often failing on out-of-domain/unfamiliar news. (b) Generalized LLMs without FND experiential learn-ing avoid dataset bias but can produce unreliable verdicts, e.g., due to hallucinated or flawed rationales. (c) Our proposed RoE-FND addresses both via synergizing LLMs with expe-riential learning. We build an experience bank of reusable reasoning guidelines via reflective comparison on past er-rors, then cross-check different analyses using retrieved task-relevant experiences for final decision. 
+
+advancements, there remain certain issues in multi-modal FND. Firstly, LLMs may over-commit to hallucinated or flawed rationales, rendering the final prediction sometimes doubtful [13, 17]. Secondly, existing pipelines provide limited self-correction, so subtle logical flaws in an otherwise persuasive analysis often go unchallenged and thus undetected. Moreover, although recent debate-based [11] and self-reflective [26] reasoning frameworks improve individual inference trajectories, most existing schemes still treat each case independently and lack a principled mechanism to accumulate reusable verification experiences that can guide future reasoning. In this paper, we propose RoE-FND ( Reason on Experiences FND), an LLM-based framework that treats evidence-based fake news detection as a structured deduction process, requiring the model to produce an explicit, evidence-grounded rationale along-side its verdict. RoE-FND operates in two stages: an offline self-reflective experience-building stage and an online deliberation stage supported by retrieved experiences, both centered on two analyst agents and an experience bank. In the experience-building stage, the Intuitive Analyst first reasons freely about each training case and produces an initial rationale and prediction. If this prediction is in-correct, we then invoke the Informed Analyst, which reasons about the same case under the ground-truth label as posterior, yielding a deliberately contrasted correct analysis. An LLM-based Reflector contrasts the incorrect and correct analyses, distills their critical di-vergence into compact reasoning guidelines, and stores only those entries that are individually validated to correct the original mistake. During deployment, RoE-FND elicits two competing analyses with opposite conclusions for each news item. An LLM-based Advisor retrieves experiences that encode similar reasoning pitfalls, and an LLM-based Judger evaluates the competing analyses under these guidelines and selects the better-supported one, which directly challenges over-commitment to a single flawed narrative and lever-ages accumulated reasoning experience to encourage reliability and cross-dataset generalization without dataset-specific fine-tuning. Although RoE-FND introduces additional inference overhead com-pared with single-pass prediction pipelines, it prioritizes reasoning reliability, interpretability, and robustness, which are important in the fake news detection task. The paradigm comparison between existing methods and RoE-FND is shown in Figure 1. We con-duct extensive experiments on five challenging datasets, including text-only datasets CHEF [15], Snopes [30], PolitiFact [33], and mul-timedia datasets FakeTT [3], FakeSV [31]. Results demonstrate that RoE-FND outperforms strong baselines without tuning the applied LLMs, while exhibiting strong cross-dataset generalization. In summary, the main contributions of this paper are as follows: 
+
+• We reframe evidence-based fake news detection as a logical deduction task that requires an explicit, evidence-grounded rationale while avoiding over-commitment to a single per-suasive but flawed reasoning. Given a news item, RoE-FND produces two competing deductions with opposite conclu-sions and selects the better-supported one under guidance from retrieved experiences. 
+
+• We introduce an experiential learning mechanism that dis-tills reusable experiences from the critical divergence be-tween incorrect and correct analyses. Each experience dis-tilled from a training sample is individually verified to im-prove FND and merged into the experience bank via dynamic experience management. 
+
+• Extensive experiments on both text-only and multimedia benchmarks show strong effectiveness and cross-dataset generalization, and we further analyze experience-bank sta-tistics to explain which experiences are duplicated, decisive, and beneficial after refinement. 
+
+## 2 Related Works 2.1 Multi-modal Fake News Detection 
+
+For content-oriented FND, the general paradigm is to transform the news into a multi-dimensional latent representations and learn bi-nary separators without the help of evidence retrieval. While many works uncover unimodal distributional difference of real and fake news such as image composition [20], manipulation traces [4], and stylistic cues [55], multi-modal content-oriented FND can benefit from multi-modal feature extraction and fusion [34, 51], or addition-ally highlight cross-modal correlation [7, 41]. For example, Zhou et al. [53] uses CLIP to analyze text and image embedding simi-larity, and Ying et al. [49] bootstraps multi-modal and multi-view representations for decision. Nonetheless, without retrieval capa-bility for factual grounding, the model must implicitly “remember” RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection CIKM ’26, November 7–11, 2026, Rome, Italy. 
+
+event-specific patterns from training data, making it more prone to overfitting to particular events, dataset distributions. For evidence-based FND, the general paradigm is to conduct knowledge comparison between news and relevant evidence mate-rials [52]. For example, DeClarE [30] proposes the earliest evidence-based FND method, it jointly learns representations of news content with evidence materials. Many works leverage the merits of hier-archical attention for evidence-news interaction, e.g., HAN [25], EHIAN [44], MAC [36]. GET proposes a graph neural network to model distant semantic correlation among news and evidence mate-rials [45]. MUSER retrieves the key evidence information for news verification in a multi-round retrieval process [23]. SEE builds a dynamic network to adaptively exploit the coarse evidence ma-terials [47]. Despite their effectiveness, existing evidence-based detectors often lack an explicit mechanism to verify and justify the relevance of used materials and may still provide limited, hard-to-audit decision logic, which can hinder robustness and trustworthy deployment on unfamiliar domains. 
+
+## 2.2 LLM-aided Fake News Detection 
+
+Many agentic workflow for multimodal FND are proposed in recent years, significantly improving the overall accuracy of detection and interpretability of the results. For example, ProgramFC [28] is a program-guided framework that verifies news by generating and executing explicit reasoning programs with large language models. IMRRF [22] improves detection performance by retrieving evidence from multiple knowledge sources and transforming it into struc-tured world knowledge for LLM-based reasoning. L-Defense [37] extracts competing evidences and generates structured justifica-tions using large language models, followed by training classifiers to predict the final label. SheepDog [42] employs LLM-generated, style-diverse reframings to enable style-agnostic training, encour-aging detectors to focus on news content rather than writing style. Nevertheless, recent LLM reasoning frameworks have increasingly explored debating [11], self-reflection [26] to improve reasoning reliability by exposing conflicting viewpoints and revising flawed rationales. Despite these advances, existing LLM-aided fake news detection pipelines generally lack a systematic mechanism to accu-mulate and reuse transferable reasoning experiences distilled from past failures, limiting their ability to stabilize future verification on unfamiliar cases and domains. 
+
+## 3 Proposed Method 
+
+Figure 2 depicts the pipeline of the proposed Reason on Experi-ences (RoE) fake news detection approach, which consists of two stages, i.e., the offline self-reflective experience-building stage, and the real-world application stage for online prediction via delib-eration through retrieved experiences. In both stages, RoE-FND employs two agent-based Analyst s together with an experience bank, i.e., the IntuitiveAnalyst and the InformedAnalyst . The 
+
+IntuitiveAnalyst examines the news with retrieved evidence and produces a free-form rationale and verdict. The IntuitiveAnalyst 
+
+generates a rationale under a required posterior prediction. In the experience-building stage, we only invoke the InformedAnalyst 
+
+when the IntuitiveAnalyst makes an incorrect prediction, so their rationales provide a deliberately contrasted view of the same case. Besides, we employ a Reflector in the first stage, to condense critical differences between a correct and an incorrect analysis into a reusable experience entry and maintains the experience bank. In the second stage, there is a Advisor that inspects a pair of current analyses, pinpoints their main inconsistency, and retrieves the most relevant experiences to guide the decision. Finally, there is a Judger 
+
+that evaluates the competing analyses under this retrieved guidance and outputs the final prediction and corresponding reasoning. 
+
+## 3.1 Self-reflective Experience Building 
+
+In this stage, we structure the workflow of the RoE-FND to produce experiences by exploring samples in the training set. 
+
+Reflective Dual Analysis. We utilize the IntuitiveAnalyst and the InformedAnalyst to generate dual analysis with reflective value. Both Analyst agents are equipped with an internet searching tool, which enables them to retrieve factual information by querying search engines for their reasoning. Specifically, the IntuitiveAnalyst 
+
+is prompted in the chain-of-thought (CoT) style [40], requiring it analyze the news’s factuality step-by-step, and finally outputs an analysis with a prediction 𝑦 ∈ { 𝑡𝑟𝑢𝑒, 𝑓 𝑎𝑙𝑠𝑒 }. If the prediction is correct, we further rerun the analysis randomly within two rounds to see if the predictions can be consistently correct. No error pre-diction indicates no reflective experience from the current news, Otherwise, e.g., due to LLM’s internal sampling, we prompt the 
+
+InformedAnalyst also in chain-of-verification style [8], which re-veals the ground truth prediction to it ahead so that the analysis can be more reliable, i.e., 
+
+𝑦, A = IntuitivelAnalyst (N 𝑡𝑟𝑎𝑖𝑛 ) ,
+
+˜𝑦, A = InformedAnalyst (N 𝑡𝑟𝑎𝑖𝑛 , ˇ𝑦 ) ,
+
+s.t. ˇ𝑦 = ˜𝑦 ≠ 𝑦, 
+
+(1) where ˇ 𝑦 ∈ { 𝑡𝑟𝑢𝑒, 𝑓 𝑎𝑙𝑠𝑒 } denotes the ground truth label of the news 
+
+N , and we regulate that ˜ 𝑦 = ˇ𝑦 . The dual analyzing produces paired contradictory analyses for reflection. 
+
+Experience Generation via Comparative Reflection. We use the Reflector for experience generation. Instead of directly asking it to examine the problematic content [1, 19], we mark the correct analysis and let it cross-compare A and A for reflection. Specif-ically, we prompt it in the CoT style to perform three sub-tasks. To begin with, it is asked to reason why A is correct while A is wrong. Then, it is asked to identify the most critical reason among them. Third, it is asked to produce an experience by formatting the reason into a keyword and a short explanation without mention-ing any entity . This design discourages event-oriented experiences and promotes generalizable reasoning guidelines. In other words, the key is not which evidence is cited in a specific instance, but what reusable verification experience can be distilled from the evi-dence–rationale discrepancy. For each newly produced experience, we also enforce a safeguard to verify that injecting it into the prompt of IntuitiveAnalyst can correct the previously wrong prediction before committing it to the bank, i.e., 
+
+R = Reflector 
+
+
+
+A, A
+
+
+
+,
+
+s.t. ˇ𝑦 = IntuitiveAnalyst (N , R) , (2) where R denotes derived experience. Note that we refrain from finetuning the Analyst and solely mine R that could help the naive CIKM ’26, November 7–11, 2026, Rome, Italy. Yuzhou Yang et al. (A) Self -reflective Experience Building 
+
+## (B) Deliberation through Retrieved Experiences 
+
+Store the entry 
+
+Analysis A 
+
+Analysis B 
+
+Experience 
+
+Text  & Video 
+
+## yoGet opposite 
+
+prediction 
+
+## yˇ
+
+Ground Truth 
+
+Analysis A 
+
+Analysis B 
+
+Intuitive Analyst 
+
+Task : 1. Analyze the factuality of the news .
+
+2. Free to give any conclusion .
+
+Input : News  Output : Analysis 
+
+Informed Analyst 
+
+Task : 1. Analyze the factuality of the news .
+
+2. Constrained by  required prediction .
+
+Input : News and Label  Output : Analysis 
+
+Reflector 
+
+Task : 1. State the reasons for Analysis B being better .
+
+2. Identify the most critical reason of them .
+
+3. Formalize it into a keyword and explanation .
+
+Input : Analysis A and Analysis B 
+
+Output : Entry to store in Knowledge Base 
+
+Intuitive Analyst 
+
+Task : 1. Analyze the factuality of the news .
+
+2. Free to give any conclusion .
+
+Input : News  Output : Analysis 
+
+Informed Analyst 
+
+Task : 1. Analyze the factuality of the news .
+
+2. Required to  make a different prediction .
+
+Input : News and Pseudo Label  Output : Analysis 
+
+Advisor 
+
+Task : 1. Cross -compare two analyses .
+
+2. Identify the most critical inconsistency .
+
+3. Retrieve entries of related knowledge .
+
+Input : Analysis A and Analysis B 
+
+Output : Retrieved entries from Knowledge Base 
+
+Experience Bank   
+
+> ...
+> Credible Source :Trust evidence from credible sources ...
+> Cultural Context :Consider cultural context of the event ...
+
+Judger 
+
+Task : 1. Rate two analyses on each retrieved entry .
+
+2. Select the analysis with higher score .
+
+Input : Analysis A , Analysis B , and Retrieved Entries 
+
+Output : The winning analysis as final prediction 
+
+Text  & Video 
+
+Retrieve entries 
+
+## yo
+
+Figure 2: The RoE-FND framework consists of two stages. In Stage A, RoE-FND builds up an experience bank through reflection. For each sample input, if it is wrongly predicted, we let the analyst write an analysis by revealing the ground truth ahead. Then, RoE-FND produces experience by cross-comparing the two opposite analyses to identify flaws within the original one. In Stage B, RoE-FND produces two analyses with opposite conclusions. Then it retrieves experience accordingly from the built bank to assist in selecting the better analysis as the final prediction. 
+
+LLM make individual correct predictions. Unlike debate-based rea-soning frameworks that iteratively exchange arguments to defend competing conclusions, RoE-FND uses dual analyses primarily as reflective supervision signals for experience construction. Our ob-jective is to identify the critical reasoning divergence that explains why one rationale succeeds while another fails. This design enables the framework to distill compact and reusable reasoning guidance without generating increasingly lengthy debate trajectories. 
+
+Dynamic Experience Management. The experience bank, de-noted as B, cannot grow indefinitely and must be efficient, explain-able and inspiring. Thus, we design an experience management strategy that serves two primary objectives, i.e., common experience refinement and extreme experience elimination. First, it compresses redundant experience entries. Since reflection can generate similar experiences across different samples, we prevent duplication by evaluating semantic similarity between the experience candidate and those within the bank. When the Reflector creates a new en-try, we compute the semantic similarity between the keywords of the new entry and those already in storage. The entry is saved only if the maximum similarity is below a pre-defined threshold, other-wise, we ask LLM to merge two similar entries. Second, we refine the bank by filtering out extreme experiences, i.e., those that apply only to narrow cases and lack generalizability. We propose average advantage score, denoted as 𝐴𝑑𝑣 , for entries within the unrefined bank B∗, which are calculated through the Judger . Specifically, it scores the correct and wrong analyses w.r.t each retrieved entry within 1 to 10. Suppose the 𝑘 -th entry is retrieved, we thereby get its score as 𝑠 𝑘 = max (𝑠 correct  
+
+> 𝑘
+
+− 𝑠 wrong  
+
+> 𝑘
+
+, 0), i.e., 
+
+𝐴𝑑𝑣 𝑘 = 1
+
+𝑁 𝑘 𝑁 𝑘 ∑︁ 
+
+> 𝑖 =1
+
+𝑠 𝑖 𝑘 , (3) 
+
+B = {𝑅 𝑘 |𝐴𝑑𝑣 𝑘 ≥ 𝑡ℎ 𝑑𝑖𝑠 , 𝑅 𝑘 ∈ B ∗ } , (4) where we empirically set the threshold 𝑡ℎ 𝑑𝑖𝑠 to discard entries with advantages below it. This procedure preserve effective entries to improves the quality of the experience bank. 
+
+## 3.2 Deliberation through Retrieved Experiences 
+
+In the inference stage, we leverage the distilled experience bank to guide deliberation between competing analyses. 
+
+Deliberative Dual Analysis. We again adopt dual analysis instead of a single-shot prediction, explicitly constructing two analyses that support contradictory conclusions. This design aligns with the ex-perience bank, whose entries are distilled from key divergences between correct and incorrect reasoning, and allows us to leverage these experiences when cross-comparing the analyses to identify the more reliable verdict. Concretely, we first obtain a free-form analysis A and prediction 𝑦 𝑜 by the IntuitiveAnalyst . To min-imize the impact from LLM random sampling, here we also infer RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection CIKM ’26, November 7–11, 2026, Rome, Italy. 
+
+Algorithm 1 Stage I: Self-reflective Experience Building 
+
+Require: Training set D𝑡𝑟𝑎𝑖𝑛 , initial experience bank B = ∅, simi-larity threshold 𝜏 𝑠 , discard threshold 𝜏 𝑑 
+
+Ensure: Refined experience bank B 
+
+> 1:
+
+for each training news sample (N 𝑖 , ˇ𝑦 𝑖 ) ∈ D 𝑡𝑟𝑎𝑖𝑛 do  
+
+> 2:
+
+(𝑦 𝑖 , 𝐴 𝑖 ) ← IntuitiveAnalyst (N 𝑖 ) 
+
+> 3:
+
+if 𝑦 𝑖 = ˇ𝑦 𝑖 then  
+
+> 4:
+
+Re-run IntuitiveAnalyst (N 𝑖 ) for consistency check  
+
+> 5:
+
+if all predictions remain correct then  
+
+> 6:
+
+continue  
+
+> 7:
+
+end if  
+
+> 8:
+
+end if  
+
+> 9:
+
+( ˜𝑦 𝑖 , ˜𝐴 𝑖 ) ← InformedAnalyst (N 𝑖 , ˇ𝑦 𝑖 ) 
+
+> 10:
+
+constrain ˜𝑦 𝑖 = ˇ𝑦 𝑖 ≠ 𝑦 𝑖  
+
+> 11:
+
+𝑅 𝑖 ← Reflector (𝐴 𝑖 , ˜𝐴 𝑖 ) ⊲ Turn key divergence into reusable experience  
+
+> 12:
+
+(𝑦 𝑅 𝑖 , 𝐴 𝑅 𝑖 ) ← IntuitiveAnalyst (N 𝑖 , 𝑅 𝑖 ) 
+
+> 13:
+
+if 𝑦 𝑅 𝑖 = ˇ𝑦 𝑖 then  
+
+> 14:
+
+𝑅 𝑗 ← arg max 𝑅 ∈ B sim (𝑅 𝑖 , 𝑅 ) 
+
+> 15:
+
+if sim (𝑅 𝑖 , 𝑅 𝑗 ) < 𝜏 𝑠 then  
+
+> 16:
+
+B ← B ∪ { 𝑅 𝑖 } 
+
+> 17:
+
+else  
+
+> 18:
+
+𝑅 𝑗 ← MergeExperience (𝑅 𝑖 , 𝑅 𝑗 ) 
+
+> 19:
+
+end if  
+
+> 20:
+
+end if  
+
+> 21:
+
+end for  
+
+> 22:
+
+for each experience entry 𝑅 𝑘 ∈ B do  
+
+> 23:
+
+Compute its average advantage score: 
+
+𝐴𝑑𝑣 𝑘 = 1
+
+𝑁 𝑘 𝑁 𝑘 ∑︁ 
+
+> 𝑖 =1
+
+max 
+
+
+
+𝑠 𝑐𝑜𝑟𝑟𝑒𝑐𝑡 𝑖,𝑘 − 𝑠 𝑤𝑟𝑜𝑛𝑔 𝑖,𝑘 , 0
+
+ 
+
+> 24:
+
+end for  
+
+> 25:
+
+B ← { 𝑅 𝑘 | 𝐴𝑑𝑣 𝑘 ≥ 𝜏 𝑑 , 𝑅 𝑘 ∈ B} 
+
+return B
+
+the model for three rounds and choose one with the overwhelming binary prediction. Then, we provide the InformedAnalyst with the opposite pseudo label 𝑦 𝑜 , as posterior, i.e., 
+
+𝑦 𝑜 , A𝑜 = IntuitiveAnalyst (N 𝑡𝑒𝑠𝑡 ),
+
+˜𝑦 𝑜 , A𝑜 = InformedAnalyst (N 𝑡𝑒𝑠𝑡 , 𝑦 𝑜 ),
+
+s.t. ˜𝑦 𝑜 = 𝑦 𝑜 ≠ 𝑦 𝑜 .
+
+(5) This produces two opposing analyses for downstream deliberation. 
+
+Experience Retrieval and Integration. The Advisor retrieves entries from the experience bank according to the news content and the provided analyses. We devise a prompt in CoT style to complete the mission by three steps. First, it is asked to cross-compare two analyses and state their discrepancies. Then, it is asked to identify the most critical point that bifurcates the two analyses. Lastly, it is asked to summarize the point into a sentence 𝑄 as the query to retrieve relevant experiences. E.g., if one analysis adopts an opinion that most evidence supports, while the other analysis uses the opposite opinion from a credible source, it may generate “whether use the majority evidence or trust credible sources”. It retrieves top-𝑘 relevant entries based on sentence-wise semantic similarity 
+
+Algorithm 2 Stage II: Deliberation through Retrieved Experiences 
+
+Require: Test news sample N, refined experience bank B, top-𝑘 ,retrieval threshold 𝜏 𝑟 
+
+Ensure: Final prediction ˆ 𝑦 and final rationale ˆ 𝐴  
+
+> 1:
+
+(𝑦 𝑜 , 𝐴 𝑜 ) ← IntuitiveAnalyst (N) ⊲ Free-form analysis  
+
+> 2:
+
+¯𝑦 𝑜 ← OppositeLabel (𝑦 𝑜 ) 
+
+> 3:
+
+( ˜𝑦 𝑜 , ˜𝐴 𝑜 ) ← InformedAnalyst (N , ¯𝑦 𝑜 ) 
+
+> 4:
+
+constrain ˜𝑦 𝑜 = ¯𝑦 𝑜 ≠ 𝑦 𝑜  
+
+> 5:
+
+𝑄 ← Advisor (𝐴 𝑜 , ˜𝐴 𝑜 ) ⊲ Identify key inconsistency and form retrieval query  
+
+> 6:
+
+C ← RetrieveTopK (B , 𝑄, 𝑘 ) 
+
+> 7:
+
+while max 𝑅 𝑖 ∈ C sim (𝑅 𝑖 , 𝑄 ) < 𝜏 𝑟 do  
+
+> 8:
+
+𝑄 ← AdvisorRefineQuery (𝐴 𝑜 , ˜𝐴 𝑜 , 𝑄 ) 
+
+> 9:
+
+C ← RetrieveTopK (B , 𝑄, 𝑘 ) 
+
+> 10:
+
+end while  
+
+> 11:
+
+𝐽 ← Judger (𝐴 𝑜 , ˜𝐴 𝑜 , C) ⊲ Score both analyses under retrieved experiences  
+
+> 12:
+
+if 𝐽 favors 𝐴 𝑜 then  
+
+> 13:
+
+ˆ𝑦 ← 𝑦 𝑜  
+
+> 14:
+
+ˆ𝐴 ← 𝐴 𝑜  
+
+> 15:
+
+else  
+
+> 16:
+
+ˆ𝑦 ← ˜𝑦 𝑜  
+
+> 17:
+
+ˆ𝐴 ← ˜𝐴 𝑜  
+
+> 18:
+
+end if return ˆ𝑦, ˆ𝐴 
+
+calculation. We set a threshold 𝑡ℎ 𝑟𝑒 to ensure the relevance, i.e., if the maximum of similarity scores is below 𝑡ℎ 𝑟𝑒 , we initiate a re-retrieval process by prompting Advisor to refine the query. Let the retrieved experiences be C, we have: 
+
+Q = Advisor 
+
+
+
+A, A
+
+
+
+,
+
+C = [𝑅 1, . . . , 𝑅 𝑘 ] = arg max   
+
+> R𝑥 ∈ B
+
+sim (R 𝑥 , Q) ,
+
+s.t. min   
+
+> 𝑅 𝑖 ∈ C
+
+sim (𝑅 𝑖 , 𝑄 ) ≥ 𝑡ℎ 𝑟𝑒 .
+
+(6) 
+
+Prediction via Deliberation. In the last step, we assign a Judger 
+
+to play a role of an expert in rating and assessment. We devise a prompt with an experience-grounded scorecard that rates both analyses on each retrieved entry with short evidence-based justi-fications and includes a label–rationale consistency check before selecting the final verdict. The conclusion of the winning analysis is regarded as the framework’s final prediction. Judger ’s procedure to output the final prediction is represented as: 
+
+J = Judger 
+
+
+
+A𝑜 , A𝑜 , C
+
+
+
+,𝑦 =
+
+(
+
+𝑦 𝑜 , if J indicates A≀ ≥ A 𝑜 ,𝑦 𝑜 , otherwise ,
+
+(7) where we utilize the symbol ≥ to represent favoring A𝑜 over A𝑜 .
+
+## 3.3 Implementation Details 
+
+Framework Settings. We utilize the OpenAI platform and the DeepSeek platform to run RoE-FND with their models. Qwen-7B is run locally with vLLM. Invocations of these models use OpenAI CIKM ’26, November 7–11, 2026, Rome, Italy. Yuzhou Yang et al. 
+
+SDK standard. And we utilzie DashScope SDK to invoke Qwen-VL from Aliyun platform, which allows to upload videos for processing. The temperatures of LLMs are set to 1 .0. The similarity threshold for experience retrieval is empirically set 𝑡ℎ 𝑟𝑒 = 0.9, and the discarding threshold is empirically set as 𝑡ℎ 𝑑𝑖𝑠 = 0.25. For Advisor , it retrieves 
+
+𝑘 = 3 entries. For the Analysts , if the dataset is already with off-line supplementary materials, similar to many evidence-based FND baselines, we downgrade the searching tool to only utilize these prepared materials, otherwise, online searching is granted with restriction to filter out the debunk news or materials with identical or very similar content. All modules are inferred with dedicated prompting, without being explicitly fine-tuned with any FND label. Prompts of LLM-based modules are exhibited in the appendix. 
+
+Efficiency Considerations. Although RoE-FND adopts a multi-stage deliberative reasoning pipeline, several mechanisms are in-troduced to reduce practical inference overhead. The Reflector 
+
+only participates in offline experience construction and is excluded during deployment-time prediction. Retrieved experiences are com-pact text rather than lengthy demonstrations, keeping the Advisor 
+
+and Judger lightweight in token consumption. To further improve deployment efficiency, we distill reason-ing traces from strong teacher models, e.g., DeepSeek-R1, into lightweight student models, e.g., Qwen-7B. Specifically, teacher-generated reasoning traces are first constructed under posterior supervision utilizing the InformedAnalyst and then used to fine-tune lightweight Analyst s through parameter-efficient LoRA [14]. During deployment, the distilled student models replace heavy-weight Analyst s, substantially reducing latency while preserving strong reasoning capability. To facilitate reproducibility, we provide detailed prompting templates, module configurations, and imple-mentation settings in the appendix. 
+
+## 4 Experiments 4.1 Experimental Setups 
+
+Datasets. We conduct experiments based on famous text-only and multi-modal FND datasets. For text-only datasets, CHEF [15] is a Chinese dataset collected from the real world with multiple do-mains of news. PolitiFact [32], and Snopes [30] for our experiments are collected from fact-checking websites. CHEF contains 5,754 samples for training, 666 samples each for validation and test. Poli-tiFact contains 2,140 samples for training, 714 for validation, and 714 for testing. Snopes contains 2,604 samples for training, 869 each for validation and test. Notably, all data from these datasets are collected from the real world and are prepared with fixed evidence articles corresponding to each piece of news. These datasets remain valuable because they provide standardized evidence materials, en-abling controlled comparison of reasoning quality across methods. For multimedia datasets, FakeSV [31] is a Chinese dataset for fake news detection on short video platforms. FakeTT [3] is an Eng-lish dataset for fake news detection curated from TikTok. For all datasets, we utilize the official data splitting either directly from dataset source or specified in baseline works. 
+
+Baseline Setups. We primarily use performance reported in the original baseline papers if available. Otherwise, we run their public code following the same implementation details. For the LLM-based methods, we apply the same prompts to ensure fair comparison. For ProgramFC [28] and IMRRF [22], we upgrade the LLM component to a more capable model—DeepSeekv3 and GPT-4o-mini, while the other configurations are kept unchanged. 
+
+## 4.2 Performance Comparisons 
+
+Comparisons on Text-only FND Datasets. We compare RoE-FND with multiple text-only baselines as shown in Table 1. In-cluding neural network methods and LLM-based methods. Details of them are presented in section 2. We report accuracy (ACC), F1-macro (F1), precision (PR), and recall (RC), following previous works. RoE-FND consistently outperforms trained neural networks and other LLM-based approaches. Several comparisons highlight specific advantages of RoE-FND. RoE-FND and ProgramFC both decompose detection into sub-tasks, and the better performance with same models underscores the insight of our sub-task divi-sion. Secondly, IMRRF integrates knowledge graph in addition to web searched evidence. Our better results highlight the benefits conferred by RoE-FND’s experiential learning mechanism in addi-tion to external evidence’s help. Moreover, we perform knowledge distillation from DeepSeek-R1 to Qwen-7B, denoted as RoE-FND ∗
+
+in the table. Due to that the distillation data is generated with ground-truth posterior supervision, we regard the distilled variants as "trained" in our experimental reports. 
+
+Comparisons on Multimedia FND Datasets. In addition, we em-ploy Qwen-VL in RoE-FND to handle multimedia samples. Results on FakeTT and FakeSV are reported in Table 2. The plain Qwen-VL model and the RAG approach achieve limited results on both datasets, highlighting the inherent difficulty of detecting fake news videos via logical deduction. The other four methods learn deep learning features on the training set for detection, significantly out-performing Qwen-VL-based models. We see that RoE-FND achieves not only substantial gains over these four trained methods but also significantly surpasses the RAG method, suggesting its better relia-bility in logical deduction. 
+
+Cross-dataset Generalization Performance. Apart from the above in-domain tests, we also conducted cross-dataset testing to evaluate the generalization ability of RoE-FND, which could be of higher value in application perspective. The results are presented in Table 3. We select four baseline methods that require training. When evaluated on different datasets, these models exhibit a marked drop in performance. The results indicate that although the training pro-cess successfully teaches detection skills, it also inadvertently trains the models to be sensitive to the unique characteristics of the source dataset. In contrast, RoE-FND demonstrates strong generalization even by constructing the experience bank on one dataset and testing on another. This ability likely stems from two factors: first, it de-tects through logical deduction rather than learning dataset-specific deep features. Second, the extracted experiences are not confined to a single data domain and can be transferred to unfamiliar data. 
+
+## 4.3 Experience Analysis and Case Study 
+
+Experience Bank Analysis. We perform experience bank man-agement—comprising experience compression and refinement—on the training data. We count the most frequently duplicated key-words from the compression procedure, exhibit entries’ keywords and their advantage scores. The results are visualized in Figure 3. RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection CIKM ’26, November 7–11, 2026, Rome, Italy. 
+
+Table 1: Performance comparison based on text-only FND datasets. We report accuracy (ACC), F1-Macro (F1), precision (PR), and recall (RC). * denotes the performance of enhanced RoE-FND via knowledge distillation from DeepSeek R1. Baseline Method Ref. Trained CHEF Snopes PolitiFact 
+
+ACC F1 PR RC ACC F1 PR RC ACC F1 PR RC GET [45] ✓ 0.588 0.602 0.585 0.582 0.814 0.771 0.721 0.854 0.694 0.691 0.687 0.708 ReRead [16] ✓ 0.789 0.776 0.826 0.745 0.816 0.714 0.652 0.789 0.693 0.681 0.711 0.718 SheepDog [42] ✓ 0.601 0.602 0.601 0.632 0.718 0.681 0.679 0.733 0.648 0.652 0.658 0.648 MUSER [23] ✓ 0.608 0.612 0.603 0.631 0.841 0.745 0.699 0.798 0.729 0.732 0.735 0.728 SEE [47] ✓ 0.763 0.776 0.751 0.802 0.824 0.786 0.773 0.845 0.706 0.705 0.688 0.724 L-Defense [37] ✓ 0.711 0.708 0.692 0.721 0.773 0.761 0.755 0.792 0.695 0.691 0.684 0.711 LLaMa-7B [35] - 0.646 0.662 0.836 0.469 0.703 0.431 0.487 0.386 0.555 0.416 0.613 0.315 Qwen-7B [46] - 0.622 0.510 0.615 0.506 0.671 0.235 0.362 0.174 0.519 0.439 0.597 0.141 GPT-4o-mini [27] - 0.740 0.773 0.687 0.883 0.745 0.452 0.604 0.361 0.575 0.695 0.648 0.775 DeepSeekv3 [24] - 0.780 0.784 0.790 0.778 0.736 0.253 0.712 0.154 0.530 0.631 0.485 0.872 RAG (DeepSeekv3) [21] - 0.811 0.800 0.832 0.800 0.820 0.711 0.730 0.800 0.707 0.688 0.705 0.901 Self-Reflect (DeepSeekv3) [26] - 0.789 0.785 0.790 0.780 0.814 0.815 0.821 0.810 0.709 0.704 0.704 0.704 D2D (DeepSeekv3) [11] - 0.820 0.816 0.821 0.811 0.818 0.811 0.766 0.841 0.714 0.709 0.709 0.709 ProgramFC [28] - 0.694 0.708 0.723 0.697 0.741 0.619 0.542 0.723 0.678 0.684 0.725 0.741 ProgramFC (DeepSeekv3) [28] - 0.750 0.743 0.773 0.791 0.769 0.776 0.758 0.795 0.683 0.689 0.748 0.661 ProgramFC (4o-mini) [28] - 0.748 0.751 0.761 0.788 0.769 0.776 0.758 0.795 0.692 0.666 0.653 0.856 IMRRF (DeepSeekv3) [22] - 0.799 0.802 0.811 0.801 0.798 0.781 0.772 0.818 0.693 0.681 0.654 0.737 IMRRF (4o-mini) [22] - 0.776 0.769 0.764 0.781 0.802 0.784 0.768 0.800 0.703 0.700 0.755 0.681 OpenAI o1 [18] - 0.890 0.888 0.875 0.892 0.852 0.800 0.788 0.823 0.833 0.833 0.832 0.820 DeepSeek-R1 [10] - 0.882 0.880 0.870 0.891 0.876 0.788 0.783 0.791 0.800 0.792 0.775 0.899 
+
+RoE-FND (Qwen-7B) - 0.828 0.827 0.846 0.784 0.824 0.747 0.644 0.888 0.743 0.709 0.875 0.659 RoE-FND (DeepSeekv3) - 0.890 0.892 0.876 0.908 0.863 0.791 0.708 0.896 0.731 0.758 0.767 0.676 RoE-FND (4o-mini) - 0.891 0.893 0.876 0.911 0.860 0.774 0.732 0.822 0.732 0.735 0.662 0.827 RoE-FND ∗ (Qwen-7B) ✓ 0.904 0.908 0.899 0.914 0.886 0.818 0.773 0.842 0.891 0.765 0.762 0.833 
+
+Table 2: Performance comparison based on multimedia (short-video platform) FND datasets. Method Ref. Trained FakeTT FakeSV 
+
+ACC F1 ACC F1 SV-FEND [31] ✓ 0.771 0.756 0.808 0.805 FakingRecipe [3] ✓ 0.792 0.777 0.854 0.848 ExMRD [12] ✓ 0.842 0.831 0.869 0.865 CA-FVD [38] ✓ 0.816 0.803 0.858 0.853 Qwen-VL [2] - 0.659 0.631 0.641 0.641 Qwen-VL + RAG [2] - 0.710 0.742 0.694 0.707 RoE-FND (Qwen-VL) - 0.882 0.878 0.890 0.888 
+
+As will be testified in the ablation study, although the advantageous entries are discriminative during Judger ’s assessment, they are not universally applicable. One way to demonstrate this is that each dataset’s advantageous entries adapt to and highlight its distinctive features. For example, data from PolitiFact emphasizes concepts like “neutrality” and “critical thinking,” whereas rumors from Snopes place a greater premium on “evidential support”. However, as the results of cross-dataset testing show, such differences do not lead to evident performance dropping. Thus, we infer that the established experience bank already covers the necessary knowledge to handle 
+
+Table 3: Results of cross-datasets testing. The suffix of ACC denotes the detection accuracy of the models trained on Snopes (-S) and PolitiFact (-P). ↓(%) indicates the decrease compared to testing on the same dataset. Method Snopes PolitiFact 
+
+ACC-S ACC-P ↓(%) ACC-P ACC-S ↓(%) GET 0.814 0.662 15.2 0.694 0.556 13.8 SEE 0.824 0.665 15.9 0.706 0.584 12.2 MUSER 0.841 0.693 14.8 0.729 0.617 11.2 L-Defense 0.773 0.671 10.2 0.695 0.608 8.7 RoE-FND 0.860 0.843 1.7 0.743 0.712 3.1 
+
+the majority of cases. Moreover, we find that entries with higher ad-vantage scores tend to be more decisive for verification than those with lower scores. For instance, a keyword like “avoid assumption” provides greater discriminatory power between analyses than a term like “comprehensive” during Judger ’s assessment procedure. Notably, cross-comparing subfigures (a) and (b), the most frequently duplicated entries often receive low advantage scores. This demon-strates the necessity of experience management, by which these experiences are discarded to avoid hindering Judger ’s reasoning. 
+
+Case Study. In Figure 4, we present two related cases from FakeTT, drawn from the two stages of RoE-FND, respectively. The presented CIKM ’26, November 7–11, 2026, Rome, Italy. Yuzhou Yang et al. 0 1 2 3 4
+
+> Logical Clarity Depth and Breadth Logical Coherence Objectivity Comprehensive Conclusion Clarity Evidence Sufficiency Accuracy Evidential Support ... Evidence Diverstiy Respond to Challenges Evidence Fullness Information Completeness Assess Alternate Explanation Provide Guidance Further Explanation Concentration Accurate Sources Directly Proof Avoid Assumption
+
+## chef_cnt politi_cnt snopes_cnt 
+
+> 10 %
+> 20 %
+> 30 %
+> 0%
+
+## chef_cnt politi_cnt 
+
+Comprehensive  Evidential Supports 
+
+Accuracy 
+
+Logical Clarity 
+
+Conclusion Clarity Objectivity 
+
+Depth and Breadth 
+
+Logical Coherence 
+
+Evidence Sufficiency  Neutrality 
+
+Writing Clarity 
+
+Critical Thinking 
+
+## chef_cnt politi_cnt 
+
+CHEF  PolitiFact 
+
+## chef_cnt politi_cnt 
+
+Accuracy 
+
+## chef_cnt politi_cnt snopes_cnt Snopes 
+
+(a) Statistics of the most frequently duplicated keywords during the procedure of Knowledge Base management. CHEF PolitiFact (b) Visualization of entry keywords and their advantage scores. 0 1 2 3                                                             
+
+> Comprehensive Conclusion Clarity Evidence Sufficiency Accuracy Evidential Support ... Evidence Diverstiy Respond to Challenges Evidence Fullness Information Completeness Assess Alternate Explanation Provide Guidance Further Explanation Concentration Accurate Sources Directly Proof Avoid Assumption
+> 0123
+> Logical Coherence Comprehensive Conclusion Clarity ... Further Research Full Context Clear Standard Neutrality Accurate Sources Professional Terminology Provide Solution Avoid Assumption Directly Proof Verifiable Avoid Simplification Evidence Sufficiency Authoritative Source
+> 0123
+> Comprehensive Conclusion Clarity Evidence Sufficiency Accuracy Evidential Support ... Evidence Diverstiy Respond to Challenges Evidence Fullness Information Completeness Assess Alternate Explanation Provide Guidance Further Explanation Concentration Accurate Sources Directly Proof Avoid Assumption
+> 0123
+> Logical Coherence Comprehensive Conclusion Clarity ... Further Research Full Context Clear Standard Neutrality Accurate Sources Professional Terminology Provide Solution Avoid Assumption Directly Proof Verifiable Avoid Simplification Evidence Sufficiency Authoritative Source
+> 01234
+> Logical Clarity Depth and Breadth Logical Coherence Objectivity Comprehensive Conclusion Clarity Evidence Sufficiency Accuracy Evidential Support ... Evidence Diverstiy Respond to Challenges Evidence Fullness Information Completeness Assess Alternate Explanation Provide Guidance Further Explanation Concentration Accurate Sources Directly Proof Avoid Assumption
+
+Figure 3: Experience-bank statistics across datasets. Key-word distributions indicate which verification criteria RoE-FND most often distills, offering an interpretable view of the framework’s acquired reasoning standards. Variations across datasets reflect domain-specific rumor characteristics, while consistently high-advantage criteria suggest transfer-able guidance that supports cross-dataset generalization. 
+
+cases further illustrate how RoE-FND improves reasoning reliabil-ity through experience-guided deliberation. In the first case, while Analysis A relies on surface-level wording, Analysis B focuses on verifying the underlying meaning, prioritizing intent over literal phrasing. This leads to the generation of an experience entry termed “intent-based evaluation”. In the second case, the framework encoun-ters a similar divergence, this time over the interpretation of the term “invisibility cloak”. Advisor identifies the disagreement and retrieves relevant entries from the experience bank, which includes the previously stored entry of “intent-based evaluation”. Retrieved experiences help the Judger avoid overly literal or assumption-driven conclusions and instead prioritize semantically grounded verification principles. Furthermore, the framework’s interpretable outputs make the model’s decision-making process far more trans-parent and accessible to human users. 
+
+Table 4: Ablation studies of the proposed RoE-FND. ↓(%) indi-cates the decrease compared to the baseline setting. Ablation Setting CHEF Snopes PolitiFact ACC ±(%) ACC ↓(%) ACC ↓(%) 
+
+w/o Reflector 0.610 -21.8 0.633 -19.1 0.549 -19.4 
+
+w/o Advisor 0.748 -8.0 0.721 -10.3 0.555 -18.8 
+
+w/o Dual Analysis 0.725 -10.3 0.736 -8.8 0.645 -9.8 
+
+w/o KB Management 0.788 -4.0 0.800 -2.4 0.709 -3.4 Fixed Retrieval 0.704 -12.4 0.776 -4.8 0.678 -6.5 Randomly Retrieval 0.694 -13.4 0.793 -3.1 0.673 -7.0 Retrieval by News 0.660 -16.8 0.782 -4.2 0.683 -6.0 
+
+Baseline setting 0.828 - 0.824 - 0.743 -
+
+## 4.4 Ablation Studies 
+
+Table 4 reports the ablation studies where we evaluate the necessity of model components and strategy of experience utilization. 
+
+Ablations of Components. 1) w/o Reflector stores analyses from Analyst directly in the experience bank and presented to the 
+
+Judger as exemplars. The performance drop indicates that unre-fined, case-specific analyses are insufficient to be directly utilized to boost the reasoning ability of models. Reflector successfully turns raw analyses into a solid and reusable experience. 2) w/o Advisor 
+
+fetches entries without cross-comparing two analyses. The decline suggests that the semantic information of analyses is not applicable for retrieving proper experience. 3) w/o InformedAnalyst replaces the dual analysis with an IntuitiveAnalyst .
+
+Experience Retrieval Strategy Variations. 1) w/o KB Manage-ment disables experience compression and refinement, leaving redundant and low-quality entries in the bank, which increases retrieval noise and makes the Judger’s scoring less discrimina-tive. 2) Fixed retrieval always selects a small set of globally high-advantage experiences. Although these experiences are generally useful, forcing them onto every case ignores the fact that different news items fail for different reasons. And 3) Randomly retrieval 
+
+retrieves random experiences from the experience bank. It can pro-vide irrelevant guidance that cannot help the Judger identify subtle reasoning flaws for deliberation. 3) Retrieval by news stores news-experience pairs in the bank and retrieves experiences according to the similarity between input news samples. Results indicate that news-level similarity does not necessarily imply reasoning-level similarity. 
+
+## 5 Conclusions 
+
+We propose RoE-FND, which introduces an experiential learning mechanism that distills reusable reasoning guidelines from reflec-tive comparison and reuses them via retrieval to guide future deci-sions. Extensive experiments on benchmark datasets demonstrate strong effectiveness and cross-dataset generalization. 
+
+## Acknowledgments 
+
+This work is supported by the National Natural Science Foundation of China 62572125, the Natural Science Foundation of Shanghai 25ZR1401019, and the China Postdoctoral Science Foundation under Grant 2025M771574. RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection CIKM ’26, November 7–11, 2026, Rome, Italy. Search Results: 
+
+[1] Current robots that are equipped with weapons are tele-operated so they are not capable of taking lives ... [2] Marathon robots are reactive which makes live-fire training realistic and challenging.... [3] The U.S. and Israel deploy armed drones and AI-assisted targeting systems. China has demonstrated robotic ... 
+
+Reflector (Analyze why is Analysis B is better, construct entry to store) 
+
+Title: AI robots are helping soldiers prepare for the the battlefield. Label : True 
+
+Both analyses notice the dramatic description, but B explains the analogy behind it... B prioritizing contextual accuracy over phrasing. 
+
+Store Entries into Experience Bank 
+
+Intent-Based Evaluation: Focus on underlying meaning rather than dramatic wording or sensational phrasing. 
+
+Search query generated by Agent: US military AI robots for live firearm training behavior swarm attack capability 
+
+Analysis B (Required to have a conclusion of the label) Prediction: True Analysis A (Reason without constraining its conclusion ) Prediction: False 
+
+The video ... The text overlay explicitly states they can self-organize a swarming autonomous attack, which is a dramatic claim. Verified sources indicate that while AI-powered robotic offered by Marathon Targets ... they are not capable of swarming attacks... ... Therefore, the specific claims about autonomous swarm behavior and human-like intelligence are inaccurate based on available evidence. The video ... they scatter and can organize a swarming autonomous attack refers to the coordinated behavior of these robotic targets. This aligns with information from companies like Marathon Targets, which specialize in providing such robotic training assets for military. ... Therefore, the post correctly portrays the use of robots for training purposes without overstating their capabilities or implying lethality. 
+
+Search Results: 
+
+[1] Researchers from Wuhan University in China debut InvisDefense, a real-life invisibility cloak ... [2] China is making groundbreaking advancements in invisibility technology. The invisible cloak ... [3] Chinese scientists have made invisibility cloaks called tactic a reality, raising ethical concerns about ... 
+
+Advisor (Cross-comparison for knowledge retrieval) 
+
+Analysis B (Required to have a different conclusion) Prediction: True Analysis A (Reason without constraining its conclusion ) Prediction: False 
+
+Title: China just invented an “invisibility cloak” #science # invention # education. Label : True 
+
+Both analyses identify it is not a real invisible coat. Both think search results support the factuality. The key difference lies in: - A demands strict literal accuracy. - B allows for semantic flexibility. 
+
+Key: whether accept the sensationalized framing as disqualifying the underlying scientific claims 
+
+Retrieved Entries from Experience Bank 
+
+Scientific Support : utilize scientific evidence to support the assertion. 
+
+Intent-Based Evaluation: focus on underlying meaning and interpretation rather than dramatic wording or sensational phrasing. 
+
+Judger (Rate two analyses and decide which is better) Final Prediction: True 
+
+Scientific Support: A[7] B[7] Intent-Based Evaluation : A[6] B[8] Analysis B is better, therefore, the final judgement of the post is ``True`` .
+
+The video presents ... is not a functional invisibility cloak in the sci-fi sense; it is a visual illusion created using optical tricks and materials... The search results confirm that Chinese researchers have developed “invisibility cloaks” ... These technologies are experimental and far from the real-life invisibility cloak .... ... Therefore, while China has made notable strides in metamaterials and cloaking technology, the post is misleading and not factually accurate. The video presents ... appear to rely on optical illusions using refractive than true invisibility. Search results confirm that Chinese researchers have demonstrated prototypes of invisibility cloaks.... Importantly, the video exaggerates the claim, but the underlying technology is real and scientifically verified. ... Therefore, despite the dramatic framing, the post is factual in its description of a real scientific development. 
+
+Search query generated by Agent: China invents invisibility cloak real scientific verification 
+
+A Case of Self-reflective Experience Building A Case of Deliberation through Retrieved Experiences 
+
+Figure 4: Two challenging cases of FakeTT from two stages of RoE-FND. We highlight analyses’ consistency in light blue and inconsistency in light yellow. In the second stage, the learned experience helps the Judger make the correct prediction. 
+
+## A Additional Implementation Details 
+
+Embedding and Similarity Computation. We utilize sentence-level embedding created by all-MiniLM-L6-v2 1 for both retrieval and duplicate detection, and compute cosine similarity between normalized embeddings. The retrieval threshold is empirically set to 
+
+𝜏 𝑟 𝑒 = 0.9, while the duplicate-filtering threshold is set to 𝜏 𝑠 = 0.97. 
+
+> 1https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+
+Consistency Checking. If the prediction of IntuitiveAnalyst 
+
+is correct, we further repeat inference two additional times to eval-uate prediction consistency. Only samples that remain consistently correct are excluded from reflective experience generation. 
+
+LoRA Distillation Settings. We utilize standard causal language modeling loss for supervised fine-tuning. The LoRA rank is set to 
+
+𝑟 = 16, the scaling factor is set to 𝛼 = 32, and the dropout rate is set to 0 .05. Training is conducted using the AdamW optimizer with a learning rate of 2 × 10 −5 and cosine learning rate scheduling. CIKM ’26, November 7–11, 2026, Rome, Italy. Yuzhou Yang et al. 
+
+Table 5: Average amount of output tokens of each RoE-FND component across different backbone models and datasets. Dataset Intuitive Informed Reflector Advisor Judger 
+
+> DeepSeek
+
+CHEF 341.4 302.8 124.5 77.3 42.5 Snopes 213.4 193.1 104.4 44.0 37.2 PolitiFact 206.2 191.9 115.1 47.5 39.5 
+
+> 4o-mini
+
+CHEF 340.5 339.8 127.2 62.9 37.9 Snopes 262.0 240.4 109.0 42.4 50.2 PolitiFact 251.1 222.6 123.5 41.2 52.3 
+
+> QwenVL
+
+FakeTT 234.5 206.8 121.2 50.1 40.8 FakeSV 165.0 158.3 111.0 48.6 48.2 
+
+Table 6: Comparisons of the average amount of output tokens per sample during deployment for testing. Method Ref. CHEF Snopes PolitiFact 
+
+Self-Reflect [26] 532.4 350.9 363.8 D2D [11] 777.5 539.8 555.6 DeepSeekR1 [10] 800.3 681.2 663.8 RoE-FND 764.0 487.7 484.9 0.83 0.63 0.83 0.66  
+
+> (a) CHEF (b) Snopes
+
+Figure 5: Learning curves of RoE-FND with respect to the size of the memory bank (from 0% to 100%). 
+
+## B Cost and Stability Analysis 
+
+We report the average output token consumption to evaluate the practical inference cost. The usage of output tokens directly re-flects the computational and monetary costs incurred by each mod-ule. The statistics show that most output tokens are consumed by the two Analyst s, while the Advisor and Judger introduce comparatively small overhead. The compact retrieved experiences help constrain the deliberation context length, resulting in better performance-cost tradeoff compared with other methods. We visualize the growth of detection accuracy with the accu-mulation of the memory bank. As the memory bank gradually grows, the performance of RoE-FND consistently improves on both datasets. This trend demonstrates that the proposed cross-sample review mechanism effectively benefits from accumulated histor-ical cases. Meanwhile, the performance gain becomes saturated when the memory bank reaches a sufficient scale. This suggests that the framework captures most representative experiences after observing enough samples, and additional memory mainly provides marginal improvements. Such behavior indicates the favorable scal-ability of the proposed framework. 
+
+## C Prompt of RoE-FND Prompt of IntuitiveAnalyst 
+
+You are an expert in credibility analysis and factual reasoning, think step-by-step to produce answer. I want you to verify input claims. You may only use the provided search tool once to gather information from the search engine. You must think deeply before each search and reflect thoroughly on the search results. Do not rely solely on search to complete the entire verification process, as this may impair your ability to solve problems and think deeply. Return your reasoning process and conclusion. Prompt of Reflector 
+
+You are an expert in critical thinking and analysis. You are given two reasoning with different conclusion that verify the same claim’s authenticity. What hint should I provided to let you decide Reasoning B is better. 1. Identify the most critical point that distinguish B from A. 2. Summarize a sentence from that point as your answer. 3. Your answer shouldn't mention any specific content or Name (Reasoning A, Reasoning B) about neither Reasoning. 4. Return the final answer (the sentence you summarized) within <answer> </answer>. For example, if Reasoning B is better because it distinguish fact from exaggerated claim, your output should be like: ``` Reasoning B focus on factuality rather than ... <answer> Focus on verified facts rather than exaggerated claims. </answer>``` Prompt of InformedAnalyst 
+
+You are given a post and the factuality of the post. Your task is to think step-by-step about whether the post is. You are provided with some related searched information about the event. Prompt of Advisor 
+
+Read the following fact-checking reasoning of the same claim, what are the key differences in the reasoning that lead to opposite conclusion? 1. Identify the most critical point that distinguish B from A. 2. Summarize a sentence from that point as your answer. 3. Your answer shouldn't mention any specific content or Name (Reasoning A, Reasoning B) about neither Reasoning. 4. Return the final answer (the sentence you summarized) within <answer> </answer>. 
+
+Prompt for Advisor’s Query Refinement 
+
+The description “{{{query}}}” cannot describe the key discrepancy of the two Reasonings. Please re-generate with the same requirements. Prompt of Judger 
+
+You are an expert in assessment and rating. You are given two reasoning reports with different conclusions. Rate them from 0 to 10 according to the given rating standards and tell why. Gap of scores of specific standard should reflect the reports’ differences. Return the below json with placeholder [your answer] filled by your answer: 
+
+```json [{item: {{{retrieved entry 1}}}, scoreA: [your answer], scoreB: [your answer], reason: [your answer]}, ...] ``` RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection CIKM ’26, November 7–11, 2026, Rome, Italy. 
+
+## References 
+
+[1] Akari Asai, Zeqiu Wu, Yizhong Wang, Avi Sil, and Hannaneh Hajishirzi. 2024. Self-rag: Learning to retrieve, generate, and critique through self-reflection. In 
+
+International conference on learning representations , Vol. 2024. 9112–9141. [2] Jinze Bai, Shuai Bai, Yunfei Chu, Zeyu Cui, Kai Dang, Xiaodong Deng, Yang Fan, Wenbin Ge, Yu Han, Fei Huang, et al. 2023. Qwen technical report. arXiv preprint arXiv:2309.16609 (2023). [3] Yuyan Bu, Qiang Sheng, Juan Cao, Peng Qi, Danding Wang, and Jintao Li. 2024. Fakingrecipe: Detecting fake news on short video platforms from the perspective of creative process. In Proceedings of the 32nd ACM International Conference on Multimedia . 1351–1360. [4] Juan Cao, Peng Qi, Qiang Sheng, Tianyun Yang, Junbo Guo, and Jintao Li. 2020. Exploring the role of visual content in fake news detection. Disinformation, Misinformation, and Fake News in Social Media (2020), 141–161. [5] Kevin Matthe Caramancion. 2023. News verifiers showdown: A comparative performance evaluation of ChatGPT 3.5, ChatGPT 4.0, Bing AI, and Bard in news fact-checking. In 2023 IEEE Future Networks World Forum (FNWF) . IEEE, 1–6. [6] Carlos Castillo, Marcelo Mendoza, and Barbara Poblete. 2011. Information credi-bility on twitter. In Proceedings of the 20th international conference on World wide web . 675–684. [7] Yixuan Chen, Dongsheng Li, Peng Zhang, Jie Sui, Qin Lv, Lu Tun, and Li Shang. 2022. Cross-modal Ambiguity Learning for Multimodal Fake News Detection. In 
+
+Proceedings of the ACM Web Conference 2022 . 2897–2905. [8] Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston. 2024. Chain-of-verification reduces hallucina-tion in large language models. In Findings of the association for computational linguistics: ACL 2024 . 3563–3578. [9] Song Feng, Ritwik Banerjee, and Yejin Choi. 2012. Syntactic stylometry for deception detection. In Proceedings of the 50th annual meeting of the association for computational linguistics (volume 2: Short papers) . 171–175. [10] Daya Guo, Dejian Yang, Haowei Zhang, et al. 2025. Deepseek-r1: Incentiviz-ing reasoning capability in llms via reinforcement learning. arXiv preprint arXiv:2501.12948 (2025). [11] Chen Han, Wenzhen Zheng, and Xijin Tang. 2025. Debate-to-detect: Reformulat-ing misinformation detection as a real-world debate with large language models. In Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing . 15125–15140. [12] Rongpei Hong, Jian Lang, Jin Xu, Zhangtao Cheng, Ting Zhong, and Fan Zhou. 2025. Following clues, approaching the truth: Explainable micro-video rumor detection via chain-of-thought reasoning. In Proceedings of the ACM on Web Conference 2025 . 4684–4698. [13] Beizhe Hu, Qiang Sheng, Juan Cao, Yuhui Shi, Yang Li, Danding Wang, and Peng Qi. 2024. Bad actor, good advisor: Exploring the role of large language models in fake news detection. In Proceedings of the AAAI conference on artificial intelligence ,Vol. 38. 22105–22113. [14] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen, et al. 2022. Lora: Low-rank adaptation of large language models. ICLR 1, 2 (2022), 3. [15] Xuming Hu, Zhijiang Guo, GuanYu Wu, Aiwei Liu, Lijie Wen, and Philip S Yu. 2022. CHEF: A pilot Chinese dataset for evidence-based fact-checking. In 
+
+Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies . 3362–3376. [16] Xuming Hu, Zhaochen Hong, Zhijiang Guo, Lijie Wen, and Philip Yu. 2023. Read it twice: Towards faithfully interpretable fact verification by revisiting evidence. In Proceedings of the 46th International ACM SIGIR Conference on Research and Development in Information Retrieval . 2319–2323. [17] Lei Huang, Weijiang Yu, et al. 2023. A survey on hallucination in large lan-guage models: Principles, taxonomy, and open questions. ACM Transactions on Information Systems (2023). [18] Aaron Jaech, Adam Kalai, et al. 2024. Openai o1 system card. arXiv preprint arXiv:2412.16720 (2024). [19] Soyeong Jeong, Jinheon Baek, Sukmin Cho, Sung Ju Hwang, and Jong C Park. 2024. Adaptive-rag: Learning to adapt retrieval-augmented large language mod-els through question complexity. In Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers) . 7036–7050. [20] Zhiwei Jin, Juan Cao, Yongdong Zhang, Jianshe Zhou, and Qi Tian. 2016. Novel visual and statistical image features for microblogs news verification. IEEE transactions on multimedia 19, 3 (2016), 598–608. [21] Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, et al. 2020. Retrieval-augmented generation for knowledge-intensive nlp tasks. 
+
+Advances in Neural Information Processing Systems 33 (2020), 9459–9474. [22] Dayang Li, Fanxiao Li, BingBing Song, Li Tang, and Wei Zhou. 2025. IMRRF: Integrating Multi-Source Retrieval and Redundancy Filtering for LLM-based Fake News Detection. In Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers) . 9127–9142. [23] Hao Liao, Jiahao Peng, Zhanyi Huang, Wei Zhang, Guanghua Li, Kai Shu, and Xing Xie. 2023. Muser: A multi-step evidence retrieval enhancement framework for fake news detection. In Proceedings of the 29th ACM SIGKDD conference on knowledge discovery and data mining . 4461–4472. [24] Aixin Liu, Bei Feng, Bing Xue, Bingxuan Wang, Bochao Wu, Chengda Lu, Cheng-gang Zhao, Chengqi Deng, Chenyu Zhang, Chong Ruan, et al. 2024. Deepseek-v3 technical report. arXiv preprint arXiv:2412.19437 (2024). [25] Jing Ma, Wei Gao, Shafiq Joty, and Kam-Fai Wong. 2019. Sentence-level evidence embedding for claim verification with hierarchical attention networks. In Pro-ceedings of the 57th annual meeting of the association for computational linguistics .2561–2571. [26] Aman Madaan, Niket Tandon, Prakhar Gupta, Skyler Hallinan, Luyu Gao, Sarah Wiegreffe, Uri Alon, Nouha Dziri, Shrimai Prabhumoye, Yiming Yang, et al. 2023. Self-refine: Iterative refinement with self-feedback. Advances in neural information processing systems 36 (2023), 46534–46594. [27] OpenAI. 2022. ChatGPT . Technical Report. OpenAI. https://chat.openai.com [28] Liangming Pan, Xiaobao Wu, Xinyuan Lu, Luu Anh Tuan, William Yang Wang, Min-Yen Kan, and Preslav Nakov. 2023. Fact-checking complex claims with program-guided reasoning. In Proceedings of the 61st annual meeting of the asso-ciation for computational linguistics (volume 1: Long papers) . 6981–7004. [29] Kashyap Popat, Subhabrata Mukherjee, Jannik Strötgen, and Gerhard Weikum. 2017. Where the truth lies: Explaining the credibility of emerging claims on the web and social media. In Proceedings of the 26th international conference on world wide web companion . 1003–1012. [30] Kashyap Popat, Subhabrata Mukherjee, Andrew Yates, and Gerhard Weikum. 2018. Declare: Debunking fake news and false claims using evidence-aware deep learning. In Proceedings of the 2018 conference on empirical methods in natural language processing . 22–32. [31] Peng Qi, Yuyan Bu, Juan Cao, Wei Ji, Ruihao Shui, Junbin Xiao, Danding Wang, and Tat-Seng Chua. 2023. Fakesv: A multimodal benchmark with rich social context for fake news detection on short video platforms. In Proceedings of the AAAI Conference on Artificial Intelligence , Vol. 37. 14444–14452. [32] Hannah Rashkin, Eunsol Choi, Jin Yea Jang, Svitlana Volkova, and Yejin Choi. 2017. Truth of varying shades: Analyzing language in fake news and political fact-checking. In Proceedings of the 2017 conference on empirical methods in natural language processing . 2931–2937. [33] Kai Shu, Deepak Mahudeswaran, et al. 2020. A data repository with news content, social context, and spatiotemporal information for studying fake news on social media. Big data (2020). [34] Shivangi Singhal, Anubha Kabra, Mohit Sharma, Rajiv Ratn Shah, Tanmoy Chakraborty, and Ponnurangam Kumaraguru. 2020. Spotfake+: A multimodal framework for fake news detection via transfer learning (student abstract). In 
+
+Proceedings of the AAAI Conference on Artificial Intelligence , Vol. 34. 13915–13916. [35] Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, et al. 2023. Llama 2: Open Foundation and Fine-Tuned Chat Models. arXiv preprint arXiv:2307.09288 (2023). [36] Nguyen Vo and Kyumin Lee. 2021. Hierarchical multi-head attentive network for evidence-aware fake news detection. In Proceedings of the 16th conference of the European chapter of the association for computational linguistics: main volume .965–975. [37] Bo Wang, Jing Ma, Hongzhan Lin, Zhiwei Yang, Ruichao Yang, Yuan Tian, and Yi Chang. 2024. Explainable fake news detection with large language model via defense among competing wisdom. In Proceedings of the ACM Web Conference 2024 . 2452–2463. [38] Junxi Wang, Jize Liu, Na Zhang, and Yaxiong Wang. 2025. Consistency-aware fake videos detection on short video platforms. In International Conference on Intelligent Computing . Springer, 200–210. [39] Jason Wei, Yi Tay, Rishi Bommasani, Colin Raffel, Barret Zoph, Sebastian Borgeaud, Dani Yogatama, Maarten Bosma, Denny Zhou, Donald Metzler, et al. [n. d.]. Emergent Abilities of Large Language Models. Transactions on Machine Learning Research ([n. d.]). [40] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou, et al. 2022. Chain-of-thought prompting elicits reasoning in large language models. Advances in neural information processing systems 35 (2022), 24824–24837. [41] Zimian Wei, Hengyue Pan, Linbo Qiao, Xin Niu, Peijie Dong, and Dongsheng Li. 2022. Cross-Modal Knowledge Distillation in Multi-Modal Fake News Detection. In ICASSP 2022-2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) . IEEE, 4733–4737. [42] Jiaying Wu, Jiafeng Guo, and Bryan Hooi. 2024. Fake news in sheep’s clothing: Robust fake news detection against LLM-empowered style attacks. In Proceedings of the 30th ACM SIGKDD conference on knowledge discovery and data mining .3367–3378. [43] Lianwei Wu, Yuan Rao, Yuqian Lan, Ling Sun, and Zhaoyin Qi. 2021. Unified dual-view cognitive model for interpretable claim verification. In Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: CIKM ’26, November 7–11, 2026, Rome, Italy. Yuzhou Yang et al. 
+
+Long Papers) . 59–68. [44] Lianwei Wu, Yuan Rao, Xiong Yang, Wanzhen Wang, and Ambreen Nazir. 2021. Evidence-aware hierarchical interactive attention networks for explainable claim verification. In Proceedings of the twenty-ninth international conference on inter-national joint conferences on artificial intelligence . 1388–1394. [45] Weizhi Xu, Junfei Wu, Qiang Liu, Shu Wu, and Liang Wang. 2022. Evidence-aware fake news detection with graph neural networks. In Proceedings of the ACM web conference 2022 . 2501–2510. [46] An Yang, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chengyuan Li, Dayiheng Liu, Fei Huang, Haoran Wei, et al. 2024. Qwen2. 5 technical report. arXiv preprint arXiv:2412.15115 (2024). [47] Yuzhou Yang, Yangming Zhou, Qichao Ying, Zhenxing Qian, and Xinpeng Zhang. 2024. Search, Examine and Early-Termination: Fake News Detection with Annotation-Free Evidences. In ECAI 2024 . IOS Press, 1463–1470. [48] Zhiwei Yang, Jing Ma, Hechang Chen, Hongzhan Lin, Ziyang Luo, and Yi Chang. 2022. A Coarse-to-fine Cascaded Evidence-Distillation Neural Network for Ex-plainable Fake News Detection. In Proceedings of the 29th International Conference on Computational Linguistics . 2608–2621. [49] Qichao Ying, Xiaoxiao Hu, Yangming Zhou, Zhenxing Qian, Dan Zeng, and Shiming Ge. 2023. Bootstrapping multi-view representations for fake news detection. In Proceedings of the AAAI conference on Artificial Intelligence , Vol. 37. 5384–5392. [50] Xueyao Zhang, Juan Cao, Xirong Li, Qiang Sheng, Lei Zhong, and Kai Shu. 2021. Mining dual emotion for fake news detection. In Proceedings of the web conference 2021 . 3465–3476. [51] Xinyi Zhou, Jindi Wu, and Reza Zafarani. 2020. SAFE: Similarity-Aware Multi-modal Fake News Detection. In Pacific-Asia Conference on Knowledge Discovery and Data Mining . Springer, 354–367. [52] Xinyi Zhou and Reza Zafarani. 2020. A Survey of Fake News: Fundamental Theories, Detection Methods, and Opportunities. ACM Comput. Surv. 53, 5, Article 109 (sep 2020), 40 pages. doi:10.1145/3395046 [53] Yangming Zhou, Yuzhou Yang, Qichao Ying, Zhenxing Qian, and Xinpeng Zhang. 2023. Multimodal fake news detection via clip-guided learning. In 2023 IEEE International Conference on Multimedia and Expo (ICME) . IEEE, 2825–2830. [54] Yongchun Zhu, Qiang Sheng, et al. 2022. Memory-guided multi-view multi-domain fake news detection. TKDE (2022). [55] Arkaitz Zubiaga, Ahmet Aker, Kalina Bontcheva, Maria Liakata, and Rob Procter. 2018. Detection and resolution of rumours in social media: A survey. ACM Computing Surveys (CSUR) 51, 2 (2018), 1–36.

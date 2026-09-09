@@ -1,0 +1,201 @@
+Title: An Explainable Coherence Score for Detecting Temporal Inconsistencies in Political News
+
+URL Source: https://arxiv.org/pdf/2608.29175v1
+
+Published Time: Tue, 01 Sep 2026 00:37:24 GMT
+
+Number of Pages: 6
+
+Markdown Content:
+# An Explainable Coherence Score for Detecting Temporal Inconsistencies in Political News 
+
+Marius Nicusor Pantea and Adrian Groza Artificial Intelligence Research Institute AIRi@UTCN Technical University of Cluj-Napoca, Cluj-Napoca, Romania marius.pantea@campus.utcluj.ro, adrian.groza@cs.utcluj.ro 
+
+Abstract —Temporal inconsistencies, such as mandates at-tributed outside their real interval, events presented as past before they occurred, or inverted causal sequences, are a form of political disinformation that evades style-based fake news detectors: a well-written article with a single wrong date carries no lexical signal of falsehood. This paper introduces the Temporal Coherence Score (TCS), a continuous, intrinsically interpretable metric that quantifies the temporal coherence of a news article, computed by a four-stage pipeline: extraction of temporal facts, construction of a temporal knowledge graph, hierarchical verifi-cation against internal consistency rules and external reference sources, and score aggregation with automatically generated explanations. Verification combines eight internal checkers de-rived from Allen’s interval algebra with a five-level external hierarchy ranging from a locally stored reference knowledge base of 1,256 curated political facts to live Wikidata SPARQL queries. On a benchmark of 100 political news articles with injected temporal errors, the system reaches a precision of 0.909 at the selected operating threshold, with a single residual false positive, a profile deliberately tuned for human-in-the-loop fact-checking assistance, where false alarms are costlier than missed detections. Unlike lexical baselines that output only a binary label, every flagged article is accompanied by the inconsistency type, the entities involved, and the reference source that contradicts the claim. 
+
+Index Terms —fake news detection, temporal knowledge graphs, fact verification, explainable AI, temporal reasoning 
+
+I. I NTRODUCTION 
+
+Automated fake news detection has largely concentrated on linguistic style, source credibility, and propagation patterns [1]. These families of methods share a blind spot: an article written in neutral language, published by a credible outlet, and quoting real sources may still contain a factual error that no stylistic feature can reveal [2]. Temporal errors are a prominent instance. A text stating that a politician signed a law in 2004 when his mandate ended in 2001, or presenting a treaty as preceding the events it responded to, is grammatically and stylistically indistinguishable from an accurate report. Readers tend to accept presented chronologies without independent verification, and manual fact-checking organizations can only cover a small fraction of the daily output of political news. Existing research on temporal fact verification treats tem-poral errors as a special case of claim verification, operating on isolated statements [3]–[5]. Two gaps remain. First, no dedicated metric quantifies the temporal coherence of an entire article, aggregating the verification of multiple interdependent claims into a single interpretable value. Second, explainability is rarely a first-class requirement: a binary verdict without a verifiable justification cannot be integrated into an editorial workflow. This paper addresses both gaps with the following contri-butions:  
+
+> •
+
+the Temporal Coherence Score (TCS), a continuous met-ric in [0 , 1] that aggregates severity-weighted temporal inconsistencies, internal graph coherence, and external verification coverage, and is interpretable by construction: each factor of the formula corresponds to a well-defined semantic concept;  
+
+> •
+
+an end-to-end system that computes TCS through afour-component pipeline (extraction, temporal knowledge graph construction, hierarchical verification, scoring and explanation), running fully on-premise for inference and generating natural-language explanations with a compact local language model;  
+
+> •
+
+an evaluation on a purpose-built benchmark of 100 po-litical news articles with five categories of injected tem-poral errors, including a threshold analysis, a comparison against lexical baselines, and an explicit delimitation of the domain of applicability on two external datasets. II. R ELATED WORK 
+
+Zhou and Zafarani [1] organize fake news detection into knowledge-based, style-based, propagation-based, and source-based methods. Style-based classifiers perform strongly on datasets whose false class carries distinctive lexical patterns, but by design cannot detect factual errors in stylistically neutral text; knowledge-based verification against structured sources addresses precisely this vulnerability. Standard re-sources such as LIAR [6] and FEVER [7] operate at the level of short isolated claims and provide no temporal context at article level; FakeNewsNet [8] adds social and spatio-temporal context but no temporal verification mechanism. Temporal fact verification has recently emerged as a distinct direction. TemporalFC [3] predicts the validity interval of a claim using temporal knowledge graph embeddings, but verifies claims in isolation and produces neither an article-level score nor explanations. TSVer [4] benchmarks verification against time-series evidence, exposing the weakness of cur-rent systems in numerical-temporal reasoning. ChronoFact [5] verifies claims involving multiple, overlapping, or recurring events by constructing event timelines, again at claim level. arXiv:2608.29175v1 [cs.AI] 29 Aug 2026 Allein et al. study the temporal ordering of evidence [9] and implicit temporal reasoning [10], showing that ignoring implicit temporal constraints causes systematic classification errors for entities with well-defined mandates. Soulard et al. [11] validate knowledge-graph facts against automatically discovered temporal constraints grounded in Allen’s interval algebra [12], with each decision justified by the violated constraint; the present work adopts the complementary strategy of a fixed set of checkers derived from the inconsistency types relevant to political text. On the explainability side, Ngueajio et al. [13] survey XAI techniques for fake news detection and identify human-in-the-loop integration as underexplored. Coroama and Groza [14] argue for evaluation of explainability at the level of individual decisions, a perspective that directly motivated the design of TCS as a decomposable score. MindBugs [15] is an explainable disinformation detection system with a human-in-the-loop mechanism operating on narrative structures; it works at article level and produces explanations, but does not address the temporal dimension. Recent agentic and causal approaches [16]–[18] generate structured justifications but likewise lack an article-level temporal coherence metric. A related but architecturally distinct alternative is prompting a general-purpose large language model directly to judge the temporal plausibility of a claim, relying on its parametric knowledge rather than an explicit, auditable reference source. Such an approach offers no verifiable provenance for a verdict and is prone to hallucinated dates and mandates, particularly for less prominent political figures; the present system instead grounds every external check in a queryable source (a curated reference base or live Wikidata), so that a verdict can always be traced to a specific, inspectable fact. To the best of our knowledge, no existing system combines article-level input, verification over a temporal knowledge graph, explanation generation, and an aggregated interpretable score; this combination is the contribution of the present work. III. M ETHOD 
+
+A. Problem Formalization 
+
+Given an article A, the system extracts a set of temporal facts F = {(ei, r i, v i, t i)}ni=1 , where e is a political entity, 
+
+r a relation type, v the associated value, and t a temporal anchor expressed as a point tp or an interval [ts, t e]. Five relation types are used, selected by frequency in political news: HOLDS_POSITION , OCCURRED_ON , MEMBER_OF ,
+
+FOLLOWED , and GENERIC . Facts are verified against a ref-erence knowledge base K and against each other, and the outcome is aggregated into a score TCS ∈ [0 , 1] ; an article is classified as temporally suspect if TCS < θ , with θ determined empirically. The system targets five categories of temporal inconsistency: mandate errors (a position attributed outside its real interval, e.g., a former minister quoted as still holding office after resignation), anachronisms (an event or policy referenced as already in effect before its actual date), causal violations (an effect placed before its cause, e.g., a resignation dated  
+
+> Article text C1: Extraction (Pipeline A / B) C2: Temporal Knowledge Graph C3: Hierarchical Verification (V1–V8, L1–L5) C4: TCS Scoring and Explanation Score, inconsistencies, explanation
+> Fig. 1. Four-stage TCS pipeline: extraction, knowledge graph construction, hierarchical verification, and scoring with explanation.
+
+earlier than the scandal that prompted it), temporal cycles in precedence chains (entity A reported as preceding B while B is separately reported as preceding A), and impossible simultaneous roles (the same individual holding two mutually exclusive positions at once). 
+
+B. Pipeline Architecture 
+
+The pipeline consists of four sequential components with strict separation of responsibilities, exposed through a REST API and a web interface. Figure 1 summarizes the flow from raw article text to the final score and explanation. 
+
+C1 — Extraction. Two alternative extraction strategies are provided. Pipeline A is deterministic: a transformer-based NLP model [19] performs named entity recognition and dependency parsing; subject–predicate–object triples with temporal anchor-ing are derived from the dependency tree through a cascade of four strategies with decreasing confidence (dependency-based extraction, reflexive event facts, nominal association, and an entity–date fallback), and a verb ontology maps root lemmas to relation types. Pipeline B uses a compact generative lan-guage model (1.7B parameters [20]) with few-shot structured prompting and JSON-schema validation, recovering temporal claims expressed through implicit or periphrastic constructions that dependency analysis misses; sentences without a four-digit year are pre-filtered before any model call to bound latency. Temporal expressions from both pipelines are normalized to ISO 8601, with resolution of relative dates and approximate decade expressions. 
+
+C2 — Temporal knowledge graph. Extracted facts are filtered by a minimum confidence threshold of 0.3 and by the requirement of a valid temporal anchor, deduplicated on the exact tuple signature, and inserted into a directed multigraph following the TKG formalization G = ( E, R, T, F ) with F ⊂TABLE I ONE ILLUSTRATIVE EXAMPLE PER INTERNAL CHECKER                    
+
+> Code Illustrative example V1 Article states Blair FOLLOWED Brown, and separately Brown FOLLOWED Blair — a cycle V2 A resignation dated before the scandal that caused it becomes public V3 Amandate spanning 95 years, exceeding plausible tenure V4 Two different entities both stated to hold “President” on the same date V5 A minister acting in office weeks before the confirming election V6 A 2030 policy referenced as already completed in a 2024 article V7 The same person presented as PM of two countries in the same month V8 An official signing a law before the recorded date of taking office
+
+Algorithm 1 Hierarchical Verification 
+
+Require: graph G, reference base KL1, cross-article cache 
+
+KL2
+
+Ensure: annotated inconsistency list I 
+
+> 1:
+
+I ← APPLY CHECKERS (G) ▷ V1–V8, internal, no network  
+
+> 2:
+
+for all fact f ∈ G unresolved by internal checkers do  
+
+> 3:
+
+if VERIFY (f, K L1) then ▷ L1 — local reference KB  
+
+> 4:
+
+add result to I; continue  
+
+> 5:
+
+end if  
+
+> 6:
+
+if VERIFY (f, K L2) then ▷ L2 — Neo4j cache  
+
+> 7:
+
+add result to I; continue  
+
+> 8:
+
+end if  
+
+> 9:
+
+if QUERY WIKIDATA (f ) then ▷ L3 — SPARQL  
+
+> 10:
+
+add result to I; continue  
+
+> 11:
+
+end if  
+
+> 12:
+
+VERIFY RSS (f ) ▷ L5 — recent facts  
+
+> 13:
+
+add result to I 
+
+> 14:
+
+end for  
+
+> 15:
+
+I ← AGGREGATE SEVERITIES (I) ▷
+
+LOW/MEDIUM/HIGH/CRITICAL  
+
+> 16:
+
+return IE × R × E × T [21]. An optional graph database provides cross-article persistence and caching. 
+
+C3 — Hierarchical verification. Verification combines two orthogonal mechanisms. Eight internal checkers (V1–V8) operate on the graph alone, without network access, detecting: temporal cycles in precedence chains (V1), causal violations (V2), ordering errors and implausible durations (V3), the same position held simultaneously by different entities (V4), positions held before election or investiture (V5), future events presented as past (V6), incompatible simultaneous roles of one entity (V7), and actions performed before taking office (V8). Table I gives one illustrative example per checker. Algorithm 1 formalizes the order of application, from internal checkers to hierarchical external escalation. The checkers instantiate relations of Allen’s interval alge-bra [12], which defines thirteen mutually exclusive relations between two time intervals I1 and I2 — before , meets ,
+
+overlaps , starts , during , finishes , equals , and the inverses of the first six. An overlaps relation between two mandates of mutually exclusive offices held by the same entity sig-nals V4/V7; a before relation whose transitive closure over the FOLLOWED chain returns to its starting entity signals a temporal cycle (V1). The checkers further use explicit day-level tolerances (e.g., 30 days for inverted intervals, 180 days between election and investiture) to absorb the imprecision of dates extracted from text. External verification escalates each externally verifiable fact through a hierarchy of sources: a locally stored reference knowledge base of 1,256 curated facts covering US, UK, and EU political mandates and canonical events (L1, zero latency); a persistent cross-article cache (L2, optional); live Wikidata SPARQL queries over the temporal qualifiers of position and membership properties [22] (L3). An identity guard compares the resolved Wikidata entity against the extracted name before accepting any result, preventing cross-entity confusion between similarly named individuals. For position-holding claims, verification is inverse rather than direct: all recorded positions and organizational memberships of the entity are retrieved from Wikidata, and the claimed interval is checked against every one of them, not only the specific position named in the article. If the claimed position is absent from the retrieved set entirely, the mismatch is flagged at reduced severity, since the gap may reflect incomplete Wikidata coverage rather than a genuine article error; if the position is present but under a conflicting interval, severity is high. This asymmetry reduces false positives caused by Wiki-data’s uneven coverage of less-documented offices. Verifica-tion continues, for unresolved entities, with a Wikipedia REST fallback (L4) that was tested and rejected after introducing false positives; and real-time RSS feeds for recent facts (L5, opt-in). A general tolerance of 200 days applies to external interval comparison, relaxed to year-level granularity when the article states only a year. Canonical-event matching applies five successive precision filters (minimum word count, action verb presence, fuzzy similarity, word overlap, and distinctive shared words) to avoid spurious matches. Table II summarizes the domain, data source, and inconsistency-generating capabil-ity of each checker and level. 
+
+C. Temporal Coherence Score 
+
+Component C4 aggregates the verification outcome into 
+
+TCS = (1 − penalty ratio ) × score coherence 
+
+× (0 .85 + 0 .15 × coverage factor ), (1) clipped to [0 , 1] . The penalty ratio is the severity-weighted sum of detected inconsistencies, normalized by the maximum possible penalty ( nclaims ×1.5), with weights {0.0, 0.3, 1.0, 1.5}
+
+for severities LOW to CRITICAL. The coherence factor is the proportion of temporal relations unaffected by inconsis-tencies of MEDIUM severity or higher. The coverage factor is the fraction of facts verifiable against external sources; its multiplicative bonus is bounded to the interval [0 .85 , 1.00] ,TABLE II INTERNAL CHECKERS AND EXTERNAL VERIFICATION LEVELS                  
+
+> Code Domain / data source New incons.? V1–V8 Internal TKG structure (cycles, or-dering, contradictions, overlaps); in-memory graph Yes L1 Reference mandates and canonical events; local file Yes L2 Facts verified in prior articles; Neo4j (local) Yes L3 Mandates and events from Wiki-data; external SPARQL Yes L4 Wikipedia verification (disabled in production); external REST —L5 Confirmation from recent news feeds; external RSS No (confirm only)
+
+Detected inconsistency (type + entity + date) Severity weight (drives TCS penalty and UI highlight) Qwen3-1.7B narrative generation (static template on timeout) Natural-language explanation  
+
+> Fig. 2. Explanation-generation flow: detected severity drives both the TCS penalty and the UI highlight, while the inconsistency list feeds narrative generation, which falls back to a static template on timeout.
+
+a deliberate design decision limiting the influence of external coverage to at most 15% so that penalty and internal coherence dominate the score. Articles with no extractable temporal facts receive the neutral score 0.5, explicitly labeled as insufficient temporal data rather than a truth verdict. TCS is intrinsically interpretable: each factor corresponds to a named concept, and the classification can be justified by exhibiting the component values and the list of detected inconsistencies, without post-hoc approximation. For each analysis, a compact local language model trans-forms the structured inconsistency list into a narrative ex-planation; if generation fails or times out, static per-type templates guarantee that every result carries a justification. Figure 2 summarizes this explanation-generation flow, the system’s central explainability mechanism. A human-in-the-loop mechanism activates once an analysis is persisted, exposing Confirm and Reject actions to the reviewer. The recorded verdict is stored as an attribute of the article node in the graph database; at the current stage it functions as an audit trail and as a substrate for future extensions of the verification logic, rather than being fed back into scoring, consistent with the design premise that the system assists, rather than replaces, human judgment. All inference runs on commodity hardware without GPU      
+
+> 0.50.60.70.75 0.80.900.20.40.60.81
+
+Decision threshold θ    
+
+> Metric value
+> Precision Recall F1
+> Fig. 3. Precision, recall, and F1 across decision thresholds, measured on the intermediate development configuration used to select θ= 0 .75 (Table V traces the further corrections that raised final precision at this threshold to 0.909).
+
+acceleration. Pipeline A and the internal checkers (V1–V8) are lightweight and dominate neither latency nor cost; the local language model calls in Pipeline B and in explanation gen-eration are the main contributors to per-article latency, since both rely on model inference rather than the rule-based path of Pipeline A. This places Pipeline A at an advantage for high-throughput batch processing, and Pipeline B at an advantage for coverage of implicitly phrased claims, motivating their availability as alternative, user-selectable strategies rather than a single fixed extractor. IV. E VALUATION 
+
+A. Benchmark and Protocol 
+
+Evaluation uses a purpose-built benchmark of 100 synthetic political news articles: 56 temporally coherent (TRUE) and 44 containing exactly one injected temporal error (FAKE), covering five inconsistency types (date mismatch, ordering error, future-as-past, entity inconsistency, implicit contradic-tion). TRUE articles describe chronologies validated against Wikidata; FAKE articles are derived from them by controlled error injection, each annotated with the injected type. An article is predicted FAKE if it yields at least one temporal fact and TCS < θ ; articles without temporal facts are pre-dicted TRUE. The operating threshold θ = 0 .75 was selected through a sweep over [0 .50 , 0.90] as the point that favors precision, since in the intended assistance context a false alarm against a legitimate source is costlier than a missed detection recoverable through manual review. Figure 3 shows the sweep, measured on the development configuration used at the time of threshold selection; the subsequent precision-oriented corrections traced in Table V raised precision at this same threshold to the final 0.909 reported in Table III. 
+
+B. Results 
+
+Table III reports the results at the operating threshold, and Table IV the confusion matrix. Precision is high: of the 11 articles flagged, 10 are truly fake, i.e., a single false alarm over the whole set. Precision at this operating point is computed from only 11 positive predictions; a 95% Wilson score interval is [0 .62 , 0.98] , reflecting substantial uncertainty at this sample size and motivating evaluation on the larger 150-article benchmark constructed for future work. Accuracy (0.650) exceeds the majority-class baseline of 0.56. Recall is deliberately low (10 of 44 fakes detected), reflecting the precision-oriented operating point. The mean TCS of true articles is 0.880 versus 0.747 for fake articles, a separation of 
+
++0 .133 whose partial overlap explains the missed detections. The reported configuration is the outcome of an iterative development process: starting from a baseline Wikidata veri-fication with precision 0.714 and four false positives, targeted corrections (strict object matching, canonical-event verifica-tion, reduced date tolerance, role-category grouping, and the entity identity guard) raised precision to 0.909 and reduced false positives to one, each correction validated by re-running the benchmark. Table V traces precision, recall, F1, and false-positive count across the five successive configurations. Two case studies illustrate the behavior. A factually accurate article on the Obama presidency yields six extracted facts, zero inconsistencies, and TCS = 0 .925 . A fake article stating that Bill Clinton signed a law in 2004, after his mandate ended in January 2001, yields four facts and six HIGH-severity date-mismatch inconsistencies against the Wikidata mandate interval, with TCS = 0 .0.
+
+C. Comparison with Lexical Baselines 
+
+Three lexical classifiers (logistic regression, linear SVM, random forest) over TF–IDF features (5,000 terms, uni- and bigrams) were evaluated by stratified 5-fold cross-validation on the same benchmark (Table VI). Random forest (F1 =0.572 ) and SVM (F1 = 0 .535 ) exceed the proposed system’s F1 of 0.364, as expected when the false class carries lexical patterns. The advantage of the proposed system lies elsewhere: the baselines emit a bare binary label, whereas every TCS verdict identifies the inconsistency type, the entities involved, and the contradicting reference source, which is the functional requirement for editorial integration [14]. 
+
+D. Domain Delimitation on External Datasets 
+
+To characterize generalization, the system was run on 100 political articles each from ISOT [23] and RAGuard [24]. F1 collapses to 0.000 (ISOT) and 0.039 (RAGuard), with TCS class separations of +0 .065 and −0.052 respectively. The causes differ and are informative: ISOT’s fake class is characterized by emotional style rather than verifiable temporal errors, so the temporal signal that TCS measures is absent; RAGuard’s short claims lack extended temporal context and frequently reduce to the neutral score 0.5. These results delimit the domain of applicability rather than invalidate the approach: TCS is a specialized metric for temporal inconsistencies in political narratives, complementary to, not a replacement for, general-purpose detectors. 
+
+E. Failure Analysis 
+
+The single residual false positive is an accurate article on the Clinton impeachment: the factual-contradiction checker               
+
+> TABLE III RESULTS ON THE BENCHMARK AT θ= 0 .75 .Metric Value Precision 0.909 Recall 0.227 F1 score 0.364 Accuracy 0.650 TABLE IV CONFUSION MATRIX AT θ= 0 .75 .Predicted TRUE Predicted FAKE Actual TRUE (56) 55 1Actual FAKE (44) 34 10
+
+(V4) matches the objects associated with two distinct enti-ties that were legitimately co-involved in the same events, lacking the narrative context to distinguish co-involvement from contradiction. This identifies a structural limitation of object-matching contradiction detection and motivates context-sensitive verification as future work. A negative result is also reported for extraction: a generative relation-extraction pipeline based on REBEL [25] was evaluated on the same benchmark and rejected at F1 = 0 .038 , mirroring the tested-and-rejected Wikipedia verification level (L4). The main limitations are the low recall, the synthetic nature of the primary benchmark, the dependence on extraction quality and reference coverage, and the restriction to English-language text, all documented as directions for improvement; an extended 150-article benchmark has been constructed for future validation. V. C ONCLUSIONS 
+
+This paper introduced the Temporal Coherence Score, an interpretable article-level metric for the detection of temporal inconsistencies in the news. The metric is computed by a pipeline that combines: (i) temporal knowledge graphs, (ii) eight internal consistency checkers grounded in interval alge-bra, and (iii) a five-level hierarchical external verification. At the selected operating point, the system achieves a precision of 0.909 with a single false positive, a profile suited to human-in-the-loop fact-checking assistance, and every verdict is accompanied by a verifiable justification. Evaluation on external datasets explicitly delimits the domain of applicability to temporally grounded political narratives. Future work targets recall: extending the reference knowl-edge base beyond US, UK, and EU coverage, refining the extraction of implicitly expressed temporal facts, and introduc-ing context-sensitive contradiction verification to eliminate the residual false positive. Integrating causal temporal reasoning models [17], [18] is another direction for inconsistencies that exceed interval-based verification. The results indicate that temporal coherence is a viable and explainable signal for a specific class of disinformation, complementing rather than replacing lexical detectors. TABLE V EVOLUTION OF PERFORMANCE DURING DEVELOPMENT 
+
+Configuration P R F1 FP Baseline verification 0.714 0.227 0.345 4Extended tol. + cross-entity 0.667 0.273 0.387 6Role-category grouping 0.706 0.273 0.393 5FP correction ( θ=0 .70 ) 0.900 0.205 0.333 1Final ( θ=0 .75 ) 0.909 0.227 0.364 1TABLE VI LEXICAL BASELINES ON THE BENCHMARK (5-FOLD CV). Model Precision Recall F1 Logistic Regression 0.783 0.181 0.280 Linear SVM 0.777 0.436 0.535 Random Forest 0.701 0.500 0.572 Proposed (TCS, θ=0 .75 ) 0.909 0.227 0.364 
+
+The code and the online demo are available after blind review. ETHICAL CONSIDERATIONS 
+
+The benchmark’s fake articles contain temporal errors delib-erately injected into otherwise factual accounts of real public figures, for the sole purpose of controlled evaluation; this text is not intended for, nor suitable for, circulation outside the research setting. All reference facts derive from Wikidata [22], a public, collaboratively maintained knowledge base, used under its open licensing terms; no personal or private data is involved. Given its precision-oriented operating point, its low recall, and its demonstrated inability to generalize beyond temporally grounded political narratives (Section IV-D), the system is intended to assist, not replace, human fact-checkers, and should not be deployed as an autonomous arbiter of an article’s veracity, particularly given the reputational risk to public figures of an erroneous flag. ACKNOWLEDGMENT 
+
+This work was supported by a grant of the Min-istry of Research, Innovation and Digitization, CCCDI-UEFISCDI, project number PN-IV-P6-6.3-SOL-2024-2-0312 within PNCDI IV. REFERENCES [1] X. Zhou and R. Zafarani, “A survey of fake news: Fundamental theories, detection methods, and opportunities,” ACM Computing Surveys , vol. 53, no. 5, pp. 1–40, 2020. [2] A.-A. Avram, A. Lecu, and A. Groza, “Mcp-orchestrated multi-agent system for automated disinformation detection,” in 2025 27th Interna-tional Symposium on Symbolic and Numeric Algorithms for Scientific Computing (SYNASC) , 2025, pp. 333–341. [3] U. Qudus, M. R¨ oder, and A.-C. N. Ngomo, “TemporalFC: A temporal fact checking approach over knowledge graphs,” in Proc. 22nd Int. Semantic Web Conf. Springer, 2023. [4] M. Strong and A. Vlachos, “TSVer: A benchmark for fact verification against time-series evidence,” arXiv:2511.01101 , 2024. [5] A. M. Barik, W. Hsu, and M. L. Lee, “ChronoFact: Timeline-based temporal fact verification,” arXiv:2410.14964 , 2025. [6] W. Y. Wang, ““liar, liar pants on fire”: A new benchmark dataset for fake news detection,” in Proc. 55th Annu. Meeting of the ACL , 2017, pp. 422–426. [7] J. Thorne, A. Vlachos, C. Christodoulopoulos, and A. Mittal, “FEVER: A large-scale dataset for fact extraction and VERification,” in Proc. 2018 Conf. NAACL , 2018, pp. 809–819. [8] K. Shu, D. Mahudeswaran, S. Wang, D. Lee, and H. Liu, “FakeNewsNet: A data repository with news content, social context, and spatiotemporal information for studying fake news on social media,” Big Data , vol. 8, no. 3, pp. 171–188, 2020. [9] L. Allein, I. Augenstein, and M.-F. Moens, “Time-aware evidence ranking for fact-checking,” Journal of Web Semantics , vol. 71, 2021. [10] L. Allein, M. Saelens, R. Cartuyvels, and M.-F. Moens, “Implicit temporal reasoning for evidence-based fact-checking,” in Findings of the ACL: EACL 2023 , 2023. [11] T. Soulard, F. Sa¨ ıs, and J. Raad, “Explainable temporal validation of knowledge graph facts using temporal constraints,” 2025. [12] J. F. Allen, “Maintaining knowledge about temporal intervals,” Commu-nications of the ACM , vol. 26, no. 11, pp. 832–843, 1983. [13] M. K. Ngueajio, S. Aryal, M. Atemkeng, G. Washington, and D. Rawat, “Decoding fake news and hate speech: A survey of explainable AI techniques,” ACM Computing Surveys , vol. 57, no. 7, pp. 1–37, 2025. [14] L. Coroama and A. Groza, “Evaluation metrics in explainable artificial intelligence (XAI),” in Int. Conf. Advanced Research in Technologies, Information, Innovation and Sustainability . Springer, 2022, pp. 401– 413. [15] I. Cheres ¸ and A. Groza, “MindBugs: Self-explanatory disinformation detection system with human-in-the-loop,” 2025, preprint. [16] X. Cui et al. , “T2Agent: A tool-augmented multimodal misinformation detection agent with monte carlo tree search,” 2026. [17] Y. Wang et al. , “Explainable fake news detection with variational causal inference,” 2025. [18] Z. Yang et al. , “LoCal: Logical and causal fact-checking with LLM-based multi-agents,” 2025. [19] M. Honnibal, I. Montani, S. V. Landeghem, and A. Boyd, “spaCy: Industrial-strength natural language processing in python,” 2020. [20] Qwen Team, “Qwen3 technical report,” 2025. [21] L. Cai, X. Mao, Y. Zhou, Z. Long, C. Wu, and M. Lan, “A survey on temporal knowledge graph: Representation learning and applications,” 
+
+arXiv:2403.04782 , 2024. [22] D. Vrandeˇ ci´ c and M. Kr¨ otzsch, “Wikidata: A free collaborative knowl-edgebase,” Communications of the ACM , vol. 57, no. 10, pp. 78–85, 2014. [23] Y. Mogre, “Comparative analysis of machine learning classifiers on ISOT and LIAR fake news datasets,” 2024. [24] L. Zeng, R. Gupta, D. Motwani, Y. Zhang, and D. Yang, “Worse than zero-shot? a fact-checking dataset for evaluating the robustness of RAG against misleading retrievals,” arXiv:2502.16101 , 2026. [25] P.-L. H. Cabot and R. Navigli, “REBEL: Relation extraction by end-to-end language generation,” in Findings of the ACL: EMNLP 2021 , 2021, pp. 2370–2381.

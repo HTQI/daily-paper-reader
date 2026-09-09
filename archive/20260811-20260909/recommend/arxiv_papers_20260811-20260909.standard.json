@@ -1,0 +1,754 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-09T03:29:02.494557+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 9,
+    "deep_cap": 6,
+    "deep_selected": 7,
+    "quick_candidates": 15,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2608.22832v1",
+      "source": "arxiv",
+      "title": "Let the Bullets Fly: Multimodal Fake News Detection with Temporal-Aligned Generative Danmaku",
+      "abstract": "The social interactions among crowds via \\textit{Danmaku} (a.k.a., bullet comments) on modern multimedia platforms can facilitate both viewpoint conflicts and consensus, providing fine-grained discriminative social signals that can benefit fake news detection. However, the inherent accumulation latency of \\textit{Danmaku} in real-world scenarios violates the real-time necessity of fake news detection, making the studies of \\textit{Danmaku}-related fake news detection underexplored. To break this violation, we simulate this temporal-aware user interactive process by proposing a novel temporal \\textbf{Gen}erative \\textbf{da}nmaku framework, called \\textbf{Genda}, which consists of: (1) a \\textit{Danmaku} Trigger for predicting the timing and intensity of user reactions; and (2) a \\textit{Danmaku} Generator for synthesizing corresponding semantic and emotional expressions, thereby mutually constructing a temporally aligned and human-like pseudo \\textit{Danmaku} streams. To make the generated \\textit{Danmaku} useful for identifying fake news videos, we further design a \\textit{Danmaku}-guided Temporal Multimodal fake news detection model - \\textbf{DM-FEND}, which enables fine-grained multimodal interactions among video, audio, text, and \\textit{Danmaku}, enhancing dynamic modalities alignment and semantic noise inhibition. The experimental results demonstrate that \\emph{DM-FEND} consistently outperforms state-of-the-art baselines across both Chinese (FakeSV) and English (FakeTT) benchmarks. Further ablations validate the crucial role of temporal \\textit{Danmaku} modeling in enhancing robustness and discriminative capability. Finally, this study offers a bright and robust solution for multimodal fake news detection in modern social interactive fashions by bridging the temporal inconsistency between news and user behaviors.",
+      "authors": [
+        "Xiansheng Luo",
+        "Chaowei Zhang",
+        "Zewei Zhang",
+        "Yi Zhu",
+        "Jipeng Qiang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-24T05:50:12+00:00",
+      "link": "https://arxiv.org/pdf/2608.22832v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Multimodal fake news detection using generative Danmaku social signals with temporal alignment.",
+      "llm_evidence_cn": "利用时间对齐生成式弹幕模拟群体互动，直接面向多模态假新闻检测。",
+      "llm_evidence": "利用时间对齐生成式弹幕模拟群体互动，直接面向多模态假新闻检测。",
+      "canonical_evidence": "利用时间对齐生成式弹幕模拟群体互动，直接面向多模态假新闻检测。",
+      "llm_tldr_en": "Genda proposes temporal generative danmaku to simulate user interactions, avoiding the latency of real bullet comments, and supplies fine-grained social context signals for real-time multimodal fake news detection.",
+      "llm_tldr_cn": "针对真实弹幕积累延迟与虚假新闻检测实时性矛盾，提出时间对齐生成式弹幕框架Genda。它通过弹幕触发器预测时间点并生成具有时间戳的弹幕，以模拟多模态平台中的用户观点交互，为假新闻检测提供细粒度的社交判别信号。该方法把弹幕生成与检测联合建模，缓解了真实弹幕缺失带来的实时性限制。相关工作验证了生成式社交线索可提升多模态虚假新闻识别能力。",
+      "llm_tldr": "针对真实弹幕积累延迟与虚假新闻检测实时性矛盾，提出时间对齐生成式弹幕框架Genda。它通过弹幕触发器预测时间点并生成具有时间戳的弹幕，以模拟多模态平台中的用户观点交互，为假新闻检测提供细粒度的社交判别信号。该方法把弹幕生成与检测联合建模，缓解了真实弹幕缺失带来的实时性限制。相关工作验证了生成式社交线索可提升多模态虚假新闻识别能力。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "multimodal fake news detection models that combine text, image, and social context features",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.20983v1",
+      "source": "arxiv",
+      "title": "Beyond Truth Discovery: A Two-Stage Framework to Assess the Severity of False Claim during Disasters",
+      "abstract": "False information spreads rapidly on social media during disasters and can undermine emergency response efforts, public trust, and crisis communication. Existing research primarily focuses on determining whether social media posts contain false information, but provides limited insight into the specific false claims embedded within posts and the severity of individual false claims. To address the limitations, we propose a two-stage framework to assess the severity of false claims during disasters. In the first stage, we develop a false claim extraction agent that identifies false claims from multimodal social media posts containing text, images, videos, and links. A subsequent verification step validates extracted claims with supporting evidence. In the second stage, we define false claim severity as the combination of two complementary dimensions: believability, which determines the likelihood that a claim will be believed, and harmfulness, which captures the potential consequences if it is believed. Human annotators assess both dimensions to construct a claim-level severity benchmark using false claims extracted from Reddit posts related to hurricanes and wildfires. Building upon this benchmark, we investigate false claim severity assessment as a human-AI alignment problem, evaluating whether models can reproduce human judgments under a shared evaluation rubric rather than merely predicting severity labels. Experiments on the benchmark show that traditional supervised models exhibit limited alignment with human judgments, whereas Large Language Models (LLMs) achieve substantially stronger performance. Among the evaluated strategies, in-context learning consistently achieves the strongest alignment with human judgments, highlighting the importance of human examples and shared decision criteria for severity assessment.",
+      "authors": [
+        "Ruichen Yao",
+        "Tejna Dasari",
+        "Gulshat Baispay",
+        "Aizhan Zaurbek",
+        "Yifan Liu",
+        "Yaokun Liu",
+        "Zelin Li",
+        "Dong Wang"
+      ],
+      "primary_category": "cs.SI",
+      "categories": [
+        "cs.SI",
+        "cs.HC"
+      ],
+      "published": "2026-08-21T11:09:51+00:00",
+      "link": "https://arxiv.org/pdf/2608.20983v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Identifies and verifies false claims from multimodal disaster posts containing text, images, videos, and links; matches multimodal misinformation identification",
+      "llm_evidence_cn": "从包含文本、图像、视频和链接的多模态灾难帖子中抽取并验证虚假声明，契合多模态错误信息识别",
+      "llm_evidence": "从包含文本、图像、视频和链接的多模态灾难帖子中抽取并验证虚假声明，契合多模态错误信息识别",
+      "canonical_evidence": "从包含文本、图像、视频和链接的多模态灾难帖子中抽取并验证虚假声明，契合多模态错误信息识别",
+      "llm_tldr_en": "A two-stage framework assesses severity of false claims in disaster social media: an agent extracts false claims from multimodal posts, followed by a verification step, going beyond truth discovery to severity assessment.",
+      "llm_tldr_cn": "灾害场景中虚假信息快速扩散，现有研究只判断帖子是否含假信息，却缺少对具体虚假声明及其危害程度的刻画。该文提出两阶段框架：第一阶段用一个虚假声明抽取智能体从含文本、图像、视频和链接的多模态社交帖子中识别并抽取虚假声明，第二阶段对抽取结果进行验证，进而评估单条声明的严重程度。该框架将判断粒度从帖子级细化到声明级，为灾害应急中的虚假信息处置和优先级排序提供了新的工具。",
+      "llm_tldr": "灾害场景中虚假信息快速扩散，现有研究只判断帖子是否含假信息，却缺少对具体虚假声明及其危害程度的刻画。该文提出两阶段框架：第一阶段用一个虚假声明抽取智能体从含文本、图像、视频和链接的多模态社交帖子中识别并抽取虚假声明，第二阶段对抽取结果进行验证，进而评估单条声明的严重程度。该框架将判断粒度从帖子级细化到声明级，为灾害应急中的虚假信息处置和优先级排序提供了新的工具。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "automatically identifying misinformation from posts containing images, text, and video",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.23811v1",
+      "source": "arxiv",
+      "title": "Generating Biomedical Fact-Checking Reports with RL-Enhanced Agentic Search",
+      "abstract": "Automated fact-checking is essential for ensuring the reliability of public health information, yet the biomedical domain poses unique challenges. Validating biomedical claims requires rigorous interpretation of scientific literature, assessment of retrieved evidence, and comprehensive justification toward the conclusion. Although Large Language Models (LLMs) enhanced by Retrieval-Augmented Generation (RAG) and agentic search perform automated fact-checking in a retrieve-then-verify paradigm, current methods still output isolated prediction labels, lacking explanatory depth and offers limited utility for human understanding. To bridge this gap, we introduce an LLM-based agent named BioCheck Agent that generates structured biomedical fact-checking reports with agentic search. Rather than merely outputting supported or refuted labels, our agent synthesizes final conclusions with retrieved evidence and rigorous analysis. To ensure domain-specific accuracy, BioCheck Agent exclusively searches high-quality scientific literature in PubMed, utilizing advanced Boolean search operators. Recognizing that direct prompting often results in hallucinations and low-quality reports, especially for lightweight open-source models, we further propose the Evidence-Grounded Group Relative Policy Optimization (EG-GRPO) to perform reinforcement learning on BioCheck Agent with a task-specific reward that incentivizes advanced search behavior and high-quality evidence retrieval while penalizing hallucinations. Our experimental results show that compared to the base model Qwen3.5-4B, BioCheck Agent with EG-GRPO improves label prediction accuracy on SciFact by 9.95%. Furthermore, it achieves a 3.7% higher evidence quality score and a 19.63% lower evidence hallucination rate, demonstrating its ability to generate biomedical fact-checking reports with improved accuracy and quality.",
+      "authors": [
+        "Jiongxiao Wang",
+        "Dingli Ma",
+        "Chaoqun Ni"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-24T20:25:38+00:00",
+      "link": "https://arxiv.org/pdf/2608.23811v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Fact-checking via RL agentic retrieval of external literature generating structured reports",
+      "llm_evidence_cn": "通过强化学习智能体检索外部文献生成结构化事实核查报告，属证据驱动核查",
+      "llm_evidence": "通过强化学习智能体检索外部文献生成结构化事实核查报告，属证据驱动核查",
+      "canonical_evidence": "通过强化学习智能体检索外部文献生成结构化事实核查报告，属证据驱动核查",
+      "llm_tldr_en": "BioCheck Agent combines LLMs with RL-enhanced agentic search to produce structured biomedical fact-checking reports, moving beyond isolated labels and adding explanatory depth to evidence-based verification.",
+      "llm_tldr_cn": "生物医学事实核查要求严格解读科学文献并给出完整论证，而现有检索增强生成方法只输出孤立标签，解释性不足。论文提出BioCheck Agent，将LLM与强化学习增强的智能体搜索相结合，在检索-验证范式中生成结构化的生物医学事实核查报告。该系统可自动收集文献证据并形成可读结论，有望提高自动化事实核查的可解释性和实用性。",
+      "llm_tldr": "生物医学事实核查要求严格解读科学文献并给出完整论证，而现有检索增强生成方法只输出孤立标签，解释性不足。论文提出BioCheck Agent，将LLM与强化学习增强的智能体搜索相结合，在检索-验证范式中生成结构化的生物医学事实核查报告。该系统可自动收集文献证据并形成可读结论，有望提高自动化事实核查的可解释性和实用性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.26787v1",
+      "source": "arxiv",
+      "title": "Self-Reflective Multi-modal Reasoning for Short-Video Fake News Detection",
+      "abstract": "Recent fake news detection pipelines increasingly leverage large language models and vision-language models for reasoning-based analysis. However, several challenges remain open: improving reasoning quality through self-reflection without ground-truth chain-of-thought supervision, using improved reasoning to benefit downstream model fine-tuning, and connecting single-sample fraudulent-pattern discovery with cross-sample verification. We propose SRM-FND, a self-reflective multimodal reasoning framework for short-video fake news detection. SRM-FND develops higher-quality reasoning through contrastive deliberation, iterative root-cause diagnosis, and corrective prompt refinement. A Blind Analyst, Counter-Conclusion Reasoner, and Self-Consistency Arbiter collaboratively identify and retain discriminative rationales. The framework also incorporates dual-phase, topic-adaptive vision-language model fine-tuning to improve multimodal grounding and enable lightweight topic specialization. For uncertain cases, it performs confidence-driven cross-sample review by retrieving credible and suspicious co-event examples. Experiments on FakeSV and FakeTT show that SRM-FND outperforms strong baselines, produces more reliable and interpretable predictions, and delivers noticeable improvements in cross-dataset performance.",
+      "authors": [
+        "Pinjie Xu",
+        "Yuzhou Yang",
+        "Zhikai Tan",
+        "Qichao Ying",
+        "Zaiyang Yu",
+        "Ce Li",
+        "Zhenxing Qian"
+      ],
+      "primary_category": "cs.MM",
+      "categories": [
+        "cs.MM"
+      ],
+      "published": "2026-08-27T08:17:41+00:00",
+      "link": "https://arxiv.org/pdf/2608.26787v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Direct multimodal FND for short videos: integrates visual, textual and video signals with self-reflective LLM reasoning",
+      "llm_evidence_cn": "短视频假新闻检测，结合文本与视频多模态线索，并通过对比反思实现推理，匹配图像-文本-视频错误信息识别。",
+      "llm_evidence": "短视频假新闻检测，结合文本与视频多模态线索，并通过对比反思实现推理，匹配图像-文本-视频错误信息识别。",
+      "canonical_evidence": "短视频假新闻检测，结合文本与视频多模态线索，并通过对比反思实现推理，匹配图像-文本-视频错误信息识别。",
+      "llm_tldr_en": "SRM-FND detects fake news in short videos via multimodal reasoning and self-reflection modules, improving rationale quality and downstream fine-tuning while bridging single-sample fraud analysis with cross-sample verification.",
+      "llm_tldr_cn": "短视频假新闻的跨模态线索难以识别，且高质量推理难以在没有思维链真值的环境中自动获得。本文提出SRM-FND，通过对比深思、根因诊断和纠错提示等模块实现自我反思式多模态推理。该框架无需监督CoT，即可用改进推理微调检测器，并同时进行单样本欺诈模式识别与跨样本检验。实验表明，它在短视频假新闻检测任务上显著优于既有方法。此项工作说明自省与跨样本验证结合对多模态虚假信息治理具有重要潜力。",
+      "llm_tldr": "短视频假新闻的跨模态线索难以识别，且高质量推理难以在没有思维链真值的环境中自动获得。本文提出SRM-FND，通过对比深思、根因诊断和纠错提示等模块实现自我反思式多模态推理。该框架无需监督CoT，即可用改进推理微调检测器，并同时进行单样本欺诈模式识别与跨样本检验。实验表明，它在短视频假新闻检测任务上显著优于既有方法。此项工作说明自省与跨样本验证结合对多模态虚假信息治理具有重要潜力。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "automatically identifying misinformation from posts containing images, text, and video",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.29617v1",
+      "source": "arxiv",
+      "title": "Memory-First Fact-Checking: A Knowledge-Graph-Grounded Multi-Agent System for Misinformation Detection",
+      "abstract": "This paper introduces a hybrid fact-checking framework that integrates Knowledge Graph-based semantic memory with adversarial multi-agent reasoning for explainable misinformation detection. The proposed system follows a memory-first, web-fallback architecture, in which input claims are initially evaluated against a dual-index Knowledge Graph through Sentence-BERT-based semantic retrieval and Natural Language Inference. When the evidence retrieved from the graph is insufficient to support a reliable decision, the framework collects information from trusted web sources and assesses it using an adversarial tribunal composed of support, contradiction, and judging agents. A graph-aware confidence mechanism combines semantic similarity, NLI confidence, and structural graph evidence to determine whether internal knowledge is sufficient, thereby reducing unnecessary web retrieval. Following verification, validated information is transformed into structured triples and incorporated into the Knowledge Graph, supporting the incremental expansion of the system's semantic memory. Experimental evaluation on a curated COVID-19 misinformation benchmark demonstrates that the proposed framework achieves an accuracy of 97.4\\% and a macro-averaged F1-score of 92.6% on resolved claims, outperforming a Llama~3.3~70B baseline, which obtains an accuracy of 87.7% and a macro-averaged F1-score of 86.3%.",
+      "authors": [
+        "Amelia Petrenciuc",
+        "Alexandru Lecu",
+        "Adrian Groza"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-08-30T07:16:07+00:00",
+      "link": "https://arxiv.org/pdf/2608.29617v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Knowledge-graph and web-source retrieval with multi-agent reasoning for explainable misinformation detection",
+      "llm_evidence_cn": "融合知识图谱与网络来源检索及多智能体推理的可解释虚假信息检测",
+      "llm_evidence": "融合知识图谱与网络来源检索及多智能体推理的可解释虚假信息检测",
+      "canonical_evidence": "融合知识图谱与网络来源检索及多智能体推理的可解释虚假信息检测",
+      "llm_tldr_en": "Memory-First Fact-Checking integrates knowledge-graph semantic memory, Sentence-BERT/NLI, and a multi-agent adversarial tribunal with web fallback to deliver explainable misinformation detection.",
+      "llm_tldr_cn": "针对现有误导信息检测缺乏可解释性与外部知识整合的问题，本文提出记忆优先的事实核查框架。该系统首先利用双索引知识图谱与句子BERT语义检索和自然语言推理评估声明，证据不足时再回退到可信网络来源，并由支持、反驳与裁决多智能体对抗审议。图感知的置信度机制综合判定结果，实现可解释且可靠的误导信息检测。",
+      "llm_tldr": "针对现有误导信息检测缺乏可解释性与外部知识整合的问题，本文提出记忆优先的事实核查框架。该系统首先利用双索引知识图谱与句子BERT语义检索和自然语言推理评估声明，证据不足时再回退到可信网络来源，并由支持、反驳与裁决多智能体对抗审议。图感知的置信度机制综合判定结果，实现可解释且可靠的误导信息检测。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.29681v1",
+      "source": "arxiv",
+      "title": "MMMMM: A Unified Taxonomy for Investigating the Mechanisms of Multilingual MultiModal Misinformation",
+      "abstract": "Multimodal misinformation on social media is highly prevalent, potent, and harmful, yet difficult to detect and counter, and still poorly understood compared to its text-only counterpart. Research on the properties and deceptive strategies of multimodal misinformation is hindered by a lack of taxonomies grounded in real-world contexts and by the limitations of current multimodal machine learning models, which prevent the automation of annotation and analysis at scale. We address these shortcomings in three steps. First, we collect a large-scale, high-quality dataset of real-world misinformation instances from Twitter/X in seven languages. Second, we develop a novel, comprehensive taxonomy of multimodal misinformation grounded in an in-depth qualitative analysis of the data and prior theoretical work. Finally, we operationalise the taxonomy through an automated multi-step annotation pipeline using a Vision-Language Model (VLM), and perform human-validation. Our novel approach leads to previously undocumented insights about how social media users combine images with text to spread misinformation in the wild, e.g., that AI-generated content is particularly prevalent in technology and science, while vaccination misinformation disproportionately utilises images from news outlets to assert credibility. Our method and findings provide guidance for targeted approaches for detecting multimodal misinformation, and suggest that mitigation efforts should be developed and applied strategically rather than uniformly.",
+      "authors": [
+        "Nadav Borenstein",
+        "Greta Warren",
+        "Desmond Elliott",
+        "Isabelle Augenstein"
+      ],
+      "primary_category": "cs.CY",
+      "categories": [
+        "cs.CY"
+      ],
+      "published": "2026-08-30T09:30:19+00:00",
+      "link": "https://arxiv.org/pdf/2608.29681v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Builds a large real-world multilingual multimodal misinformation dataset and a grounded taxonomy; directly supports benchmarks and mechanism study.",
+      "llm_evidence_cn": "构建七语种真实多模态错误信息数据集并提出系统分类法，直接支撑多模态错误信息基准与机制研究。",
+      "llm_evidence": "构建七语种真实多模态错误信息数据集并提出系统分类法，直接支撑多模态错误信息基准与机制研究。",
+      "canonical_evidence": "构建七语种真实多模态错误信息数据集并提出系统分类法，直接支撑多模态错误信息基准与机制研究。",
+      "llm_tldr_en": "MMMMM collects a large-scale, high-quality dataset of real-world multimodal misinformation from Twitter/X in seven languages and develops a comprehensive taxonomy of deceptive strategies. It addresses the lack of grounded taxonomies and supports annotation and analysis at scale for understanding multilingual multimodal misinformation.",
+      "llm_tldr_cn": "针对社交媒体上多模态错误信息缺乏真实语境分类法、且现有模型难以自动标注分析的问题，MMMMM分三步建构：首先收集七种语言的Twitter/X真实错误信息样本；随后提出一套基于真实情境的多模态错误信息机制分类法；最后结合多模态模型实现规模化标注与分析。该工作为多语言多模态错误信息研究提供了高质量数据集与统一分析框架，可作为相关检测模型的评测基准。",
+      "llm_tldr": "针对社交媒体上多模态错误信息缺乏真实语境分类法、且现有模型难以自动标注分析的问题，MMMMM分三步建构：首先收集七种语言的Twitter/X真实错误信息样本；随后提出一套基于真实情境的多模态错误信息机制分类法；最后结合多模态模型实现规模化标注与分析。该工作为多语言多模态错误信息研究提供了高质量数据集与统一分析框架，可作为相关检测模型的评测基准。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.00508v1",
+      "source": "arxiv",
+      "title": "CoVer: Conflict-Aware Claim Verification",
+      "abstract": "Social media fact-checking has long been challenged by evidence-level and aggregation-level conflicts, where erroneous evidence mimics authoritative news sources. To capture this challenge and support conflict verification tasks, we present ContraNote, a large-scale real-world dataset curated from X's Community Notes system. It includes 33,686 posts for evaluating evidence-level conflict resolution, and 54,474 instances for evaluating aggregation-level prioritization. Additionally, we propose CoVer, a factual adjudication framework with three-stage pipelines: evidence schema normalization, factual consensus and support verification. This prioritizes evidence over noise to prevent it from compromising the final verdict. Technical evaluations show that CoVer achieves strong performance compared with state-of-the-art baselines across ContraNote (86.0% Acc., 68.0% mac. F1, 64.5 bal. Acc. on Conflict; and 88.5% Acc., 88.5 mac. F1 and 89.2 bal. Acc. on Prioritization), CONFACT-HumC (88.4% Acc.) and CONFACT-ModC (89.4% Acc.).",
+      "authors": [
+        "Shuning Zhang",
+        "Dai Shi",
+        "Bohao Chu",
+        "Hui Wang",
+        "Yuwei Chuai",
+        "Yifan Wang",
+        "Jingruo Chen",
+        "Simin Li",
+        "Xin Yi",
+        "Hewu Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-01T00:18:58+00:00",
+      "link": "https://arxiv.org/pdf/2609.00508v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Evidence-driven claim verification against conflicting social media evidence",
+      "llm_evidence_cn": "面向证据冲突的社交媒体声明事实核查",
+      "llm_evidence": "面向证据冲突的社交媒体声明事实核查",
+      "canonical_evidence": "面向证据冲突的社交媒体声明事实核查",
+      "llm_tldr_en": "CoVer addresses evidence-level and aggregation-level conflicts in social media fact-checking, introducing ContraNote and a three-stage factual adjudication framework that prioritizes reliable evidence over noise.",
+      "llm_tldr_cn": "社交媒体事实核查常因证据聚合层面的冲突而失效，错误证据可能伪装成权威信源。该文基于X Community Notes构建大规模真实数据集ContraNote（含5.4万实例），并提出CoVer三阶段事实判定框架，先归一化证据模式，再聚合共识并验证支持度，以阻止噪声干扰裁决。实验表明CoVer能有效消解证据冲突并提升多层级验证性能，为冲突感知的声明核查提供新基准与方法。",
+      "llm_tldr": "社交媒体事实核查常因证据聚合层面的冲突而失效，错误证据可能伪装成权威信源。该文基于X Community Notes构建大规模真实数据集ContraNote（含5.4万实例），并提出CoVer三阶段事实判定框架，先归一化证据模式，再聚合共识并验证支持度，以阻止噪声干扰裁决。实验表明CoVer能有效消解证据冲突并提升多层级验证性能，为冲突感知的声明核查提供新基准与方法。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.15574v1",
+      "source": "arxiv",
+      "title": "Catching Hallucinated Citations in Video-LLM Question Answering: A Self-Verification Pipeline and Verifier Ablation Study",
+      "abstract": "Video question answering systems built on vision-language models often produce timestamped claims with high confidence even when unsupported by the cited frame. This deceptive hallucination arises because timestamps imply grounding without ensuring correctness, increasing user trust but not accuracy. We introduce a pipeline that closes this loop. A retrieval-augmented language model drafts answers with per-claim timestamp citations, and each cited frame is independently re-examined before being shown to the user. We compare against a plain baseline and ablate three verification designs, evaluated on both Apple Silicon (MLX) and Google Colab (HF Transformers, CUDA). Directly asking the vision model whether a frame supports a claim fails completely (0% catch rate on 40 claims) due to sycophancy. Blind re-captioning plus a general LLM judge improves results but is unstable, oscillating between 0% and 100% flagged depending on prompt phrasing. Replacing that judge with a small natural language inference model yields a stable, interpretable verifier that catches 79% of fabricated claims on adversarial false-premise questions while leaving true claims untouched. We release the full pipeline, evaluation harness, and implementations for both Apple Silicon and Colab. Code is available at https://github.com/yogesh-iitj/grounded-video-qa.",
+      "authors": [
+        "Yogesh Kumar"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-08-16T06:42:11+00:00",
+      "link": "https://arxiv.org/pdf/2608.15574v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "self-verification pipeline re-examines timestamp citations against cited frames to catch unsupported claims, matching claim verification with text and visual evidence",
+      "llm_evidence_cn": "自我验证流水线逐条核验时间戳引用与视频帧，检测文本主张是否获得视觉证据支持",
+      "llm_evidence": "自我验证流水线逐条核验时间戳引用与视频帧，检测文本主张是否获得视觉证据支持",
+      "canonical_evidence": "自我验证流水线逐条核验时间戳引用与视频帧，检测文本主张是否获得视觉证据支持",
+      "llm_tldr_en": "A self-verification pipeline catches hallucinated timestamp citations in video-LLM QA by independently re-examining each cited frame, directly relevant to multimodal claim verification.",
+      "llm_tldr_cn": "视频问答大模型常自信给出带时间戳的声明，但这些声明可能并未得到所引帧支持。作者提出自我验证流水线：由检索增强语言模型生成逐句带引用答案后，独立复核每个引用帧，并消融三种验证设计。实验在Apple Silicon与Colab环境中验证该方法能发现幻觉引用。此思路可用于图文证据一致性要求高的虚假信息核查任务。",
+      "llm_tldr": "视频问答大模型常自信给出带时间戳的声明，但这些声明可能并未得到所引帧支持。作者提出自我验证流水线：由检索增强语言模型生成逐句带引用答案后，独立复核每个引用帧，并消融三种验证设计。实验在Apple Silicon与Colab环境中验证该方法能发现幻觉引用。此思路可用于图文证据一致性要求高的虚假信息核查任务。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2608.15056v1",
+      "source": "arxiv",
+      "title": "GraphLoom: Reliability-Calibrated Graph Evidence Routing for Multimodal KG-RAG",
+      "abstract": "Multimodal retrieval-augmented generation (RAG) systems often rely on long unstructured contexts or aggressively expanded evidence graphs, which can introduce noisy evidence, weaken multi-hop reasoning, and increase unsupported generation. We present GraphLoom, a reliability-calibrated multimodal knowledge-graph RAG framework for compact and faithful evidence routing. Given a question and its associated multimodal input, GraphLoom constructs an instance-level multimodal knowledge graph from grounded scene descriptions, extracted relational triples, and external commonsense knowledge. Instead of injecting all retrieved evidence into the generator, GraphLoom performs reliability-aware subgraph retrieval with bounded expansion and selectively routes high-utility evidence through hierarchical graph memory slots and joint graph-sequence attention in a frozen language model. To improve robustness in complex reasoning settings, GraphLoom further combines interleaved retrieval with budgeted corrective retrieval, enabling adaptive multi-hop evidence refinement under noisy retrieval conditions. We evaluate GraphLoom on ScienceQA, MultiModalQA, and OK-VQA, including large distractor evidence pools that approximate noisy external knowledge retrieval. Experimental results show consistent gains in answer quality and evidence faithfulness over strong multimodal RAG, graph-retrieval, and open-source vision-language baselines, with improved retrieval quality on MultiModalQA and stable performance under noisy evidence pools. Additional analyses using MiniCheck-based verification, human evaluation, and latency profiling show that reliability-calibrated graph evidence routing provides an effective alternative to long-context multimodal evidence injection.",
+      "authors": [
+        "Zafar Ali",
+        "Asad Khan",
+        "Aalia Malik",
+        "Pavlos Kefalas"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-15T06:02:23+00:00",
+      "link": "https://arxiv.org/pdf/2608.15056v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Reliability-calibrated multimodal KG-RAG for faithful evidence routing to avoid unsupported generation; applicable to evidence-based fact checking.",
+      "llm_evidence_cn": "面向多模态知识图谱RAG的可靠性校准证据路由，以减少噪声证据、支撑证据驱动的事实核查。",
+      "llm_evidence": "面向多模态知识图谱RAG的可靠性校准证据路由，以减少噪声证据、支撑证据驱动的事实核查。",
+      "canonical_evidence": "面向多模态知识图谱RAG的可靠性校准证据路由，以减少噪声证据、支撑证据驱动的事实核查。",
+      "llm_tldr_en": "GraphLoom constructs an instance-level multimodal knowledge graph and uses reliability-calibrated subgraph retrieval with selective routing to reduce noisy evidence and unsupported generation; supports evidence-grounded fact checking.",
+      "llm_tldr_cn": "多模态RAG通常会引入过长非结构上下文或激进的证据图扩展，导致噪声证据和多跳推理变弱。GraphLoom在给定问题与多模态输入时，先构建实例级多模态知识图谱，再进行可靠性感知的有界子图谱检索，并有选择地向生成器路由紧凑证据。实验表明该方法能提高生成忠实度并减少无依据输出。它展示了可靠性校准的证据路由机制，可迁移到基于外部知识源的多模态事实核查。",
+      "llm_tldr": "多模态RAG通常会引入过长非结构上下文或激进的证据图扩展，导致噪声证据和多跳推理变弱。GraphLoom在给定问题与多模态输入时，先构建实例级多模态知识图谱，再进行可靠性感知的有界子图谱检索，并有选择地向生成器路由紧凑证据。实验表明该方法能提高生成忠实度并减少无依据输出。它展示了可靠性校准的证据路由机制，可迁移到基于外部知识源的多模态事实核查。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.14391v2",
+      "source": "arxiv",
+      "title": "Can We Defend Against AI-Generated Video Attacks on Real-World Crisis Events? A Systematic Evaluation of Detectors, Generators and Social Dissemination",
+      "abstract": "Recent video generators can fabricate realistic depictions of wars, disasters, public emergencies, and other real-world crises, creating substantial risks of misinformation. Existing benchmarks, however, provide limited evidence on detector and generator behavior in such settings, including how detectability varies with generation conditions, how people perceive generated videos, and whether detectors remain reliable during social dissemination. To address this gap, we introduce RA-Bench, a benchmark for AI-generated video detection that uses Real videos as Anchors. RA-Bench contains 17,886 videos, comprising 1,830 real-video anchors across 10 social-risk categories and 16,056 generated clips from four open-source and five closed-source generators. Based on RA-Bench, we organize our evaluation along three dimensions. We first assess detector generalization across seven traditional detectors, ten zero-shot multimodal models under three review settings, and two MLLMs specifically fine-tuned on AI-generated video detection. Across these methods, none of the three detector families generalizes consistently across RA-Bench instances. We then examine how detectability varies with generation quality, conditioning information, and sampling seeds. These analyses show that generation properties affect detector families differently, while source-level detection patterns remain stable across seeds. Finally, we study human authenticity judgments and detector reliability during social dissemination. We find that videos that mislead people are also difficult for current detectors, and that social dissemination makes detection harder. Together, these findings show that current methods struggle to detect realistic AI-generated videos, highlighting the need for detectors robust to evolving video generators.",
+      "authors": [
+        "Shuo Liang",
+        "Yixing Ma",
+        "Pengfei Zhou",
+        "Zhenglin Wan",
+        "Xingyan Chen",
+        "Zihan Mei",
+        "Manting Li",
+        "Feihan Chen",
+        "Zhiwen Wang",
+        "Bin Xu",
+        "Haotian Zhang",
+        "Jiajun Song",
+        "Shiya Su",
+        "Run Liu",
+        "Zhenghang Ni",
+        "Yifa Yu",
+        "Jintao Hong",
+        "Bolong Feng",
+        "Yifei Liu",
+        "Zirui Zhang",
+        "Jingxuan Zhang",
+        "Songlin Zhao",
+        "Yifan Bai",
+        "Kang Tan",
+        "Yizhe Liu",
+        "Junhao Du",
+        "Yongtao Ge",
+        "Zhaopan Xv",
+        "Xinyuan Zhang",
+        "Mengru Ma",
+        "Chunhua Shen",
+        "Wei Wang",
+        "Yang You",
+        "Zheng Zhu",
+        "Kaipeng Zhang",
+        "Wangbo Zhao"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-08-14T15:32:56+00:00",
+      "link": "https://arxiv.org/pdf/2608.14391v2",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Benchmark for detecting AI-generated videos of real-world crisis misinformation; useful for video-forensics layer but not multimodal text-image joint analysis",
+      "llm_evidence_cn": "面向危机事件AI生成视频的虚假信息检测基准，可作为视频取证评测资源，但未涉及图文联合分析",
+      "llm_evidence": "面向危机事件AI生成视频的虚假信息检测基准，可作为视频取证评测资源，但未涉及图文联合分析",
+      "canonical_evidence": "面向危机事件AI生成视频的虚假信息检测基准，可作为视频取证评测资源，但未涉及图文联合分析",
+      "llm_tldr_en": "Introduces RA-Bench, an AI-generated video detection benchmark with 17,886 crisis-related videos covering 10 social-risk categories, evaluating detectors across generation conditions and social dissemination.",
+      "llm_tldr_cn": "现有多媒体虚假信息基准很少系统评估危机事件中的AI生成视频，尤其缺少对生成条件、人类感知和社会传播的联合考察。为此该文提出RA-Bench，使用真实视频作为锚点，构建含17886个视频、10个社会风险类别的基准，并系统评估检测器、生成器与社交传播环节。实验揭示了检测性能随生成条件和传播过程而变化的规律及检测器的脆弱点，为视频型虚假信息防护与后续多模态检测研究提供了可复用的公共评测平台。",
+      "llm_tldr": "现有多媒体虚假信息基准很少系统评估危机事件中的AI生成视频，尤其缺少对生成条件、人类感知和社会传播的联合考察。为此该文提出RA-Bench，使用真实视频作为锚点，构建含17886个视频、10个社会风险类别的基准，并系统评估检测器、生成器与社交传播环节。实验揭示了检测性能随生成条件和传播过程而变化的规律及检测器的脆弱点，为视频型虚假信息防护与后续多模态检测研究提供了可复用的公共评测平台。",
+      "llm_tags": [
+        "query:mfnd:composite"
+      ],
+      "matched_query_tag": "query:mfnd:composite",
+      "matched_query_text": "Papers central to 系统检索多模态虚假新闻、错误信息、谣言检测与事实核查方法，涵盖跨模态一致性、证据驱动验证、视觉语言模型及基准数据集等方向。, especially work that connects or combines: detecting fake news by jointly analyzing textual content and visual information; automatically identifying misinformation from posts containing images, text, and video; verifying the truthfulness of a claim using both textual and visual evidence; checking misinformation by retrieving external sources and evidence to support or refute claims; detecting rumors based on multimodal posts that integrate text, image, video, and social context; multimodal fake news detection models that combine text, image, and social context features; cross modal semantic consistency and image text mismatch detection for misinformation verification; evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources; explainable and domain generalizable multimodal misinformation detection methods and benchmarks.",
+      "matched_requirement_id": "req-composite-mfnd",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.25487v1",
+      "source": "arxiv",
+      "title": "ReliableRAG: Combating Misinformation in Retrieval-Augmented Generation via Reliability-Guided Reasoning Chains",
+      "abstract": "Retrieval-Augmented Generation (RAG) has emerged as a powerful architecture for Question Answering (QA) by integrating external information into Large Language Models (LLMs). However, false, inaccurate, and misleading information in news and social media poses a serious challenge to real-world RAG systems, especially in multi-hop QA, where complex multi-step reasoning can be misled by even a single deceptive misinformation segment in the retrieved documents. Existing approaches mainly rely on implicit alignment or explicit regulation, but their limited ability to assess fine-grained information reliability makes them vulnerable to deceptive misinformation that is semantically relevant to the question yet factually incorrect, leading to erroneous answers. To address this limitation, we propose ReliableRAG, which, to the best of our knowledge, is the first reliability-driven framework that mitigates deceptive misinformation in multi-hop QA through fine-grained evaluation of individual triples. ReliableRAG first extracts information segments from source documents and represents them as structured triples. It then quantifies triple reliability by combining query-triple semantic relevance with triple credibility, retaining only the top-$K$ reliable and non-redundant triples. Based on these refined triples, ReliableRAG autoregressively constructs robust reasoning chains to consolidate trustworthy evidence and filter deceptive misinformation, producing accurate answers faithful to reliable information. Experiments on three multi-hop QA datasets show that ReliableRAG outperforms existing methods, substantially improving the factual reliability and robustness of RAG systems under deceptive misinformation injection.",
+      "authors": [
+        "Jinpu Jiang",
+        "Xuan Wu",
+        "Wenhao Song",
+        "Bo Yang",
+        "You Zhou",
+        "Hongwei Ge",
+        "Heow Pueh Lee",
+        "Yanchun Liang",
+        "Chunguo Wu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.IR"
+      ],
+      "published": "2026-08-26T07:59:24+00:00",
+      "link": "https://arxiv.org/pdf/2608.25487v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Reliability-guided retrieval-augmented reasoning explicitly mitigates misinformation from external sources; strong match to evidence-based claim verification.",
+      "llm_evidence_cn": "可靠性引导的检索增强链显式抵御外部文档中的误导性信息，与证据核实和反驳任务要求高度一致。",
+      "llm_evidence": "可靠性引导的检索增强链显式抵御外部文档中的误导性信息，与证据核实和反驳任务要求高度一致。",
+      "canonical_evidence": "可靠性引导的检索增强链显式抵御外部文档中的误导性信息，与证据核实和反驳任务要求高度一致。",
+      "llm_tldr_en": "ReliableRAG guides RAG reasoning chains with fine-grained reliability assessment, preventing retrieved misinformation from misleading multi-hop QA; it beats implicit-alignment and explicit-regulation baselines against semantically relevant but false evidence.",
+      "llm_tldr_cn": "检索增强问答中，检索文档可能包含语义贴合但事实错误的误导性信息，从而破坏多步推理答案正确性。ReliableRAG先对候选证据做细粒度可靠性评估，再用可靠性引导的推理链约束下一步检索与推理，同时避免只靠隐式对齐或简单显式约束造成的脆弱性。实验显示，该方法在真实新闻舆情与多跳问答场景中减少错误传播、提升最终答案质量，为证据驱动的事实核查提供了实用方向。",
+      "llm_tldr": "检索增强问答中，检索文档可能包含语义贴合但事实错误的误导性信息，从而破坏多步推理答案正确性。ReliableRAG先对候选证据做细粒度可靠性评估，再用可靠性引导的推理链约束下一步检索与推理，同时避免只靠隐式对齐或简单显式约束造成的脆弱性。实验显示，该方法在真实新闻舆情与多跳问答场景中减少错误传播、提升最终答案质量，为证据驱动的事实核查提供了实用方向。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2608.20116v1",
+      "source": "arxiv",
+      "title": "When Text and Numbers Disagree: Evidence Arbitration in Large Language Models",
+      "abstract": "Large language models (LLMs) are increasingly used in settings where textual summaries, numerical observations, and external tool outputs may provide conflicting evidence. We study how LLMs arbitrate between such sources when they support opposing decisions. To do so, we introduce a controlled synthetic benchmark in which latent risk trajectories generate both numerical time series and natural language summaries, allowing us to construct conflicts where exactly one evidence source is aligned with the ground-truth label. This design lets us independently manipulate modality, temporal recency, source reliability, and evidence provenance. Across open-weight instruction-tuned models, we find that arbitration behaviour is systematic rather than random: models exhibit distinct text-versus-number preferences, follow temporal recency more consistently than explicit reliability cues, and can over-rely on external forecasts even when they conflict with direct contextual evidence. These results suggest that current LLMs often rely on heuristic arbitration strategies when integrating heterogeneous evidence, highlighting a failure mode for tool-augmented decision systems.",
+      "authors": [
+        "Mattia Carletti",
+        "Edward Phillips",
+        "Fredrik K. Gustafsson",
+        "Patitapaban Palo",
+        "Lei Clifton",
+        "Danielle Belgrave",
+        "Xiao Gu",
+        "David A. Clifton"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-08-20T14:48:30+00:00",
+      "link": "https://arxiv.org/pdf/2608.20116v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Explicitly studies arbitration among conflicting textual, numeric and tool-output evidence, relevant to evidence-based misinformation verification",
+      "llm_evidence_cn": "研究文本、数值与工具输出等矛盾证据的取舍机制，与证据驱动的错误信息核查直接相关",
+      "llm_evidence": "研究文本、数值与工具输出等矛盾证据的取舍机制，与证据驱动的错误信息核查直接相关",
+      "canonical_evidence": "研究文本、数值与工具输出等矛盾证据的取舍机制，与证据驱动的错误信息核查直接相关",
+      "llm_tldr_en": "This work builds a controlled synthetic benchmark where latent risk trajectories generate conflicting numerical time series and natural-language summaries, enabling systematic study of how LLMs arbitrate evidence by modality, recency, source reliability, and provenance.",
+      "llm_tldr_cn": "事实核查系统经常遇到文本摘要、数值序列和外部工具输出互相矛盾的情况，而LLM如何取舍这些证据尚缺乏受控研究。该文利用隐风险轨迹同时生成数值时间序列和自然语言摘要，构造了恰好只有一方与真实标签一致的冲突场景，从而可以独立操纵证据模态、时间新鲜度、来源可靠性和出处。实验发现多种开源指令模型在跨源证据仲裁上具有系统性而非随机性的行为模式。该工作为理解并改进多源证据融合的事实核查与自动化决策提供了可控的测试框架。",
+      "llm_tldr": "事实核查系统经常遇到文本摘要、数值序列和外部工具输出互相矛盾的情况，而LLM如何取舍这些证据尚缺乏受控研究。该文利用隐风险轨迹同时生成数值时间序列和自然语言摘要，构造了恰好只有一方与真实标签一致的冲突场景，从而可以独立操纵证据模态、时间新鲜度、来源可靠性和出处。实验发现多种开源指令模型在跨源证据仲裁上具有系统性而非随机性的行为模式。该工作为理解并改进多源证据融合的事实核查与自动化决策提供了可控的测试框架。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.15210v1",
+      "source": "arxiv",
+      "title": "RoE-FND: Synergizing LLMs with Experiential Learning for Effective and Generalizable Evidence-Based Fake News Detection",
+      "abstract": "The proliferation of deceptive content in social networks necessitates robust Fake News Detection (FND) systems. Existing pipelines either train detectors on labeled data or leverage Large Language Models (LLMs) for their reasoning ability. However, current approaches remain either limited in generalizability or prone to over-commitment to persuasive yet flawed rationales, lacking systematic experience and mechanisms to expose subtle reasoning errors. We propose \\textbf{RoE-FND} (\\textbf{\\underline{R}}eason \\textbf{\\underline{o}}n \\textbf{\\underline{E}}xperiences FND), an LLM-based framework that combines self-reflective experience building with deliberation through retrieved experiences for FND. RoE-FND builds an experience bank via reflective learning that compares an unconstrained analysis with a label-conditioned analysis using the ground-truth label as posterior supervision, then summarizes their critical divergence into reusable reasoning guidelines. During inference, RoE-FND generates two opposing deductions via a flipped pseudo-label provided as posterior, retrieves the most relevant experiences for resolving their key disagreement, and adjudicates the better-supported rationale as the final prediction. Experiments across five popular benchmarks, including text-only datasets, i.e., CHEF, Snopes, PolitiFact, and multimedia datasets, i.e., FakeTT, FakeSV, demonstrate that RoE-FND outperforms strong baselines without optimizing LLM parameters on dataset distributions, while exhibiting strong cross-dataset generalization.",
+      "authors": [
+        "Yuzhou Yang",
+        "Qichao Ying",
+        "Sheng Li",
+        "Zhiyin Zhu",
+        "Zhenxing Qian",
+        "Xinpeng Zhang"
+      ],
+      "primary_category": "cs.MM",
+      "categories": [
+        "cs.MM"
+      ],
+      "published": "2026-08-15T12:48:32+00:00",
+      "link": "https://arxiv.org/pdf/2608.15210v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "LLM-based evidence-driven fake news detection with self-reflective experience and deliberation, supports evidence-based misinformation detection although not multimodal",
+      "llm_evidence_cn": "基于LLM经验学习与证据推理的假新闻检测框架，强调可泛化与纠错，契合证据驱动核查",
+      "llm_evidence": "基于LLM经验学习与证据推理的假新闻检测框架，强调可泛化与纠错，契合证据驱动核查",
+      "canonical_evidence": "基于LLM经验学习与证据推理的假新闻检测框架，强调可泛化与纠错，契合证据驱动核查",
+      "llm_tldr_en": "RoE-FND combines self-reflective experience building with deliberation over retrieved experiences to make LLM-based fake news detection more robust and generalizable, directly relevant to evidence-based misinformation detection.",
+      "llm_tldr_cn": "假新闻检测常见方法或用标注训练，或让LLM直接推理，但二者分别受泛化不足和过度信任错误理由困扰。RoE-FND让LLM先构建自我反思经验库，再基于检索到的相似经验进行审慎推理，从而暴露推理错误并提高泛化能力。该框架面向社交网络中的欺骗性内容，展示了经验驱动假新闻检测的新路径，可被用于多模态假新闻检测中的证据推理部分。",
+      "llm_tldr": "假新闻检测常见方法或用标注训练，或让LLM直接推理，但二者分别受泛化不足和过度信任错误理由困扰。RoE-FND让LLM先构建自我反思经验库，再基于检索到的相似经验进行审慎推理，从而暴露推理错误并提高泛化能力。该框架面向社交网络中的欺骗性内容，展示了经验驱动假新闻检测的新路径，可被用于多模态假新闻检测中的证据推理部分。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.29175v1",
+      "source": "arxiv",
+      "title": "An Explainable Coherence Score for Detecting Temporal Inconsistencies in Political News",
+      "abstract": "Temporal inconsistencies, such as mandates attributed outside their real interval, events presented as past before they occurred, or inverted causal sequences, are a form of political disinformation that evades style-based fake news detectors: a well-written article with a single wrong date carries no lexical signal of falsehood. This paper introduces the Temporal Coherence Score (TCS), a continuous, intrinsically interpretable metric that quantifies the temporal coherence of a news article, computed by a four-stage pipeline: extraction of temporal facts, construction of a temporal knowledge graph, hierarchical verification against internal consistency rules and external reference sources, and score aggregation with automatically generated explanations. Verification combines eight internal checkers derived from Allen's interval algebra with a five-level external hierarchy ranging from a locally stored reference knowledge base of 1{,}256 curated political facts to live Wikidata SPARQL queries. On a benchmark of 100 political news articles with injected temporal errors, the system reaches a precision of 0.909 at the selected operating threshold, with a single residual false positive, a profile deliberately tuned for human-in-the-loop fact-checking assistance, where false alarms are costlier than missed detections. Unlike lexical baselines that output only a binary label, every flagged article is accompanied by the inconsistency type, the entities involved, and the reference source that contradicts the claim.",
+      "authors": [
+        "Marius Nicusor Pantea",
+        "Adrian Groza"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-29T09:56:19+00:00",
+      "link": "https://arxiv.org/pdf/2608.29175v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Explainable metric verifying temporal facts against internal consistency rules and external sources to catch political disinformation.",
+      "llm_evidence_cn": "通过时间事实抽取、时间知识图谱与外部来源核验，计算可解释一致性分数来识别政治虚假信息。",
+      "llm_evidence": "通过时间事实抽取、时间知识图谱与外部来源核验，计算可解释一致性分数来识别政治虚假信息。",
+      "canonical_evidence": "通过时间事实抽取、时间知识图谱与外部来源核验，计算可解释一致性分数来识别政治虚假信息。",
+      "llm_tldr_en": "Proposes a Temporal Coherence Score that detects temporal inconsistencies in political news, which evade style-based fake news detectors. It extracts temporal facts, builds a temporal knowledge graph, verifies against internal rules and external sources, and yields an explainable score for disinformation.",
+      "llm_tldr_cn": "针对只改一个日期即可绕过文体假新闻检测的政治虚假信息，提出时间一致性分数(TCS)。该方法先抽取时间事实并构建时间知识图谱，再通过内部一致性规则与外部参考源进行层级核验，最后聚合出连续且可解释的一致性分数。它能够识别单条错误日期引发的时序错乱。该项可解释的时序证据核验方法可补充事实核查系统，但尚未处理多模态内容。",
+      "llm_tldr": "针对只改一个日期即可绕过文体假新闻检测的政治虚假信息，提出时间一致性分数(TCS)。该方法先抽取时间事实并构建时间知识图谱，再通过内部一致性规则与外部参考源进行层级核验，最后聚合出连续且可解释的一致性分数。它能够识别单条错误日期引发的时序错乱。该项可解释的时序证据核验方法可补充事实核查系统，但尚未处理多模态内容。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.16185v1",
+      "source": "arxiv",
+      "title": "LENS: In-Context Search via Latent Evidence Exploration over Dynamic Raw Documents",
+      "abstract": "LLM agents increasingly answer questions over dynamic raw-document collections, where files may change before preprocessing, and relevant evidence (spans, sections, pages, or tables) is query-dependent. Existing retrieval-augmented approaches pre-materialize evidence via fixed chunking, embeddings, or persistent indexes: effective for lookup, yet costly, stale-prone, and committed to a granularity before the query is known.   We formulate in-context search as Budgeted Evidence Localization over a latent evidence space induced by dynamic raw documents and propose LENS (Latent Evidence Exploration and Search), an index-free framework. Instead of pre-materializing the evidence space, LENS maintains a query-conditioned belief over candidate units, iteratively selecting candidates via complementary lexical, local, and exploratory proposal policies, updating the belief via an LLM relevance oracle, and narrowing toward high-posterior regions under a controllable budget. Evidence is consolidated into compact, source-grounded regions of interest and compressed into self-organizing knowledge clusters reused across related queries.   On a controlled 500-question evaluation with matched corpus snapshots, LENS reaches 62.4% exact match and 84.8% evidence recall vs. 65.2% exact match but 50.4% evidence recall for a ReAct-style baseline. Across scales, LENS gives the strongest supporting-fact localization and answer grounding. On a fixed 150-question fullwiki subset over the raw Wikipedia dump with zero indexing, LENS and ReAct are nearly tied in official answer quality (43.3% vs. 42.7% EM), with LENS grounding more answers in retrieved evidence (84.0% vs. 70.7%). A no-retrieval Closed-Book reference highlights the contribution of model memory. LENS is query-ready after corpus changes, needs no preprocessing or persistent index, and preserves source-grounded evidence localization throughout.",
+      "authors": [
+        "Xingjun Wang",
+        "Gongsheng Li",
+        "Qi Fan",
+        "Yunlin Mao",
+        "Luyan Su",
+        "Yingda Chen"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-08-17T07:04:25+00:00",
+      "link": "https://arxiv.org/pdf/2608.16185v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Index-free latent evidence search over raw documents; provides evidence-localization technology useful for fact checking and retrieval-augmented claim verification",
+      "llm_evidence_cn": "提出无索引的潜在证据定位与检索方法，可支撑事实核查中的外部证据检索以支持或反驳主张",
+      "llm_evidence": "提出无索引的潜在证据定位与检索方法，可支撑事实核查中的外部证据检索以支持或反驳主张",
+      "canonical_evidence": "提出无索引的潜在证据定位与检索方法，可支撑事实核查中的外部证据检索以支持或反驳主张",
+      "llm_tldr_en": "Proposes LENS, an index-free framework for budgeted evidence localization over dynamic raw documents, maintaining query-conditioned beliefs instead of pre-materialized indexes.",
+      "llm_tldr_cn": "现有检索增强系统通过固定分块和持久索引预物化证据，但文档可能动态变化，证据粒度在查询前未知，因此检索又慢又易过期。该文提出无索引框架LENS，把上下文内检索形式化为预算受限的证据定位，在潜在证据空间维护面向查询的候选单元信念以逐步定位证据。LENS能适应动态原始文档且不必预提交到固定证据粒度，适合需要外部资料支持或反驳主张的检索增强事实核查与多模态事实验证流程。",
+      "llm_tldr": "现有检索增强系统通过固定分块和持久索引预物化证据，但文档可能动态变化，证据粒度在查询前未知，因此检索又慢又易过期。该文提出无索引框架LENS，把上下文内检索形式化为预算受限的证据定位，在潜在证据空间维护面向查询的候选单元信念以逐步定位证据。LENS能适应动态原始文档且不必预提交到固定证据粒度，适合需要外部资料支持或反驳主张的检索增强事实核查与多模态事实验证流程。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.30145v1",
+      "source": "arxiv",
+      "title": "Understanding before verifying: Claim normalization for automated citation verification",
+      "abstract": "Citation accuracy has been studied for decades because of its importance to research reliability. Content-level citation verification assesses the reliability of scholarly claims. Recent work adopts a two-stage retrieval-classification framework inherited from fact-checking. However, this design overlooks the complexity of the raw citing claim and introduces three issues into the verification system, namely scope mismatch, perspective mismatch, and proposition entanglement. These issues increase the difficulty of retrieval and classification, thereby limiting model performance. Motivated by this gap, we propose claim normalization, which applies three rewriting strategies to the raw citing claim before retrieval and classification, allowing each downstream model to perform a single, well-defined task. Building on this method, we develop Claim-Normalized Citation Verification (CNCV), a new three-stage framework consisting of claim normalization, evidence retrieval with grounding, and citation classification. We evaluate CNCV across 18 classifiers using a factorial experiment on human-annotated citation instances. Compared with the prior two-stage framework, CNCV improves macro F1 by an average of 12% for encoders and 10% for generative LLMs, driven by improved evidence quality, the dominant factor identified in our experiments. Evidence retrieved from automatically normalized claims yields downstream classification performance statistically equivalent to that obtained with manually annotated evidence.",
+      "authors": [
+        "Yifan He",
+        "Mengjia Wu",
+        "Siming Deng",
+        "Yi Zhang"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-08-31T01:58:59+00:00",
+      "link": "https://arxiv.org/pdf/2608.30145v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "claim normalization improves two-stage retrieval-classification citation verification, directly transferable to evidence-based fact-checking pipelines",
+      "llm_evidence_cn": "声明规范化改进检索-分类式引文验证，与证据基事实核查流程高度相通",
+      "llm_evidence": "声明规范化改进检索-分类式引文验证，与证据基事实核查流程高度相通",
+      "canonical_evidence": "声明规范化改进检索-分类式引文验证，与证据基事实核查流程高度相通",
+      "llm_tldr_en": "The paper identifies scope mismatch, perspective mismatch and proposition entanglement in citation verification and proposes claim normalization rewriting strategies to improve retrieval and classification, highly relevant to evidence-driven fact-checking.",
+      "llm_tldr_cn": "内容级引文验证常套用事实核查的两阶段检索-分类框架，但原始引用声明会带来范围错位、视角错位和命题纠缠等问题，损害检索和分类。论文提出声明规范化，在检索和分类前对原始引用声明施加三种改写策略。实验显示规范化可显著提高引文验证能力。该机制适用于自动化事实核查中的查询改写与证据匹配环节。",
+      "llm_tldr": "内容级引文验证常套用事实核查的两阶段检索-分类框架，但原始引用声明会带来范围错位、视角错位和命题纠缠等问题，损害检索和分类。论文提出声明规范化，在检索和分类前对原始引用声明施加三种改写策略。实验显示规范化可显著提高引文验证能力。该机制适用于自动化事实核查中的查询改写与证据匹配环节。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.16259v1",
+      "source": "arxiv",
+      "title": "Defake-o3: From Speculative Rationales to Verifiable Evidence for Explainable AIGI Detection",
+      "abstract": "The rapid progress of image generation models calls for AI-generated image (AIGI) detectors that are not only accurate but also explainable and reliable. While MLLM-based detectors can provide natural language explanations, existing methods often generate speculative rationales: they rely on vague or hallucinated artifacts, miss subtle localized flaws from the latest generators, and fail to provide evidence that can be visually verified. We present Defake-o3, an explainable AIGI detector that moves from speculative rationales to verifiable evidence. It combines interactive visual search with verifier-guided evidence alignment: the model iteratively zooms into suspicious regions to inspect fine-grained details, while an Evidence Verifier, trained from human verification annotations, provides reinforcement learning rewards that favor grounded evidence and penalize baseless claims. To support this objective, we construct GroundFake, a dataset designed for grounded explainable detection, with localized bounding-box evidence, human verification based on visual grounding and artifact specificity, corrected reasoning trajectories, and valid/invalid evidence supervision. We further introduce FakeFrontier, an out-of-distribution benchmark built from real images and outputs of 10 recent generators, together with an MLLM-based protocol for evaluating evidence quality and persuasiveness. Experiments on GroundFake, FakeFrontier, and additional out-of-distribution benchmarks show that Defake-o3 improves both detection accuracy and explanation quality, producing more localized, verifiable, and persuasive evidence.",
+      "authors": [
+        "Bowen Deng",
+        "Jiahui Zhan",
+        "Yikun Ji",
+        "Haozhen Yan",
+        "Jianfu Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-08-17T08:30:32+00:00",
+      "link": "https://arxiv.org/pdf/2608.16259v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Explainable detection of AI-generated visual misinformation with verifiable visual evidence.",
+      "llm_evidence_cn": "面向AI生成图像的具解释性检测，提供可验证的视觉证据，可支撑虚假视觉信息的判别。",
+      "llm_evidence": "面向AI生成图像的具解释性检测，提供可验证的视觉证据，可支撑虚假视觉信息的判别。",
+      "canonical_evidence": "面向AI生成图像的具解释性检测，提供可验证的视觉证据，可支撑虚假视觉信息的判别。",
+      "llm_tldr_en": "Defake-o3 detects AI-generated images with interactive visual search and verifier-guided evidence alignment, replacing speculative rationales with visually verifiable evidence. This supports reliable explainable visual misinformation detection and could aid audit of fake visuals in fake news.",
+      "llm_tldr_cn": "AI生成图像检测需要可解释且可验证的证据，但现有方法常生成依赖幻觉或模糊伪影的推测性理由。Defake-o3通过交互式视觉搜索逐步放大可疑区域，并用证据验证器对齐细粒度线索，从而输出可被视觉确认的解释。结合最新生成模型的评测验证了其证据质量与检测可靠性，有助于伪造视觉内容的可审计判定。",
+      "llm_tldr": "AI生成图像检测需要可解释且可验证的证据，但现有方法常生成依赖幻觉或模糊伪影的推测性理由。Defake-o3通过交互式视觉搜索逐步放大可疑区域，并用证据验证器对齐细粒度线索，从而输出可被视觉确认的解释。结合最新生成模型的评测验证了其证据质量与检测可靠性，有助于伪造视觉内容的可审计判定。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.00550v1",
+      "source": "arxiv",
+      "title": "Same Semantics, Different Outcome: On the Modality Robustness of Multimodal LLMs under Knowledge Conflict",
+      "abstract": "Multimodal large language models (MLLMs) are increasingly provided with contextual evidence in heterogeneous forms: as a text passage, as a rendered image of the same passage, or as both together. However, it remains unclear how consistently these surface forms are processed, especially when the evidence conflicts with the model's parametric knowledge. We study modality robustness under knowledge conflict across 13 MLLMs and two datasets, and find them far from robust. (1) Contrary to common belief, models favor a context that contradicts parametric knowledge more readily in image form than in text form; (2) when a contradicting text and image are presented together, the preferred modality is essentially arbitrary, varying with input order, model, and dataset. We further demonstrate that this instability has practical consequences: it degrades performance in multimodal RAG and can be exploited by adversarial attacks. To alleviate this brittleness, we examine several simple techniques---prompting, steering, supervised fine-tuning (SFT), and direct preference optimization; the majority prove ineffective, whereas SFT achieves moderate success. We therefore call for greater awareness of this inconsistency and argue that it is fundamental, demanding attention at multiple training stages.",
+      "authors": [
+        "Jungyeon Lee",
+        "Yejin Yoon",
+        "Taeuk Kim"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-01T01:37:18+00:00",
+      "link": "https://arxiv.org/pdf/2609.00550v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Shows multimodal LLMs treat semantically identical text versus rendered-image evidence inconsistently under conflict, informing cross-modal evidence reliability for claim/rumor verification",
+      "llm_evidence_cn": "揭示多模态大模型在文本与其渲染图像证据冲突时偏好不稳定，为图文证据一致性验证提供关键实证",
+      "llm_evidence": "揭示多模态大模型在文本与其渲染图像证据冲突时偏好不稳定，为图文证据一致性验证提供关键实证",
+      "canonical_evidence": "揭示多模态大模型在文本与其渲染图像证据冲突时偏好不稳定，为图文证据一致性验证提供关键实证",
+      "llm_tldr_en": "Evaluates 13 MLLMs under knowledge conflict with evidence in text, image-rendered text, or both, finding arbitrary modality preferences and weak robustness relevant to evidence-based verification.",
+      "llm_tldr_cn": "多模态LLM常用文本、文本渲染图像或图文组合作为上下文证据，但面对与自身参数知识冲突的证据时其模态处理远非鲁棒。该文对13个MLLM、两个数据集进行评测，发现模型往往更易采信图像形式的矛盾上下文，而文本与图像同时呈现矛盾证据时偏好模态几乎任意且变化较大。结果警示：在依赖图文证据的事实核查与虚假信息验证中，不能想当然认为模型能稳定处理跨模态一致性与冲突，需针对性校准和评测。",
+      "llm_tldr": "多模态LLM常用文本、文本渲染图像或图文组合作为上下文证据，但面对与自身参数知识冲突的证据时其模态处理远非鲁棒。该文对13个MLLM、两个数据集进行评测，发现模型往往更易采信图像形式的矛盾上下文，而文本与图像同时呈现矛盾证据时偏好模态几乎任意且变化较大。结果警示：在依赖图文证据的事实核查与虚假信息验证中，不能想当然认为模型能稳定处理跨模态一致性与冲突，需针对性校准和评测。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
