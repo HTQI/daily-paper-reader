@@ -1,0 +1,579 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-09T21:54:46.837481+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 6,
+    "deep_cap": 6,
+    "deep_selected": 6,
+    "quick_candidates": 8,
+    "quick_skim_target": 11,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2609.08943v1",
+      "source": "arxiv",
+      "title": "Evaluating and Improving Evidence-Grounded Fact-Checking in LLMs via Multi-Round Evidence Ablation",
+      "abstract": "Automatic fact-checking systems assess the veracity of claims given evidence from relevant documents. Large Language Models (LLMs) have demonstrated strong performance in fact-checking due to their general reasoning capabilities. However, it remains unclear whether they faithfully make use of the evidence provided to reach veracity judgments or rely on parametric knowledge. To investigate this, we introduce Fact-Ablated Evaluation (FAE), a new evaluation framework that iteratively ablates the cited evidence to assess whether LLMs revise their predictions accordingly. Our empirical results show that current off-the-shelf LLMs as fact-checking systems rely more on their parametric knowledge than on the evidence provided. To bridge this gap between prediction accuracy and evidence grounding, we propose REAL (Rigorous Evidence Ablation Learning), a training framework that promotes evidence-dependent verification through counterfactual evidence supervision for the LLM-as-verifier models. Experiments on four fact-checking datasets across different domains demonstrate that models trained with REAL obtain superior evidence-dependent capabilities compared to standard fine-tuned models. Our findings highlight that strong fact-checking performance can still coexist with weak evidence dependency, while REAL encourages veracity predictions to remain more closely tied to the availability of supporting evidence.",
+      "authors": [
+        "Xingyu Deng",
+        "Mingzi Cao",
+        "Nikolaos Aletras",
+        "Xi Wang",
+        "Mark Stevenson"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-09-08T16:04:20+00:00",
+      "link": "https://arxiv.org/pdf/2609.08943v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Explicitly investigates evidence utilization in LLM fact-checking by multi-round evidence ablation; core to evidence-grounded claim verification.",
+      "llm_evidence_cn": "用多轮证据消融研究LLM事实核查中的证据利用，是证据基础声明核查的核心工作。",
+      "llm_evidence": "用多轮证据消融研究LLM事实核查中的证据利用，是证据基础声明核查的核心工作。",
+      "canonical_evidence": "用多轮证据消融研究LLM事实核查中的证据利用，是证据基础声明核查的核心工作。",
+      "llm_tldr_en": "Introduces Fact-Ablated Evaluation (FAE), iteratively removing cited evidence to see if LLM fact-checkers revise predictions; finds they mostly rely on parametric knowledge and then improves evidence grounding, contributing to credible evidence-based fact-checking.",
+      "llm_tldr_cn": "论文关注LLM在证据基础上判断声明真伪时是否忠实使用所给证据。为此提出FAE评测方法：循环删减证据并观察预测是否随之变化，从而辨识模型是在进行证据推理还是记忆检索。实验发现，现有LLM在做事实核查时更倾向依赖内部参数知识而不是当前证据，说明其证据利用并不可靠。该评测能够定位证据失效样本，为构建更可信、更可解释的证据型事实核查系统提供了关键诊断工具。",
+      "llm_tldr": "论文关注LLM在证据基础上判断声明真伪时是否忠实使用所给证据。为此提出FAE评测方法：循环删减证据并观察预测是否随之变化，从而辨识模型是在进行证据推理还是记忆检索。实验发现，现有LLM在做事实核查时更倾向依赖内部参数知识而不是当前证据，说明其证据利用并不可靠。该评测能够定位证据失效样本，为构建更可信、更可解释的证据型事实核查系统提供了关键诊断工具。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.00581v2",
+      "source": "arxiv",
+      "title": "Enoki: Efficient Multi-Level Hallucination Detection",
+      "abstract": "Ensuring factuality remains a critical challenge for deploying LLMs in high-stakes settings. Existing hallucination detectors usually operate at a single level: claim-level methods provide interpretable factual units, while span-level methods localize unsupported text. Bridging these views is costly, as LLM-heavy pipelines require multiple decomposition and verification calls, and modular systems need additional claim-to-span alignment. We propose Enoki, an Open Information Extraction framework for multi-level hallucination detection. Enoki extracts text-anchored relational facts, verifies them against evidence, and projects unsupported facts back to hallucinated spans. This shared representation enables claim-level verification and span-level localization without requiring separate alignment. Enoki supports LLM-based, encoder-based, and rule-based extraction regimes, balancing accuracy and inference cost through a common interface. Experiments show that Enoki remains competitive with strong claim-level systems while using fewer resources and achieves superior performance on fine-grained span- and entity-level localization. We also release EnokiQA, a dual-granularity dataset with aligned claim-level verification and span-level localization annotations.",
+      "authors": [
+        "Elisei Rykov",
+        "Timur Ionov",
+        "Nikolay Ivanov",
+        "Maksim Savkin",
+        "Maksim Makarenko",
+        "Alexander Panchenko",
+        "Vasily Konovalov",
+        "Julia Belikova"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-01T02:21:28+00:00",
+      "link": "https://arxiv.org/pdf/2609.00581v2",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Extracts claims and verifies them against evidence to localize unsupported spans, equivalent to evidence-based claim checking.",
+      "llm_evidence_cn": "抽取关系事实并对照证据验证，定位不支持的事实，与基于证据的声明核查同构。",
+      "llm_evidence": "抽取关系事实并对照证据验证，定位不支持的事实，与基于证据的声明核查同构。",
+      "canonical_evidence": "抽取关系事实并对照证据验证，定位不支持的事实，与基于证据的声明核查同构。",
+      "llm_tldr_en": "Enoki, an Open IE framework, jointly supports claim-level verification and span-level localization by extracting facts, checking them against evidence, and projecting unsupported facts to text spans efficiently.",
+      "llm_tldr_cn": "针对幻觉检测中声明级与跨度级方法彼此割裂且对齐成本高的问题，提出Enoki开放信息抽取框架。它将文本锚定的关系事实抽取出来，与证据进行验证，并把不支持的事实映射回幻觉跨度，从而无需额外对齐即可同时产出声明级验证和跨度级定位。实验表明该框架在事实性核查上高效且可解释，为证据驱动的真相验证和虚假信息核查提供了可复用的技术路线。",
+      "llm_tldr": "针对幻觉检测中声明级与跨度级方法彼此割裂且对齐成本高的问题，提出Enoki开放信息抽取框架。它将文本锚定的关系事实抽取出来，与证据进行验证，并把不支持的事实映射回幻觉跨度，从而无需额外对齐即可同时产出声明级验证和跨度级定位。实验表明该框架在事实性核查上高效且可解释，为证据驱动的真相验证和虚假信息核查提供了可复用的技术路线。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.02097v1",
+      "source": "arxiv",
+      "title": "Evidence-Guided Detection, Localization and Explanation for Text-Centric Image Forensics",
+      "abstract": "The rapid progress of AIGC has made text-centric image manipulation increasingly accessible, creating new forensic challenges that require not only authenticity detection but also spatial grounding and evidence-based explanation. This paper presents our solution to the GenText-Forensics Challenge at ACM Multimedia 2026. We propose an evidence-guided detector-localizer-reasoner system, where an image-level detector provides a global authenticity prior, a dedicated localizer extracts tampered regions as spatial grounding evidence, and an MLLM-based reasoner generates structured forensic reports grounded in this expert forensic evidence. These modules are connected through a cascaded evidence flow: the detector gates the subsequent localization and prompting process, the localizer converts tamper responses into grounding boxes, and the reasoner is trained to synthesize the detector decision and localized evidence into the final report. As a key part of our method, we introduce iterative difficulty-aware mining to improve localization quality and apply report-mask consistency post-processing to align report grounding with predicted masks. On the official hidden test set, our system achieves a final score of 0.638 and ranks second in the challenge, validating the effectiveness of the proposed evidence-guided system. The code is available at https://github.com/peifengLiu42/ACMMM26-evidence-guided-detector-localizer-reasoner-system.",
+      "authors": [
+        "Peifeng Liu",
+        "Bin Li",
+        "Qingsong Zhang",
+        "Yangxin Yu",
+        "Leqing Chen",
+        "Xiaoye Qiu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-02T04:37:32+00:00",
+      "link": "https://arxiv.org/pdf/2609.02097v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "evidence-guided detector-localizer-reasoner for text-centric image forensics detects and explains image/text tampering for misinformation",
+      "llm_evidence_cn": "面向文本中心图像取证，证据引导的检测-定位-解释系统可检测并解释图像/文本篡改，用于虚假信息验证",
+      "llm_evidence": "面向文本中心图像取证，证据引导的检测-定位-解释系统可检测并解释图像/文本篡改，用于虚假信息验证",
+      "canonical_evidence": "面向文本中心图像取证，证据引导的检测-定位-解释系统可检测并解释图像/文本篡改，用于虚假信息验证",
+      "llm_tldr_en": "Proposes an evidence-guided detector-localizer-reasoner system that localizes tampered regions in text-centric images and generates structured, evidence-grounded forensic reports; relevant to explainable visual misinformation detection.",
+      "llm_tldr_cn": "针对AIGC推动下文本中心图像篡改带来的取证挑战，提出证据引导的检测-定位-推理级联系统。图像级检测器给出全局真实性先验，局部定位器提取被篡改区域作为空间证据，基于MLLM的推理器依据专家取证证据生成结构化取证报告。该系统不仅判定真实性还能给出定位和解释，解决了仅有检测结果缺乏可解释证据的问题，对多模态虚假信息检测中的图像文本篡改验证具有直接价值。",
+      "llm_tldr": "针对AIGC推动下文本中心图像篡改带来的取证挑战，提出证据引导的检测-定位-推理级联系统。图像级检测器给出全局真实性先验，局部定位器提取被篡改区域作为空间证据，基于MLLM的推理器依据专家取证证据生成结构化取证报告。该系统不仅判定真实性还能给出定位和解释，解决了仅有检测结果缺乏可解释证据的问题，对多模态虚假信息检测中的图像文本篡改验证具有直接价值。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.07369v1",
+      "source": "arxiv",
+      "title": "DF26: We Cannot Tell Fake From Real Anymore",
+      "abstract": "We introduce DF26, a novel benchmark for detecting AI-generated videos containing fully synthetic clips produced by recent text-to-video and image-to-video models. The videos capture single-person public-speaking scenarios, spanning direct-to-camera recordings, official statements, and studio interviews - 271 real and 2,420 synthetic videos generated by seven modern video models. The study on DF26 shows that human performance in detecting AI-generated videos, as well as state-of-the-art deepfake detectors, is close to random chance. Our results highlight the limitations of current evaluation protocols and motivate the need for benchmarks that explicitly measure robustness to modern generative model distribution shifts.",
+      "authors": [
+        "Severyn Shykula",
+        "Andrii Yermakov",
+        "Ivan Samarskyi",
+        "Dmytro Mishkin",
+        "Jan Cech",
+        "Anastasiia Mishchuk"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-07T11:44:36+00:00",
+      "link": "https://arxiv.org/pdf/2609.07369v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "benchmark for detecting AI-generated fake videos, domain generalizability issue in misinformation detection",
+      "llm_evidence_cn": "AI生成虚假视频检测基准，展示深度伪造检测在生成模型分布漂移下的脆弱性",
+      "llm_evidence": "AI生成虚假视频检测基准，展示深度伪造检测在生成模型分布漂移下的脆弱性",
+      "canonical_evidence": "AI生成虚假视频检测基准，展示深度伪造检测在生成模型分布漂移下的脆弱性",
+      "llm_tldr_en": "Introduces DF26 benchmark of 2,691 real and synthetic public-speaking videos from seven generative models; both humans and state-of-the-art deepfake detectors perform near chance, highlighting the need for robustness to generative distribution shifts.",
+      "llm_tldr_cn": "随着文本到视频与图像到视频模型的发展，AI合成视频令人难以辨别真伪。论文提出DF26基准，包含271段真实和2420段由七个现代视频模型生成的合成片段，覆盖直接拍摄、官方声明和演播室采访等场景。人类评审与最先进的深度伪造检测器在该基准上均接近随机表现，表明当前评测协议可能高估了检测能力，亟需针对生成模型分布漂移的鲁棒性评测，以支撑虚假视频识别的可信发展。",
+      "llm_tldr": "随着文本到视频与图像到视频模型的发展，AI合成视频令人难以辨别真伪。论文提出DF26基准，包含271段真实和2420段由七个现代视频模型生成的合成片段，覆盖直接拍摄、官方声明和演播室采访等场景。人类评审与最先进的深度伪造检测器在该基准上均接近随机表现，表明当前评测协议可能高估了检测能力，亟需针对生成模型分布漂移的鲁棒性评测，以支撑虚假视频识别的可信发展。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.07663v1",
+      "source": "arxiv",
+      "title": "Noēsis: Deterministic-First Retrieval with Two-Tier Context Hydration for Factuality-Critical Queries on Small Local Models",
+      "abstract": "A wrong number is worse than no answer. Across factuality-critical domains -- audience metrics, scheduling and rights in media; dosages and lab values in healthcare; figures and citations in finance and legal -- a confident but fabricated value is more damaging than an honest admission of uncertainty. Yet this is the dominant failure mode we observe on small local language models: even when correct evidence is present in context, models fabricate plausible numbers and timestamps. Recent work characterizes a real limit of this regime: below 7B parameters, the bottleneck of retrieval-augmented generation (RAG) is not retrieval quality but context utilization.   We present Noesis, the deterministic-first query plane of the Noesis architecture, which makes every deterministic judgment before generation. Its mechanisms follow from the ingestion architecture (subject of a separate patent application): (a) a producer-side fact layer rendering precomputed metric facts verbatim without ranking; (b) positional addressing with deterministic cross-source alignment, resolved ahead of query time at zero LLM cost; (c) provenance scoping as an attribution constraint with multi-tier named-reference routing; and (d) two-tier context with model-triggered verbatim hydration.   Across four ablations, a 2B model reaches parity with a 35B model on factual integrity (exact values in all runs; zero confabulated numbers on absent-entity traps); structured retrieval beats flat RAG by +11.4 points at 2B; skeleton-only context preserves quantitative answers at 20-30% smaller prompts; and hydration recovers verbatim narrative in ~8s versus ~29s. Two properties matter for regulated domains: each query resolves in a single generation call, and every reported value is traceable to its exact source and position by construction.",
+      "authors": [
+        "Nicola Cogotti"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-09-07T15:49:16+00:00",
+      "link": "https://arxiv.org/pdf/2609.07663v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "retrieval-augmented generation with deterministic-first evidence and context hydration to avoid fabricated factual values.",
+      "llm_evidence_cn": "通过确定性优先检索与上下文灌注避免事实性数值编造，支持证据驱动的核查方法。",
+      "llm_evidence": "通过确定性优先检索与上下文灌注避免事实性数值编造，支持证据驱动的核查方法。",
+      "canonical_evidence": "通过确定性优先检索与上下文灌注避免事实性数值编造，支持证据驱动的核查方法。",
+      "llm_tldr_en": "Aimed at factuality-critical domains, small local models fabricate numbers despite evidence in context; Noesis uses deterministic-first retrieval with two-tier context hydration to prioritize trustworthy evidence and reduce invention, outperforming standard RAG.",
+      "llm_tldr_cn": "面向媒体、医疗、金融与法律等事实关键领域，小型语言模型在上下文中已有正确证据时仍会编造可靠数字与时间戳，现有RAG研究指出低于7B参数时瓶颈不在检索而在上下文利用。本文提出Noesis，采用确定性优先检索策略，先获取不容置疑的确定答案，再对上下文进行双层补足与注入，使模型优先使用可信证据。实验显示该方法相较普通RAG显著减少数值编造，提升了小模型在事实核查类查询上的答案可靠性。",
+      "llm_tldr": "面向媒体、医疗、金融与法律等事实关键领域，小型语言模型在上下文中已有正确证据时仍会编造可靠数字与时间戳，现有RAG研究指出低于7B参数时瓶颈不在检索而在上下文利用。本文提出Noesis，采用确定性优先检索策略，先获取不容置疑的确定答案，再对上下文进行双层补足与注入，使模型优先使用可信证据。实验显示该方法相较普通RAG显著减少数值编造，提升了小模型在事实核查类查询上的答案可靠性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.08267v1",
+      "source": "arxiv",
+      "title": "Evidence-Aligned Entity Verification for Hallucination Detection in Retrieval-Augmented Generation",
+      "abstract": "Hallucination detection is crucial for large language models (LLMs), as hallucinated content creates significant barriers in applications requiring factual accuracy. Current detection methods mainly depend on internal signals like uncertainty and self-consistency checks, using the model's pre-trained knowledge to identify unreliable outputs. However, pre-trained knowledge may become outdated and has coverage limitations, especially for specialized or recent information. To address these limitations, retrieval-augmented generation (RAG) has emerged as a promising solution by retrieving relevant evidence at inference time, grounding outputs beyond the model's parametric knowledge. In this paper, we target a critical and practical learning problem RAG-based hallucination detection (RHD), where RAG is employed to enhance hallucination detection by addressing information updating challenges. To address RHD, we propose a novel method Evidence-Aligned Entity Verification (EAEV), which detects entity-level hallucinations by leveraging RAG to align generated entities with retrieved evidence contexts. Specifically, EAEV evaluates entity-evidence alignment through three complementary dimensions and introduces counterfactual stability analysis to ensure robust alignments under evidence perturbations. Experiments across multiple RAG benchmarks demonstrate that EAEV achieves consistent improvements over existing methods with strong generalization capabilities.",
+      "authors": [
+        "Runsong Jia",
+        "Zhen Fang",
+        "Mengjia Wu",
+        "Jie Lu",
+        "Yi Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-09-08T05:22:29+00:00",
+      "link": "https://arxiv.org/pdf/2609.08267v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Verifies generated claims against retrieved evidence at entity level, directly aligned with evidence-based fact checking.",
+      "llm_evidence_cn": "对检索证据与生成文本做实体级对齐以检测幻觉，与基于证据的事实核查目标高度一致。",
+      "llm_evidence": "对检索证据与生成文本做实体级对齐以检测幻觉，与基于证据的事实核查目标高度一致。",
+      "canonical_evidence": "对检索证据与生成文本做实体级对齐以检测幻觉，与基于证据的事实核查目标高度一致。",
+      "llm_tldr_en": "This work performs evidence-aligned entity verification to detect hallucinated content in RAG, comparing outputs with external evidence instead of only internal uncertainty.",
+      "llm_tldr_cn": "大模型幻觉检测通常依赖内部不确定性，但预训练知识可能过时且覆盖不足。针对RAG场景下的关键实践需求，本文提出面向幻觉检测的证据对齐实体验证，将生成实体与检索到的外部证据对齐来判断内容是否可靠。实验表明该方法能有效识别检索支撑下的幻觉输出。其为基于证据的事实核查提供了通用且可迁移的检测框架。",
+      "llm_tldr": "大模型幻觉检测通常依赖内部不确定性，但预训练知识可能过时且覆盖不足。针对RAG场景下的关键实践需求，本文提出面向幻觉检测的证据对齐实体验证，将生成实体与检索到的外部证据对齐来判断内容是否可靠。实验表明该方法能有效识别检索支撑下的幻觉输出。其为基于证据的事实核查提供了通用且可迁移的检测框架。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.01316v1",
+      "source": "arxiv",
+      "title": "MIDR: Enrichment-Augmented Indexing for Multimodal Document Retrieval",
+      "abstract": "Retrieval over visually rich documents has a representation problem: important content often lives in tables, charts, figures, and layout relations that plain OCR linearizes, corrupts, or omits. ColPali-family visual retrievers address this with patch-level multi-vector indexes and late-interaction scoring, keeping image-derived retrieval on the query-time serving path. We introduce MIDR (Multimodal Indexing for Document Retrieval), a training-free framework for enrichment-augmented indexing that shifts multimodal reasoning to index time. During ingestion, a multimodal LLM converts rendered pages into verified textual fields that are indexed with BM25F and optionally fused with dense retrieval, enabling text-centric serving over multimodally grounded evidence. On ViDoRe V3, MIDR Hybrid achieves 0.6219 average nDCG across five English domains, a 23.0% relative gain over BM25, remaining competitive with ColQwen2.5. On two French-document domains, enrichment bridges English queries and French page text, lifting BM25 from 0.1532 to 0.5448 nDCG and outperforming ColQwen2.5. Across all seven domains, MIDR leads ColQwen2.5 on four while using approximately 9x smaller index memory and approximately 2x lower query latency. These results establish index-time multimodal reasoning as a compelling accuracy-deployment alternative to serving-time visual late interaction.",
+      "authors": [
+        "Debanjan Mahata",
+        "Atharva Tendle",
+        "Daniel Preotiuc-Pietro",
+        "Yong Zhuang",
+        "Ozan Irsoy"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI",
+        "cs.CL",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-09-01T14:38:39+00:00",
+      "link": "https://arxiv.org/pdf/2609.01316v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "multimodal document retrieval framework, enables evidence acquisition from visually rich documents for fact checking",
+      "llm_evidence_cn": "多模态文档检索框架，从图文图表丰富的文档中定位事实核查所需的证据",
+      "llm_evidence": "多模态文档检索框架，从图文图表丰富的文档中定位事实核查所需的证据",
+      "canonical_evidence": "多模态文档检索框架，从图文图表丰富的文档中定位事实核查所需的证据",
+      "llm_tldr_en": "Proposes MIDR, a training-free enrichment-augmented indexing framework that converts multimodal document pages into verified text fields via an MLLM and indexes with BM25F and dense retrieval, improving evidence retrieval.",
+      "llm_tldr_cn": "视觉丰富的文档中的表格、图表和版式往往被OCR忽略或破坏，给多模态证据检索带来困难。论文提出无需训练的MIDR框架，在索引阶段用多模态大模型将渲染文档页面转换为经过校验的文本字段，再通过BM25F与稠密检索融合服务查询。该方法把多模态推理移到索引期，使基于文本的检索能访问多模态证据内容，为事实核查和证据增强检索提供高效支撑。",
+      "llm_tldr": "视觉丰富的文档中的表格、图表和版式往往被OCR忽略或破坏，给多模态证据检索带来困难。论文提出无需训练的MIDR框架，在索引阶段用多模态大模型将渲染文档页面转换为经过校验的文本字段，再通过BM25F与稠密检索融合服务查询。该方法把多模态推理移到索引期，使基于文本的检索能访问多模态证据内容，为事实核查和证据增强检索提供高效支撑。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.00761v1",
+      "source": "arxiv",
+      "title": "Agent-Enhanced Heterogeneous Graph RAG for Academic Question Answering",
+      "abstract": "Academic question answering requires reasoning over heterogeneous scholarly graphs, where queries range from simple attribute lookups to multi-hop inference across author--paper--venue structures. Existing retrieval-augmented generation (RAG) systems struggle in this setting due to three limitations: (1) fixed retrieval strategies that do not adapt to varying query complexity, (2) the absence of sufficiency evaluation leading to incomplete or misaligned evidence, and (3) a lack of structured verification against graph facts. To address these issues, we propose an agentic heterogeneous graph RAG method that transforms the three core stages of the RAG pipeline into explicit agentic decision steps. A query-aware retrieval agent analyzes query type and selects an appropriate graph traversal strategy; a sufficiency-aware reranking agent assesses evidence completeness and adaptively expands the retrieved subgraph; and a graph-grounded verification agent checks entity, relation, and attribute correctness before finalizing the answer. Experiments on heterogeneous graphs constructed from OpenAlex and DBLP suggest that our method consistently outperforms strong LLM, graph-augmented RAG, and agent-based baselines.",
+      "authors": [
+        "Runsong Jia",
+        "Mengjia Wu",
+        "Ying Ding",
+        "Jie Lu",
+        "Yi Zhang"
+      ],
+      "primary_category": "cs.SI",
+      "categories": [
+        "cs.SI"
+      ],
+      "published": "2026-09-01T05:50:58+00:00",
+      "link": "https://arxiv.org/pdf/2609.00761v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic heterogeneous graph RAG with retrieval sufficiency evaluation and structured verification against graph facts, transferable to external evidence fact checking.",
+      "llm_evidence_cn": "智能体化异构图谱RAG，含检索充分性评估与图事实结构化验证，可迁移到外部证据的事实核查。",
+      "llm_evidence": "智能体化异构图谱RAG，含检索充分性评估与图事实结构化验证，可迁移到外部证据的事实核查。",
+      "canonical_evidence": "智能体化异构图谱RAG，含检索充分性评估与图事实结构化验证，可迁移到外部证据的事实核查。",
+      "llm_tldr_en": "RAG systems for academic QA lack adaptive retrieval and sufficiency evaluation; this paper transforms retrieval, evaluation, and verification into explicit agentic decisions, with structure verification against graph facts, improving evidence quality and grounding.",
+      "llm_tldr_cn": "面向作者-论文-会议构成的异构学术图，学术问答需要在图结构上进行多跳推理，现有RAG多采用固定检索且没有充分性评估与结构化验证，导致证据不完整。本文提出一种智能体式异构图RAG，将检索、评估和验证分别转成显式的智能体决策，包括查询感知的检索选择、证据充分性检测、以及对照图事实的验证环节。实验显示这套方法能更系统地给出与证据对齐的答案，对于结合外部知识库的可靠事实核查具有可借鉴价值。",
+      "llm_tldr": "面向作者-论文-会议构成的异构学术图，学术问答需要在图结构上进行多跳推理，现有RAG多采用固定检索且没有充分性评估与结构化验证，导致证据不完整。本文提出一种智能体式异构图RAG，将检索、评估和验证分别转成显式的智能体决策，包括查询感知的检索选择、证据充分性检测、以及对照图事实的验证环节。实验显示这套方法能更系统地给出与证据对齐的答案，对于结合外部知识库的可靠事实核查具有可借鉴价值。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.01383v1",
+      "source": "arxiv",
+      "title": "InSight: A Benchmark for Agentic Claim Verification in Interactive Visualizations",
+      "abstract": "Vision Language Models have demonstrated remarkable proficiency in interpreting static visual artifacts, but modern data analysis is inherently dynamic, requiring the active interrogation of interactive environments. Existing benchmarks are predominantly constrained to static imagery and one-shot question answering and fail to capture the epistemic demands of this domain, where evidence is frequently occluded, distributed across linked views, or conditionally revealed through user agency. In this paper, we introduce InSight, a benchmark for agentic claim verification over interactive visualizations. The dataset consists of 21,349 claims derived from human-authored analytical narratives and grounded in fully interactive web-based environments. Agents must navigate these environments to determine whether a natural language claim is supported, refuted or not verifiable given the available evidence. Unlike traditional evaluations, InSight treats interaction traces as intrinsic proxies for reasoning, enabling a rigorous audit of how models seek and synthesize visual evidence. We evaluate state-of-the-art models, revealing that interactive verification remains a non-trivial challenge. We release InSight at https://github.com/maevehutch/insight.",
+      "authors": [
+        "Maeve Hutchinson",
+        "Syed Mahbubul Huq",
+        "Mohammad Albinhassan",
+        "Radu Jianu",
+        "Aidan Slingsby",
+        "Pranava Madhyastha"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CV",
+        "cs.HC"
+      ],
+      "published": "2026-09-01T15:15:30+00:00",
+      "link": "https://arxiv.org/pdf/2609.01383v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "benchmark for agentic claim verification over interactive visualizations; verifying claims by interpreting and interacting with visual evidence.",
+      "llm_evidence_cn": "基于交互式可视化的智能体声明验证基准；通过操作视觉证据验证声明真伪。",
+      "llm_evidence": "基于交互式可视化的智能体声明验证基准；通过操作视觉证据验证声明真伪。",
+      "canonical_evidence": "基于交互式可视化的智能体声明验证基准；通过操作视觉证据验证声明真伪。",
+      "llm_tldr_en": "Vision-language models struggle with dynamic evidence in interactive environments; InSight provides 21,349 human-authored claims grounded in interactive visualizations, requiring active interrogation and multi-view integration to verify claims.",
+      "llm_tldr_cn": "视觉语言模型静态图表理解能力虽强，但现实分析需要交互式地挖掘证据，证据往往被遮挡、跨链接视图分布或需要用户操作后才显现，现有基准缺少这种机制。本文提出InSight，基于21,349条来自人类分析叙述的声明，构建于完全交互式网页环境中，要求模型自主点击、联动检索并判断声明是否被支持。当前视觉语言模型在该基准上表现不佳，说明动态交互式声明验证仍是巨大挑战。InSight为需要视觉与文本证据的自动事实核查提供了新评测平台。",
+      "llm_tldr": "视觉语言模型静态图表理解能力虽强，但现实分析需要交互式地挖掘证据，证据往往被遮挡、跨链接视图分布或需要用户操作后才显现，现有基准缺少这种机制。本文提出InSight，基于21,349条来自人类分析叙述的声明，构建于完全交互式网页环境中，要求模型自主点击、联动检索并判断声明是否被支持。当前视觉语言模型在该基准上表现不佳，说明动态交互式声明验证仍是巨大挑战。InSight为需要视觉与文本证据的自动事实核查提供了新评测平台。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.02188v1",
+      "source": "arxiv",
+      "title": "Group-Aware Adaptive Retrieval for Evidence Navigation",
+      "abstract": "Reasoning-intensive retrieval addresses queries whose relevance cannot be identified by surface-level matching, thereby requiring multi-step reasoning. Because relevant documents rarely appear in the initial candidate set, retrieval systems suffer from the bounded recall problem. Existing methods iteratively expand a candidate pool at the document level over a corpus graph, examining each neighbor in isolation and drifting toward a narrow region of the corpus. To address this problem, we propose Group-Aware Adaptive Retrieval for Evidence Navigation (GAREN), which explores the corpus graph through group-level expansion. GAREN organizes documents into semantically coherent and distinguishable groups based on their connections in the corpus graph. The information in each group indicates what can be accessed by expanding through it, providing guidance beyond individual document-level signals. At each iteration, GAREN uses a group-level navigator to identify promising expansion directions, retrieves documents from the selected groups, and applies a document-level reranker to evaluate the updated candidate set. Extensive experiments show that GAREN achieves up to 8.0% improvement over the strongest baseline on BRIGHT. The source code is available at https://github.com/KJ12124/GAREN",
+      "authors": [
+        "June Park",
+        "Jun Kwon",
+        "Jonghyo Kim",
+        "Jongwuk Lee"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-09-02T06:51:06+00:00",
+      "link": "https://arxiv.org/pdf/2609.02188v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "adaptive retrieval method for evidence navigation, directly applicable to evidence-based claim checking",
+      "llm_evidence_cn": "面向证据导航的自适应检索方法，可直接用于基于证据的事实核查",
+      "llm_evidence": "面向证据导航的自适应检索方法，可直接用于基于证据的事实核查",
+      "canonical_evidence": "面向证据导航的自适应检索方法，可直接用于基于证据的事实核查",
+      "llm_tldr_en": "Proposes GAREN, a group-aware adaptive retrieval framework that expands candidate evidence pools in corpus graphs to overcome bounded recall, improving multi-step reasoning retrieval for evidence navigation.",
+      "llm_tldr_cn": "在需要多步推理的证据检索中，相关文档少，系统常受限于候选召回边界。现有方法在文档层面逐一扩展邻居，容易漂移到局部区域。论文提出组感知自适应检索模型GAREN，将文档按图连接组织成语义连贯的组并进行组级扩展。实验表明该方法能在更广的语义空间上导航证据，缓解候选池收窄问题，进而提升复杂事实核查与证据发现任务的检索质量。",
+      "llm_tldr": "在需要多步推理的证据检索中，相关文档少，系统常受限于候选召回边界。现有方法在文档层面逐一扩展邻居，容易漂移到局部区域。论文提出组感知自适应检索模型GAREN，将文档按图连接组织成语义连贯的组并进行组级扩展。实验表明该方法能在更广的语义空间上导航证据，缓解候选池收窄问题，进而提升复杂事实核查与证据发现任务的检索质量。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.04647v1",
+      "source": "arxiv",
+      "title": "CAGE: Coherence-Aware Graph Encoding for Retrieval-Augmented Generation",
+      "abstract": "Traditional Retrieval-Augmented Generation (RAG) systems score each passage independently against the query, assembling context sets that may be individually relevant yet collectively incoherent. We introduce Coherence-Aware Graph Encoding (CAGE), a reranking framework that models \"between-chunk coherence\" across four dimensions: Intra-Domain Relevance, Noise Resistance, Informational Bonding, and Factual Consistency. Our pipeline transforms retrieved passages into directed heterogeneous entity graphs, amplifies factual anchors via min-out-degree reweighting, encodes structural patterns through a Relational Graph Convolutional Network, and fuses inter-chunk coherence with query relevance for final ranking. Evaluated across four multi-hop benchmarks, CAGE matches or outperforms strong baselines including monoT5 in Recall@5 on bridge-dominated datasets and consistently improves downstream Exact Match, demonstrating that structurally coherent context yields more precise answers even when retrieval recall is comparable or lower.",
+      "authors": [
+        "Tong Qi",
+        "Jingyu Wu",
+        "Youbing Yin",
+        "Spencer Hong",
+        "Daben Liu",
+        "Erin Babinsky"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.IR"
+      ],
+      "published": "2026-09-04T02:27:34+00:00",
+      "link": "https://arxiv.org/pdf/2609.04647v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "coherence-aware graph reranking of retrieved passages, transferable to evidence-based misinformation checking",
+      "llm_evidence_cn": "面向检索证据的图编码重排序，增强多段落事实一致性与证据整合，可用于基于外部证据的谣言核查",
+      "llm_evidence": "面向检索证据的图编码重排序，增强多段落事实一致性与证据整合，可用于基于外部证据的谣言核查",
+      "canonical_evidence": "面向检索证据的图编码重排序，增强多段落事实一致性与证据整合，可用于基于外部证据的谣言核查",
+      "llm_tldr_en": "RAG passage sets can be individually relevant yet collectively incoherent. CAGE reranks passages by building directed heterogeneous entity graphs, amplifying factual anchors, and using a relational GCN to model between-chunk coherence; multi-hop benchmark experiments show this improves evidence selection and output reliability.",
+      "llm_tldr_cn": "传统检索增强生成对每个段落独立打分，导致上下文虽各自相关却整体不连贯。CAGE把检索结果转换为有向异质实体图，用关系图卷积网络编码段落间的信息绑定与事实一致性，并与查询相关度融合做重排序。在四个多跳问答基准上验证了该方法可提升证据选择与回答表现。该框架不依赖具体任务，可迁移到基于外部证据的事实核查流程中。",
+      "llm_tldr": "传统检索增强生成对每个段落独立打分，导致上下文虽各自相关却整体不连贯。CAGE把检索结果转换为有向异质实体图，用关系图卷积网络编码段落间的信息绑定与事实一致性，并与查询相关度融合做重排序。在四个多跳问答基准上验证了该方法可提升证据选择与回答表现。该框架不依赖具体任务，可迁移到基于外部证据的事实核查流程中。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.05802v1",
+      "source": "arxiv",
+      "title": "AtomCite: Verification and Correction of Supplied Page-Level Citations in Multi-Page Documents",
+      "abstract": "Large language models answering questions over multi-page documents are expected to cite the supporting pages, yet supplied citations are sometimes inaccurate, and current evaluations score citations at generation time or against text passages: no existing benchmark evaluates whether a system can verify and correct a page-level citation already attached to an answer. We propose AtomCite, an agentic framework that parses an answer into claims, checks each claim against the image of its cited page, and applies a deterministic repair policy. To evaluate it, we introduce DocCite, to our knowledge the first benchmark for systems that verify and correct page-level citations in document images. Built on MP-DocVQA and DUDE, it combines 928 validated injected instances with 2,468 candidate natural errors harvested from frontier- and efficiency-tier models, of which a two-annotator audit confirms 1,909 as genuine errors. Primary labels are assigned deterministically, not by LLM judges, with the human audit as a separate validation layer. Across three model families (Gemini, Claude, and GPT), AtomCite reaches around 93% binary verification accuracy on the injected benchmark, significantly outperforming every OCR-only condition, including a compute-matched control, and exceeding every prior text-based baseline given the same OCR text. Its repair policy lifts citation precision on the injected mix from a constructed 34% to 87-90% while retaining over 90% of correct claims. AtomCite also transfers: with frozen prompts and zero training, it raises the hallucination-detection scores of two open 7-8B models on five public benchmarks above the same models prompted as direct judges. Finally, the audit shows that noise in automatic labels biases measured verifier accuracy and can reverse system rankings, so evaluations relying only on synthetic or automatic labels risk mismeasuring verification capability.",
+      "authors": [
+        "Chen Qian",
+        "Yimeng Wang",
+        "Yu Chen",
+        "Lingfei Wu",
+        "Andreas Stathopoulos"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-09-05T01:31:50+00:00",
+      "link": "https://arxiv.org/pdf/2609.05802v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "claims parsed and checked against cited document page images; visual-evidence claim verification transferable to fact checking",
+      "llm_evidence_cn": "将答案拆分为声明并用页面图像逐条核验，属于视觉证据驱动的声明级验证，可迁移至多模态事实核查",
+      "llm_evidence": "将答案拆分为声明并用页面图像逐条核验，属于视觉证据驱动的声明级验证，可迁移至多模态事实核查",
+      "canonical_evidence": "将答案拆分为声明并用页面图像逐条核验，属于视觉证据驱动的声明级验证，可迁移至多模态事实核查",
+      "llm_tldr_en": "LLM page-level citations in multi-page documents are often inaccurate and not evaluated after generation. AtomCite parses an answer into claims, checks each claim against the image of its cited page, and repairs bad citations; the new DocCite benchmark shows effective verification and correction.",
+      "llm_tldr_cn": "长文档问答中语言模型提供的页码引用常不准确，现有评估也没有在生成后验证或修正引用。AtomCite将答案拆解为声明，把每条声明与引用页的图像进行核对，再按确定性策略修复错误引用。为评测该任务，作者构建了首个页码引用验证基准DocCite。实验显示框架能有效验证和修正文档图像中的引用，为基于证据的视觉事实核查提供了可迁移思路。",
+      "llm_tldr": "长文档问答中语言模型提供的页码引用常不准确，现有评估也没有在生成后验证或修正引用。AtomCite将答案拆解为声明，把每条声明与引用页的图像进行核对，再按确定性策略修复错误引用。为评测该任务，作者构建了首个页码引用验证基准DocCite。实验显示框架能有效验证和修正文档图像中的引用，为基于证据的视觉事实核查提供了可迁移思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.07670v1",
+      "source": "arxiv",
+      "title": "Harnessing CLIP and DINO: An Uncertainty-Aware Cascaded Fusion Network for Generalizable Deepfake Image Detection",
+      "abstract": "The growing realism and accessibility of manipulated and generated faces threaten the trustworthiness of digital media. To detect such forgeries, deepfake detectors based on vision foundation models have shown promising performance, but they typically rely on a single pretrained representation and are prone to overfitting to particular training distributions. To improve generalization to unseen forgeries, we propose UCF-Net, an uncertainty-aware cascaded fusion network that harnesses CLIP's language-aligned semantic priors and DINO's self-supervised visual-structure priors. UCF-Net extracts hierarchical features across Transformer depths, uses layer-wise expert aggregation to adaptively combine each encoder's multi-level cues, and performs weighted fusion of the resulting representations based on entropy-derived uncertainty. We further consolidate public deepfake datasets into a unified benchmark of approximately 4M images and construct a separate cross-generator evaluation set with over 8K face images from eight recent generators. On the unified benchmark, UCF-Net achieves the best mean AUC among the evaluated methods in both in-domain and cross-domain evaluations. On the cross-generator set, it adapts effectively with limited target-domain data, although zero-shot transfer remains challenging.",
+      "authors": [
+        "Xuechao Zou",
+        "Yi Zhou",
+        "Kai Li",
+        "Shun Zhang",
+        "Yuhui Chen",
+        "Congyan Lang",
+        "Junliang Xing"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-09-07T15:59:19+00:00",
+      "link": "https://arxiv.org/pdf/2609.07670v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fusion of CLIP and DINO for generalizable deepfake image detection; targets visual misinformation and domain generalization",
+      "llm_evidence_cn": "融合CLIP与DINO的深度伪造图像检测，关注视觉虚假信息与泛化能力，可作为多模态虚假信息检测的视觉模块",
+      "llm_evidence": "融合CLIP与DINO的深度伪造图像检测，关注视觉虚假信息与泛化能力，可作为多模态虚假信息检测的视觉模块",
+      "canonical_evidence": "融合CLIP与DINO的深度伪造图像检测，关注视觉虚假信息与泛化能力，可作为多模态虚假信息检测的视觉模块",
+      "llm_tldr_en": "Deepfake detectors built on one pretrained model overfit to known forgeries. UCF-Net fuses CLIP and DINO features with uncertainty-aware cascades and layer-wise expert aggregation, improving generalization to unseen manipulations. It offers a reusable visual forgery module for detecting visual misinformation in multimodal pipelines.",
+      "llm_tldr_cn": "深度伪造人脸日益逼真，威胁数字媒体可信度，但依赖单一预训练表示的检测器易过拟合。UCF-Net设计不确定性感知的级联融合网络，结合CLIP的语义先验与DINO的自监督结构先验，并在Transformer不同深度做层感知专家聚合。在未见伪造类型上的实验显示其泛化能力优于单骨干方案。该方法为虚假图像检测提供了更强的视觉泛化模块，可嵌入多模态虚假新闻检测流水线。",
+      "llm_tldr": "深度伪造人脸日益逼真，威胁数字媒体可信度，但依赖单一预训练表示的检测器易过拟合。UCF-Net设计不确定性感知的级联融合网络，结合CLIP的语义先验与DINO的自监督结构先验，并在Transformer不同深度做层感知专家聚合。在未见伪造类型上的实验显示其泛化能力优于单骨干方案。该方法为虚假图像检测提供了更强的视觉泛化模块，可嵌入多模态虚假新闻检测流水线。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.09156v1",
+      "source": "arxiv",
+      "title": "ReCite: Agentic Reasoning for Faithful Citation",
+      "abstract": "Accurate citations are the foundation of academic writing, tracing intellectual origins and substantiating core claims. However, manually navigating the growing volume of scientific literature is increasingly difficult, prompting reliance on automatic citation recommendation. While modern retrieval-augmented architectures have largely mitigated the fabrication of non-existent papers, current systems relying on semantic similarity struggle with misattribution, often citing authentic papers that fail to logically support the author's claim. To address this challenge, we argue that accurate citation requires a shift from similarity-based search to active, claim-level reasoning. We propose ReCite, a decoupled agentic framework that orchestrates location perception, intent-aware query planning, and reflective verification. Trained on synthesized reasoning trajectories, our agent verifies claim-evidence consistency and triggers self-correction loops when retrieved candidates lack logical support. Experiments demonstrate that our lightweight framework outperforms state-of-the-art massive generative models in strict citation accuracy. By grounding literature matching in verifiable logic rather than semantic overlap, ReCite establishes a reliable foundation for automated academic writing.",
+      "authors": [
+        "Yuyang Huang",
+        "Bobo Li",
+        "Jiajia Song",
+        "Yuzhe Ding",
+        "Chong Teng",
+        "Fei Li",
+        "Donghong Ji"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-08T17:59:50+00:00",
+      "link": "https://arxiv.org/pdf/2609.09156v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Uses claim-level agentic reasoning instead of similarity search to retrieve documents that logically support a claim, closely paralleling evidence-based fact-checking.",
+      "llm_evidence_cn": "以声明级智能体推理代替相似搜索检索可逻辑支持声明的文献，与基于证据的事实核查高度同构。",
+      "llm_evidence": "以声明级智能体推理代替相似搜索检索可逻辑支持声明的文献，与基于证据的事实核查高度同构。",
+      "canonical_evidence": "以声明级智能体推理代替相似搜索检索可逻辑支持声明的文献，与基于证据的事实核查高度同构。",
+      "llm_tldr_en": "ReCite is a decoupled agentic framework that sees citation recommendation as active claim-level reasoning, orchestrating location perception and intent-aware retrieval to find logically supporting papers. The claim-evidence reasoning mechanism is directly applicable to fact-checking and misinformation evidence retrieval.",
+      "llm_tldr_cn": "现有引用推荐系统依赖语义相似度，容易引用真实但与声明逻辑无关的文献。ReCite提出解耦的智能体框架，把引用推荐从相似性搜索转为主动的声明级推理，用位置感知与意图感知的检索定位能真正支撑声明的论文。该机制强调声明与证据之间的逻辑匹配，而不仅仅是文本相似。该范式可迁移到多模态虚假信息核查中为给定声明检索支持或反驳的证据，具有较强的方法借鉴意义。",
+      "llm_tldr": "现有引用推荐系统依赖语义相似度，容易引用真实但与声明逻辑无关的文献。ReCite提出解耦的智能体框架，把引用推荐从相似性搜索转为主动的声明级推理，用位置感知与意图感知的检索定位能真正支撑声明的论文。该机制强调声明与证据之间的逻辑匹配，而不仅仅是文本相似。该范式可迁移到多模态虚假信息核查中为给定声明检索支持或反驳的证据，具有较强的方法借鉴意义。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

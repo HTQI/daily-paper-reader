@@ -1,0 +1,233 @@
+{
+  "date": "20260909",
+  "date_label": "",
+  "generated_at": "2026-09-09 22:04:04 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.08943v1",
+      "route": "202609/09/2609.08943v1-evaluating-and-improving-evidence-grounded-fact-checking-in-llms-via-multi-round-evidence-ablation",
+      "title": "Evaluating and Improving Evidence-Grounded Fact-Checking in LLMs via Multi-Round Evidence Ablation",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "用多轮证据消融研究LLM事实核查中的证据利用，是证据基础声明核查的核心工作。",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.00581v2",
+      "route": "202609/09/2609.00581v2-enoki-efficient-multi-level-hallucination-detection",
+      "title": "Enoki: Efficient Multi-Level Hallucination Detection",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 8.0,
+      "evidence": "抽取关系事实并对照证据验证，定位不支持的事实，与基于证据的声明核查同构。",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.02097v1",
+      "route": "202609/09/2609.02097v1-evidence-guided-detection-localization-and-explanation-for-text-centric-image-forensics",
+      "title": "Evidence-Guided Detection, Localization and Explanation for Text-Centric Image Forensics",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 8.0,
+      "evidence": "面向文本中心图像取证，证据引导的检测-定位-解释系统可检测并解释图像/文本篡改，用于虚假信息验证",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.07369v1",
+      "route": "202609/09/2609.07369v1-df26-we-cannot-tell-fake-from-real-anymore",
+      "title": "DF26: We Cannot Tell Fake From Real Anymore",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 8.0,
+      "evidence": "AI生成虚假视频检测基准，展示深度伪造检测在生成模型分布漂移下的脆弱性",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.07663v1",
+      "route": "202609/09/2609.07663v1-nosis-deterministic-first-retrieval-with-two-tier-context-hydration-for-factuality-critical-queries-on-small-local-models",
+      "title": "Noēsis: Deterministic-First Retrieval with Two-Tier Context Hydration for Factuality-Critical Queries on Small Local Models",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 8.0,
+      "evidence": "通过确定性优先检索与上下文灌注避免事实性数值编造，支持证据驱动的核查方法。",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.08267v1",
+      "route": "202609/09/2609.08267v1-evidence-aligned-entity-verification-for-hallucination-detection-in-retrieval-augmented-generation",
+      "title": "Evidence-Aligned Entity Verification for Hallucination Detection in Retrieval-Augmented Generation",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 8.0,
+      "evidence": "对检索证据与生成文本做实体级对齐以检测幻觉，与基于证据的事实核查目标高度一致。",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.01316v1",
+      "route": "202609/09/2609.01316v1-midr-enrichment-augmented-indexing-for-multimodal-document-retrieval",
+      "title": "MIDR: Enrichment-Augmented Indexing for Multimodal Document Retrieval",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "多模态文档检索框架，从图文图表丰富的文档中定位事实核查所需的证据",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.01383v1",
+      "route": "202609/09/2609.01383v1-insight-a-benchmark-for-agentic-claim-verification-in-interactive-visualizations",
+      "title": "InSight: A Benchmark for Agentic Claim Verification in Interactive Visualizations",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "基于交互式可视化的智能体声明验证基准；通过操作视觉证据验证声明真伪。",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.04647v1",
+      "route": "202609/09/2609.04647v1-cage-coherence-aware-graph-encoding-for-retrieval-augmented-generation",
+      "title": "CAGE: Coherence-Aware Graph Encoding for Retrieval-Augmented Generation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "面向检索证据的图编码重排序，增强多段落事实一致性与证据整合，可用于基于外部证据的谣言核查",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.07670v1",
+      "route": "202609/09/2609.07670v1-harnessing-clip-and-dino-an-uncertainty-aware-cascaded-fusion-network-for-generalizable-deepfake-image-detection",
+      "title": "Harnessing CLIP and DINO: An Uncertainty-Aware Cascaded Fusion Network for Generalizable Deepfake Image Detection",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "融合CLIP与DINO的深度伪造图像检测，关注视觉虚假信息与泛化能力，可作为多模态虚假信息检测的视觉模块",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.00761v1",
+      "route": "202609/09/2609.00761v1-agent-enhanced-heterogeneous-graph-rag-for-academic-question-answering",
+      "title": "Agent-Enhanced Heterogeneous Graph RAG for Academic Question Answering",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "智能体化异构图谱RAG，含检索充分性评估与图事实结构化验证，可迁移到外部证据的事实核查。",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.02188v1",
+      "route": "202609/09/2609.02188v1-group-aware-adaptive-retrieval-for-evidence-navigation",
+      "title": "Group-Aware Adaptive Retrieval for Evidence Navigation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向证据导航的自适应检索方法，可直接用于基于证据的事实核查",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.05802v1",
+      "route": "202609/09/2609.05802v1-atomcite-verification-and-correction-of-supplied-page-level-citations-in-multi-page-documents",
+      "title": "AtomCite: Verification and Correction of Supplied Page-Level Citations in Multi-Page Documents",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "将答案拆分为声明并用页面图像逐条核验，属于视觉证据驱动的声明级验证，可迁移至多模态事实核查",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    },
+    {
+      "paper_id": "2609.09156v1",
+      "route": "202609/09/2609.09156v1-recite-agentic-reasoning-for-faithful-citation",
+      "title": "ReCite: Agentic Reasoning for Faithful Citation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "以声明级智能体推理代替相似搜索检索可逻辑支持声明的文献，与基于证据的事实核查高度同构。",
+      "first_seen_at": "2026-09-09 22:04:04 UTC",
+      "updated_at": "2026-09-09 22:04:04 UTC"
+    }
+  ]
+}

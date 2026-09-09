@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-08-11 ~ 2026-09-09</span>
+      <span class="dpr-home-dashboard-kicker">2026-09-09</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 18 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 14 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>7</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>11</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>6</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>8</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-09-09 03:37:15 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-09-09 22:04:04 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,7 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日精读聚焦多模态假新闻检测与灾难虚假声明分级，速读覆盖视频问答幻觉与可靠检索生成。</p>
-<p>最值得看：利用时间对齐弹幕生成的多模态检测达满分10分，两阶段灾难虚假严重性评估获9分。</p>
-<p>建议优先精读这两篇，把握弹幕时序特征与分级评估思路，可有效提升对复杂谣言与灾害信息的辨识力。</p>
+<p>今日14篇论文中精读6篇，重点追踪大模型的事实核查与幻觉检测防线。最高分9.0的多轮证据消融研究揭示了LLM证据鲁棒性瓶颈，而8.0分的Enoki框架则给出跨层级高效幻觉定位方案。建议普通读者优先关注这两篇，它们直接对应AI内容可信度与安全落地的核心痛点。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -80,12 +78,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">7 篇</strong>
+    <strong class="dpr-home-dashboard-count">6 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Let the Bullets Fly: Multimodal Fake News Detection with Temporal-Aligned Generative Danmaku">Let the Bullets Fly: Multimodal Fake News Detection with Temporal-Aligned Generative Danmaku</span></li><li><span class="dpr-home-dashboard-paper-title" title="Beyond Truth Discovery: A Two-Stage Framework to Assess the Severity of False Claim during Disasters">Beyond Truth Discovery: A Two-Stage Framework to Assess the Severity of False Claim during Disasters</span></li><li><span class="dpr-home-dashboard-paper-title" title="Generating Biomedical Fact-Checking Reports with RL-Enhanced Agentic Search">Generating Biomedical Fact-Checking Reports with RL-Enhanced Agentic Search</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Evaluating and Improving Evidence-Grounded Fact-Checking in LLMs via Multi-Round Evidence Ablation">Evaluating and Improving Evidence-Grounded Fact-Checking in LLMs via Multi-Round Evidence Ablation</span></li><li><span class="dpr-home-dashboard-paper-title" title="Enoki: Efficient Multi-Level Hallucination Detection">Enoki: Efficient Multi-Level Hallucination Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="Evidence-Guided Detection, Localization and Explanation for Text-Centric Image Forensics">Evidence-Guided Detection, Localization and Explanation for Text-Centric Image Forensics</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>7</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>6</strong></span></div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -93,12 +91,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">11 篇</strong>
+    <strong class="dpr-home-dashboard-count">8 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Catching Hallucinated Citations in Video-LLM Question Answering: A Self-Verification Pipeline and Verifier Ablation Study">Catching Hallucinated Citations in Video-LLM Question Answering: A Self-Verification Pipeline and Verifier Ablation Study</span></li><li><span class="dpr-home-dashboard-paper-title" title="ReliableRAG: Combating Misinformation in Retrieval-Augmented Generation via Reliability-Guided Reasoning Chains">ReliableRAG: Combating Misinformation in Retrieval-Augmented Generation via Reliability-Guided Reasoning Chains</span></li><li><span class="dpr-home-dashboard-paper-title" title="GraphLoom: Reliability-Calibrated Graph Evidence Routing for Multimodal KG-RAG">GraphLoom: Reliability-Calibrated Graph Evidence Routing for Multimodal KG-RAG</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="MIDR: Enrichment-Augmented Indexing for Multimodal Document Retrieval">MIDR: Enrichment-Augmented Indexing for Multimodal Document Retrieval</span></li><li><span class="dpr-home-dashboard-paper-title" title="InSight: A Benchmark for Agentic Claim Verification in Interactive Visualizations">InSight: A Benchmark for Agentic Claim Verification in Interactive Visualizations</span></li><li><span class="dpr-home-dashboard-paper-title" title="CAGE: Coherence-Aware Graph Encoding for Retrieval-Augmented Generation">CAGE: Coherence-Aware Graph Encoding for Retrieval-Augmented Generation</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>11</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>8</strong></span></div>
 </section>
 </div>
 
