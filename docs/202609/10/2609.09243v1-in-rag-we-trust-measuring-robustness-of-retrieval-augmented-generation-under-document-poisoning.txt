@@ -1,0 +1,199 @@
+Title: In RAG We Trust? Measuring Robustness of Retrieval-Augmented Generation Under Document Poisoning
+
+URL Source: https://arxiv.org/pdf/2609.09243v1
+
+Published Time: Thu, 10 Sep 2026 00:03:40 GMT
+
+Number of Pages: 6
+
+Markdown Content:
+# In RAG We Trust? Measuring Robustness of Retrieval-Augmented Generation Under Document Poisoning 
+
+Iliano Fasolino 
+
+Department of Computer Science University of Milan Milan, Italy 
+
+Abstract —Retrieval-augmented generation (RAG) grounds a language model in retrieved documents, which reduces hallu-cination but creates a new attack surface: if retrieved text is tampered with, the model may repeat the falsehood. We study how much a small quantized model, Llama 3.1 8B, degrades when a fraction of its retrieved context is poisoned. Three corruption strategies are tested, entity swap, number swap, and negation, each applied to zero, one, two, or three of the three retrieved passages, over a factorial sweep of 588 runs on a fact-checking task built from FEVER. Accuracy falls from 77.9% on clean context to 43.5% when all three passages are corrupted. Entity swap flips the largest share of answers that were correct on clean context. Number-based corruption stays flat while poisoned passages are a minority and jumps once they form a majority, a pattern we re-check with query-level bootstrap intervals. The model rarely invents new falsehoods; its dominant reaction is to abstain, and a lexical overlap proxy of unsupported generation falls under attack rather than rising. The study is a small-scale measurement with coarse automated labels; we treat the strategy contrasts as suggestive until decoding is controlled and stronger adjudication is in place. 
+
+Index Terms —retrieval-augmented generation, large language models, adversarial robustness, document poisoning, fact verifi-cation 
+
+I. I NTRODUCTION 
+
+Large language models answer questions fluently but carry two well-known liabilities: their knowledge is frozen at train-ing time, and they sometimes state false facts with full con-fidence. Retrieval-augmented generation, proposed by Lewis et al. [1], addresses both by fetching relevant documents at query time and placing them in the prompt as evidence. The model is then asked to answer from that evidence rather than from memory alone. This design has become the default recipe for question answering over private or fast-moving knowledge bases. The same design introduces a dependency that is easy to overlook. A RAG answer is only as trustworthy as the documents it retrieves. If an attacker can edit, inject, or otherwise corrupt even part of the retrieved set, the grounding step that was meant to improve reliability becomes a channel for misinformation. Shi et al. [3] showed that irrelevant context alone can pull a model off track; corrupted but on-topic context is a stronger lever, because it looks exactly like the evidence the model was told to trust. What is still missing for a practitioner running a small model on modest hardware is a concrete measurement: how far does accuracy fall, which kind of corruption bites hardest, and does the model fail loudly by fabricating or quietly by refusing. We answer those three questions empirically. Our contri-bution is threefold. First, we build a reproducible poisoning testbed around a 4-bit Llama 3.1 8B model, a MiniLM re-triever, and a FAISS index of nearly twenty thousand FEVER evidence sentences. Second, we run a full factorial experiment, three corruption strategies crossed with four poisoning levels over a fixed query set, and report accuracy, a fooled rate, ab-stention, and a lexical-overlap proxy of unsupported generation for every cell. Third, we characterise the failure surface: entity corruption flips the most answers, numeric corruption jumps once it reaches a majority of the context, and the model’s default response to contradiction is to abstain rather than to invent. Every point estimate reported here comes from the same 588-run table. Where we interpret a jump or a strategy ranking, we also report query-level bootstrap intervals and paired tests recomputed from that table. II. M ETHOD 
+
+A. Retrieval and Generation Pipeline 
+
+The pipeline follows the standard three stages of RAG. A user question is embedded, the nearest passages are retrieved from a vector index, and those passages are concatenated into a prompt that the language model answers. Passages and questions are embedded with the all-MiniLM-L6-v2 sentence transformer [6], which maps text to 384-dimensional vectors and is small enough to run comfortably on a CPU. Vectors are normalised to unit length and stored in a FAISS flat inner-product index [7], so that the inner product between a query and a passage equals their cosine similarity. For a query q and passage d the retrieval score is 
+
+sim( q, d ) = eq · ed
+
+∥eq ∥ ∥ ed∥ , (1) where eq and ed are the embeddings. The index holds an exact copy of every vector and is scanned in full at query time, which is appropriate at this corpus size. The top three passages, k = 3 , are passed to the generator. arXiv:2609.09243v1 [cs.CR] 8 Sep 2026 The generator is Llama 3.1 8B Instruct, quantized to 4 bits in the GGUF Q4 K M format and run through llama.cpp on CPU. Full-precision weights would need about 16 GB of memory; 4-bit quantization brings the footprint near 5 GB, which fits the 8 GB machine used for all runs. Decoding uses temperature 0.1 so that answers are close to deterministic, which matters when the same query is evaluated many times. The prompt instructs the model to answer only from the supplied context and to reply “Not enough information” when the context does not settle the question. 
+
+B. Poisoning Strategies 
+
+Document poisoning here means rewriting a retrieved pas-sage so that it states something false while remaining fluent and on-topic. The rewrite happens after retrieval and before the prompt is built, so the retriever itself is never attacked; only the evidence handed to the model is altered. Three strategies are implemented, each targeting a different class of fact. 
+
+Entity swap replaces named entities with plausible alterna-tives of the same type. “The Eiffel Tower is located in Paris, France” becomes “The Eiffel Tower is located in Madrid, Spain.” Grammar and register are untouched, so nothing flags the sentence as suspicious except the fact itself. 
+
+Number swap perturbs a numeric value to a nearby wrong one, for example turning “over 13,000 miles” into “over 3,000 miles.” A language model has no internal arithmetic check for such a claim and tends to echo whatever figure the context provides. 
+
+Negation inserts a negation that flips the truth value of a statement, so “Barack Obama was the 44th President” becomes “Barack Obama was never the 44th President.” The word “never” is a strong lexical signal, and we expected the model to treat it with more suspicion than a silent entity substitution. 
+
+C. Poisoning Level 
+
+The poisoning level is the number of the three retrieved passages that are corrupted before generation. We sweep all four values, from none to all three: 
+
+p ∈ { 0/3, 1/3, 2/3, 3/3}. (2) At 0/3 the passages are left untouched, giving a within-condition baseline. At 3/3 every passage the model sees has been rewritten. The passages to corrupt are chosen at random among the three, which lets a single clean passage sit anywhere in the ordering. 
+
+D. Evaluation Metrics 
+
+For every run the model retrieves once, then answers twice: once from the clean passages and once from a poisoned copy of that same list. Passage identity and order are therefore shared across the pair; what is not locked is decoding (temper-ature 0.1, two independent generate calls). Four quantities are recorded. 
+
+Accuracy checks whether the reference keyword for aquestion appears in the answer, case-insensitively. Keyword presence is a coarse label: a negated or qualified answer can still contain the keyword, and an otherwise correct paraphrase can miss it. We keep it because it is reproducible and applied uniformly, not because it is a gold standard. Fooled rate is the fraction of runs where the clean answer was correct but the poisoned answer was not; it isolates correct-to-incorrect flips from questions the model could not answer anyway. It is not a direct measure of poison adoption, because an incorrect poisoned answer may abstain, contradict the poison, or state a third wrong fact. Abstention rate counts answers that decline to commit, detected through a small set of phrases such as “not enough information” and “cannot determine.” Unsupported generation (reported in earlier drafts as a hallucination proxy) is approximated by lexical overlap: an answer is flagged when fewer than 30% of its content words appear in any retrieved passage, 
+
+hallu = 1
+
+ |Wa ∩ Wd||Wa| < 0.3
+
+
+
+, (3) with Wa the content words of the answer and Wd those of the retrieved passages. Lexical overlap confuses faithful para-phrase with unsupported invention, and it can miss answers that copy poisoned text. We treat the proxy as a trend indicator only. 
+
+E. Experimental Design 
+
+The evaluation set contains 49 fact-checking queries, of which 37 are distinct, spanning locations, dates and counts, yes/no claims, and people. Ten information-rich passages covering the queried facts were added to the index because raw FEVER evidence sentences are often too terse to support a full answer. Crossing the query set with three strategies and four poisoning levels yields 49 × 3 × 4 = 588 runs, each producing a clean and a poisoned answer for 1,176 generations in total. Because a full sweep takes roughly a day on CPU, results are written to disk after every run and a checkpoint records completed cells, so an interrupted sweep resumes without repeating work. III. E XPERIMENTS AND RESULTS 
+
+A. Setting 
+
+All runs use the corpus of 19,597 FEVER dev evidence sentences plus the ten added passages, the MiniLM retriever, and the quantized Llama 3.1 8B generator described above, with k = 3 and temperature 0.1 held fixed. The dataset comes from the FEVER benchmark of Thorne et al. [2], which pairs claims with Wikipedia evidence and is a standard resource for fact verification. 
+
+B. Accuracy Degradation 
+
+Table I tracks the model as more of its context is corrupted. The clean arm stays near 78% throughout, which confirms that the query set itself is not drifting across rows. Poisoned accuracy still moves for reasons other than poisoning alone: the 0/3 cell is already 69.4%, nine points below the clean arm, before any passage is rewritten. From that residual baseline the poisoned arm falls further to 63.9% at one corrupted passage and to 43.5% when all three are corrupted. The fooled rate TABLE I ACCURACY AND FAILURE BEHAVIOUR BY POISONING LEVEL , AVERAGED OVER ALL THREE STRATEGIES . E ACH LEVEL AGGREGATES 147 RUNS .Poisoned Clean Poisoned Fooled Abstain passages acc. (%) acc. (%) rate (%) rate (%) 0 / 3 78.2 69.4 9.5 21.1 1 / 3 77.6 63.9 15.0 29.3 2 / 3 78.2 53.1 25.9 38.8 3 / 3 77.6 43.5 34.0 51.7 TABLE II FOOLED RATE WITH QUERY -LEVEL BOOTSTRAP 95% INTERVALS (ALL STRATEGIES , 147 RUNS PER ROW ). Poisoned passages Fooled (%) 95% CI n                
+
+> 0 / 3 9.5 [5 .4,14 .3] 147 1 / 3 15.0 [8 .8,21 .8] 147 2 / 3 25.9 [18 .4,33 .3] 147 3 / 3 34.0 [24 .5,44 .2] 147
+
+rises from 9.5% at 0/3 to 34.0% at 3/3, and abstention climbs from 21% to 52%. Attack effects should be read against the 
+
+0/3 residual, not against a silent zero. Figure 1 plots the same trend per strategy. The three curves separate clearly. Entity swap drives the steepest fall, and by the full-poisoning level it sits below the other two. The right panel, which shows the gap against the clean arm, makes the ordering explicit and shows that no strategy is harmless once two of the three passages are corrupted. One detail in Table I needs to be read carefully. The 0/3
+
+row still shows a fooled rate near 10% and an accuracy about 9 points below the clean arm, even though no passage is rewritten and both answers see the same retrieved list. That residual is therefore not a retrieval mismatch. It comes from decoding noise under temperature 0.1 across two independent generations, plus a strict keyword matcher that can disagree on near-paraphrases. Recomputing from the 588-run table, clean and poisoned answers are identical in only 76.9% of the 0/3
+
+runs. The residual is large relative to some attack increments (the rise from 9.5% to 15.0% fooled between 0/3 and 1/3 is 5.5 points), so strategy contrasts at light poisoning should be read as suggestive until decoding is controlled (fixed seeds, repeated draws) and labels are less brittle. We therefore read the clean-arm column, not the 0/3 poisoned cell, as the true no-attack baseline. 
+
+C. Uncertainty on the Existing Runs 
+
+We do not invent new generations for this revision. We reanalyse the same table with a query-level bootstrap: resample the 49 indexed query slots with replacement (37 distinct texts), keep every run tied to a drawn slot, recompute the fooled rate, and repeat 10 ,000 times with a fixed seed to obtain percentile 95% intervals. Exact McNemar tests on discordant clean/poisoned correctness pairs are reported as a secondary check; effect sizes and intervals remain primary. Table II shows that the climb with poisoning level remains after accounting for query resampling, while neighbouring                       
+
+> TABLE III BEHAVIOUR BY STRATEGY ,AVERAGED OVER ALL FOUR POISONING LEVELS . E ACH STRATEGY AGGREGATES 196 RUNS .Strategy Clean Poisoned Fooled Abstain acc. (%) acc. (%) rate (%) rate (%) Entity swap 78.1 54.6 23.5 43.4 Number swap 77.6 57.7 20.4 30.1 Negation 78.1 60.2 19.4 32.1
+
+levels overlap. The comparison that matters for the numeric pattern is isolated next. 
+
+D. Which Strategy Hurts Most 
+
+Table III ranks the strategies. Entity swap has the highest fooled rate at 23.5% and the lowest poisoned accuracy, so it flips the largest share of answers that the model would otherwise get right. It also provokes the most abstention, 43.4%, which fits its mechanism: swapping “Paris, France” for “Madrid, Spain” can leave the passage internally inconsistent, and the model often reacts to that inconsistency by refusing to answer. Number swap and negation are close behind on fooled rate but keep higher poisoned accuracy. The heatmap in Figure 2 gives the full strategy-by-level grid. Two patterns stand out. Fooled rates rise from left to right in every row, and the number-swap row is nearly flat across the first two columns before it jumps. 
+
+E. A Majority Pattern in Numeric Corruption 
+
+Figure 3 isolates that pattern. For entity swap and negation the fooled rate grows in roughly even steps as poisoning increases. Number swap behaves differently. It stays at 10.2% for both zero and one corrupted passage (bootstrap 95% CI [2 .0, 18 .4] in both cells), then rises to 26.5% at two ([14 .3, 38 .8] ) and 34.7% at three ( [22 .5, 49 .0] ). The jump from one to two poisoned passages is 16.3 points with CI 
+
+[2 .0, 30 .6] , which excludes zero but is wide. Exact McNemar tests on clean-versus-poisoned correctness are significant at two and three poisoned passages ( p < 10 −3) and not at one ( p = 0 .22 ). We read this as a majority-leaning pattern consistent with outvoting a single wrong figure, not as a sharp phase transition proven under locked pairs. Because a model cannot sanity-check a bare number the way it can catch “Madrid, Spain,” numeric corruption remains a quiet risk once it reaches critical mass. 
+
+F. How the Model Fails 
+
+The most useful result for a system designer is not how often the model is wrong but how it is wrong. Two failures are possible under attack. The model can accept the falsehood and state it, or it can notice the conflict and decline. It could also invent a third answer grounded in neither, which the hallucination proxy is meant to catch. The evidence points to abstention as the dominant recorded failure mode. Averaged over all runs the model abstains on 35.2% of poisoned queries, well above the 21.1% fooled rate. Figure 4(a) shows abstention climbing with poisoning 0/3 1/3 2/3 3/3 
+
+Poisoned documents (out of 3 retrieved) 
+
+> 020 40 60 80 100
+> Accuracy (%)
+
+(a) Accuracy under poisoning    
+
+> Entity swap Number swap Negation Clean arm
+> 0/3 1/3 2/3 3/3
+
+Poisoned documents (out of 3 retrieved) 
+
+> 010 20 30
+> Accuracy drop (pp)
+
+(b) Drop vs. clean arm     
+
+> Entity swap Number swap Negation Fig. 1. Accuracy as a function of how many of the three retrieved passages are poisoned. Panel (a) shows poisoned accuracy per strategy against the shared clean baseline; the clean arm stays near 78% while every poisoned curve declines. Panel (b) shows the drop relative to the clean arm, where entity swap opens the widest gap at high poisoning. 0/3 1/3 2/3 3/3
+
+Poisoned documents (out of 3)           
+
+> Entity swap Number swap Negation
+> 10.2 18.4 28.6 36.7 10.2 10.2 26.5 34.7 8.2 16.3 22.4 30.6
+> 010 20 30 40
+> Fooled rate (%)
+> Fig. 2. Fooled rate for every strategy and poisoning level. Colour runs from green (safe) to red (many answers flipped). The number-swap row barely changes between zero and one poisoned passage, then rises steeply.
+
+for every strategy and reaching 69% for entity swap at full corruption. The lexical-overlap proxy moves the other way. Figure 4(b) shows that low-overlap answers are more common on the clean arm, near 29%, than on the poisoned arm, near 20%. Under this proxy, corrupted context does not look like a surge of unsupported invention; it looks like a surge of refusal. A fuller faithfulness taxonomy (entailment, contradiction, poi-son adoption, unsupported generation) would be needed before claiming that hallucination itself falls. Figure 5 decomposes only those queries the model answered correctly on clean context, so every bar starts from a fact the model knew. As poisoning grows, the green “still correct” band shrinks and is replaced mostly by blue abstention, with the red “fooled” band growing more slowly. Negation is the most resilient: even at full corruption a large share of originally correct answers survives, which matches our expectation that an explicit “never” is easier to distrust than a silent swap. 0/3 1/3 2/3 3/3 
+
+Poisoned documents (out of 3 retrieved) 
+
+> 010 20 30 40
+> Fooled rate (%)  +16.3 pp
+> Entity swap Number swap Negation
+> Fig. 3. Fooled rate by poisoning level. Entity swap and negation grow steadily, whereas number swap (bold) stays flat through one poisoned passage and then rises once poisoned passages become the majority. Intervals for the number-swap jump are reported in the text.
+
+G. Which Queries Break 
+
+Fooled rates are uneven across questions. Figure 6 lists the ten most fragile ones. Questions about a well-known person’s biography and about the landmark facts in our added passages top the list, because those passages contain the richest set of swappable entities. Yes/no and location questions are more exposed than open numeric ones, whose lower clean accuracy leaves less room for a correct-to-wrong flip. The pattern is a reminder that vulnerability depends on the fact being asked about, not only on the attack. 
+
+H. Relation to Prior Work 
+
+Our findings extend the RAG picture drawn by Lewis et al. [1] from the cooperative case to an adversarial one: retrieval that lifts accuracy on clean corpora becomes a liability on 0/3 1/3 2/3 3/3 
+
+> Poisoned documents (out of 3 retrieved)
+> 010 20 30 40 50 60 70 80
+> Abstention rate (%)
+
+(a) Abstention      
+
+> Entity swap Number swap Negation Clean arm
+> 0/3 1/3 2/3 3/3
+> Poisoned documents (out of 3 retrieved)
+> 0510 15 20 25 30 35 40
+> Hallucination rate (%)
+> 31.3 29.9 24.5 29.9 26.5 19.7 21.1 12.2
+
+(b) Hallucination     
+
+> Clean arm Poisoned arm Fig. 4. Failure behaviour across poisoning levels. Panel (a): abstention rises with poisoning for every strategy, most steeply for entity swap. Panel (b): the lexical-overlap proxy of unsupported generation is higher on the clean arm than the poisoned arm for all three strategies. 0/3 1/3 2/3 3/3
+> Poisoned documents
+> 020 40 60 80 100
+> % of clean-correct cases
+
+Entity swap    
+
+> Still correct Abstained Fooled
+> 0/3 1/3 2/3 3/3
+> Poisoned documents
+
+Number swap    
+
+> 0/3 1/3 2/3 3/3
+> Poisoned documents
+
+Negation  
+
+> Fig. 5. Outcome of queries that were correct on clean context, split by strategy and poisoning level. Green is still correct, blue is abstained, red is fooled. The lost green area is absorbed mainly by abstention, and negation retains the most correct answers.
+
+corrupted ones. Where Shi et al. [3] showed that off-topic context distracts a model, we show that on-topic but false context does more, because it wears the appearance of the evidence the model was told to trust. The abstention-over-fabrication pattern we measure is an empirical answer, for a small quantized model, to how such a system fails when the context is corrupted rather than merely irrelevant. The retrieval-integrated pre-training of Guu et al. [5] shares the grounding assumption our attack targets. Zhou et al. [4] warn that evaluation can leak into training and inflate scores; we keep the FEVER-derived query set fixed and report every cell from the same 588-run table so strategy comparisons are not an artifact of shifting test items. IV. T HREAT MODEL AND DISCUSSION 
+
+The attacker assumed here can alter the text of retrieved passages after retrieval and before generation, but cannot retrain the model or change the retriever. This maps onto realistic settings such as a compromised document store, a poisoned web source that a live retriever pulls in, or a tampered cache between retrieval and prompting. The attacker does not need to fool the similarity search; editing content that is already retrieved is enough. Under that model the results carry three practical messages. Numeric facts deserve special protection, because a model can-not verify a figure and numeric corruption becomes markedly more harmful once it dominates the context in this sweep. Cross-checking retrieved numbers against an independent source, or flagging disagreement among passages, is worth the cost in domains where quantities matter. Redundancy helps but only to a point: in this sweep two trustworthy passages often outvote one bad numeric claim, yet that pattern weakens once corrupted passages take the majority, so raising k without raising source diversity offers little real protection. Finally, abstention should be treated as a signal, not as noise. A model that starts refusing far more often than usual may be reacting to conflicting evidence, and a monitored abstention rate could 0 50 100 
+
+Fooled rate across all conditions (%) 
+
+> Where did Obama go to law school? Is the Eiffel Tower the most visited monumen… Was Obama born in Hawaii? When did Obama start his presidency? Where was Obama born? Did Obama go to Harvard? Where was Barack Obama born? Where is the Eiffel Tower? Is the Eiffel Tower in France? Was Obama the 44th president?
+
+Fig. 6. The ten queries with the highest fooled rate across all conditions. Biographical and landmark questions dominate because the passages that answer them carry many swappable entities. 
+
+serve as a cheap early warning of a poisoned store. V. C ONCLUSION 
+
+We measured how a 4-bit Llama 3.1 8B model behaves when its retrieved context is poisoned, across three corruption strategies and four poisoning levels in a 588-run sweep. Accuracy falls from 77.9% to 43.5% as corruption goes from none to total. Entity swap flips the most answers. Numeric corruption shows a majority-leaning jump once two of three passages are poisoned, with a bootstrap interval on that jump that excludes zero but remains wide. The model’s main recorded response to attack is to abstain rather than to state a wrong answer, and the lexical-overlap proxy of unsupported generation falls under poisoning rather than rising. The study has clear limits. It covers one small quantized model on a compact query set with rule-based corruption, so the absolute numbers should not be read as universal. Retrieval is shared across the pair, but decoding is not locked (temperature 0.1, two independent generations), and the 0/3
+
+residual shows that background pair noise is non-trivial. Key-word matching is a weak correctness criterion, and the overlap proxy is not a semantic faithfulness judge. The added passages make retrieval easier than raw FEVER evidence would. Each limit points to a concrete next step: lock decoding seeds across the pair and add multi-seed and multi-corruption repeats with hierarchical resampling, replace keyword checks with struc-tured FEVER-style labels and normalized entity or quantity scoring, adjudicate a stratified sample with blinded humans or a validated entailment model, and decompose answers into atomic claims so poison adoption can be separated from unsupported generation. We also plan to repeat the sweep on a larger instruction-tuned model and on a second corpus, to replace rule-based edits with model-generated adversarial passages that keep entity swaps internally consistent, and to measure whether flagging cross-passage disagreement before generation recovers accuracy without suppressing correct an-swers. REFERENCES [1] P. Lewis et al. , “Retrieval-augmented generation for knowledge-intensive NLP tasks,” in Advances in Neural Information Processing Systems , vol. 33, 2020, pp. 9459–9474. [2] J. Thorne, A. Vlachos, C. Christodoulopoulos, and A. Mittal, “FEVER: a large-scale dataset for fact extraction and verification,” in Proc. Conf. North American Chapter of the Association for Computational Linguistics (NAACL-HLT) , 2018, pp. 809–819. [3] F. Shi et al. , “Large language models can be easily distracted by irrelevant context,” in Proc. Int. Conf. Machine Learning (ICML) , 2023, pp. 31210–31227. [4] K. Zhou et al. , “Don’t make your LLM an evaluation benchmark cheater,” arXiv preprint arXiv:2311.01964, 2023. [5] K. Guu, K. Lee, Z. Tung, P. Pasupat, and M. Chang, “REALM: retrieval-augmented language model pre-training,” in Proc. Int. Conf. Machine Learning (ICML) , 2020, pp. 3929–3938. [6] N. Reimers and I. Gurevych, “Sentence-BERT: sentence embeddings using Siamese BERT-networks,” in Proc. Conf. Empirical Methods in Natural Language Processing (EMNLP) , 2019, pp. 3982–3992. [7] J. Johnson, M. Douze, and H. J´ egou, “Billion-scale similarity search with GPUs,” IEEE Trans. Big Data , vol. 7, no. 3, pp. 535–547, 2019.

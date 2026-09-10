@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-09-09</span>
+      <span class="dpr-home-dashboard-kicker">2026-09-10</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 14 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 6 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>6</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>8</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>6</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-09-09 22:04:04 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-09-10 21:44:32 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,7 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日14篇论文中精读6篇，重点追踪大模型的事实核查与幻觉检测防线。最高分9.0的多轮证据消融研究揭示了LLM证据鲁棒性瓶颈，而8.0分的Enoki框架则给出跨层级高效幻觉定位方案。建议普通读者优先关注这两篇，它们直接对应AI内容可信度与安全落地的核心痛点。</p>
+<p>今天共速读 6 篇、精读 0 篇，主题集中在可信信息检索与网络虚假信息治理。</p>
+<p>最值得看的是评分 7.0 的 ROMCIR 2026 研讨会综述（可信检索如何减少在线虚假信息），其次是 6.0 的 Counter-GEO-Bench（防御&quot;生成引擎优化&quot;造成的信息扭曲）与 TRILOGUE 三语语音对话事实核查基准。</p>
+<p>普通读者可先读 ROMCIR 综述了解领域全貌，再按需跟进 GEO 防御与多语言语音核查这两个具体方向。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -78,12 +80,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">6 篇</strong>
+    <strong class="dpr-home-dashboard-count">0 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Evaluating and Improving Evidence-Grounded Fact-Checking in LLMs via Multi-Round Evidence Ablation">Evaluating and Improving Evidence-Grounded Fact-Checking in LLMs via Multi-Round Evidence Ablation</span></li><li><span class="dpr-home-dashboard-paper-title" title="Enoki: Efficient Multi-Level Hallucination Detection">Enoki: Efficient Multi-Level Hallucination Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="Evidence-Guided Detection, Localization and Explanation for Text-Centric Image Forensics">Evidence-Guided Detection, Localization and Explanation for Text-Centric Image Forensics</span></li></ul>
+<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>6</strong></span></div>
+
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -91,12 +93,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">8 篇</strong>
+    <strong class="dpr-home-dashboard-count">6 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="MIDR: Enrichment-Augmented Indexing for Multimodal Document Retrieval">MIDR: Enrichment-Augmented Indexing for Multimodal Document Retrieval</span></li><li><span class="dpr-home-dashboard-paper-title" title="InSight: A Benchmark for Agentic Claim Verification in Interactive Visualizations">InSight: A Benchmark for Agentic Claim Verification in Interactive Visualizations</span></li><li><span class="dpr-home-dashboard-paper-title" title="CAGE: Coherence-Aware Graph Encoding for Retrieval-Augmented Generation">CAGE: Coherence-Aware Graph Encoding for Retrieval-Augmented Generation</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Overview of ROMCIR 2026: The 6th Workshop on Reducing Online Misinformation through Credible Information Retrieval">Overview of ROMCIR 2026: The 6th Workshop on Reducing Online Misinformation through Credible Information Retrieval</span></li><li><span class="dpr-home-dashboard-paper-title" title="Counter-GEO-Bench: Evaluating Defenses Against Information-Distorting Generative Engine Optimization">Counter-GEO-Bench: Evaluating Defenses Against Information-Distorting Generative Engine Optimization</span></li><li><span class="dpr-home-dashboard-paper-title" title="TRILOGUE: A Trilingual Spoken Dialogue Fact-Checking Benchmark with Evidence and Paired Audio">TRILOGUE: A Trilingual Spoken Dialogue Fact-Checking Benchmark with Evidence and Paired Audio</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>8</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>6</strong></span></div>
 </section>
 </div>
 

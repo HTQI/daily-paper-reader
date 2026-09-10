@@ -1,0 +1,105 @@
+{
+  "date": "20260910",
+  "date_label": "",
+  "generated_at": "2026-09-10 21:44:32 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.05684v1",
+      "route": "202609/10/2609.05684v1-overview-of-romcir-2026-the-6th-workshop-on-reducing-online-misinformation-through-credible-information-retrieval",
+      "title": "Overview of ROMCIR 2026: The 6th Workshop on Reducing Online Misinformation through Credible Information Retrieval",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "通过可信信息检索减少在线错误信息",
+      "first_seen_at": "2026-09-10 21:44:32 UTC",
+      "updated_at": "2026-09-10 21:44:32 UTC"
+    },
+    {
+      "paper_id": "2609.02316v1",
+      "route": "202609/10/2609.02316v1-counter-geo-bench-evaluating-defenses-against-information-distorting-generative-engine-optimization",
+      "title": "Counter-GEO-Bench: Evaluating Defenses Against Information-Distorting Generative Engine Optimization",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向信息扭曲GEO虚假信息的防御基准",
+      "first_seen_at": "2026-09-10 21:44:32 UTC",
+      "updated_at": "2026-09-10 21:44:32 UTC"
+    },
+    {
+      "paper_id": "2609.04452v1",
+      "route": "202609/10/2609.04452v1-trilogue-a-trilingual-spoken-dialogue-fact-checking-benchmark-with-evidence-and-paired-audio",
+      "title": "TRILOGUE: A Trilingual Spoken Dialogue Fact-Checking Benchmark with Evidence and Paired Audio",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "带证据与配对音频的口语对话事实核查基准",
+      "first_seen_at": "2026-09-10 21:44:32 UTC",
+      "updated_at": "2026-09-10 21:44:32 UTC"
+    },
+    {
+      "paper_id": "2609.05535v1",
+      "route": "202609/10/2609.05535v1-beyond-the-verdict-evidence-aligned-evaluation-of-visual-prompt-injection-guardrails",
+      "title": "Beyond the Verdict: Evidence-Aligned Evaluation of Visual Prompt-Injection Guardrails",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "评估视觉语言模型对图文冲突判定是否与视觉证据对齐",
+      "first_seen_at": "2026-09-10 21:44:32 UTC",
+      "updated_at": "2026-09-10 21:44:32 UTC"
+    },
+    {
+      "paper_id": "2609.09243v1",
+      "route": "202609/10/2609.09243v1-in-rag-we-trust-measuring-robustness-of-retrieval-augmented-generation-under-document-poisoning",
+      "title": "In RAG We Trust? Measuring Robustness of Retrieval-Augmented Generation Under Document Poisoning",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "检索增强事实核查在文档投毒下的鲁棒性",
+      "first_seen_at": "2026-09-10 21:44:32 UTC",
+      "updated_at": "2026-09-10 21:44:32 UTC"
+    },
+    {
+      "paper_id": "2609.10224v1",
+      "route": "202609/10/2609.10224v1-uot-gap-a-variational-principle-for-the-modality-gap-in-vision-language-models-via-unbalanced-optimal-transport",
+      "title": "UOT-Gap: A Variational Principle for the Modality Gap in Vision-Language Models via Unbalanced Optimal Transport",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "免训练诊断图文模态间隙与配对一致性",
+      "first_seen_at": "2026-09-10 21:44:32 UTC",
+      "updated_at": "2026-09-10 21:44:32 UTC"
+    }
+  ]
+}
