@@ -1,0 +1,58 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-11T21:26:58.201400+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.11244v1",
+      "source": "arxiv",
+      "title": "OmniHallu: Unified Hallucination Detection for Cross-Modal Comprehension and Generation in Multimodal Large Language Models",
+      "abstract": "While Multimodal Large Language Models (MLLMs) have achieved remarkable progress across diverse tasks, they suffer from hallucinations where generated outputs contradict or misrepresent input semantics. Existing research typically addresses hallucination detection within a single modality or task type, limiting generalizability. We introduce OmniHallu, a unified hallucination detection framework spanning both comprehension and generation tasks across image, video, and audio modalities. We contribute OmniHallu-Bench, a 10,000-sample benchmark with claim-level human annotations covering six cross-modal tasks: image-to-text (I2T), video-to-text (V2T), audio-to-text (A2T), text-to-image (T2I), text-to-video (T2V), and text-to-audio (T2A). Our multi-agent architecture decomposes model outputs into atomic claims, verifies them through modality-specific experts, and aggregates evidence via structured reasoning. We further propose a preference-optimized trainable verifier that approximates the multi-agent decision boundary, reducing expert calls by 66% with minimal performance loss. Extensive experiments reveal a consistent modality-dependent performance gradient and provide fine-grained insights into cross-modal hallucination patterns.",
+      "authors": [
+        "Jianjiang Yang",
+        "Peihang Li",
+        "Shanqing Xu",
+        "Mengchen Qian",
+        "Lu Zhang",
+        "Meng Luo"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CV"
+      ],
+      "published": "2026-09-10T08:41:12+00:00",
+      "link": "https://arxiv.org/pdf/2609.11244v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unified cross-modal hallucination detection with claim-level annotations for verifying output against input semantics",
+      "llm_evidence_cn": "统一跨模态幻觉检测与声明级标注，验证输出与输入语义是否一致",
+      "llm_evidence": "统一跨模态幻觉检测与声明级标注，验证输出与输入语义是否一致",
+      "canonical_evidence": "统一跨模态幻觉检测与声明级标注，验证输出与输入语义是否一致",
+      "llm_tldr_en": "OmniHallu unifies cross-modal hallucination detection across comprehension and generation with a 10k-sample claim-level benchmark; closely related to multimodal claim verification.",
+      "llm_tldr_cn": "针对多模态大模型输出常与输入语义相矛盾、而现有幻觉检测多局限于单模态或单任务的问题，论文提出统一检测框架 OmniHallu。该方法覆盖图像、视频、音频三种模态，同时支持理解与生成任务，并构建含一万样本、声明级人工标注、覆盖六类跨模态任务的基准 OmniHallu-Bench。实验显示该框架在跨模态场景下具备更好的通用性。其贡献在于为跨模态声明级真实性核查提供统一框架与基准，与多模态虚假信息检测高度相关。",
+      "llm_tldr": "针对多模态大模型输出常与输入语义相矛盾、而现有幻觉检测多局限于单模态或单任务的问题，论文提出统一检测框架 OmniHallu。该方法覆盖图像、视频、音频三种模态，同时支持理解与生成任务，并构建含一万样本、声明级人工标注、覆盖六类跨模态任务的基准 OmniHallu-Bench。实验显示该框架在跨模态场景下具备更好的通用性。其贡献在于为跨模态声明级真实性核查提供统一框架与基准，与多模态虚假信息检测高度相关。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

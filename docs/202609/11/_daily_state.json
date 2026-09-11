@@ -1,0 +1,25 @@
+{
+  "date": "20260911",
+  "date_label": "",
+  "generated_at": "2026-09-11 21:27:40 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.11244v1",
+      "route": "202609/11/2609.11244v1-omnihallu-unified-hallucination-detection-for-cross-modal-comprehension-and-generation-in-multimodal-large-language-models",
+      "title": "OmniHallu: Unified Hallucination Detection for Cross-Modal Comprehension and Generation in Multimodal Large Language Models",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "统一跨模态幻觉检测与声明级标注，验证输出与输入语义是否一致",
+      "first_seen_at": "2026-09-11 21:27:40 UTC",
+      "updated_at": "2026-09-11 21:27:40 UTC"
+    }
+  ]
+}

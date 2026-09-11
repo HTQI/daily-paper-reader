@@ -1,0 +1,24 @@
+{
+  "label": "2026-09-11",
+  "date": "2026-09-11",
+  "generated_at": "2026-09-11T21:27:42",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202609/11/2609.11244v1-omnihallu-unified-hallucination-detection-for-cross-modal-comprehension-and-generation-in-multimodal-large-language-models",
+      "section": "quick",
+      "title_en": "OmniHallu: Unified Hallucination Detection for Cross-Modal Comprehension and Generation in Multimodal Large Language Models",
+      "authors": "Jianjiang Yang, Peihang Li, Shanqing Xu, Mengchen Qian, Lu Zhang, Meng Luo",
+      "date": "2026-09-10",
+      "pdf": "https://arxiv.org/pdf/2609.11244v1",
+      "score": "6.0",
+      "evidence": "统一跨模态幻觉检测与声明级标注，验证输出与输入语义是否一致",
+      "tldr": "多模态大模型在跨模态理解与生成中常出现与输入语义矛盾的幻觉，而现有检测多局限于单一模态或任务。为此，OmniHallu提出统一幻觉检测框架，覆盖图像、视频、音频的六类跨模态任务，并构建含一万条声明级人工标注的OmniHallu-Bench。其方法用多智能体把输出拆成原子声明，经模态专家验证并结构化聚合证据，再以偏好优化验证器逼近决策边界，减少66%专家调用。实验发现模态相关性能梯度，并提供跨模态幻觉模式的细粒度洞见。",
+      "tags": "query:mfnd",
+      "abstract_en": "While Multimodal Large Language Models (MLLMs) have achieved remarkable progress across diverse tasks, they suffer from hallucinations where generated outputs contradict or misrepresent input semantics. Existing research typically addresses hallucination detection within a single modality or task type, limiting generalizability. We introduce OmniHallu, a unified hallucination detection framework spanning both comprehension and generation tasks across image, video, and audio modalities. We contribute OmniHallu-Bench, a 10,000-sample benchmark with claim-level human annotations covering six cross-modal tasks: image-to-text (I2T), video-to-text (V2T), audio-to-text (A2T), text-to-image (T2I), text-to-video (T2V), and text-to-audio (T2A). Our multi-agent architecture decomposes model outputs into atomic claims, verifies them through modality-specific experts, and aggregates evidence via structured reasoning. We further propose a preference-optimized trainable verifier that approximates the multi-agent decision boundary, reducing expert calls by 66% with minimal performance loss. Extensive experiments reveal a consistent modality-dependent performance gradient and provide fine-grained insights into cross-modal hallucination patterns.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
