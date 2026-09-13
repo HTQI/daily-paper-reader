@@ -1,0 +1,982 @@
+Title: BanglaMemeX: Advancing Cultural Metaphoric Image Interpretation in Bangla with a Multimodal Explainable Dataset
+
+URL Source: https://arxiv.org/pdf/2609.08029v1
+
+Published Time: Wed, 09 Sep 2026 03:29:05 GMT
+
+Number of Pages: 37
+
+Markdown Content:
+# BanglaMemeX: Advancing Cultural Metaphoric Image Interpretation in Bangla with a Multimodal Explainable Dataset 
+
+Md. Sadman Sakib 1,* , Zisan Mahmud 1,* , Md. Fahim Arefin 1 & Md Fahim 2
+
+> 1
+
+University of Dhaka 2University of Texas at Dallas  
+
+> *Equal Contribution
+> Correspondence: ssadman887@gmail.com
+
+Abstract 
+
+Vision Language Models have achieved strong performance on multimodal benchmarks, yet their ability to reason about culturally grounded and metaphor-rich content remains insuffi-ciently studied. Internet memes present a challenging setting where meaning emerges from implicit interactions between image, over-laid text, sarcasm, and shared socio-cultural knowledge rather than literal visual recognition. This challenge is amplified in low-resource lan-guages such as Bangla, where code-mixing, stylized scripts, and culturally specific symbol-ism introduce substantial distribution shift. In this work, we introduce BanglaMemeX , a cul-turally grounded multimodal benchmark com-prising 3,000 Bangla memes annotated with multi-dimensional labels (humor, sarcasm, of-fensiveness, motivational intent, and overall sentiment) and human-written explanations that explicitly describe textual and visual metaphors. We systematically evaluate modern VLMs on both classification and explanation generation, revealing that current models struggle to inter-pret implicit cultural cues despite reasonable surface-level accuracy. Our results highlight the need for culturally-aware multimodal sys-tems capable of grounded reasoning under lin-guistic and cultural distribution shift. 
+
+1 Introduction 
+
+Social media platforms have become major chan-nels for public discourse and cultural exchange. In-ternet memes are among the most common forms of communication on these platforms. They com-bine images, text, and cultural references to con-vey opinions, humor, or social commentary. Due to their visual and concise format, memes spread rapidly and have been studied for tasks such as hate speech detection, sentiment analysis, and offensive content classification (Xu et al., 2022). However, meme meaning rarely arises from literal image-to-text correspondence. Instead, interpretation often depends on metaphor, sarcasm, irony, and shared cultural context. As a result, categorical labels alone provide only a partial view of the under-lying reasoning behind a meme’s interpretation. Explanations can therefore improve interpretabil-ity and help analyze model decisions in socially sensitive domains (Ribeiro et al., 2016; Doshi-Velez and Kim, 2017). This challenge becomes more pronounced in multimodal settings where meaning emerges from interactions between visual and textual elements (Agarwal et al., 2024). De-spite progress in Vision Language Models (Radford et al., 2021), many multimodal benchmarks focus on literal tasks such as captioning or visual question answering, which primarily evaluate cross-modal alignment rather than culturally grounded reason-ing. Several Bangla meme datasets have recently been introduced. MemoSen (Hossain et al., 2022a) studies sentiment classification, while MUTE (Hos-sain et al., 2022b), BanHateMeme (Mia and Fahim, 2025), and BanglaAbuseMeme (Das and Mukher-jee, 2023) focus on hate or abusive content de-tection. CMBAN (Alam et al., 2025) studies contextual classification in cartoon memes. Ban-MiMe (Mia et al., 2025) introduces misogyny de-tection with explanations; however, it is limited to misogyny-specific cases and does not cover the broader spectrum of meme interpretation. While these datasets support important tasks, most em-phasize categorical prediction and do not explic-itly evaluate whether models correctly interpret metaphor and reasoning. To address this limitation, we introduce 
+
+BanglaMemeX , a dataset of 3,000 Bangla memes annotated with labels for humor, sarcasm, offen-siveness, and motivational intent, along with over-all sentiment and human-written explanations de-scribing the textual and visual metaphors in each meme. These explanations allow evaluation be-yond classification accuracy and enable analysis of 1arXiv:2609.08029v1 [cs.CL] 7 Sep 2026 Dataset Name Volume Modality Explored Domain Explanation BanglaSarc3 (Biswas et al., 2025) 12,089 Text Sarcasm ×                       
+
+> CMBAN (Alam et al., 2025) 2,641 Multimodal Cartoon-based Meme ×
+> BanMiMe (Mia et al., 2025) 2,000 Multimodal Misogyny Meme ✓
+> BanHateMeme (Mia and Fahim, 2025) 3,819 Multimodal Hate & Sarcastic Meme ×
+> BanglaAbuseMeme (Das and Mukherjee, 2023) 4,043 Multimodal Abuse, Vulgarity, Sarcasm ×
+> BanHate (Raquib et al., 2025) 19,203 Text General Hate Category ×
+> BanglaMemeX (Ours) 3,000 Multimodal Humor, Sarcasm, Offensiveness, Mo-tivation
+> ✓
+> Table 1: Overview of major Bangla textual and multimodal benchmark datasets (2023-2025). The Explanation column indicates whether the dataset includes explicit human-written explanation annotations.
+
+model reasoning. We evaluate modern VLMs using zero-shot prompting, chain-of-thought reasoning, and parameter-efficient fine-tuning. Explanation quality is assessed using BERTScore (Zhang et al., 2020) and an LLM-as-a-judge evaluation. We also employed a structured LLM Council prompting for explanation generation and explored LoRA-based adaptation to improve robustness under cultural and linguistic variation (Hu et al., 2022). Our contributions are twofold. First, we intro-duce BanglaMemeX, a culturally grounded multi-modal dataset with explanation-level annotations for metaphor-rich meme understanding. Second, we provide a systematic evaluation of modern vi-sion–language models under cultural and linguistic shift, examining whether models can correctly in-terpret metaphoric Bangla memes and how expla-nation supervision influences reasoning quality. 
+
+2 Related Work 
+
+Vision Language Models. Vision Language Models (VLMs) have progressed through large-scale contrastive and generative pretraining. CLIP (Radford et al., 2021) demonstrated that image–text alignment at scale enables strong zero-shot transfer across tasks. Subsequent models such as BLIP (Li et al., 2022) and Flamingo (Alayrac et al., 2022) ex-tended this framework toward unified multimodal understanding and few-shot reasoning. These sys-tems perform effectively on captioning, visual ques-tion answering, and instruction-following bench-marks. However, most evaluation settings empha-size literal semantic meaning and are primarily developed using high-resource languages. Their performance under linguistic nuance and cultural variation, particularly for metaphor-rich content, remains less explored. 
+
+Multimodal Meme Understanding in Bangla. 
+
+Memes require visual context, linguistic clues, and sociocultural expertise to comprehend. Accord-ing to the Hateful Memes Challenge (Kiela et al., 2020), multimodal fusion is essential for accurate hate detection. Later research focused on misog-yny detection, sentiment analysis, and multimodal classification (Xu et al., 2022). Bangla language datasets have addressed classification tasks. Memo-Sen (Hossain et al., 2022a) analyzed Bangla meme sentiment, whereas MUTE (Hossain et al., 2022b) and BanHateMeme (Mia and Fahim, 2025) de-tected multimodal hate. BanglaAbuseMeme (Das and Mukherjee, 2023) expanded this approach to classify abusive content. BanMiMe (Mia et al., 2025) added misogyny intensity categories and metaphor localization, whereas CMBAN (Alam et al., 2025) added humor and sarcasm to con-textual classification. BanglaSarc3 (Biswas et al., 2025) investigated sarcasm recognition in code-mixed text. These materials expanded Bangla mul-timodal research annotation techniques and bench-mark coverage. Most assessment methodologies, however, remain focused on category prediction tasks such as hatred, abuse, emotion, or sarcasm categorization. Current Bangla benchmarks prior-itize label-based evaluation for sentiment, hatred, abuse, and sarcasm (see Table 1). While some datasets incorporate structured annotations such as metaphor localization (Mia et al., 2025), system-atic examination of explanation alignment and rea-soning consistency has received comparably little attention. Although recent implication-level bench-marks such as II-Bench (Liu et al., 2024) and CII-Bench (Zhang et al., 2025) address implicit mean-ing inference in vision-language settings, their task formulations are not centered on culturally situ-ated meme interpretation. BanglaMemeX extends this line of work to Bangla internet memes by combining multi-dimensional meme labels with explicit textual and visual metaphor annotations and human-written explanations, thereby support-2❌Duplication                        
+
+> ❌Remov e Watermark
+> ❌Memes without Bangla textual content
+> ❌Personally identifiable information
+> ❌Literal meme
+> BanglaMemeX
+> Dataset
+> Data Source Data Filtering Data Cleaning
+> Data Annotation
+> &Validation
+> Dataset
+
+Figure 1: Overview of the BanglaMemeX dataset construction pipeline. 
+
+ing evaluation of both interpretation accuracy and text-image-metaphor reasoning. 
+
+3 Dataset 
+
+We introduce BanglaMemeX , a curated collec-tion of 3,000 Bangla multimodal memes annotated across four communicative dimensions, namely, Humor, Sarcasm, Offensiveness, and Motiva-tional intent, together with Overall Sentiment and explanation-level supervision. The dataset con-struction workflow is depicted in Figure 1. 
+
+3.1 Data Collection and Annotation Data Collection. We collected 105,835 memes from publicly accessible posts on Facebook, Insta-gram, Reddit, and X, focusing on Bangla-speaking communities where memes commonly combine vi-sual imagery with overlaid Bangla or code-mixed Bangla-English text. Only publicly available con-tent was considered, and no user-identifiable in-formation or engagement metadata were retained during collection. Images are redistributed only when permitted under platform terms. A detailed description of the data acquisition workflow, in-cluding source identification, scraping tool, and manual screening, is provided in Appendix A. 
+
+Filtering and Cleaning. The collected memes were processed through a structured filtering pipeline to ensure linguistic and visual consistency. First, duplicate and near-duplicate images were re-moved using automated duplicate-detection tools, as discussed in Appendix A, followed by manual inspection for further assurance. Duplicates share identical image and text, whereas near-duplicates differ only by minor cropping, resizing, or seman-tically equivalent wording changes. We then dis-carded memes containing third-party watermarks, such as logos of social media pages or groups em-bedded within the image. Automatic OCR tools often struggle to reliably extract Bangla meme text due to stylized fonts, mixed scripts, and low-resolution overlays com-monly used in memes; we discuss this issue in detail in Appendix F. Therefore, instead of rely-ing on external OCR systems, all textual content was manually transcribed by annotators during the annotation process. After applying these filtering steps, the final dataset consists of 3,000 memes. The number of samples removed and remaining at each filtering stage is reported in Table 3. 
+
+Annotation. The dataset was annotated by three native Bangla-speaking annotators who are famil-iar with contemporary Bangla meme culture and are undergraduate students in linguistics. The an-notation process took place over a period of three months, and annotators were compensated BDT 5 per meme. Because the dataset contains instances of hateful and misogynistic content, structured an-notation breaks were incorporated throughout the process to reduce cognitive fatigue and maintain annotation quality. The full annotation process re-quired approximately 1500 annotator hours. On average, annotators spent 10 minutes per meme to identify labels, metaphor types, and produce expla-nations. Each meme was annotated with multiple compo-nents. Annotators first assigned communicative la-bels capturing humor, sarcasm, offensiveness, moti-vational, and overall intent. They then identified the textual metaphor, describing the figurative mean-ing conveyed by the overlaid text, and the visual metaphor, referring to the symbolic meaning repre-sented through elements within the image. Finally, annotators wrote a short natural-language expla-nation linking the visual and textual elements to the underlying cultural meaning or communicative intent. To support visual metaphor annotation, we de-signed a semi-assisted annotation pipeline. Each meme image was first processed using the Segment Anything Model (SAM) (Kirillov et al., 2023), which generates region-level segmentations of the image. Annotators then selected the region cor-responding to the visual metaphor and described its symbolic role before writing the final explana-tion. Full annotation guidelines and representative 3Dataset Attribute Value                              
+
+> Total Memes 3,000 Training/Test Split 2,550/450
+> Label Distributions Humor
+> Funny 2,439 (81.3%) Very Funny 342 (11.4%) Not Funny 219 (7.3%)
+> Sarcastic
+> Little Sarcastic 1,489 (49.6%) Not Sarcastic 768 (25.6%) Very Sarcastic 743 (24.8%)
+> Offensive
+> Not Offensive 1,955 (65.17%) Slight Offensive 714 (23.80%) Very Offensive 230 (7.67%) Hateful Offensive 101 (3.37%)
+> Motivational
+> Not Motivational 2,833 (94.4%) Motivational 167 (5.6%)
+> Overall
+> Very Positive 30 (1%) Positive 168 (5.6%) Neutral 1,880 (62.67%) Negative 846 (28.2%) Very Negative 76 (2.53%)
+> Metaphor Statistics Image Metaphor Mean Length 32.83 chars
+> Textual Metaphor Mean Length 11.49 chars
+> Explanation Statistics Explanation Mean Length 99.58 chars
+> Explanation Modality Text
+> Maximum Explanation Length 541 chars
+
+Table 2: Summary statistics and label distributions of the BanglaMemeX dataset. Length values are reported in characters. 
+
+examples are provided in Appendix B. 
+
+3.2 Data Validation 
+
+The dataset is divided into training and test sets using stratified multi-label sampling to preserve la-bel distributions across communicative categories. Inter-annotator agreement was measured using Fleiss’ κ (Fleiss, 1971) across three annotators. For multi-class labels, agreement was computed separately for each class using a one-vs-rest formu-lation. The resulting per-class κ values are shown in Table 7 in Appendix B. To verify the quality and consistency of the annotated explanations, we conducted both human evaluation and semantic similarity analysis. Each annotated meme contains three textual components: (i) the textual metaphor                  
+
+> Stage Filtering Step Removed Remaining
+> 0Initial collected pool -105,835 1Language filtering (exclu-sively Bangla) 72,392 33,443 2Literal meme removal 18,987 14,456 3Duplicate removal 7,128 7,328 4Watermark removal 4,328 3,000
+
+Table 3: Data filtering process used to construct the BanglaMemeX dataset. 
+
+description (ii) the visual metaphor description and (iii) the final explanation. Human evaluation was performed by three independent annotators as they added a five-point Likert scale (Amidei et al., 2019) assessing correctness, clarity, and cultural appropri-ateness for each textual component. Annotations receiving an average score below 3.5 were flagged for revision and sent for re-annotation until the threshold was satisfied. The human quality score was computed as: 
+
+Q = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+si (1) where si represents the score assigned by anno-tator i and N is the total number of annotators. We did not only rely on human evaluation. To measure semantic agreement between annotators, we computed BERTScore (Zhang et al., 2020), which evaluates similarity using contextual embed-dings from pretrained transformer models. Table 4 reports the human evaluation scores and semantic similarity results for textual metaphor descriptions, visual metaphor explanations, and the final multi-modal explanation. BERTScore was computed at the instance level between explanations written by different anno-tators. For each meme, pairwise BERTScore F1 values were calculated across annotator explana-tions and averaged to obtain an instance-level agree-ment score. Corresponding textual component with maximum BERTScore F1 were selected. The fi-nal dataset-level BERTScore reported in Table 4 corresponds to the mean score across all accepted annotations. Complementary overlap metrics also indicate strong agreement (ROUGE-1 F1: 85.9, ROUGE-2 F1: 50.8, ROUGE-L F1: 84.7) (Lin, 2004). Figure 2 provides a representative exam-ple illustrating the multimodal annotation struc-ture, including categorical labels, textual and visual metaphors, and the corresponding human-written 4Annotation Component Human Score mean BERT-P mean BERT-R mean BERT-F1             
+
+> Textual Metaphor Description 4.12 0.88 0.86 0.87 Visual Metaphor Explanation 4.08 0.87 0.85 0.86 Final Multimodal Explanation 4.18 0.89 0.86 0.87
+> Table 4: Human evaluation and semantic similarity analysis of BanglaMemeX metaphor annotations.
+> Figure 2: Example of a BanglaMemeX instance with multi-dimensional labels, metaphor annotations, and explanation.
+
+explanation. Annotation guidelines and representa-tive examples are provided in B. 
+
+Data Statistics. Dataset statistics, label distribu-tion, and explanation length values are presented in Table 2. 
+
+4 Experiment Setup 
+
+We evaluate multimodal reasoning and cultur-ally grounded interpretation of memes on the BanglaMemeX dataset using three experimental settings: (i) prompt-based inference, (ii) a role-based LLM Council , and (iii) parameter-efficient fine-tuning via Low-Rank Adaptation (LoRA). The overall experimental pipeline is illustrated in Fig-ure 3. 
+
+4.1 Problem Formulation 
+
+Each meme instance consists of an image I and optional overlaid text T . The objective is to predict a set of semantic labels 
+
+Y = {y1, y 2, . . . , y k},
+
+corresponding to humor , sarcasm , offensiveness ,
+
+motivational intent , and overall sentiment . In addi-tion to label prediction, the model generates an ex-planation E describing the interaction between vi-sual elements, textual cues, and implied metaphors. The task therefore combines multi-label classifica-tion with explanation generation. 
+
+4.2 Prompt-Based Inference 
+
+We first evaluate pretrained vision-language mod-els using structured prompting without parameter updates. For each meme, a template prompt speci-fies the prediction categories and enforces a struc-tured output format. Two prompting strategies are considered. 
+
+Zero-shot prompting. The model predicts the labels and generates an explanation directly from the input meme. 
+
+Chain-of-thought prompting. The model is en-couraged to produce intermediate reasoning steps, including visual interpretation, textual understand-ing, and metaphor identification before generating the final prediction. Refer to Appendix C for detailed prompts. 
+
+4.3 Role-Based LLM Council 
+
+We employ a three-stage, multi-model LLM Coun-cil to improve explanation quality through delib-erative refinement. The council consists of two explainer models (Claude-Opus-4.5 and Gemini-3 Flash), three critic models (LLaMA-4-Maverick, Qwen3-VL-8B, and Gemma-3-12B-IT), and one synthesizer model (GPT-5.2). The explainer stage generates initial interpretations of the meme’s lit-eral meaning, figurative meaning, cultural context, and labels. The critic stage reviews these inter-pretations for grounding, cultural alignment, and possible interpretive gaps. The synthesizer then rec-onciles disagreements and produces the final struc-tured prediction. Consensus is achieved through 
+
+sequential synthesis rather than majority voting. All roles use fixed prompt templates, a shared pre-defined label schema, and constrained structured 5Figure 3: Proposed pipeline to benchmark BanglaMemeX dataset. 
+
+outputs. Images are resized to a maximum of 
+
+1024 × 1024 pixels and reused across all stages. Refer to Appendix C for detailed prompts. 
+
+4.4 Parameter-Efficient Fine-Tuning 
+
+To adapt models to culturally grounded super-vision, we apply parameter-efficient fine-tuning using LoRA. Instead of updating all parameters, LoRA introduces trainable low-rank matrices into selected projection layers while keeping the pre-trained weights fixed. Given a weight matrix W ∈ Rd×k, LoRA updates the weight as 
+
+W ′ = W + ∆ W, ∆W = BA, 
+
+where A ∈ Rr×k and B ∈ Rd×r are low-rank matrices with r ≪ min( d, k ).Training optimizes a joint objective combining multi-label classification and explanation genera-tion losses. 
+
+4.5 Evaluation Metrics 
+
+Model performance is evaluated along two dimen-sions. 
+
+Classification performance. We compute stan-dard multi-label metrics for humor, sarcasm, offen-siveness, motivational intent, and overall sentiment. 
+
+Explanation quality. Explanation faithfulness is evaluated using BERTScore (Zhang et al., 2020) to-gether with an LLM-as-a-judge evaluation inspired by LAVE (Mañas et al., 2024). The evaluation as-sesses textual grounding, cultural alignment, and metaphor interpretation. We also conduct a human evaluation using a 1 to 5 Likert scale (Amidei et al., 2019) to assess the quality of generated explana-tions. Details of the scoring criteria and evaluation protocol are provided in Appendix G. 
+
+4.6 Implementation Details 
+
+Experiments are conducted using the predefined train and test splits of BanglaMemeX. Images are resized according to the input resolution of each backbone model, and meme images are processed directly without external OCR. LoRA fine-tuning experiments are performed on an NVIDIA RTX 4090 GPU (24GB VRAM) using PyTorch with mixed-precision optimization. For prompt-based inference and the LLM Council experiments, mod-els are accessed through OpenRouter-hosted infer-ence endpoints. For LoRA fine-tuning, adapters are applied to attention projection layers with rank 
+
+r = 16 , scaling factor α = 32 , and dropout 0.05 .Training runs for 5 epochs using AdamW with learning rate 2 × 10 −4 and weight decay 0.01 .Training uses batch size 1 with mixed-precision optimization. All experiments use fixed random seeds. 
+
+5 Results Analysis 
+
+Table 5 reports classification accuracy scores and explanation performance scores while Table 6 shows textual and visual metaphor understanding measured by LAVE and human evaluation. Rel-evant F1 scores for classification are reported in Table 8 in Appendix E 
+
+Closed-source vs. open-source models. Under zero-shot prompting, closed-source models are strongest on the more inference-heavy labels (Ta-ble 5). Claude-Opus-4.5 performs best on sarcasm, offensiveness, and overall sentiment (Sarc=68.50; Offe=66.10; Over=55.80), suggesting stronger abil-ity to infer implicit stance and culturally grounded negativity. GPT-5.2 obtains the best humor score (Hum=81.10), while Gemini-3 Flash performs best on motivational intent (Moti=95.07). Open-source models show a less consistent pattern. Phi-4-MM and Gemma-3-12B-IT perform reasonably on hu-mor and motivational intent, but they lag behind closed-source models on sarcasm, offensiveness, and overall sentiment. Qwen3-VL-8B is especially weak on humor and sarcasm in the zero-shot set-ting, although it remains strong on motivational intent. Across both model groups, motivational intent is the easiest label, likely because it of-ten relies on direct textual or visual cues. Sar-casm remains difficult because it requires recogniz-ing implicit contrast, irony, and culturally specific framing. Explanation quality follows a different trend. BERTScore (Zhang et al., 2020) remains 6Models Classification Explanation                                                                                                                                                                                                      
+
+> Hum Sarc Offe Moti Over Avg BScore LAVE HumEval Zero-Shot Prompting GPT-5.2 81.10 41.70 43.20 94.43 42.53 60.59 69.40 34.70 69.21 Gemini-3 Flash 79.63 35.25 56.95 95.07 35.85 60.55 70.00 33.61 73.65 Claude-Opus-4.5 79.90 68.50 66.10 94.50 55.80 72.96 69.19 52.98 81.23 Grok-4.1-Fast 77.68 38.91 43.21 89.62 27.59 55.40 68.16 7.47 25.85 Gemma-3-12B-IT 80.43 42.80 61.83 94.37 29.50 61.79 66.86 2.90 13.56 Qwen3-VL-8B 62.43 30.20 52.50 93.30 34.37 54.56 66.86 4.37 15.22 Phi-4-MM 80.27 38.10 58.20 94.40 39.03 62.00 67.62 3.63 13.48 LLaMA-4-Maverick 77.23 27.87 50.37 94.53 41.13 58.23 69.58 16.97 35.82 Chain-of-Thought Prompting GPT-5.2 81.73 45.33 52.47 90.60 34.90 61.01 69.26 40.17 78.75 Gemini-3 Flash 69.89 44.61 60.92 93.83 24.81 58.81 69.00 34.74 77.75 Claude-Opus-4.5 66.84 42.86 56.50 94.17 46.24 61.32 69.52 60.88 84.52 Grok-4.1-Fast 79.53 40.00 43.37 92.07 24.23 55.84 67.98 8.30 34.38 Gemma-3-12B-IT 77.07 45.20 60.90 94.00 35.80 62.59 66.88 4.10 13.75 Qwen3-VL-8B 75.67 45.00 53.87 94.47 23.00 58.40 67.58 7.33 15.54 Phi-4-MM 74.83 46.37 60.77 94.23 28.23 60.89 67.54 6.43 24.38 LLaMA-4-Maverick 79.63 46.87 61.27 94.53 24.07 61.27 69.53 20.53 38.57 LLM Council LLM Council 53.17 32.29 51.10 95.26 44.06 55.18 68.37 68.82 85.51 LoRA Fine-Tuning Qwen3-VL-8B 81.70 55.50 66.70 95.10 66.10 73.02 68.09 11.82 31.88 Gemma-3-12B-IT 82.20 58.80 65.40 95.40 65.20 73.40 69.19 7.20 19.11 LLaVa-1.6-Mistral-7B 81.80 44.90 64.50 94.40 61.80 69.48 68.06 4.60 13.13 LLaVa-Next-8B 81.20 48.60 66.80 93.90 63.00 70.70 66.59 3.41 25.68
+
+Table 5: Performance comparison on BanglaMemeX across zero-shot prompting, chain-of-thought prompting, LLM Council reasoning, and LoRA fine-tuning. HumEval denotes the human evaluation score for explanation quality. 
+
+relatively high across models, indicating fluent out-puts with surface-level semantic overlap. How-ever, LAVE varies sharply, showing that plausible explanations do not always capture the intended metaphor. HumEval further supports this observa-tion. 
+
+Do reasoning prompts help? Table 5 shows that chain-of-thought prompting has only a small aggre-gate effect, with the impact varying across models. GPT-5.2 increases marginally in Avg from 60.59 to 61.01, whereas Gemini-3 Flash declines from 60.55 to 58.81. A similar but more large degra-dation pattern is observed for Claude-Opus-4.5. CoT appears most useful on the more inference-heavy labels like sarcasm. For instance, GPT-5.2 improves on sarcasm from 41.70 to 45.33 (+3.63), and LLaMA-4-Maverick exhibits a larger increase from 27.87 to 46.87. But the benefits are not stable across labels. Several models exhibit notable degra-dations on overall sentiment under CoT prompting; for example, GPT-5.2 decreases on Overall senti-ment from 42.53 to 34.90, and Gemini-3 Flash drops from 35.85 to 24.81. Consequently, the net improvement in classification average remains modest across the evaluated suite. 
+
+Effect of LLM Council The LLM Council con-sistently delivers the strongest explanation quality among all evaluated approaches as shown in Ta-ble 5. These gains, however, are accompanied by a marked decline in label prediction accuracy. The multi-model deliberation in the LLM Council tends to prioritize broader, more narratively appealing in-terpretations, even when these diverge from the strict decision boundaries demanded by the classi-fication rubric. 
+
+Tradeoffs of LoRA fine-tuning. As shown in Table 5, Qwen3-VL-8B improves its classifica-tion Avg from 54.56 under zero-shot prompting to 73.02 after fine-tuning. Similarly, Gemma-3-12B-IT reaches the highest fine-tuned classification Avg of 73.40, slightly surpassing the strongest zero-shot baseline, Claude-Opus-4.5, which achieves 72.96. These gains are especially visible in the more ambiguous categories, such as sarcasm and overall sentiment, suggesting that task-specific su-pervision helps calibrate the models toward the dataset’s label definitions. However, these classifi-7Figure 4: Textual vs. visual metaphor faithfulness across strategies. Textual and image LAVE scores for each model under zero-shot prompting, CoT prompting, LoRA fine-tuning, and the LLM Council. Visual metaphor understanding is consistently weaker than textual metaphor understanding, and LoRA fine-tuning often reduces both.                                                                                        
+
+> Textual Image HumTex HumImg Models LAVE LAVE MetEval MetEval Zero-Shot Prompting GPT-5.2 69.86 41.46 68.43 44.41 Gemini-3 Flash 70.36 34.52 72.82 44.20 Claude-Opus-4.5 69.83 36.43 62.42 46.14 Grok-4.1-Fast 48.27 16.50 38.82 26.12 Gemma-3-12B-IT 29.83 5.47 24.52 16.41 Qwen3-VL-8B 32.65 12.11 37.38 18.52 Phi-4-MM 24.25 10.06 16.20 15.80 LLaMA-4-Maverick 39.30 19.69 36.45 20.23 Chain-of-Thought Prompting GPT-5.2 68.39 41.61 73.13 46.25 Gemini-3 Flash 57.91 32.62 66.65 39.82 Claude-Opus-4.5 60.23 33.13 67.62 45.81 Grok-4.1-Fast 44.07 13.61 36.25 18.62 Gemma-3-12B-IT 23.19 7.19 22.50 16.25 Qwen3-VL-8B 30.98 15.06 35.83 17.66 Phi-4-MM 22.40 11.22 22.55 14.38 LLaMA-4-Maverick 40.60 21.14 42.21 24.52 LLM Council LLM Council 77.87 43.14 86.45 47.42 LoRA Fine-Tuning Qwen3-VL-8B 18.47 4.67 28.13 13.75 Gemma-3-12B-IT 19.10 4.88 19.18 7.51 LLaVa-1.6-Mistral-7B 21.34 3.82 27.46 5.18 LLaVa-Next-8B 18.06 2.25 24.25 3.25
+
+Table 6: Metaphor understanding performance on BanglaMemeX measured using textual LAVE, image LAVE, and human evaluation of textual and image metaphor understanding. 
+
+cation gains do not translate into stronger metaphor understanding or explanation quality. As reported in Table 6, Qwen3-VL-8B drops from 32.65 to 18.47 in Textual LAVE and from 12.11 to 4.67 in Image LAVE after fine-tuning. The same pattern is reflected in Table 5, where the post-adaptation explanation LAVE remains low for Qwen3-VL-8B and Gemma-3-12B-IT, with scores of 11.82 and 7.20, respectively. This indicates a clear tradeoff: LoRA fine-tuning improves label prediction, but may also encourage label-predictive shortcuts that do not strengthen cross-modal metaphor grounding or faithful explanation generation. 
+
+Why visual metaphors remain hard. Table 6 shows a consistent gap between textual and visual metaphor understanding across experimental set-tings. In the zero-shot setting, for example, GPT-5.2 achieves a Textual LAVE of 69.86 but an Image LAVE of only 41.46, while Gemini-3 Flash reaches 70.36 and 34.52, respectively. This gap highlights a core difficulty in culturally grounded meme under-standing. Textual metaphors often provide explicit linguistic cues that models can associate with famil-iar rhetorical patterns, whereas visual metaphors require models to infer meaning from symbolic objects, social situations, and culturally specific visual cues. The gap is particularly large for open-source models under zero-shot prompting, suggest-ing limitations in multilingual visual grounding and in processing stylized or low-resolution Bangla meme text. The LLM Council reduces this limita-tion to some extent, achieving the strongest overall metaphor performance with a Textual LAVE of 77.87 and an Image LAVE of 43.14. This sug-gests that iterative explanation, critique, and syn-thesis can recover some missing cross-modal con-nections. 
+
+6 Conclusion 
+
+The study introduced a culturally grounded Bangla multimodal metaphoric image benchmark that jointly evaluates multi-label meme interpretation and explanation faithfulness under metaphor-rich interactions. Across prompting, LLM Council rea-8soning, and LoRA adaptation, our results reveal a consistent decoupling between classification accu-racy and metaphor-grounded explanations: strong label prediction does not guarantee faithful reason-ing. While closed-source models provide strong zero-shot baselines and LoRA boosts open-source classification performance, explanation quality re-mains fragile for visual metaphors, highlighting the need for supervision and evaluation. 
+
+7 Limitations 
+
+This study has several limitations. BanglaMemeX is limited to Bangla memes collected from public online social media platforms and may not capture the full range of dialectal, regional, or community-specific humor and metaphor. Although the dataset includes explanation annotations, interpretation of memes remains inherently subjective despite multi-annotator agreement procedures. In addition, expla-nation evaluation relies partly on automated metrics and LLM-based judgment, which are informative but imperfect proxies despite being complemented by human evaluation. The dataset is also limited to 3,000 samples, as BanglaMemeX is designed as a focused benchmark for Bangla multimodal meme understanding rather than a large-scale pretraining corpus. The final size reflects the limited availabil-ity of suitable Bangla memes online, as well as the removal of duplicated, low-quality, irrelevant, and heavily code-mixed content during strict filtering and manual annotation. The dataset also contains label imbalance, which reflects the natural distribu-tion of meme content in public social media rather than an artificial sampling flaw. Finally, the experi-mental study is limited to a selected set of models and one dataset, so the findings should not be taken as evidence of generalization to all multimodal or cross-cultural settings. 
+
+8 Ethical Considerations and Potential Risks 
+
+We put attention to content sensitivity, privacy, and responsible research use. During dataset con-struction, memes containing explicit sexual con-tent were excluded. Because the data were col-lected from publicly accessible online memes, the benchmark may still contain socially sensitive, of-fensive, or polarizing expressions that reflect the nature of real world meme discourse. No person-ally identifiable information is included in the re-leased dataset, and no personal information was collected from annotators beyond what was neces-sary to conduct the annotation process. To reduce privacy risk, the dataset excludes user-level meta-data and is intended only as a research resource for studying culturally grounded multimodal un-derstanding rather than for profiling individuals or communities. We further acknowledge that labels such as humor, sarcasm, offensiveness, sentiment, and metaphor-based explanation involve subjective judgment. Any public release of annotations, splits, and code will be carried out only where permitted, with appropriate attribution to original sources and with attention to platform and copyright constraints. We recommend that the benchmark be used for re-search and evaluation purposes only, and not as the sole basis for automated moderation or other high-stakes decisions without human oversight. 
+
+8.1 Use of AI Tools 
+
+We employed AI-assisted tools in a limited and controlled manner to support specific stages of the dataset construction pipeline. First, the Segment Anything Model (SAM) (Kirillov et al., 2023) was used to generate region-level segment proposals for each meme image. These segments served only as visual aids to assist annotators in identifying can-didate regions corresponding to visual metaphors. All final selections and interpretations of visual metaphors were performed manually by human an-notators. No generative AI systems were used to create or modify meme content. All textual an-notations, including communicative labels, textual metaphors, visual metaphor descriptions, and final explanations, were written exclusively by human annotators. Additionally, AI models were not used to automatically assign labels or generate explana-tions at any stage of dataset construction. AI-based evaluation metrics, specifically BERTScore (Zhang et al., 2020), were used post hoc to measure seman-tic similarity between annotator-written explana-tions. These metrics were used solely for quality analysis and did not influence the annotation pro-cess itself. We emphasize that all annotations in BanglaMemeX reflect human judgment and cultur-ally grounded interpretation. AI-assisted tools were used in a limited manner only for auxiliary support, including code debugging, resolving implementa-tion errors while coding, and language editing and proofreading during manuscript preparation. 9References 
+
+Siddhant Agarwal, Shivam Sharma, Preslav Nakov, and Tanmoy Chakraborty. 2024. Mememqa: Multimodal question answering for memes via rationale-based inferencing. Preprint , arXiv:2405.11215. Newaz Ben Alam, Akm Moshiur Rahman Mazumder, Mir Sazzat Hossain, Mysha Samiha, Md Alvi Noor Hossain, Md Fahim, Amin Ahsan Ali, Ashraful Is-lam, M Ashraful Amin, and Akmmahbubur Rahman. 2025. CMBan: Cartoon-driven meme contextual classification dataset for Bangla. In Proceedings of the 14th International Joint Conference on Natu-ral Language Processing and the 4th Conference of the Asia-Pacific Chapter of the Association for Com-putational Linguistics , pages 2178–2194, Mumbai, India. The Asian Federation of Natural Language Processing and The Association for Computational Linguistics. Jean-Baptiste Alayrac, Jeff Donahue, Pauline Luc, An-toine Miech, Iain Barr, Yana Hasson, Karel Lenc, Arthur Mensch, Katie Millicah, Malcolm Reynolds, Roman Ring, Eliza Rutherford, Serkan Cabi, Tengda Han, Zhitao Gong, Sina Samangooei, Marianne Mon-teiro, Jacob Menick, Sebastian Borgeaud, and 8 oth-ers. 2022. Flamingo: a visual language model for few-shot learning. In Advances in Neural Informa-tion Processing Systems , volume 35, pages 23716– 23736. Jacopo Amidei, Paul Piwek, and Alistair Willis. 2019. The use of rating and Likert scales in natural lan-guage generation human evaluation tasks: A review and some recommendations. In Proceedings of the 12th International Conference on Natural Language Generation , pages 397–402, Tokyo, Japan. Associa-tion for Computational Linguistics. Satanjeev Banerjee and Alon Lavie. 2005. METEOR: An automatic metric for MT evaluation with im-proved correlation with human judgments. In Pro-ceedings of the ACL Workshop on Intrinsic and Ex-trinsic Evaluation Measures for Machine Translation and/or Summarization , pages 65–72. Association for Computational Linguistics. Deeparghya Dutta Barua, Md Sakib Ul Rahman Sourove, Md Fahim, Fabiha Haider, Fariha Tanjim Shifat, Md Tasmim Rahman Adib, Anam Borhan Uddin, Md Farhan Ishmam, and Md Farhad Alam. 2025. Chitrojera: A regionally relevant visual ques-tion answering dataset for bangla. In Joint European Conference on Machine Learning and Knowledge Discovery in Databases , pages 473–491. Springer. Susmoy Biswas, Mostafizur Rahman Zahid, Mst. Taposi Rabeya, Minhazul Abedin, and Md. Hasan Imam Bijoy. 2025. Banglasarc3: A benchmark dataset for bangla sarcasm detection from social media to advance bangla nlp. Data in Brief .Mithun Das and Animesh Mukherjee. 2023. Banglaabusememe: A dataset for bengali abu-sive meme classification. In Proceedings of the 2023 Conference on Empirical Methods in Natural Lan-guage Processing , pages 15498–15512, Singapore. Association for Computational Linguistics. Finale Doshi-Velez and Been Kim. 2017. Towards a rigorous science of interpretable machine learning. 
+
+arXiv preprint arXiv:1702.08608 .Md Fahim, Md Sakib Ul Rahman, Akm Moshiur Rah-man, Md Farhan Ishmam, Md Tasmim Rahman, Far-iha Tanjim Shifat, Fabiha Haider, and Md Farhad Alam Bhuiyan. 2026. Banglaprotha: Evaluating vi-sion language models in underrepresented long-tail cultural contexts. In Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vi-sion , pages 1159–1169. Md Fahim, Fariha Tanjim Shifat, Fabiha Haider, Deeparghya Dutta Barua, MD Sakib Ul Rahman Sourove, Md Farhan Ishmam, and Md Farhad Alam Bhuiyan. 2024. Banglatlit: A benchmark dataset for back-transliteration of romanized bangla. In Find-ings of the Association for Computational Linguistics: EMNLP 2024 , pages 14656–14672. Joseph L. Fleiss. 1971. Measuring nominal scale agree-ment among many raters. Psychological Bulletin ,76(5):378–382. Eftekhar Hossain, Omar Sharif, and Mo-hammed Moshiul Hoque. 2022a. Memosen: A multimodal dataset for sentiment analysis of memes. In Proceedings of the Thirteenth Language Resources and Evaluation Conference , pages 1542–1554, Marseille, France. European Language Resources Association. Eftekhar Hossain, Omar Sharif, and Mo-hammed Moshiul Hoque. 2022b. Mute: Amultimodal dataset for detecting hateful memes. In Proceedings of the 2nd Conference of the Asia-Pacific Chapter of the Association for Com-putational Linguistics and the 12th International Joint Conference on Natural Language Processing: Student Research Workshop , pages 32–39, Online. Association for Computational Linguistics. Edward J. Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and Weizhu Chen. 2022. Lora: Low-rank adaptation of large language models. In International Conference on Learning Representations .Douwe Kiela, Hamed Firooz, Aravind Mohan, Vedanuj Goswami, Amanpreet Singh, Pratik Ringshia, and Davide Testuggine. 2020. The hateful memes chal-lenge: Detecting hate speech in multimodal memes. In Advances in Neural Information Processing Sys-tems , volume 33, pages 2611–2624. Alexander Kirillov, Eric Mintun, Nikhila Ravi, Hanzi Mao, Chloe Rolland, Laura Gustafson, Tete Xiao, Spencer Whitehead, Alexander C. Berg, Wan-Yen Lo, Piotr Dollár, and Ross Girshick. 2023. Segment anything. Preprint , arXiv:2304.02643. 
+
+10 Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi. 2022. BLIP: Bootstrapping language-image pre-training for unified vision-language understanding and generation. In Proceedings of the 39th Inter-national Conference on Machine Learning , pages 12888–12900. PMLR. Chin-Yew Lin. 2004. ROUGE: A package for auto-matic evaluation of summaries. In Text Summariza-tion Branches Out , pages 74–81, Barcelona, Spain. Association for Computational Linguistics. Ziqiang Liu, Feiteng Fang, Xi Feng, Xinrun Du, Chen-hao Zhang, Zekun Wang, Yuelin Bai, Qixuan Zhao, Liyang Fan, Chengguang Gan, Hongquan Lin, Ji-aming Quan, Yuxiang Liang, Tuney Zheng Wang, Junting Sui, Xiang Yue, Chenghua Lin, Min Liu, Wenhu Chen, and 3 others. 2024. II-Bench: An im-age implication understanding benchmark for multi-modal large language models. In Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track .Oscar Mañas, Benno Krojer, and Aishwarya Agrawal. 2024. Improving automatic vqa evaluation us-ing large language models. In Proceedings of the AAAI Conference on Artificial Intelligence , vol-ume 38, pages 4170–4178. Also available as arXiv:2310.02567. Md Ayon Mia and Md Fahim. 2025. Banhateme : Un-derstanding hate in bangla memes thorough detection, categorization, and target profiling. In Proceedings of the Second Workshop on Bangla Language Pro-cessing (BLP-2025) , pages 180–195, Mumbai, India. Association for Computational Linguistics. Md Ayon Mia, Akm Moshiur Rahman Mazumder, Khadiza Sultana Sayma, Md Fahim, Md Tah-mid Hasan Fuad, Muhammad Ibrahim Khan, and Akmmahbubur Rahman. 2025. Banmime : Misog-yny detection with metaphor explanation on bangla memes. In Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing ,pages 17813–17839, Suzhou, China. Association for Computational Linguistics. Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sas-try, Amanda Askell, Pamela Mishkin, Jack Clark, Gretchen Krueger, and Ilya Sutskever. 2021. Learn-ing transferable visual models from natural language supervision. In Proceedings of the 38th International Conference on Machine Learning , pages 8748–8763. PMLR. Faisal Hossain Raquib, Akm Moshiur Rahman Mazumder, Md Tahmid Hasan Fuad, Md Farhan Ish-mam, and Md Fahim. 2025. An up-to-date and fine-grained bangla hate speech dataset. In Proceedings of the Second Workshop on Bangla Language Pro-cessing (BLP-2025) . Association for Computational Linguistics. Marco Tulio Ribeiro, Sameer Singh, and Carlos Guestrin. 2016. "why should i trust you?": Explain-ing the predictions of any classifier. In Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining , pages 1135–1144. ACM. Bo Xu, Tingting Li, Junzhe Zheng, Mehdi Naseriparsa, Zhehuan Zhao, Hongfei Lin, and Feng Xia. 2022. Met-meme: A multimodal meme dataset rich in metaphors. In Proceedings of the 45th International ACM SIGIR Conference on Research and Develop-ment in Information Retrieval , pages 2887–2899. ACM. Chenhao Zhang, Xi Feng, Yuelin Bai, Xinrun Du, Jin-chang Hou, Kaixin Deng, Guangzeng Han, Qinrui Li, Bingli Wang, Jiaheng Liu, Xingwei Qu, Yifei Zhang, Qixuan Zhao, Yiming Liang, Ziqiang Liu, Feiteng Fang, Min Yang, Wenhao Huang, Chenghua Lin, and 2 others. 2025. Can MLLMs understand the deep implication behind Chinese images? In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) .Tianyi Zhang, Varsha Kishore, Felix Wu, Kilian Q. Weinberger, and Yoav Artzi. 2020. Bertscore: Eval-uating text generation with BERT. In International Conference on Learning Representations .
+
+A Data Collection Process 
+
+This section describes how the memes in the 
+
+BanglaMemeX dataset were acquired, screened, and prepared for annotation. We focus on the data sources, the collection workflow, and the inclu-sion criteria applied during manual filtering, so that readers can assess the coverage, reproducibility, and potential biases of the dataset. 
+
+Data Sources. The memes were collected from publicly available Bangla-speaking online spaces across Facebook, X (formerly Twitter), Instagram, and Reddit. We first identified public groups, pages, and communities where Bangla memes are regu-larly shared and circulated. Only publicly accessi-ble posts and images were considered; no private accounts, restricted groups, or personal communi-cations were included. 
+
+Acquisition Workflow. Once the target groups, pages, and communities were identified, we used 
+
+ESUIT | Photos Downloader for Facebook 1 to scrape publicly available meme images from these sources. We subscribed to the tool’s Basic Plan ($2.89/month), which provides the standard image-download features sufficient for our collection needs. Images were downloaded in batches across 
+
+> 1https://esuit.dev/
+
+11 multiple rounds to ensure coverage of different communities and posting styles rather than relying on a single source. 
+
+Duplicate and Near-Duplicate Removal. To re-duce redundancy before manual annotation, we ap-plied an automated near-duplicate removal step to the downloaded image pool. Specifically, we used 
+
+fast-near-duplicate-image-search 2, a command-line tool that computes perceptual image hashes using pHash from the ImageHash library 3 and in-dexes the resulting hash vectors with a KDTree to efficiently identify visually similar images within a directory. Detected duplicate and near-duplicate images were removed before the final manual screening stage. This step helped prevent repeated meme templates or reposted versions of the same image from inflating the dataset and reduced anno-tation redundancy. 
+
+Inclusion Criteria and Manual Screening. Af-ter acquisition, the downloaded images were man-ually inspected by native Bangla speakers. We retained only meme images whose textual con-tent was written in Bangla. Memes containing English, Hindi, transliterated Bangla (Banglish), or other non-Bangla scripts were excluded to main-tain the linguistic focus and annotation consistency of the dataset. Non-meme images, duplicates, low-resolution samples, and images with unreadable text were also discarded at this stage. We addi-tionally removed literal memes, defined as memes whose meaning could be understood directly from the image and text without requiring a metaphorical or non-literal interpretation. This distinction was determined through manual screening by native Bangla annotators, with ambiguous cases discussed during screening. 
+
+Coverage and Limitations. While the combina-tion of multiple platforms and community-based searches was intended to broaden coverage, the re-sulting dataset still reflects the demographics, post-ing habits, and moderation norms of the sampled platforms and communities. We discuss these po-tential biases alongside the dataset statistics in the main paper. 
+
+> 2https://github.com/umbertogriffo/ fast-near-duplicate-image-search
+> 3https://github.com/JohannesBuchner/ imagehash
+
+B Dataset Annotation Guidelines 
+
+This section presents the annotation guidelines developed for the BanglaMemeX dataset. The guidelines were designed to support consistent, reproducible, and culturally grounded annotation of Bangla memes, which often rely on implicit metaphor, sarcasm, visual exaggeration, and socio-political context. All annotations were conducted by native Bangla speakers familiar with local cul-tural practices, public discourse, and social media conventions. Each meme was annotated indepen-dently across five categories: Humor , Sarcasm , Of-fensive , Motivation , and Overall Sentiment . Anno-tators were instructed to assign exactly one label per category based on the dominant communica-tive intent of the meme. For the annotation guide-lines, we follow some popular works like (Fahim et al., 2024; Barua et al., 2025; Fahim et al., 2026). 
+
+B.1 Annotator Recruitment and Qualification 
+
+Three annotators were recruited for the annota-tion task, all of whom were undergraduate stu-dents from the Department of Linguistics at the University of Dhaka, Bangladesh. The annotators were aged between 21 and 24 years and had strong academic backgrounds in computational studies, with demonstrated familiarity with Bangla inter-net culture, social media discourse, and contem-porary socio-political references commonly found in meme content. All three annotators were na-tive Bangla speakers residing in Bangladesh. The selection criteria additionally required familiarity with common meme formats, culturally situated humor, and public discourse conventions in Bangla-language social media. 
+
+Compensation. Annotators were compensated at a rate of BDT 5 per meme instance annotated. This rate was determined in consultation with the annotators and was considered reasonable in the context of student research assistantship norms at the university. 
+
+Risk Disclosure. Prior to the annotation task, all annotators were informed that the dataset contained memes spanning a wide range of content types, in-cluding instances that may involve offensive lan-guage, hateful rhetoric, politically sensitive ma-terial, and culturally provocative imagery. Anno-tators were advised that they could skip or take breaks from any instance they found distressing 12 and were encouraged to report any concerns to the supervising researchers at any point during the pro-cess. 
+
+Consent and Data Usage. All annotators were informed that their annotations would be used to construct a publicly released research dataset and would be reported in an academic publication. In-formed consent was obtained from each annotator prior to the start of the annotation process, and an-notators were made aware that no personally identi-fiable information would be collected or associated with their annotations in the released dataset. 
+
+Ethics Statement. The annotation task involved labeling publicly available internet memes and did not involve the collection of personal data, sen-sitive information, or interaction with vulnerable populations. The study was reviewed and deter-mined to be exempt from full ethical review by the institutional authority, as it fell within the scope of minimal-risk research involving publicly available data and voluntary participation by informed adult participants. 
+
+Demographic Summary. All three annotators were Bangladeshi nationals, native speakers of Bangla, aged 21-24, and enrolled as undergradu-ate students in linguistics at the time of annotation. The dataset does not contain any protected per-sonal information as defined under GDPR or equiv-alent frameworks. No self-reported demographic attributes beyond native language proficiency and academic background were collected from the an-notators. 
+
+Calibration. Prior to the main annotation phase, all annotators underwent a calibration session in which they independently labeled a shared subset of 50 memes. Disagreements from this pilot round were discussed collectively to align interpretation standards and resolve ambiguities in the annotation schema. Only after achieving satisfactory agree-ment on the calibration set did the annotators pro-ceed to the full dataset. 
+
+Annotator Pool Considerations. Annotator se-lection prioritized linguistic competence and close familiarity with the cultural context of the dataset. The annotators were native Bangla speakers re-siding in Bangladesh and were familiar with con-temporary Bangla meme culture, social-media discourse, and culturally situated humor. Since BanglaMemeX focuses on Bangla memes and their culture-specific interpretation, this contextual fa-miliarity was considered important for producing reliable annotations. Future work may further ex-tend the annotation process by involving a broader and more demographically diverse annotator pool to capture a wider range of cultural interpretations. 
+
+Quality Control and Bias Mitigation. Several steps were taken to support annotation consistency and reduce the influence of individual annotator bias. Annotators followed detailed annotation guidelines and completed a calibration round on a shared subset before proceeding to the full dataset. Disagreements observed during calibration were discussed to align interpretation standards and clar-ify ambiguous cases. Annotation reliability was further assessed using Fleiss’ κ, and the quality of explanation annotations was examined through human ratings and semantic similarity analysis. 
+
+B.2 Annotation Timeline and Session Protocol 
+
+The full annotation of 3,000 memes was completed over a period of three months. Annotation was carried out in structured daily sessions to ensure sustained quality and prevent cognitive degradation over time. 
+
+Session Structure. Each annotator worked in daily sessions lasting approximately 6-7 hours. Within each session, annotation was organized into focused blocks of 45-50 minutes of continuous la-beling, followed by a mandatory break of 10-15 minutes. During break periods, annotators were in-structed to disengage entirely from the annotation interface and the meme content. Annotators were encouraged to step away from their workstations, engage in unrelated activities, or rest during these intervals. No annotation was permitted during des-ignated break windows. 
+
+Daily Limits. To prevent fatigue-induced degra-dation in annotation quality, a soft daily cap of approximately 40-50 memes per annotator per ses-sion was maintained. This rate was empirically determined during the calibration phase, where an-notators reported that sustained annotation beyond this threshold led to diminished attentiveness and increased difficulty in distinguishing nuanced label boundaries, particularly for sarcasm and offensive-ness categories. 13 Cognitive Well-Being and Content Exposure. 
+
+A substantial proportion of the memes in BanglaMemeX contain hateful, misogynistic, com-munally provocative, or otherwise psychologically taxing content. Prolonged and continuous exposure to such material poses a recognized risk of cogni-tive fatigue, desensitization, and emotional distress. To mitigate these effects, the following well-being measures were enforced throughout the annotation period: • Mandatory Breaks: As described above, an-notators were required to take a 10-15 minute break after every 45-50 minutes of annotation. These breaks were non-negotiable and were enforced by the supervising researchers. • Content Flagging and Skipping: Annotators were permitted to flag any individual meme as personally distressing and temporarily skip it. Flagged instances were revisited at a later session or reassigned to a different annotator if the original annotator preferred not to return to it. • Extended Cool-Down Periods: On days when annotators reported encountering a high concentration of particularly offensive or hate-ful content, an additional extended break of 20-30 minutes was provided before resuming annotation. • Open Communication: Annotators were en-couraged to communicate any concerns, fa-tigue, or emotional discomfort to the supervis-ing researchers at any point. No annotator was penalized for taking additional unscheduled breaks or for reducing their daily annotation volume on particularly difficult days. • Weekly Check-Ins: The supervising re-searchers conducted brief weekly check-ins with each annotator to assess their well-being, discuss any recurring difficulties with specific content types, and adjust workload distribu-tion if necessary. These measures were implemented to ensure that the annotation process remained sustainable over the full three-month duration, that annotator men-tal freshness was preserved throughout, and that annotation quality did not degrade as a result of cumulative exposure to harmful content. 
+
+B.3 SAM-Assisted Visual Metaphor Annotation Pipeline 
+
+To support systematic and fine-grained identifica-tion of visual metaphors, we designed a custom annotation interface integrating the Segment Any-thing Model (SAM; (Kirillov et al., 2023)). The in-terface was motivated by the observation that visual metaphors in Bangla memes are typically carried by specific regions within a visually complex im-age, and that asking annotators to identify these re-gions without structural guidance introduces incon-sistency in granularity and spatial precision across annotations. The annotation interface is organized as a four-stage pipeline, presented to the annotator through a horizontal stepper indicating the current stage and completion status. A persistent left-hand con-figuration panel displays the dataset name, split, annotation label categories, current sample index, a running session timer, annotator authorization status, and a Flag as Distressing button that allows the annotator to skip any meme they find psycho-logically taxing. The four stages operate as follows and are illustrated in Figure 5: 
+
+Stage 1: SAM Segmentation (Figure 5a). The original meme image is displayed in the central panel. The right-hand panel presents a description of the SAM segmentation process and a Run SAM Segmentation button. Upon clicking, the meme image is passed through SAM, which automatically detects and segments objects and character regions within the meme into semantically coherent visual regions. 
+
+Stage 2: Visual Metaphor Selection (Figure 5b). 
+
+After segmentation, the meme is re-displayed with all candidate segments highlighted as semi-transparent color-coded overlays with distinct bor-ders. The annotator is instructed to click on the segment or segments that carry the visual metaphor. Selected segments are confirmed with a highlighted border and appear as thumbnails in the right-hand 
+
+Selected Segments panel. Below the selected thumbnails, the annotator provides a short Visual Metaphor Description characterizing the symbolic role of the chosen region before clicking Confirm Selection to proceed. 
+
+Stage 3: Text and Labels Annotation (Figure 5c). 
+
+The original meme is displayed in the left panel for reference. The right-hand panel presents the text and label annotation form. The annotator first 14 (a) Stage 1: SAM Segmentation (b) Stage 2: Visual Metaphor Selection  
+
+> (c) Stage 3: Text & Labels Annotation (d) Stage 4: Explanation & Final Review Figure 5: Interface of the web-based annotation tool developed for the BanglaMemeX dataset.
+
+manually transcribes the overlaid Bangla text in the 
+
+Meme Text (Bangla Transcription) field, since exter-nal OCR tools were not employed. The annotator then provides the figurative meaning of the text in the Textual Metaphor (Figurative Meaning) field. Below these, the annotator assigns communicative labels via radio button selectors for each of the five categories: Humor ( Very Funny , Funny , Not Funny ), Sarcasm ( Very Sarcastic , Little Sarcastic ,
+
+Not Sarcastic ), Offensiveness ( Hateful Offensive ,
+
+Very Offensive , Slight Offensive , Not Offensive ), Motivational ( Motivational , Not Motivational ), and Sentiment ( Very Positive , Positive , Neutral , Neg-ative , Very Negative ). The annotator then clicks 
+
+Confirm & Review to proceed to the final stage. 
+
+Stage 4: Explanation and Final Review (Fig-ure 5d). The final stage presents a consolidated review of all annotations. The top section displays the meme image with the selected visual metaphor segment highlighted, alongside summary fields showing the visual metaphor description, meme transcription, and textual metaphor. Below this, all assigned communicative labels are displayed as colored badges for quick verification. The anno-tator then writes a single Bangla sentence in the 
+
+Final Explanation (Bangla) field, linking the visual and textual metaphor to the underlying cultural ref-erence or intent. An Annotation Confidence rating on a 1-5 star scale is provided to indicate the an-notator’s certainty in the overall annotation quality. The annotator may click Go Back to Edit to revise any previous stage, or Submit Annotation to finalize and proceed to the next meme. The session timer visible throughout the inter-face tracks cumulative annotation time per session and triggers a visual reminder after 45 minutes, prompting the annotator to take a mandatory break. The Flag as Distressing button remains accessible at every stage, allowing the annotator to skip any meme at any point in the pipeline without penalty. This SAM-assisted workflow standardizes the granularity at which visual metaphors are identi-fied across annotators, reduces subjectivity in de-termining which part of a visually complex meme constitutes the metaphorical element, and provides a spatially grounded reference that can be used for downstream evaluation of visual metaphor localiza-tion in multimodal models. 
+
+B.4 General Instructions 
+
+The annotation process followed the following core principles: • Multimodal Interpretation: Annotators ex-amined both visual and textual elements, con-sidering their joint meaning rather than inter-preting either modality in isolation. 15 LABEL: Not Funny English Explanation    
+
+> The meme shows that people from different ideological groups, such as Marxists, nationalists, atheists, secularists, Chhatra League, Student Union, and others, read Islamic literature and eventually join Chhatra Shibir.
+> Bangla Explanation
+> মাকর্সবাদী, জাতীয়তাবাদী, বািতল, নািস্তক, েসকু লার, ছাত্রলীগ, ছাত্র ইউিনয়ন, িবদআিত এবং িবিভন্ন েশ্রণীর েলােকরা ইসলািমক সািহতয্ পাঠ কের এবং েশষ পযর্ন্ত ছাত্র িশিবের েযাগদান কের।
+> LABEL: Funny English Explanation
+> The meme is used to represent or describe a mosquito attack.
+> Bangla Explanation
+> এখােন মশার আক্রমণেক েবাঝােনা হেয়েছ।
+> LABEL: Very Funny English Explanation
+> The meme humorously suggests that India is always involved in match fixing. It exaggerates the idea by saying that if India ever does not fix a match, then that would seem like a fake world.
+> Bangla Explanation
+> ভারত সব সময় ময্াচ িফিক্সং কের থােক---এই িবষয়িট আরও েজারােলাভােবপ্র কাশ করা হেয়েছ। বলা হেয়েছ, যিদ তারা কখেনা ময্াচ িফিক্সং না কের, তাহেল েসিট েযন নকল পৃিথবী।
+
+Figure 6: Examples of humor annotations in BanglaMemeX across the three humor levels. 
+
+• Cultural Grounding: Bangla-specific metaphors, idiomatic expressions, po-litical references, and socially familiar exaggerations were prioritized over literal interpretation. • Intent-Oriented Labeling: Labels were as-signed based on the implied communicative intent of the meme creator, rather than the an-notator’s personal agreement, disagreement, or moral judgment. • Single-Label Assignment: For each category, annotators selected exactly one label corre-sponding to the most dominant interpretation. • Consistency and Reproducibility: Defini-tions were applied uniformly across samples to ensure annotation reliability and reduce sub-jective drift. • Ambiguity Resolution: When a meme ad-mitted multiple plausible readings, annota-tors selected the interpretation most strongly supported by common Bangla cultural under-standing. 
+
+B.5 Category Definitions 
+
+Humor 
+
+This category captures the extent to which the meme is intended to evoke amusement, wit, or laughter. • Very Funny Definition: The meme strongly evokes laugh-ter through sharp exaggeration, absurd con-trast, or an effective punchline. 
+
+Indicators: – Strong comedic exaggeration 
+
+– Clear absurdity or unexpected contrast 16 Label Class κ                      
+
+> Humor Very Funny 0.72 Funny 0.76 Not Funny 0.70 Sarcasm Not Sarcastic 0.68 Little Sarcastic 0.71 Very Sarcastic 0.66 Offensive Not Offensive 0.79 Slight Offensive 0.74 Very Offensive 0.73 Hateful Offensive 0.81 Motivational Not Motivational 0.69 Motivational 0.72 Overall Very Negative 0.63 Negative 0.67 Neutral 0.70 Positive 0.64 Very Positive 0.60
+
+Table 7: Per-class Fleiss’ κ agreement scores across three annotators. 
+
+– High entertainment value • Funny Definition: The meme is mildly amusing or witty but does not produce a strong comedic effect. 
+
+Indicators: – Light playfulness or irony 
+
+– Familiar humorous comparison 
+
+– Moderate amusement • Not Funny Definition: The meme is serious, critical, in-formational, or otherwise not intended to be humorous. 
+
+Indicators: – Serious or advocacy-oriented tone 
+
+– Social or political messaging 
+
+– No clear attempt at amusement Figure 6(a) is labeled Not Funny because it de-picts a serious socio-political metaphor where dif-ferent student ideological groups are shown even-tually entering the structure of a political student wing, emphasizing political assimilation rather than humor. Figure 6(b) is labeled Funny because it uses an exaggerated visual metaphor of numerous figures descending from the sky to humorously represent mosquitoes attacking someone who tried to sleep without using a mosquito net. Figure 6(c) is labeled Very Funny because it uses an absurd hypothetical — that if India ever went a single match without fixing it, the result would look like an alternate, "fake" world — to mock the country’s reputation for match-fixing through exaggerated comparison. 
+
+Sarcasm 
+
+This category reflects the presence and strength of irony, ridicule, or indirect mockery. • Very Sarcastic Definition: The meme contains strong, ex-plicit sarcasm or overtly exaggerated mockery directed at a person, institution, or idea. 
+
+Indicators: – Clear ridicule or scorn 
+
+– Strong ironic reversal 
+
+– Deliberate exaggeration for criticism • Little Sarcastic Definition: The meme contains mild sarcasm or a subtle ironic undertone. 
+
+Indicators: – Gentle teasing 
+
+– Indirect irony 
+
+– Mild subversion of literal meaning • Not Sarcastic Definition: The meme communicates its mes-sage directly, without meaningful irony or sar-castic inversion. 
+
+Indicators: – Literal expression 
+
+– Straightforward criticism or observation 
+
+– No ironic contrast Figure 7(a) is labeled Not Sarcastic because it directly asserts, using dramatic warrior imagery paired with patriotic slogans, that within Ben-gali nationalist sentiment "Jago Bahe" carries far greater weight than "Joy Bangla" — a literal patri-otic claim rather than an ironic one. Figure 7(b) is labeled Little Sarcastic because it gently teases a familiar Ramadan scene, suggest-ing that attention drifts toward the jilapi (a popular Iftar sweet) rather than staying on the munajat (clos-ing prayer), producing soft irony rather than harsh mockery. Figure 7(c) is labeled Very Sarcastic because placing the label of a governmental advisory role related to women and children on a Hollywood celebrity image creates a strong ironic contrast that explicitly mocks the plausibility of such an appoint-ment. 17 LABEL: Not Sarcastic English Explanation   
+
+> Here it is suggested that, within Bengali nationalism, the slogan “Jago Bahe” carries far greater importance than the slogan “Joy Bangla”.
+> Bangla Explanation
+> এখােন বাঙািল জাতীয়তাবােদর সােথ জয় বাংলা েস্লাগােনর েচেয় জােগা বােহ েস্লাগােনরগুরুত্ব অেনক অেনক েবিশ েবাঝােনা হেচ্ছ।
+> LABEL: Little Sarcastic English Explanation
+> It conveys that the attention is more on eating jilapi (a sweet) than on the munajat (prayer).
+> Bangla Explanation
+> েমানাজােতর েচেয় িজলািপ খাওয়ার িদেক মেনােযাগ েবিশ বুঝােচ্ছ।
+> LABEL: Very Sarcastic English Explanation
+> Leonardo DiCaprio is being ridiculed over his character traits across different periods of his life.
+> Bangla Explanation
+> িলওনােদর্া িটকা িপিরয়ড চািরিত্রকগু ণাবলী িনেয় িতরস্কার করা হেচ্ছ।
+
+Figure 7: Examples of sarcasm annotations in BanglaMemeX across different levels of ironic intensity. 
+
+Offensiveness 
+
+This category assesses whether the meme contains insulting, degrading, harmful, or discriminatory content. • Hateful Offensive Definition: The meme contains explicit hate, dehumanization, or discriminatory targeting based on identity, community, religion, nation-ality, ethnicity, or similar group membership. 
+
+Indicators: – Identity-based hostility 
+
+– Dehumanizing comparison 
+
+– Group-directed hatred or exclusion • Very Offensive Definition: The meme includes strong insults, degrading comparisons, or aggressive attacks toward individuals or groups without neces-sarily constituting hate speech. 
+
+Indicators: – Direct humiliation 
+
+– Harsh ridicule 
+
+– Strong degrading metaphor • Slight Offensive Definition: The meme contains mild insult, teasing, or edgy humor that may be disrespect-ful but is not strongly hostile. 
+
+Indicators: – Light bullying 
+
+– Suggestive mockery 
+
+– Mildly degrading comparison • Not Offensive Definition: The meme does not contain in-sulting, harmful, or degrading intent. 
+
+Indicators: – Harmless observation 
+
+– Neutral comparison 
+
+– No hostile or demeaning target 18 LABEL: Hateful Offensive English Explanation       
+
+> Nijhum Majumder goes on Indian TV channels and speaks against Bangladesh and acts as a shill, and the meme rebukes him for it.
+> Bangla Explanation
+> িনঝুম মজুমদার ভারেতর িটিভ চয্ােনেল িগেয় বাংলােদেশর িবরুেদ্ধ কথা বেল এবং দালািল কের থােক, এজনয্ তােক িনেয় িতরস্কার করা হেয়েছ।
+> LABEL: Very Offensive English Explanation
+> It mocks the Sati (widow-burning) custom, joking that the person was told to cook but ended up burning everything completely.
+> Bangla Explanation
+> সতীদাহপ্র থােক িনেয় মশকরা করা হেচ্ছ; বলা হেচ্ছ েয এখােন রান্না করেত বলা হেয়িছল, িকন্তু পু েরাটাই পুিড়েয় েফেলেছ।
+> LABEL: Slight Offensive English Explanation
+> It pokes fun at being forced to listen to the Corona awareness message during the waiting time of a phone call.
+> Bangla Explanation
+> কল করার সময় েয ওেয়িটং টাইম থােক, ওই সমেয় কেরানার সতকর্বাণী েজার কের েশানােনার িবষয়িটেক িনেয় মশকরা করা হেয়েছ।
+> LABEL: Not Offensive English Explanation
+> A popular Bengali proverb: when it rains (during sunshine), the fox gets married.
+> Bangla Explanation প্র চিলত বাংলাপ্র বাদ: বৃষ্টি হেল েখঁ কিশয়ােলর িবেয় হয়।
+
+Figure 8: Examples of offensiveness annotations in BanglaMemeX across four offensive intensity levels. 
+
+Figure 8(a) is labeled Hateful Offensive because it singles out a specific individual, framing his ap-pearances on Indian television and remarks against Bangladesh as opportunistic shilling, and directs open contempt at him for it. Figure 8(b) is labeled Very Offensive because it employs dark humor by juxtaposing the histor-ical Sati (widow-burning) ritual with a cooking metaphor — joking that someone told to "cook" ended up burning everything — treating a violent historical practice with mocking irreverence. Figure 8(c) is labeled Slight Offensive because it pokes fun at being forced to listen to a Corona-awareness announcement during a phone call’s waiting time, expressing mild irritation rather than direct hostility. Figure 8(d) is labeled Not Offensive because it simply restates a popular Bengali proverb — that when it rains while the sun is out, the fox gets mar-ried — without targeting or insulting any individual or group. 
+
+Motivational Intent 
+
+This category captures whether the meme encour-ages hope, effort, resilience, self-improvement, or positive action. • Motivational Definition: The meme encourages construc-tive thinking, aspiration, resilience, or positive behavioral orientation. 
+
+Indicators: – Encouragement toward improvement 
+
+– Positive aspiration 
+
+– Hopeful or uplifting framing • Not Motivational Definition: The meme does not promote in-spiration or constructive action and is instead neutral, critical, mocking, or merely descrip-tive. 
+
+Indicators: – Critical or sarcastic message 19 – No inspirational direction 
+
+– Observational or discouraging tone Figure 9(a) is labeled Not Motivational because it uses "flying like a bird" as a euphemism for be-coming addicted to drugs, framing the imagery as a critical observation rather than an encouraging or aspirational message. Figure 9(b) is labeled Motivational because it metaphorically depicts daily prayer as a protective force holding back life’s hardships and emotional struggles, framing religious devotion as a source of strength and resilience. 
+
+Overall Sentiment 
+
+This category reflects the dominant emotional tone conveyed by the meme. • Very Positive Definition: Strongly uplifting, reassuring, joyful, or emotionally supportive content. • Positive Definition: Generally kind, hopeful, encour-aging, or pleasant in tone. • Neutral Definition: Emotionally balanced or observa-tional content without strong positive or nega-tive polarity. • Negative Definition: Critical, disapproving, mocking, or emotionally discouraging content. • Very Negative Definition: Strongly hostile, deeply critical, harshly condemning, or emotionally severe content. Figure 10(a) is labeled Very Positive because it reassuringly claims that reciting Ayatul Kursi wards off the "boba bhoot," the sleep-paralysis spirit, framing religious practice as a source of comfort and protection. Figure 10(b) is labeled Positive because it re-flects, in a gentle and accepting tone, that nature moves at its own pace and everything eventually becomes part of it — quiet reassurance rather than strong emotion. Figure 10(c) is labeled Neutral because it plays on the phrase "jamaat kore," literally meaning pray-ing in congregation, twisting it into a joke about joining the Bangladesh Jamaat-e-Islami party — wordplay rather than an emotionally charged state-ment. Figure 10(d) is labeled Negative because it jokes, with mild disapproval, about charity organizers ap-proaching travelers on the road and asking them to donate money. Figure 10(e) is labeled Very Negative because it expresses a harsh, hostile sentiment — that the speaker’s mind cannot be at peace unless those who insult the Prophet are killed — conveying intense anger rather than measured criticism. 
+
+B.6 Inter-Annotator Agreement 
+
+To assess the consistency and reliability of the cat-egorical label annotations, we computed Fleiss’ Kappa ( κ) (Fleiss, 1971) across all three annotators for each of the five annotation categories. Fleiss’ Kappa was chosen as the agreement metric because it generalizes Cohen’s Kappa to settings involving more than two raters and accounts for agreement occurring by chance. The resulting Fleiss’ Kappa scores for each annotation category are reported in Table 7. The final label for each meme in every category was determined through majority voting among the three annotators. In cases where all three anno-tators assigned different labels, the instance was flagged for a subsequent discussion round, and a consensus label was agreed upon collectively. 
+
+B.7 Explanation Annotation and Evaluation 
+
+In addition to categorical labels, each meme was paired with a short human-written explanation in Bangla. The purpose of this annotation was to capture the underlying metaphorical meaning of the meme and provide a reference for evaluating explanation generation quality. Annotators were instructed to follow these prin-ciples: • Single-Sentence Format: Each explanation must be written as one complete Bangla sen-tence. • Metaphor-Focused Interpretation: The explanation should identify the implicit metaphor, symbolic comparison, or intended meaning of the meme. • Contextual Grounding: Where relevant, the explanation should incorporate cultural, so-20 LABEL: Not Motivational English Explanation  
+
+> Here, “flying like a bird” is used to mean becoming addicted to drugs.
+> Bangla Explanation
+> এখােন পািখ হেয় উড়া বলেত মাদকাসক্ত হেয় যাওয়া বলা হেচ্ছ। LABEL: Motivational English Explanation
+> Performing the prayers (namaz) keeps dangers and troubles away.
+> Bangla Explanation
+> নামাজ আদায় করেল িবপদ-আপদ দূের থােক।
+
+Figure 9: Examples of motivational intent annotations in BanglaMemeX. 
+
+cial, political, or religious context necessary for interpretation. • Non-Literal Description: Literal description of image content should be avoided unless it directly supports the explanation of the metaphor. 
+
+Explanation Quality Evaluation 
+
+Unlike categorical labels, free-text explanations cannot be evaluated using standard inter-annotator agreement metrics such as Fleiss’ Kappa. To as-sess the quality and acceptability of the annotated explanations, we adopted a confidence-based eval-uation protocol. Each of the three annotators in-dependently reviewed every explanation and as-signed a confidence score on a scale of 1 to 5, where 1 indicated that the explanation was inad-equate or failed to capture the meme’s intended meaning, and 5 indicated that it was fully accurate, culturally grounded, and faithfully represented the metaphoric content. The final acceptance decision for each explana-tion was determined through majority voting: An explanation was accepted if the mean confidence score across the three annotators, 
+
+Q = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+si,
+
+was 3.5 or above; explanations falling below this threshold were revised through collaborative dis-cussion until a satisfactory version was agreed upon. Explanations that did not meet this thresh-old were revised through a collaborative discussion among the annotators until a satisfactory version was agreed upon. This process ensured that all retained explanations met a minimum standard of interpretive quality while remaining grounded in shared cultural understanding. These explanation annotations serve as ground-truth references for evaluating explanation faithful-ness, metaphor understanding, and cultural align-ment in multimodal models. 
+
+C Prompting 
+
+All the prompts are detailed in this section. 
+
+Zero-shot Prompt 
+
+You are an expert assistant who understands Bangla memes, their metaphors, and social context. Your job is to read the image (and text, if any), for each category, choose EXACTLY ONE option from the allowed list, then write a short explanation in Bangla ( ≤ 50 words) describing the hidden metaphor and intent. Do NOT invent new labels. Do NOT translate the labels. Labels MUST be exactly one of the options given. The explanation MUST be in Bangla single sentence, but the labels MUST stay in English. 
+
+Chain-of-thought Prompt 
+
+You are an expert assistant who understands Bangla memes, their metaphors, and social context. Your job is to read the image (and text, if any). Think step-by-step about the meme’s meaning, context, and metaphor. For each cate-gory, choose EXACTLY ONE option from the 21 allowed list. Then write a short explanation in Bangla ( ≤ 50 words) describing the hidden metaphor and intent. Follow these reasoning steps. STEP 1 - Analyze visual elements: What do you see in the image? What objects, people, or scenes are shown? STEP 2 - Analyze textual elements: What does the text say? What is its literal meaning? STEP 3 - Integrate visual and text: How do the image and text work together? What is the combined meaning? STEP 4 - Identify the metaphor: What is be-ing compared or symbolized? What hidden message is conveyed? STEP 5 - Assess humor: Is it funny? Why or why not? Consider absurdity, wit, or clever-ness. STEP 6 - Assess sarcasm: Is there irony or mockery? How strong is it? STEP 7 - Assess offensiveness: Could this offend anyone? Consider cultural, religious, or personal sensitivity. STEP 8 - Assess motivation: Does this inspire or encourage positive action? STEP 9 - Determine overall sentiment: Consid-ering all factors, what is the overall emotional impact? 
+
+Explainer Prompt 
+
+You are the EXPLAINER in an LLM Council analyzing Bangla memes and an expert who understands Bangla memes, their metaphors, and social context. YOUR role is to break down the metaphor in the meme - identify lit-eral vs figurative meaning, cultural references, and hidden messages. MEME TEXT (if available): 
+
+{text_content} {classification_guidelines} 
+
+Analyze the meme and provide: 1. LITERAL MEANING: What is shown/writ-ten directly 2. FIGURATIVE MEANING: The hidden metaphor or message 3. CULTURAL CONTEXT: Any Bangla/-South Asian cultural references Do NOT invent new labels. Labels MUST be exactly one of the options given. Be thorough but concise. Your analysis will be reviewed by a Critic. 
+
+Critic Prompt 
+
+You are the CRITIC in an LLM Council ana-lyzing Bangla memes. You are an expert who understands Bangla memes, their metaphors, and social context. Your role is to review the Explainer’s analysis and challenge it for accu-racy, depth, and potential blind spots. MEME TEXT (if available): 
+
+{text_content} {classification_guidelines} 
+
+EXPLAINER’S ANALYSIS: 
+
+{explainer_output} 
+
+Your task: 1. STRENGTHS: What did the Explainer get right? 2. WEAKNESSES: What was missed or incor-rectly interpreted? 3. ALTERNATIVE INTERPRETATION: If you disagree, provide your view 4. REVISED CLASSIFICATION (if needed) Do NOT invent new labels. Labels MUST be exactly one of the options given. Be construc-tive but rigorous. 
+
+Synthesizer Prompt 
+
+You are the SYNTHESIZER in an LLM Coun-cil analyzing Bangla memes. You are an ex-pert who understands Bangla memes, their metaphors, and social context. Your role is to compile the Explainer’s and Critic’s outputs into a final, cohesive analysis with definitive classifications. MEME TEXT (if available): 
+
+{text_content} {classification_guidelines} 
+
+EXPLAINER’S ANALYSIS: 
+
+{explainer_output} 
+
+CRITIC’S REVIEW: {critic_output} 
+
+YOUR TASK: 22 1) Consider all perspectives and resolve any disagreements with reasoned judgment. 2) For each category, choose EXACTLY ONE option from the allowed list. 3) Write a short explanation in Bangla ( ≤ 50 
+
+words) describing the hidden metaphor and intent. Do NOT invent new labels. Do NOT translate the labels. Labels MUST be exactly one of the options given & in English. The explanation MUST be in Bangla single sentence. 
+
+LAVE Evaluation Prompt 
+
+You are an expert evaluator of Bangla memes. Your task is to judge the QUALITY of the model’s explanation by comparing it to the hu-man reference. LAVE scoring focuses ONLY on the explanation correctness, coherence, and alignment with the reference. Classification labels (Humor, Sarcastic, etc.) are provided ONLY as context and should NOT determine the score. EVALUATION CRITERIA (for ex-planation): Score = 1 (Good Explanation) if: • The explanation captures the same core mean-ing as the reference • Minor wording differences or phrasing varia-tions are acceptable • It is relevant, coherent, and consistent with the meme’s meaning • No hallucinations or contradictions Score = 0 (Poor Explanation) if: • The explanation misses the main meaning • It is vague, incorrect, incomplete, or contra-dictory • It introduces fabricated or irrelevant details • The explanation does not align with the con-text of the meme Labels DO NOT need to match exactly. They are NOT part of evaluation. Now evaluate the model explanation. 
+
+D Model Failure Examples 
+
+This appendix presents qualitative examples il-lustrating how evaluated models misinterpret metaphors, hallucinate non-existent elements, and generate plausible but incorrect explanations of Bangla memes, even when they occasionally pro-duce correct classification labels. Figure 12 shows an example where multiple models fail to capture the underlying metaphor and incorrectly interpret the meme context. Figure 13 illustrates confusion arising from the meme template, with models at-tributing incorrect meanings and sentiment to the content. Figure 14 demonstrates more severe se-mantic and cultural misinterpretations, particularly in understanding the metaphorical relationship be-tween the meme elements. Across these examples, the red text highlights the specific mistakes made by each model relative to the ground-truth explana-tion and labels. 
+
+E Extended Classification Results and Error Analysis 
+
+In addition to accuracy-based evaluation, we re-port F1 scores to provide a more balanced view of model performance across the BanglaMemeX clas-sification labels. This is particularly important be-cause meme categories such as sarcasm, offensive-ness, motivation, and overall sentiment can exhibit uneven label distributions, where accuracy alone may overestimate performance on majority classes. Table 8 summarizes the F1 scores for all evalu-ated models across zero-shot prompting, chain-of-thought prompting, LLM Council reasoning, and LoRA fine-tuning. The results show trends that are broadly con-sistent with the accuracy-based findings. Closed-source models perform strongly in the zero-shot and chain-of-thought settings, with Claude-Opus-4.5 achieving the highest average F1 among prompting-based baselines. LoRA fine-tuning sub-stantially improves the classification F1 of open-source models, with Qwen3-VL-8B and Gemma-3-12B reaching the strongest average F1 scores among the fine-tuned models. However, the ex-planation metrics reported alongside the F1 scores indicate that stronger classification performance does not necessarily correspond to better explana-tion quality. This reinforces the need to evaluate meme understanding using both label-level classifi-cation metrics and explanation-based measures. 
+
+Unimodal Ablations 
+
+To further contextualize the multimodal results, we conduct text-only and image-only ablations of the four open-source VLMs evaluated in the main pa-per (Gemma-3-12B-IT, Qwen3-VL-8B, LLaMA-4-Maverick, and Phi-4-MM), using the same prompts and label schema as the multimodal setting. We additionally train lightweight supervised classifiers 23 Models Classification F1 Explanation                                                                                                                                                                                                      
+
+> Hum Sarc Offe Moti Over Avg BScore LAVE HumEval Zero-Shot Prompting GPT-5.2 74.72 37.00 44.93 94.02 44.72 59.08 69.40 34.70 69.21 Gemini-3 Flash 74.93 30.38 58.08 94.16 30.33 57.58 70.00 33.61 73.65 Claude-Opus-4.5 78.41 67.93 63.43 93.49 53.78 71.41 69.19 52.98 81.23 Grok-4.1-Fast 72.89 36.98 46.76 90.37 24.66 54.33 68.16 7.47 25.85 Gemma-3-12B-IT 73.23 36.37 55.79 91.76 33.52 58.13 66.86 2.90 13.56 Qwen3-VL-8B 64.53 24.66 52.39 91.90 30.07 52.71 66.86 4.37 15.22 Phi-4-MM 73.60 33.57 56.04 91.84 40.26 59.06 67.62 3.63 13.48 LLaMA-4-Maverick 74.45 22.01 51.48 93.47 38.81 56.04 69.58 16.97 35.82 Chain-of-Thought Prompting GPT-5.2 75.05 39.38 54.38 91.97 36.80 59.52 69.26 40.17 78.75 Gemini-3 Flash 70.87 43.47 58.83 94.09 24.21 58.29 69.00 34.74 77.75 Claude-Opus-4.5 77.66 65.50 60.03 93.28 49.61 69.22 69.52 60.88 84.52 Grok-4.1-Fast 73.24 38.92 46.69 91.64 24.75 55.05 67.98 8.30 34.38 Gemma-3-12B-IT 72.89 36.51 56.13 91.81 41.61 59.79 66.88 4.10 13.75 Qwen3-VL-8B 71.53 37.36 53.25 92.24 25.87 56.05 67.58 7.33 15.54 Phi-4-MM 71.67 37.26 56.66 92.72 33.73 58.41 67.54 6.43 24.38 LLaMA-4-Maverick 74.78 39.59 57.56 93.38 25.65 58.19 69.53 20.53 38.57 LLM Council LLM Council 58.74 27.51 53.61 94.05 42.98 55.38 68.37 68.82 85.51 LoRA Fine-Tuning Qwen3-VL-8B 75.60 50.24 62.62 94.45 62.10 69.00 68.09 11.82 31.88 Gemma-3-12B-IT 76.75 53.84 59.77 94.59 59.34 68.86 69.19 7.20 19.11 LLaVa-1.6-Mistral-7B 73.66 27.81 50.59 91.63 47.20 58.18 68.06 4.60 13.13 LLaVa-Next-8B 72.79 32.37 53.46 90.99 48.71 59.66 66.59 3.41 25.68
+
+Table 8: F1-score comparison on BanglaMemeX across zero-shot prompting, chain-of-thought prompting, LLM Council reasoning, and LoRA fine-tuning. HumEval denotes the human evaluation score for explanation quality.                   
+
+> Baseline Hum Sarc Offe Moti Over Avg
+> Majority-Class Accuracy 81.30 49.60 65.20 94.40 62.73 70.65 Majority-Class Weighted-F1 72.91 32.89 51.47 91.68 48.37 59.46
+
+Table 9: Majority-class baseline scores for BanglaMemeX. Majority-class accuracy is computed by always predicting the most frequent class for each task. Majority-class weighted-F1 accounts for the fact that this baseline receives zero F1 for all minority classes. 
+
+directly on our training split: DeiT-Small and Swin-Tiny for the image-only setting, and BanglaBERT and mDeBERTa-v3 for the text-only setting. Ta-ble 10 reports the F1 scores of these lightweight classifiers, while Table 11 and Table 12 give the full breakdown of unimodal F1 scores across zero-shot prompting, chain-of-thought prompting, and lightweight classifiers for text-only and image-only inputs, respectively. Across all unimodal settings, average performance falls below that of the corre-sponding multimodal systems reported in the main paper, although the margin is small for some mod-els. Table 8 shows that the best per-dimension LoRA fine-tuning results are 76.75 F1 for humor, 53.84 for sarcasm, 62.62 for offensiveness, 94.59 for mo-tivation, and 62.10 for overall sentiment, yielding an mean classification F1 of 69.98. Thus, among the five dimensions, only sarcasm remains in the 50s. These results provide additional context for interpreting the class-level confusion patterns pre-sented below. To identify which classes are sys-tematically confused and whether the models are biased toward dominant, neutral, or extreme labels, we conducted a class-level analysis using confusion matrices. The confusion-matrix analysis in Tables 13, 14, and 15 shows that the LLM Council preserves more distinctions among intensity and severity levels, but it often overpredicts stronger labels such as Very Sarcastic and Negative . In contrast, the fine-tuned models perform better on dominant or less sub-24 Technique Model Humor Sarcastic Offensive Motivational Overall Average                           
+
+> Image only DeiT-Small 51.08 28.93 37.03 68.10 39.87 45.00 Swin-Tiny 49.97 31.73 38.87 67.01 37.95 45.11 Text only BanglaBERT 51.38 32.15 36.62 68.76 42.45 46.27
+> mDeBERTa-v3-Base 56.07 27.85 37.33 69.29 38.03 45.71
+
+Table 10: F1 scores (%) of the image-only and text-only classification models.                                                                     
+
+> Method Model Humor Sarcastic Offensive Motivational Overall Average
+> Zero-shot google/gemma-3-12b-it 18.61 39.55 33.18 88.97 32.51 42.56 qwen/qwen3-vl-8b-instruct 31.45 24.25 31.51 88.30 27.41 40.58 meta-llama/llama-4-maverick 59.93 42.22 42.22 86.80 43.82 55.00
+> microsoft_phi-4-multimodal-instruct 74.18 21.04 28.90 84.15 15.40 44.73 CoT google/gemma-3-12b-it 41.82 32.36 36.17 90.90 45.33 49.32 qwen/qwen3-vl-8b-instruct 36.27 34.03 32.67 86.71 36.28 45.19 meta-llama/llama-4-maverick 51.25 33.01 39.85 83.99 43.29 50.28 microsoft_phi-4-multimodal-instruct 63.20 24.44 26.55 83.09 19.95 43.45 Lightweight classifier BanglaBERT 51.38 32.15 36.62 68.76 42.45 46.28 mDeBERTa-v3-Base 56.07 27.85 37.33 69.29 38.03 45.71
+
+Table 11: F1 scores (%) for text-only inputs across prompting strategies and lightweight classifiers. 
+
+jective classes, such as Funny , Not Sarcastic , Not Offensive , and Neutral , while frequently collapsing minority and extreme categories into these com-mon labels. All systems struggle with motivational and extreme sentiment classes, especially Hateful Offensive , Very Negative , and Very Positive , indi-cating persistent difficulty in recognizing rare and highly subjective categories. 
+
+F Reliability Check of Automatic OCR 
+
+To assess the reliability of automatic OCR-based extraction, we perform an evaluation on mod-els that we used for BanglaMemeX. For each meme image, the OCR output generated by a model is compared against manually annotated caption text. We evaluate the model extracted text using BERTScore, ROUGE-1, ROUGE-2, ROUGE-L, and METEOR using standard im-plementations and parameter settings. All met-rics are therefore reported using default pack-age parameters after consistent text normalization. BERTScore captures semantic similarity using con-textual token embeddings (Zhang et al., 2020), while ROUGE measures lexical overlap based on n-gram and longest-common-subsequence matching (Lin, 2004). METEOR further evaluates word-level alignment through unigram matching with an em-phasis on precision and recall (Banerjee and Lavie, 2005). Table 16 presents the synthetic OCR perfor-mance. The results indicate that automatic OCR ex-traction remains weak across all models. Although the stronger models obtain moderate BERTScore values, their ROUGE-2, ROUGE-L, and METEOR scores are substantially lower. This suggests that the models may occasionally preserve partial se-mantic meaning, but frequently fail to maintain exact word sequences, phrase continuity, and token-level correctness. Such errors are especially prob-lematic for Bangla memes, where minor changes in spelling, negation, slang, or phrase structure can significantly alter the interpretation of offen-sive or hateful content. Based on these findings, BanglaMemeX adopts manual image to text extrac-tion as the primary annotation strategy. Manual extraction allows annotators to account for styl-ized typography, contextual placement, informal spelling, mixed-script expressions, and culturally specific meme conventions that automatic OCR systems often fail to capture. This design choice improves the reliability of textual annotations and ensures that downstream multimodal models are trained and evaluated using accurate image-text representations. 
+
+G Human Evaluation Rubrics 
+
+We conduct human evaluation on all explanations generated using three 5-point Likert-scale rubrics: HumEval, HumTexMetEval, and HumImgMetEval. The evaluation was performed by three independent human evaluators. Human evaluators first assign raw Likert scores for all evaluated samples. After completing the evaluation, we compute the aver-25 Method Model Humor Sarcastic Offensive Motivational Overall Average 
+
+Zero-shot google/gemma-3-12b-it 74.70 28.37 48.87 80.95 42.82 55.14 
+
+qwen/qwen3-vl-8b-instruct 69.95 19.61 47.28 80.95 27.82 49.12 meta-llama/llama-4-maverick 68.71 14.63 51.73 83.24 15.72 46.81 microsoft_phi-4-multimodal-instruct 75.34 16.38 43.79 83.82 32.84 50.43 CoT google/gemma-3-12b-it 70.99 21.75 48.71 80.95 28.44 50.17 qwen/qwen3-vl-8b-instruct 66.22 38.18 46.50 80.95 39.34 54.24 meta-llama/llama-4-maverick 76.82 26.93 48.73 86.36 27.60 53.29 microsoft_phi-4-multimodal-instruct 72.99 33.15 45.59 74.16 18.42 48.86 Lightweight classifier DeiT-Small 51.08 28.93 37.03 68.10 39.87 45.00 Swin-Tiny 49.97 31.73 38.87 67.01 37.95 45.11 
+
+Table 12: F1 scores (%) for image-only inputs across prompting strategies and lightweight classifiers. 
+
+LLM Council True \ Pred Funny Not Funny Very Funny 
+
+Funny 57.75 1.43 40.82 Not Funny 69.86 16.44 13.70 Very Funny 55.13 0.88 43.99 
+
+(a) Humor True \ Pred Little Sarcastic Not Sarcastic Very Sarcastic          
+
+> Little Sarcastic 22.28 2.01 75.70 Not Sarcastic 34.85 5.85 59.30 Very Sarcastic 18.62 1.62 79.76
+
+(b) Sarcasm True \ Pred Hateful Off. Not Off. Slight Off. Very Off.                 
+
+> Hateful Offensive 5.94 6.93 46.53 40.59 Not Offensive 0.36 56.08 39.21 4.35 Slight Offensive 1.26 32.49 53.64 12.61 Very Offensive 2.19 16.23 61.40 20.18
+
+(c) Offensiveness True \ Pred Motivational Not Motivational 
+
+Motivational 22.75 77.25 Not Motivational 0.46 99.54 
+
+(d) Motivational True \ Pred Negative Neutral Positive Very Neg. Very Pos.                          
+
+> Negative 82.82 11.73 1.30 4.15 0.00 Neutral 59.67 29.70 9.62 0.96 0.05 Positive 52.38 16.07 28.57 2.38 0.60 Very Negative 78.95 1.32 0.00 19.74 0.00 Very Positive 23.33 13.33 60.00 3.33 0.00
+
+(e) Overall Sentiment 
+
+Table 13: Confusion matrices (%) for humor, sarcasm, offensiveness, motivational, and overall sentiment classifica-tion using the LLM Council. 
+
+age raw score and then normalize it to the [0 , 1] 
+
+range. Finally, the normalized percentage scores are reported in Table 5 and Table 8. 
+
+G.1 Evaluator Recruitment, Demographics, and Independence from Dataset Annotators 
+
+To avoid circularity between dataset construction and human evaluation, the three individuals who scored model explanations under HumEval, Hum-TexMetEval, and HumImgMetEval are entirely dis-tinct from, and had no prior involvement with, the three annotators who produced the original BanglaMemeX labels, metaphor descriptions, and explanations (Appendix B.1). No overlap in per-sonnel existed between the two pools at any stage of the project. 
+
+Recruitment. Evaluators were recruited from Department of Linguistics at University of Dhaka, independently of the annotation team and through a separate call for participation. Candidates were required to be native Bangla speakers with no prior exposure to the BanglaMemeX annotation guide-lines, annotation interface, or the specific meme samples used during dataset construction, ensur-ing that their judgments were not anchored to the conventions used by the original annotators. 
+
+Demographics. All three evaluators were Bangladeshi nationals and native Bangla speakers, aged 21-23 years, enrolled as undergraduate students at the time of evaluation. As with the annotation team, no personally identifiable infor-mation or self-reported demographic attributes beyond native-language proficiency and academic status were collected. 
+
+Independence and Bias Mitigation. Two mea-sures were taken to limit annotator-side and author-side bias. First, evaluators scored explanations 26 Fine-Tuned Qwen3-VL-8B True \ Pred Funny Not Funny Very Funny 
+
+Funny 97.67 2.33 0.00 Not Funny 77.27 22.73 0.00 Very Funny 100.00 0.00 0.00 
+
+(a) Humor True \ Pred Little Sarcastic Not Sarcastic Very Sarcastic 
+
+Little Sarcastic 80.37 15.95 3.68 Not Sarcastic 38.74 58.56 2.70 Very Sarcastic 84.78 7.61 7.61 
+
+(b) Sarcasm True \ Pred Hateful Off. Not Off. Slight Off. Very Off.                 
+
+> Hateful Offensive 0.00 54.55 27.27 18.18 Not Offensive 0.00 87.55 12.03 0.41 Slight Offensive 0.00 62.07 36.78 1.15 Very Offensive 0.00 51.85 44.44 3.70
+
+(c) Offensiveness True \ Pred Motivational Not Motivational 
+
+Motivational 31.58 68.42 Not Motivational 1.44 98.56 
+
+(d) Motivational True \ Pred Negative Neutral Positive Very Neg. Very Pos.                          
+
+> Negative 31.73 68.27 0.00 0.00 0.00 Neutral 9.91 88.36 1.72 0.00 0.00 Positive 5.88 70.59 23.53 0.00 0.00 Very Negative 44.44 55.56 0.00 0.00 0.00 Very Positive 0.00 25.00 75.00 0.00 0.00
+
+(e) Overall Sentiment 
+
+Table 14: Confusion matrices (%) for humor, sarcasm, offensiveness, motivational, and overall sentiment classifica-tion using the fine-tuned Qwen3-VL-8B model. 
+
+Fine-Tuned Gemma-3-12B-IT True \ Pred Funny Not Funny Very Funny 
+
+Funny 97.32 2.44 0.24 Not Funny 65.71 34.29 0.00 Very Funny 98.18 1.82 0.00 
+
+(a) Humor True \ Pred Little Sarcastic Not Sarcastic Very Sarcastic 
+
+Little Sarcastic 82.38 15.42 2.20 Not Sarcastic 35.86 63.45 0.69 Very Sarcastic 75.78 12.50 11.72 
+
+(b) Sarcasm True \ Pred Hateful Off. Not Off. Slight Off. Very Off.                 
+
+> Hateful Offensive 0.00 58.82 35.29 5.88 Not Offensive 0.00 90.49 9.51 0.00 Slight Offensive 0.00 73.91 26.09 0.00 Very Offensive 0.00 52.38 42.86 4.76
+
+(c) Offensiveness True \ Pred Motivational Not Motivational 
+
+Motivational 32.14 67.86 Not Motivational 0.85 99.15 
+
+(d) Motivational True \ Pred Negative Neutral Positive Very Neg. Very Pos.                          
+
+> Negative 23.49 76.51 0.00 0.00 0.00 Neutral 5.84 92.86 0.97 0.00 0.32 Positive 11.11 70.37 14.81 0.00 3.70 Very Negative 36.36 63.64 0.00 0.00 0.00 Very Positive 0.00 20.00 60.00 0.00 20.00
+
+(e) Overall Sentiment 
+
+Table 15: Confusion matrices (%) for humor, sarcasm, offensiveness, motivational, and overall sentiment classifica-tion using the fine-tuned Gemma-3-12B-IT model. 
+
+Model BERTScore ROUGE-1 ROUGE-2 ROUGE-L METEOR 
+
+GPT-5.2 61.23 43.81 24.17 39.72 34.19 
+
+Claude-Opus-4.5 59.42 42.13 22.64 38.21 32.76 Gemini-3 Flash 57.18 40.32 21.09 36.14 30.91 Grok-4.1-Fast 54.79 37.63 18.74 33.42 28.73 Qwen3-VL-8B 51.32 34.21 15.86 30.08 25.43 LLaMA-4-Maverick 49.64 32.69 14.32 28.37 23.91 Gemma-3-12B-IT 46.27 29.14 11.83 25.16 21.34 Phi-4-MM 43.08 26.71 9.61 22.94 18.58 
+
+Table 16: Synthetic OCR performance of multimodal models on Bangla meme text extraction in BanglaMemeX. Lower lexical overlap scores demonstrate the limitations of automatic OCR under stylized fonts, mixed scripts, and low-resolution meme overlays. 
+
+27 without access to model identity or prompting strat-egy (zero-shot, chain-of-thought, LLM Council, or LoRA fine-tuned), so scores could not be influ-enced by expectations about a particular system. Second, none of the paper’s authors participated as evaluators or scorers at any stage; all Likert scores reported in this appendix originate exclusively from the three independent, non-author evaluators de-scribed above 
+
+G.2 HumEval: Human Evaluation on Overall Explanation 
+
+HumEval evaluates whether the generated explana-tion correctly captures the overall meaning of the meme, including the text, image, metaphor, tone, humor, sarcasm, and cultural context. 
+
+G.3 HumTexMetEval: Human Evaluation on Textual Metaphor Explanation 
+
+HumTexMetEval evaluates whether the generated explanation correctly identifies and explains the metaphor conveyed through the meme text, includ-ing figurative meaning, tone, wordplay, sarcasm, and cultural-linguistic context. 
+
+G.4 HumImgMetEval: Human Evaluation on Image Metaphor Explanation 
+
+HumImgMetEval evaluates whether the generated explanation correctly identifies and explains the metaphor conveyed through the meme image, in-cluding visual symbols, image-based figurative meaning, tone, and relevant cultural or contextual cues. 
+
+G.5 Human Evaluation Score Calculation 
+
+Let s(m) 
+
+> i,j
+
+denote the raw Likert score assigned by evaluator j to sample i for metric m, where m ∈{HumEval , HumTexMetEval , HumImgMetEval }.Since each rubric uses a 5-point Likert scale, the raw score is defined as: 
+
+s(m) 
+
+> i,j
+
+∈ { 1, 2, 3, 4, 5}. (2) For each sample, we first compute the average score across all human evaluators: 
+
+¯s(m) 
+
+> i
+
+= 1
+
+K
+
+> K
+
+X
+
+> j=1
+
+s(m) 
+
+> i,j
+
+, (3) where K is the number of independent human evaluators. Then, we compute the overall raw human evalu-ation score across all evaluated samples: 
+
+S(m) 
+
+> raw
+
+= 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+¯s(m) 
+
+> i
+
+, (4) where N is the total number of evaluated sam-ples. Finally, after completing all human evaluations, we normalize the raw score to the [0 , 1] range using min-max normalization for a 5-point Likert scale: 
+
+S(m) 
+
+> norm
+
+= S(m) 
+
+> raw
+
+− 15 − 1 . (5) 
+
+H Qualitative Error Analysis of the LLM Council 
+
+For each meme, we compare the ground-truth anno-tation with the outputs produced at three layers of the council: the explainer, the critic, and the final synthesizer. The selected examples are presented in Figures 15, 16, and 17. The goal is not only to show whether the final label is wrong, but also to trace how the error emerges or persists across the intermediate reasoning layers. The selected exam-ples illustrate several recurring error patterns. First, the council often recognizes the broad metaphor of a meme but misjudges its pragmatic force, such as whether the joke is mildly offensive, strongly sarcastic, or merely humorous. Second, the critic stage sometimes amplifies a plausible interpretation into a harsher moral reading, shifting an otherwise neutral meme into a negative overall sentiment. Third, the synthesizer may preserve these ampli-fied judgments even when the original explainer had captured the core meaning more accurately. These cases are especially important for cultur-ally grounded Bangla meme understanding. Many memes rely on local religious references, social norms, and everyday habits, where the distinction between humor, sarcasm, offensiveness, and senti-ment is subtle. The error analysis therefore high-lights that correct metaphor recognition alone is insufficient: models must also infer the culturally appropriate intensity and target of the humor. 28 Score Label Criteria 
+
+1 Completely incorrect Explanation is unrelated, misunderstands the meme, or gives wrong meaning. 2 Mostly incorrect Explanation catches a tiny part but misses the main metaphor, humor, or sarcasm. 3 Partially correct Explanation understands some parts, but misses important text-image or cultural meaning. 4 Mostly correct Explanation is generally faithful, but has minor missing details or slight ambiguity. 5 Fully correct Explanation accurately captures text, image, metaphor, tone, and cultural context. 
+
+> Table 17: Likert-scale rubric for HumEval.
+
+Score Label Criteria 
+
+1 Completely incorrect Explanation is unrelated to the textual metaphor, misreads the meme text, or gives a wrong metaphorical meaning. 2 Mostly incorrect Explanation catches a small surface-level part of the text but misses the main textual metaphor, implied meaning, or sarcas-tic/humorous intent. 3 Partially correct Explanation identifies some textual meaning or metaphoric clue, but misses important figurative meaning, wordplay, sarcasm, or cultural implication in the text. 4 Mostly correct Explanation is generally faithful to the textual metaphor and im-plied meaning, but has minor missing details, slight ambiguity, or incomplete interpretation of tone or wordplay. 5 Fully correct Explanation accurately captures the meme text, textual metaphor, implied meaning, tone, sarcasm/humor, and relevant cultural or linguistic context. 
+
+> Table 18: Likert-scale rubric for HumTexMetEval.
+
+Score Label Criteria 
+
+1 Completely incorrect Explanation is unrelated to the image metaphor, misidentifies the visual content, or gives a wrong metaphorical meaning. 2 Mostly incorrect Explanation catches a minor visual element but misses the main image-based metaphor, symbolic meaning, or visual humor/sar-casm. 3 Partially correct Explanation understands some visual elements, but misses impor-tant symbolic relationships, image-text interaction, cultural cues, or metaphoric meaning. 4 Mostly correct Explanation is generally faithful to the image metaphor, but has minor missing details, slight ambiguity, or incomplete interpreta-tion of visual symbolism or context. 5 Fully correct Explanation accurately captures the visual content, image-based metaphor, symbolic meaning, tone, and relevant cultural or con-textual cues. 
+
+> Table 19: Likert-scale rubric for HumImgMetEval.
+
+29 LABEL: Very Positive English Explanation 
+
+Reciting Ayatul Kursi drives away the “boba bhoot” (the sleep-paralysis ghost). 
+
+Bangla Explanation 
+
+আয়াতুল কুরিস পাঠ করার মাধয্েম েবাবা ভূত দূর হেয় যায়। 
+
+LABEL: Positive English Explanation 
+
+Nature moves at its own pace, and over time everything becomes a part of nature. 
+
+Bangla Explanation প্র কৃ িত তার িনজস্ব গিতেত চেল এবং সমেয়র সােথ সােথ সবিকছুপ্র কৃ িতর অংশ হেয় যায়। 
+
+LABEL: Neutral English Explanation 
+
+Here “jamaat kore” refers to praying in congregation, but the meaning is twisted into a joke about joining Bangladesh Jamaat-e-Islami. 
+
+Bangla Explanation 
+
+এখােন ￿￿জামাত কের'' বলেত জামােত নামাজ পড়া েবাঝােচ্ছ, িকন্তু েসই অথর্ পািল্টেয় বাংলােদশ জামােত ইসলামীেত েযাগ েদওয়ার কথা বেল েকৗতুক করার েচষ্টা করা হেচ্ছ। 
+
+LABEL: Negative English Explanation 
+
+It jokes about charity organizers asking travellers on the road to donate money for charity. 
+
+Bangla Explanation 
+
+চয্ািরিট অগর্ ানাইজাররাভ্র মেণ থাকা পিথকেদর কােছ চয্ািরিটর জনয্ অথর্ কামনা কের---এটা িনেয় েকৗতুক করা হেয়েছ। 
+
+LABEL: Very Negative English Explanation 
+
+The meme expresses the sentiment that the speaker’s mind will not be at peace unless those who insult the Prophet are killed. 
+
+Bangla Explanation 
+
+রাসূেলর অবমাননাকারীেক (শািতম) হতয্া না করেল মন শান্ত হেব না---এমন অিভপ্রায় বয্ক্ত করা হেয়েছ। Figure 10: Examples of overall sentiment annotations in BanglaMemeX. 
+
+30 Figure 11: Example of human-written explanation annotation for a Bangla meme instance. 
+
+31 Ground Truth Explanation: The meme conveys the stereotype that when we sit at home idly and do nothing, our parents scorn us that we are being like cattle and contributing nothing. 
+
+Label: Funny, Very Sarcastic , Slight Offensive , Not Motivational, Neutral Phi-4: This image is used to convey the expression when a father sees something unexpected in an unex-pected situation , which creates humor. 
+
+Label: Funny, Little Sarcastic , Not Offensive , Not Motivational, Positive Gemma-3: This image is used to convey the expression when a father sees something unexpected in an unexpected situation , which creates a humorous situation. 
+
+Label: Funny, Little Sarcastic , Not Offensive , Not Motivational, Positive Grok-4.1: The inheritance of laziness is shown by the son not being able to wake up due to the father’s excessive sleepiness , and humor is created through inconsistency by making the cow the father .
+
+Label: Funny, Little Sarcastic , Not Offensive , Not Motivational, Positive LLaMA-4: The picture shows the cow lying on the bed, which suggests that the father saw something unusual . This created a humorous situation. 
+
+Label: Funny, Little Sarcastic , Not Offensive , Not Motivational, Neutral 
+
+Figure 12: Model Failures in Interpretation of Metaphoric Meme Understanding (m_00009). Examples illustrating how evaluated models misinterpret metaphors, hallucinate non-existent elements, and generate plausible but incorrect explanations even when occasionally classifying correctly. The red colored text highlights the mistakes each model made. 
+
+32 Ground Truth Explanation: The host is shown to be stingy by letting guests eat the breakfast they brought. This is expressed in the meme template where a person is awarding himself. 
+
+Label: Funny, Not Sarcastic , Not Offensive, Not Motivational, Neutral GPT-5.2: Using the image of Obama putting a medal on himself, it illustrates the self-satisfaction and self-praise in the funny coincidence of ultimately eating the breakfast brought home oneself. 
+
+Label: Funny, Little Sarcastic , Not Offensive, Not Motivational, Neutral 
+
+Phi-4: Here, using Barack Obama’s photo, it explains that when someone behaves like a guest, they get rejected by that very guest - meaning, if you go to someone wearing a good mask, that person sends you back .
+
+Label: Funny, Very Sarcastic , Not Offensive, Not Motivational, Negative Qwen3: It compares guests (atir) who come to the house with the behavior shown toward those guests, 
+
+indicating that what guests do for guests, guests do not do for guests .
+
+Label: Funny, Very Sarcastic , Not Offensive, Not Motivational, Negative Grok-4.1: If you don’t work hard, you have to bring a light bulb home, but if you do, you can get a medal like Obama - it motivates by showing the contrast in the results of hard work .
+
+Label: Funny, Not Sarcastic, Not Offensive, Motivational , Positive 
+
+Figure 13: Model Failures in Interpretation of Metaphoric Meme Understanding (m_00010). Examples illustrating how evaluated models misinterpret metaphors, hallucinate non-existent elements, and generate plausible but incorrect explanations even when occasionally classifying correctly. The red colored text highlights the mistakes each model made. 
+
+33 Ground Truth Explanation: Hero Alam’s song is insulted by depicting that even mosquitoes would die upon hearing his vile song. 
+
+Label: Very Funny , Very Sarcastic , Very Offensive , Not Motivational, Negative Gemma-3: An image of a mosquito net and mosquitoes is used to convey the experience of listening to Hero Alam’s song, making light humor about the song’s quality .
+
+Label: Funny , Little Sarcastic , Not Offensive , Not Motivational, Neutral Phi-4: Hero Alam’s song is so irritating that even the speakers in a state to listen to the song are being attacked by mosquitoes , conveyed in this way. 
+
+Label: Funny , Little Sarcastic , Not Offensive , Not Motivational, Neutral Qwen3: By saying ‘I played Hero Alam’s song for the mosquitoes,’ the mosquitoes have settled on the head just like how people settle their heads when listening to a song ; this meme shows the reaction to the song. 
+
+Label: Funny , Little Sarcastic , Not Offensive , Not Motivational, Neutral Grok-4.1: Hero Alam’s song is compared to an irritating and unbearable noise like mosquitoes in head-phones , mocking the quality of his music. 
+
+Label: Funny , Very Sarcastic, Slight Offensive , Not Motivational, Negative 
+
+Figure 14: Model Failures in Interpretation of Metaphoric Meme Understanding (m_00011). Examples illustrating how evaluated models misinterpret metaphors, hallucinate non-existent elements, and generate plausible but incorrect explanations, even when occasionally classifying correctly. The red colored text highlights the mistakes each model made. 
+
+34 Moral-accounting confusion after theft-donation 
+
+Ground Truth Explanation 
+
+The meme says that stealing money is still wrong regardless of the reason. It uses the Islamic idea of two shoulder-angels recording deeds to create humor: stealing is a sin, but donating is charity, so the angels are comically confused. 
+
+Ground Truth Label: Humor: Very Funny; Sarcastic: Very Sarcastic; Offensive: Slight Offensive; Motivational: Not Motivational; Overall: Neutral. 
+
+Layer 1: Explainer Output 
+
+The Explainer correctly identified the moral paradox: someone steals from the father and then donates the money, confusing the deed-recording angels. 
+
+Explainer Classification: Humor: Very Funny; Sarcastic: Little Sarcastic ; Offensive: Not Offensive ; Motiva-tional: Not Motivational; Overall: Neutral. 
+
+Error: It treats the joke as mostly harmless and only mildly sarcastic. 
+
+Layer 2: Critic Output 
+
+The Critics sharpen the interpretation into a critique of hypocrisy and self-justification. They correctly raise the sarcasm level, but still miss the slight offensive edge of stealing from a parent. 
+
+Critic Classification Tendency: Humor: Very Funny; Sarcastic: Very Sarcastic; Offensive: Not Offensive ;Motivational: Not Motivational; Overall: Negative .
+
+Layer 3: Synthesizer / Final Council Output Final explanation translated: Stealing from the father and donating creates a moral conflict; the shoulder-angels are confused about how to record it, satirizing hypocrisy/self-justification. 
+
+Final Classification: Humor: Very Funny; Sarcastic: Very Sarcastic; Offensive: Not Offensive ; Motivational: Not Motivational; Overall: Negative .
+
+Error Analysis 
+
+The council understood the main metaphor, but made two label mistakes. It softened Slight Offensive to Not Offensive , missing the parent-theft insult, and shifted the overall tone from Neutral comic moral tension to 
+
+Negative moral condemnation .
+
+Figure 15: Three-layer LLM council error analysis for m_01003. Red text marks classifications that disagree with the ground truth. 
+
+35 Park romance, Jannah, and Shaitan 
+
+Ground Truth Explanation 
+
+The meme frames park romance as haram/wrong in this religious context. A child-like Shaitan figure reacts with surprise or mischief. The joke is judgmental and mildly offensive, but not extremely sarcastic. 
+
+Ground Truth Label: Humor: Funny; Sarcastic: Little Sarcastic; Offensive: Slight Offensive; Motivational: Not Motivational; Overall: Negative. 
+
+Layer 1: Explainer Output 
+
+The Explainer reads the meme as religious-language irony: a boyfriend says he wants to go to Jannah while dating in a park, and Shaitan smiles at the contradiction. 
+
+Explainer Classification: Humor: Funny; Sarcastic: Very Sarcastic ; Offensive: Not Offensive ; Motivational: Not Motivational; Overall: Neutral .
+
+Error: It underplays the negative moral-judgment tone and removes the slight offensiveness. 
+
+Layer 2: Critic Output 
+
+The Critics focus on clever cognitive dissonance and the playful Shaitan reaction. They treat the meme as witty social satire rather than a religiously judgmental jab. 
+
+Critic Classification Tendency: Humor: Very Funny ; Sarcastic: Very Sarcastic ; Offensive: Not Offensive ;Motivational: Not Motivational; Overall: Neutral .
+
+Layer 3: Synthesizer / Final Council Output Final explanation translated: Doing romance in a park while saying Jannah exposes hypocrisy/cognitive dissonance; Shaitan smiling nearby marks temptation and satirical contradiction. 
+
+Final Classification: Humor: Very Funny ; Sarcastic: Very Sarcastic ; Offensive: Not Offensive ; Motivational: Not Motivational; Overall: Negative. 
+
+Error Analysis 
+
+The council inflated the joke from Funny/Little Sarcastic to Very Funny/Very Sarcastic and removed the Slight Offensive label. The ground truth frames the meme as a simpler negative moral judgment about dating, not merely clever irony. 
+
+Figure 16: Three-layer LLM council error analysis for m_01005. Red text marks classifications that disagree with the ground truth. 
+
+36 Ground Truth Explanation 
+
+The meme jokes about the habit of not bathing in winter. The skeleton/body-habit framing makes it a teasing jab, so it is very sarcastic and slightly offensive, while still neutral overall. 
+
+Ground Truth Label: Humor: Funny; Sarcastic: Very Sarcastic; Offensive: Slight Offensive; Motivational: Not Motivational; Overall: Neutral. 
+
+Layer 1: Explainer Output 
+
+The Explainer treats the skeleton as exaggerated winter-bathing imagery: bathing in cold weather is so undesirable that the body is shown as a skeleton/dead option. 
+
+Explainer Classification: Humor: Very Funny ; Sarcastic: Little Sarcastic ; Offensive: Not Offensive ;Motivational: Not Motivational; Overall: Neutral. 
+
+Error: It reads the joke as harmless seasonal relatability rather than a sarcastic hygiene jab. 
+
+Layer 2: Critic Output 
+
+The Critics emphasize harmless seasonal relatability and visual exaggeration. They preserve a non-offensive label and weak sarcasm instead of recognizing the teasing insult. 
+
+Critic Classification Tendency: Humor: Very Funny ; Sarcastic: Little Sarcastic ; Offensive: Not Offensive ;Motivational: Not Motivational; Overall: Neutral. 
+
+Layer 3: Synthesizer / Final Council Output Final explanation translated: Winter bathing is avoided; the skeleton exaggerates how people feel about bathing in cold weather, making the habit look funny and relatable. 
+
+Final Classification: Humor: Very Funny ; Sarcastic: Little Sarcastic ; Offensive: Not Offensive ; Motiva-tional: Not Motivational; Overall: Neutral. 
+
+Error Analysis 
+
+The council made three classification errors: it inflated Funny to Very Funny , weakened Very Sarcastic to Little Sarcastic , and missed Slight Offensive . It read the meme as harmless seasonal relatability instead of a sarcastic jab at poor hygiene habits. 
+
+Figure 17: Three-layer LLM council error analysis for m_01013. Red text marks classifications that disagree with the ground truth. 
+
+37

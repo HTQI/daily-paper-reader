@@ -1,0 +1,39 @@
+{
+  "label": "2026-09-13",
+  "date": "2026-09-13",
+  "generated_at": "2026-09-13T21:25:46",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202609/13/2609.06391v1-building-trustworthy-graph-agentic-rag-for-social-good-architectures-failure-propagation-and-assurance-by-construction",
+      "section": "quick",
+      "title_en": "Building Trustworthy Graph-Agentic RAG for Social Good: Architectures, Failure Propagation, and Assurance by Construction",
+      "authors": "Vijay Bommireddy, Raviteja Bommireddy",
+      "date": "2026-09-06",
+      "pdf": "https://arxiv.org/pdf/2609.06391v1",
+      "score": "6.0",
+      "evidence": "图智能体检索增强生成与中间声明验证",
+      "tldr": "Graph-Agentic RAG 把结构化图谱证据与可规划、遍历、验证和委派的智能体控制器结合，适合跨文档、实体、时间与机构的关系问答。但这种耦合会形成故障链：图构建缺陷会变成检索证据，改变后续控制决策，并传播到有后果的行动，威胁社会公益场景的时效、授权、可追溯、监督与救济。本文按图基座、生命周期、智能体功能、协调模式与权限边界综述文献，提出按构造保证的五类接口契约，并给出覆盖图断言、轨迹、主张、协调与结果的评估议程。",
+      "tags": "query:mfnd",
+      "abstract_en": "Graph-agentic retrieval-augmented generation combines structured evidence with adaptive controllers that can plan retrieval, traverse relations, verify intermediate claims, delegate subtasks, and use tools. This combination is useful when answers depend on relations across documents, entities, time, or institutions, but it also creates coupled failure paths: a defect in graph construction can become retrieved evidence, alter later control decisions, and propagate toward a consequential outcome. We examine how such systems should be designed and evaluated for social-good settings in which freshness, authorization, traceability, oversight, and recourse matter alongside answer quality. We organize the literature by graph substrate, graph lifecycle, agent function, coordination pattern, and authority boundary, and distinguish graph-based retrieval from observation-dependent graph control. We then synthesize reported risks as an evidence-to-action failure chain and propose an assurance-by-construction blueprint comprising five interface contracts for evidence, retrieval, reasoning, capability and delegation, and outcome. These contracts make provenance, temporal validity, authorization, uncertainty, and recoverability explicit at system boundaries. An illustrative public-benefit information design shows how the framework constrains graph structure, permissions, abstention, and operating authority. Finally, we derive an evaluation agenda spanning graph assertions, trajectories, claims, coordination, and outcomes.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/13/2609.08029v1-banglamemex-advancing-cultural-metaphoric-image-interpretation-in-bangla-with-a-multimodal-explainable-dataset",
+      "section": "quick",
+      "title_en": "BanglaMemeX: Advancing Cultural Metaphoric Image Interpretation in Bangla with a Multimodal Explainable Dataset",
+      "authors": "Md. Sadman Sakib, Zisan Mahmud, Md. Fahim Arefin, Md Fahim",
+      "date": "2026-09-07",
+      "pdf": "https://arxiv.org/pdf/2609.08029v1",
+      "score": "6.0",
+      "evidence": "面向文化隐喻梗图理解的多模态可解释基准",
+      "tldr": "视觉语言模型在多模态基准上表现强劲，但对文化隐喻丰富内容的推理仍研究不足。网络迷因依赖图像、文字、讽刺与社会文化知识的隐式互动，低资源孟加拉语中更受代码混合和独特符号影响。作者提出 BanglaMemeX，包含3000条孟加拉语迷因，标注幽默、讽刺、冒犯、激励意图、整体情感及人工解释。系统评测显示模型表层分类尚可，却难以理解隐含文化线索，凸显文化感知多模态系统的必要性。",
+      "tags": "query:mfnd",
+      "abstract_en": "Vision Language Models have achieved strong performance on multimodal benchmarks, yet their ability to reason about culturally grounded and metaphor-rich content remains insufficiently studied. Internet memes present a challenging setting where meaning emerges from implicit interactions between image, overlaid text, sarcasm, and shared socio-cultural knowledge rather than literal visual recognition. This challenge is amplified in low-resource languages such as Bangla, where code-mixing, stylized scripts, and culturally specific symbolism introduce substantial distribution shift. In this work, we introduce BanglaMemeX, a culturally grounded multimodal benchmark comprising 3,000 Bangla memes annotated with multi-dimensional labels (humor, sarcasm, offensiveness, motivational intent, and overall sentiment) and human-written explanations that explicitly describe textual and visual metaphors. We systematically evaluate modern VLMs on both classification and explanation generation, revealing that current models struggle to interpret implicit cultural cues despite reasonable surface-level accuracy. Our results highlight the need for culturally-aware multimodal systems capable of grounded reasoning under linguistic and cultural distribution shift.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

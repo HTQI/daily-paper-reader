@@ -1,0 +1,41 @@
+{
+  "date": "20260913",
+  "date_label": "",
+  "generated_at": "2026-09-13 21:25:45 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.06391v1",
+      "route": "202609/13/2609.06391v1-building-trustworthy-graph-agentic-rag-for-social-good-architectures-failure-propagation-and-assurance-by-construction",
+      "title": "Building Trustworthy Graph-Agentic RAG for Social Good: Architectures, Failure Propagation, and Assurance by Construction",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "图智能体检索增强生成与中间声明验证",
+      "first_seen_at": "2026-09-13 21:25:45 UTC",
+      "updated_at": "2026-09-13 21:25:45 UTC"
+    },
+    {
+      "paper_id": "2609.08029v1",
+      "route": "202609/13/2609.08029v1-banglamemex-advancing-cultural-metaphoric-image-interpretation-in-bangla-with-a-multimodal-explainable-dataset",
+      "title": "BanglaMemeX: Advancing Cultural Metaphoric Image Interpretation in Bangla with a Multimodal Explainable Dataset",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向文化隐喻梗图理解的多模态可解释基准",
+      "first_seen_at": "2026-09-13 21:25:45 UTC",
+      "updated_at": "2026-09-13 21:25:45 UTC"
+    }
+  ]
+}
