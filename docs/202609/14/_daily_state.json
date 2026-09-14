@@ -1,0 +1,41 @@
+{
+  "date": "20260914",
+  "date_label": "",
+  "generated_at": "2026-09-14 22:12:19 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.12678v1",
+      "route": "202609/14/2609.12678v1-detecting-and-explaining-fake-news-short-videos-with-multimodal-content-and-real-world-evidence",
+      "title": "Detecting and Explaining Fake News Short Videos with Multimodal Content and Real-World Evidence",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 10.0,
+      "evidence": "利用多模态内容与真实证据检测虚假新闻短视频",
+      "first_seen_at": "2026-09-14 22:12:19 UTC",
+      "updated_at": "2026-09-14 22:12:19 UTC"
+    },
+    {
+      "paper_id": "2609.11065v1",
+      "route": "202609/14/2609.11065v1-mosaic-query-aware-exploration-policy-adaptation-for-graphrag",
+      "title": "MOSAIC: Query-Aware Exploration Policy Adaptation for GraphRAG",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "查询感知的GraphRAG知识图谱证据检索与逐查询证据策略",
+      "first_seen_at": "2026-09-14 22:12:19 UTC",
+      "updated_at": "2026-09-14 22:12:19 UTC"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "label": "2026-09-14",
+  "date": "2026-09-14",
+  "generated_at": "2026-09-14T22:12:20",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202609/14/2609.12678v1-detecting-and-explaining-fake-news-short-videos-with-multimodal-content-and-real-world-evidence",
+      "section": "deep",
+      "title_en": "Detecting and Explaining Fake News Short Videos with Multimodal Content and Real-World Evidence",
+      "authors": "Yifeng Luo, Yupeng Li, Ming Tang, Jianxiong Guo, Liang Lan",
+      "date": "2026-09-11",
+      "pdf": "https://arxiv.org/pdf/2609.12678v1",
+      "score": "10.0",
+      "evidence": "利用多模态内容与真实证据检测虚假新闻短视频",
+      "tldr": "短视频平台已成公众重要新闻来源，也助长假新闻视频广泛传播。现有检测方法因帧选择策略可能遗漏真实性线索，或缺乏足够时序语境，且忽视多模态理解与证据检索。本文提出统一系统 NVKE-CEI：NVKE 依据视觉与 OCR 文本相似度的时序变化抽取关键帧；CEI 用内容与证据两类 LLM 事实核查器，并由轻量法官模型融合输出。大量实验表明其优于现有基线，并能生成高质量、内容有据的解释。",
+      "tags": "query:mfnd",
+      "abstract_en": "Short-video platforms have become a primary news source for the public, which has also enabled the widespread dissemination of fake news videos. We study the task of fake news video detection and explanation (FNVDE). Existing methods face two critical limitations. First, commonly used frame selection strategies may omit veracity-relevant cues or provide insufficient temporal context for understanding news videos. Second, prior methods neglect either multimodal understanding or evidence retrieval. To address these limitations, we propose NVKE-CEI, a unified system that integrates a news video keyframes extraction method (NVKE) and an FNVDE framework leveraging both content and evidence information (CEI). NVKE selects keyframes based on chronological changes in combined visual and OCR-text similarity. CEI employs two specialized LLM-based fact checkers (content-based and evidence-based) whose outputs are fused by a lightweight judge model. Extensive experiments show that NVKE-CEI outperforms state-of-the-art baselines while generating high-quality content-grounded explanations.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/14/2609.11065v1-mosaic-query-aware-exploration-policy-adaptation-for-graphrag",
+      "section": "quick",
+      "title_en": "MOSAIC: Query-Aware Exploration Policy Adaptation for GraphRAG",
+      "authors": "EunKyeong Lee, Kyeong-Jin Oh, Jinwon Kim, Hye Woo Lee, Minsang Song, Hyeongjun Jang, Junyoung Youn",
+      "date": "2026-09-10",
+      "pdf": "https://arxiv.org/pdf/2609.11065v1",
+      "score": "6.0",
+      "evidence": "查询感知的GraphRAG知识图谱证据检索与逐查询证据策略",
+      "tldr": "GraphRAG 跨图连接证据，但现有系统共享探索流程，难以适配直接事实、比较与中介问题。Mosaic 免训练，LLM 分析器将查询需求转为有界策略，控制种子选择、遍历、停止与证据选择，图与生成器共享。在 GraphRAG-Bench 上，Medical 正确率 76.97、Novel 64.33，提升 5.13 和 4.43 分；比最强固定策略高 9.96 分，Fixed Wide 少评估 81.9% 路径、少留 47.2% 证据。迁移实验表明策略接口无需特定训练。",
+      "tags": "query:mfnd",
+      "abstract_en": "Graph Retrieval-Augmented Generation (GraphRAG) can connect evidence distributed across a corpus graph, but most systems use largely shared exploration procedures across queries. This creates a structural mismatch: direct facts may need compact local neighborhoods, comparisons need balanced coverage of multiple targets, and mediated questions may require deeper paths through weakly related connectors. We present Mosaic, a training-free framework that formulates GraphRAG retrieval as a per-query control problem. An LLM analyzer converts query-specific evidence requirements into a bounded policy over seed selection, graph traversal, stopping, and evidence selection, while the corpus graph, indexes, scoring functions, grounding procedure, and answer generator remain shared.   On GraphRAG-Bench, Mosaic achieves query-weighted Answer Correctness of 76.97 on Medical and 64.33 on Novel, improving over the strongest previously reported overall results by 5.13 and 4.43 points. On Medical, it reaches 95.1 Evidence Recall and 86.1 Context Relevancy. Controlled comparisons on an identical graph and generator show that no fixed narrow, medium, or wide policy is consistently optimal; Mosaic improves by 9.96 points over the strongest canonical fixed policy. Relative to Fixed Wide, it evaluates 81.9% fewer paths and retains 47.2% fewer evidence items. Transfer experiments on HotpotQA, MuSiQue, and 2WikiMultiHopQA further show that the policy interface can be applied without benchmark-specific retriever training.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

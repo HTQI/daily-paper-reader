@@ -1,0 +1,98 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-14T22:08:36.329648+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [
+    {
+      "id": "2609.12678v1",
+      "source": "arxiv",
+      "title": "Detecting and Explaining Fake News Short Videos with Multimodal Content and Real-World Evidence",
+      "abstract": "Short-video platforms have become a primary news source for the public, which has also enabled the widespread dissemination of fake news videos. We study the task of fake news video detection and explanation (FNVDE). Existing methods face two critical limitations. First, commonly used frame selection strategies may omit veracity-relevant cues or provide insufficient temporal context for understanding news videos. Second, prior methods neglect either multimodal understanding or evidence retrieval. To address these limitations, we propose NVKE-CEI, a unified system that integrates a news video keyframes extraction method (NVKE) and an FNVDE framework leveraging both content and evidence information (CEI). NVKE selects keyframes based on chronological changes in combined visual and OCR-text similarity. CEI employs two specialized LLM-based fact checkers (content-based and evidence-based) whose outputs are fused by a lightweight judge model. Extensive experiments show that NVKE-CEI outperforms state-of-the-art baselines while generating high-quality content-grounded explanations.",
+      "authors": [
+        "Yifeng Luo",
+        "Yupeng Li",
+        "Ming Tang",
+        "Jianxiong Guo",
+        "Liang Lan"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.MM"
+      ],
+      "published": "2026-09-11T10:24:20+00:00",
+      "link": "https://arxiv.org/pdf/2609.12678v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "fake news short video detection using multimodal content and real-world evidence",
+      "llm_evidence_cn": "利用多模态内容与真实证据检测虚假新闻短视频",
+      "llm_evidence": "利用多模态内容与真实证据检测虚假新闻短视频",
+      "canonical_evidence": "利用多模态内容与真实证据检测虚假新闻短视频",
+      "llm_tldr_en": "This paper addresses fake news video detection and explanation, proposing NVKE-CEI, a unified system that extracts veracity-relevant keyframes and jointly leverages multimodal content and retrieved real-world evidence, improving detection and explanation.",
+      "llm_tldr_cn": "短视频平台成为主要新闻来源，也助长了虚假新闻视频的传播。现有方法在关键帧选择上可能遗漏真实性线索，且往往忽视多模态理解或证据检索。本文提出NVKE-CEI统一系统，融合新闻视频关键帧抽取与内容加证据的检测解释框架。该系统在虚假新闻视频检测与解释任务上取得更优表现。工作对多模态虚假信息核查与可解释检测具有直接参考价值。",
+      "llm_tldr": "短视频平台成为主要新闻来源，也助长了虚假新闻视频的传播。现有方法在关键帧选择上可能遗漏真实性线索，且往往忽视多模态理解或证据检索。本文提出NVKE-CEI统一系统，融合新闻视频关键帧抽取与内容加证据的检测解释框架。该系统在虚假新闻视频检测与解释任务上取得更优表现。工作对多模态虚假信息核查与可解释检测具有直接参考价值。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "automatically identifying misinformation from posts containing images, text, and video",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.11065v1",
+      "source": "arxiv",
+      "title": "MOSAIC: Query-Aware Exploration Policy Adaptation for GraphRAG",
+      "abstract": "Graph Retrieval-Augmented Generation (GraphRAG) can connect evidence distributed across a corpus graph, but most systems use largely shared exploration procedures across queries. This creates a structural mismatch: direct facts may need compact local neighborhoods, comparisons need balanced coverage of multiple targets, and mediated questions may require deeper paths through weakly related connectors. We present Mosaic, a training-free framework that formulates GraphRAG retrieval as a per-query control problem. An LLM analyzer converts query-specific evidence requirements into a bounded policy over seed selection, graph traversal, stopping, and evidence selection, while the corpus graph, indexes, scoring functions, grounding procedure, and answer generator remain shared.   On GraphRAG-Bench, Mosaic achieves query-weighted Answer Correctness of 76.97 on Medical and 64.33 on Novel, improving over the strongest previously reported overall results by 5.13 and 4.43 points. On Medical, it reaches 95.1 Evidence Recall and 86.1 Context Relevancy. Controlled comparisons on an identical graph and generator show that no fixed narrow, medium, or wide policy is consistently optimal; Mosaic improves by 9.96 points over the strongest canonical fixed policy. Relative to Fixed Wide, it evaluates 81.9% fewer paths and retains 47.2% fewer evidence items. Transfer experiments on HotpotQA, MuSiQue, and 2WikiMultiHopQA further show that the policy interface can be applied without benchmark-specific retriever training.",
+      "authors": [
+        "EunKyeong Lee",
+        "Kyeong-Jin Oh",
+        "Jinwon Kim",
+        "Hye Woo Lee",
+        "Minsang Song",
+        "Hyeongjun Jang",
+        "Junyoung Youn"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-10T04:12:18+00:00",
+      "link": "https://arxiv.org/pdf/2609.11065v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "query-aware GraphRAG evidence retrieval over a corpus knowledge graph with per-query evidence policies",
+      "llm_evidence_cn": "查询感知的GraphRAG知识图谱证据检索与逐查询证据策略",
+      "llm_evidence": "查询感知的GraphRAG知识图谱证据检索与逐查询证据策略",
+      "canonical_evidence": "查询感知的GraphRAG知识图谱证据检索与逐查询证据策略",
+      "llm_tldr_en": "MOSAIC casts GraphRAG retrieval as a per-query control problem, using an LLM analyzer to derive bounded policies for seed selection, graph traversal, stopping and evidence selection, better connecting dispersed evidence across a corpus graph.",
+      "llm_tldr_cn": "针对GraphRAG对多数查询采用统一探索流程、无法匹配不同证据需求的问题，本文提出免训练的MOSAIC框架，将图检索建模为逐查询控制问题，由LLM分析器把查询特定的证据要求转化为种子选择、图遍历、停止与证据选择的有界策略。实验显示查询自适应的探索策略能更有效连接语料图中分散的证据，同时保持索引、评分函数与答案生成器不变。该工作为证据驱动的检索增强推理提供了通用方法，可迁移至需要外部知识图谱与网络证据支撑的事实核查场景。",
+      "llm_tldr": "针对GraphRAG对多数查询采用统一探索流程、无法匹配不同证据需求的问题，本文提出免训练的MOSAIC框架，将图检索建模为逐查询控制问题，由LLM分析器把查询特定的证据要求转化为种子选择、图遍历、停止与证据选择的有界策略。实验显示查询自适应的探索策略能更有效连接语料图中分散的证据，同时保持索引、评分函数与答案生成器不变。该工作为证据驱动的检索增强推理提供了通用方法，可迁移至需要外部知识图谱与网络证据支撑的事实核查场景。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
