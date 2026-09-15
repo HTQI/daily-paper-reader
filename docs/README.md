@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-09-14</span>
+      <span class="dpr-home-dashboard-kicker">2026-09-15</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 2 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 7 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>1</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>1</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>7</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-09-14 22:12:19 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-09-15 21:47:50 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,7 +69,7 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日精选2篇AI论文，精读1篇、速读1篇，聚焦虚假短视频识别与GraphRAG查询优化。最值得看的是满分精读《Detecting and Explaining Fake News Short Videos with Multimodal Content and Real-World Evidence》，用多模态内容结合真实世界证据检测并解释假新闻短视频。普通读者可先读这篇了解识别思路，速读的MOSAIC则适合关注GraphRAG检索策略的读者。</p>
+<p>2026-09-15 日报速读 7 篇，聚焦多模态有害内容检测、事实核查与医学事实验证三大方向。最值得关注的是 SyRHM 用符号语言增强推理配合联想检索实现零样本有害梗图检测（7.0），以及 DARE 的辩证智能体推理用于结构化知识事实核查（7.0）。普通读者可优先了解这两篇如何用检索与多步推理提升判定准确率，再按兴趣延伸至医学片段级验证。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -78,12 +78,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">1 篇</strong>
+    <strong class="dpr-home-dashboard-count">0 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Detecting and Explaining Fake News Short Videos with Multimodal Content and Real-World Evidence">Detecting and Explaining Fake News Short Videos with Multimodal Content and Real-World Evidence</span></li></ul>
+<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>1</strong></span></div>
+
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -91,12 +91,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">1 篇</strong>
+    <strong class="dpr-home-dashboard-count">7 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="MOSAIC: Query-Aware Exploration Policy Adaptation for GraphRAG">MOSAIC: Query-Aware Exploration Policy Adaptation for GraphRAG</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="SyRHM: Symbolic-Language-Enhanced Reasoning with Associative Retrieval for Zero-shot Harmful Meme Detection">SyRHM: Symbolic-Language-Enhanced Reasoning with Associative Retrieval for Zero-shot Harmful Meme Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="DARE: Dialectical Agentic Reasoning for Structured Knowledge Fact Checking">DARE: Dialectical Agentic Reasoning for Structured Knowledge Fact Checking</span></li><li><span class="dpr-home-dashboard-paper-title" title="MedSNIP: Building and Benchmarking Snippet-Level Granularity for Medical Fact Verification">MedSNIP: Building and Benchmarking Snippet-Level Granularity for Medical Fact Verification</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>1</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>7</strong></span></div>
 </section>
 </div>
 

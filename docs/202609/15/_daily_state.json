@@ -1,0 +1,121 @@
+{
+  "date": "20260915",
+  "date_label": "",
+  "generated_at": "2026-09-15 21:47:50 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.13794v1",
+      "route": "202609/15/2609.13794v1-syrhm-symbolic-language-enhanced-reasoning-with-associative-retrieval-for-zero-shot-harmful-meme-detection",
+      "title": "SyRHM: Symbolic-Language-Enhanced Reasoning with Associative Retrieval for Zero-shot Harmful Meme Detection",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "通过图文不一致与检索增强推理检测有害梗图",
+      "first_seen_at": "2026-09-15 21:47:50 UTC",
+      "updated_at": "2026-09-15 21:47:50 UTC"
+    },
+    {
+      "paper_id": "2609.13808v1",
+      "route": "202609/15/2609.13808v1-dare-dialectical-agentic-reasoning-for-structured-knowledge-fact-checking",
+      "title": "DARE: Dialectical Agentic Reasoning for Structured Knowledge Fact Checking",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "面向结构化证据的迭代检索-推理-反思事实核查",
+      "first_seen_at": "2026-09-15 21:47:50 UTC",
+      "updated_at": "2026-09-15 21:47:50 UTC"
+    },
+    {
+      "paper_id": "2609.12884v1",
+      "route": "202609/15/2609.12884v1-medsnip-building-and-benchmarking-snippet-level-granularity-for-medical-fact-verification",
+      "title": "MedSNIP: Building and Benchmarking Snippet-Level Granularity for Medical Fact Verification",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "片段级医学事实验证与基准",
+      "first_seen_at": "2026-09-15 21:47:50 UTC",
+      "updated_at": "2026-09-15 21:47:50 UTC"
+    },
+    {
+      "paper_id": "2609.14316v1",
+      "route": "202609/15/2609.14316v1-learning-continuous-source-responses-for-generalizable-ai-generated-image-detection",
+      "title": "Learning Continuous Source Responses For Generalizable AI-Generated Image Detection",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "可泛化的AI生成虚假图像检测，服务视觉媒体可信性",
+      "first_seen_at": "2026-09-15 21:47:50 UTC",
+      "updated_at": "2026-09-15 21:47:50 UTC"
+    },
+    {
+      "paper_id": "2609.14437v1",
+      "route": "202609/15/2609.14437v1-lightweight-generalized-deepfake-face-detection-with-wavie-wavelet-augmented-vision-intermediate-embeddings",
+      "title": "Lightweight Generalized DeepFake Face Detection with WAVIE: Wavelet Augmented Vision Intermediate Embeddings",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向错误信息治理的可泛化深度伪造人脸检测",
+      "first_seen_at": "2026-09-15 21:47:50 UTC",
+      "updated_at": "2026-09-15 21:47:50 UTC"
+    },
+    {
+      "paper_id": "2609.14685v1",
+      "route": "202609/15/2609.14685v1-vitegate-visual-textual-triggered-knowledge-poisoning-for-vision-language-retrieval-augmented-generation",
+      "title": "ViTeGate: Visual-Textual Triggered Knowledge Poisoning for Vision-Language Retrieval-Augmented Generation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "融合视觉与文本证据的多模态检索增强生成",
+      "first_seen_at": "2026-09-15 21:47:50 UTC",
+      "updated_at": "2026-09-15 21:47:50 UTC"
+    },
+    {
+      "paper_id": "2609.15640v1",
+      "route": "202609/15/2609.15640v1-human-grounded-calibration-for-long-text-image-text-congruence-in-vision-language-models",
+      "title": "Human-Grounded Calibration for Long-Text Image-Text Congruence in Vision-Language Models",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "校准的图像-文本一致性评分直接支持跨模态一致性与不匹配检测",
+      "first_seen_at": "2026-09-15 21:47:50 UTC",
+      "updated_at": "2026-09-15 21:47:50 UTC"
+    }
+  ]
+}

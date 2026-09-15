@@ -1,0 +1,301 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-15T21:44:12.198036+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 7,
+    "quick_skim_target": 11,
+    "quick_selected": 7
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.13794v1",
+      "source": "arxiv",
+      "title": "SyRHM: Symbolic-Language-Enhanced Reasoning with Associative Retrieval for Zero-shot Harmful Meme Detection",
+      "abstract": "Detecting harmful memes is critical for maintaining safe online communities. However, harmful intent is often implicit, arising from visual-textual incongruity and cultural stereotypes, which challenges existing multimodal detectors. We propose SyRHM, a framework that decomposes harmful meme detection into meaning-grounded retrieval and symbolic-language-enhanced multi-stage reasoning. SyRHM retrieves semantically related memes by parsing multimodal content into textual elements and descriptions, providing grounded context beyond surface-level similarity. Building on the retrieved context, SyRHM uses a translator stage to convert multimodal inputs into symbolic intermediate representations, and then performs multi-stage reasoning via planner and solver stages, enabling expressive and interpretable analysis of harmful intent. Experiments on FHM, HarM, and MultiOff demonstrate the effectiveness of SyRHM, achieving superior performance on most evaluation settings against multimodal and reasoning-based baselines, while providing reasoning traces for harmful content. The code is available at: https://github.com/Scabbards1500/SyRHM",
+      "authors": [
+        "Hanling Wang",
+        "Chenlong Wei",
+        "Yingjuan Li",
+        "Di Wu",
+        "Yuchao Zhang",
+        "Xiaohui Zhu",
+        "Yao Zhu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-12T08:12:24+00:00",
+      "link": "https://arxiv.org/pdf/2609.13794v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "detects harmful memes via visual-textual incongruity and retrieval-augmented reasoning",
+      "llm_evidence_cn": "通过图文不一致与检索增强推理检测有害梗图",
+      "llm_evidence": "通过图文不一致与检索增强推理检测有害梗图",
+      "canonical_evidence": "通过图文不一致与检索增强推理检测有害梗图",
+      "llm_tldr_en": "SyRHM decomposes harmful meme detection into meaning-grounded retrieval and symbolic-language-enhanced multi-stage reasoning to capture implicit visual-textual incongruity.",
+      "llm_tldr_cn": "有害梗图的意图常隐含于图文不一致与文化刻板印象中，给现有多模态检测器带来挑战。本文提出SyRHM框架，将检测分解为意义接地的检索与符号语言增强的多阶段推理：先把多模态内容解析为文本元素与描述以检索语义相关梗图，再由翻译阶段转为符号中间表示进行多阶段推理。该方法超越表层相似度，提供可解释的接地上下文。其图文不一致建模与检索增强推理对跨模态虚假信息验证具有直接借鉴价值。",
+      "llm_tldr": "有害梗图的意图常隐含于图文不一致与文化刻板印象中，给现有多模态检测器带来挑战。本文提出SyRHM框架，将检测分解为意义接地的检索与符号语言增强的多阶段推理：先把多模态内容解析为文本元素与描述以检索语义相关梗图，再由翻译阶段转为符号中间表示进行多阶段推理。该方法超越表层相似度，提供可解释的接地上下文。其图文不一致建模与检索增强推理对跨模态虚假信息验证具有直接借鉴价值。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.12884v1",
+      "source": "arxiv",
+      "title": "MedSNIP: Building and Benchmarking Snippet-Level Granularity for Medical Fact Verification",
+      "abstract": "A medical claim's correctness often depends not on the claim alone, but on the clinical structure around it. A claim may require a lab reference range, a causal or conditional link, or patient-specific details to be judged correctly, and atom-level decomposition can fragment these dependencies, leaving the verifier with clinically incomplete claims. We reformulate medical fact-checking around snippet-level verification, where clause-grouped units preserve local clinical structure. We introduce MedSNIP-Bench, a human-annotated benchmark for snippet-level medical fact verification, and MedSNIP, an automatic snippet-generation pipeline. MedSNIP-Bench covers 276 consumer-health and clinical-vignette responses, segmented into 2,524 snippets with dual in-general and in-patient-context labels and six structural pattern codes. MedSNIP is evaluated against human snippet boundaries on MedSNIP-Bench and then used to generate snippet-level units for external corpora. Across MedSNIP-Bench, HealthFC, and MedHallu, snippet-level verification preserves or improves false-class F1, with gains concentrated where answers are long enough to fragment and where the verifier is strong enough to exploit the recovered structure. The largest merge-pattern gain is on causal-conditional clinical chains. It also reduces verifier calls by 24-73%, though the saving survives end-to-end only when decomposition is cheap, which an open-weight decomposer makes possible at no loss of chunking fidelity.",
+      "authors": [
+        "Hasan Iqbal",
+        "Sarfraz Ahmad",
+        "Hyunjae Kim",
+        "Sihyeon Park",
+        "Junjie Liao",
+        "Qingyu Chen",
+        "Preslav Nakov",
+        "Yuxia Wang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-11T14:08:44+00:00",
+      "link": "https://arxiv.org/pdf/2609.12884v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "snippet-level medical fact verification with benchmark",
+      "llm_evidence_cn": "片段级医学事实验证与基准",
+      "llm_evidence": "片段级医学事实验证与基准",
+      "canonical_evidence": "片段级医学事实验证与基准",
+      "llm_tldr_en": "MedSNIP reformulates medical fact-checking as snippet-level verification preserving clinical structure, releasing MedSNIP-Bench with 2524 snippets and an automatic snippet-generation pipeline.",
+      "llm_tldr_cn": "针对医学主张正确性常依赖周边临床结构、原子级分解会割裂这些依赖而使核查者面对不完整主张的问题，本文把医学事实核查重构为保留局部临床结构的片段级验证，提出自动片段生成流水线MedSNIP并发布人工标注基准MedSNIP-Bench。该基准覆盖276个消费健康与临床情景回答，切分为2524个片段，支持更完整的核查。该工作为证据驱动的事实验证提供细粒度粒度化思路。",
+      "llm_tldr": "针对医学主张正确性常依赖周边临床结构、原子级分解会割裂这些依赖而使核查者面对不完整主张的问题，本文把医学事实核查重构为保留局部临床结构的片段级验证，提出自动片段生成流水线MedSNIP并发布人工标注基准MedSNIP-Bench。该基准覆盖276个消费健康与临床情景回答，切分为2524个片段，支持更完整的核查。该工作为证据驱动的事实验证提供细粒度粒度化思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.13808v1",
+      "source": "arxiv",
+      "title": "DARE: Dialectical Agentic Reasoning for Structured Knowledge Fact Checking",
+      "abstract": "Structured knowledge fact checking aims to determine the truthfulness of natural language claims by reasoning over structured evidence. Recent program-generation approaches leverage large language models (LLMs) to generate executable graph reasoning programs, achieving strong performance on structured knowledge fact checking benchmarks. However, these methods remain limited by invalid relation generation, single-path reasoning that lacks self-correction, and biased evidence assessment that tends to overestimate supporting signals. We propose Dialectical Agentic Reasoning (DARE), a multi-agent framework that formulates structured knowledge fact checking as an iterative retrieve-reason-reflect process. DARE integrates relation-grounded evidence retrieval to constrain reasoning to valid structures, dialectical bidirectional verification to evaluate evidence from both supporting and refuting perspectives, and confidence-driven meta-reflection to dynamically determine whether additional evidence exploration is necessary. Extensive experiments demonstrate the effectiveness of DARE in structured knowledge fact checking, with an 8B backbone achieving 88.12% accuracy and matching or surpassing GPT-4o-based program-generation baselines, which attests to the efficacy of dialectical agentic reasoning in eliciting the latent reasoning capabilities of LLMs.",
+      "authors": [
+        "Yifei Li",
+        "Xiaohan Zheng",
+        "Wentao Qian",
+        "Liansheng Zhuang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-12T08:41:52+00:00",
+      "link": "https://arxiv.org/pdf/2609.13808v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "iterative retrieve-reason-reflect fact checking over structured evidence",
+      "llm_evidence_cn": "面向结构化证据的迭代检索-推理-反思事实核查",
+      "llm_evidence": "面向结构化证据的迭代检索-推理-反思事实核查",
+      "canonical_evidence": "面向结构化证据的迭代检索-推理-反思事实核查",
+      "llm_tldr_en": "Proposes DARE, a multi-agent retrieve-reason-reflect framework for structured knowledge fact checking that grounds relations and corrects single-path biased reasoning; directly relevant to evidence-based claim verification but text/structured-only.",
+      "llm_tldr_cn": "结构化知识事实核查旨在依据结构化证据判断自然语言主张的真伪，但现有程序生成方法受限于无效关系、缺乏自校正的单路径推理与偏置证据评估。本文提出DARE多智能体框架，将核查建模为迭代的检索-推理-反思过程，并整合关系锚定的证据检索。该方法在结构化知识事实核查基准上取得强性能。其证据驱动的辩证推理思路对错误信息核查具直接参考价值，但未涉及视觉模态。",
+      "llm_tldr": "结构化知识事实核查旨在依据结构化证据判断自然语言主张的真伪，但现有程序生成方法受限于无效关系、缺乏自校正的单路径推理与偏置证据评估。本文提出DARE多智能体框架，将核查建模为迭代的检索-推理-反思过程，并整合关系锚定的证据检索。该方法在结构化知识事实核查基准上取得强性能。其证据驱动的辩证推理思路对错误信息核查具直接参考价值，但未涉及视觉模态。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.14316v1",
+      "source": "arxiv",
+      "title": "Learning Continuous Source Responses For Generalizable AI-Generated Image Detection",
+      "abstract": "Advances in image generation have made synthetic images increasingly difficult to distinguish from real photographs, raising concerns about the trustworthiness of visual media. Existing AI-generated image detectors often perform well on in-domain data, but their robustness and cross-generator generalization remain limited. These limitations are commonly attributed to overfitting to shortcut cues. Although many methods seek to suppress shortcut learning, most retain binary classification as the training task without reconsidering how the task itself shapes the learned representations. We introduce CuRe, a framework for learning Continuous Source Responses that revisits authenticity detection from the perspective of the training task. CuRe reformulates backbone adaptation as regression of real-generated mixing ratios, providing finer supervision that encourages the model to capture authenticity-related variation beyond binary endpoint separation. We further select a compact source-response subspace to suppress nuisance variation and limit the final classifier's access to potential shortcut cues. Across ten public benchmarks, CuRe achieves an average balanced accuracy of 89.7%, exceeding the second-best method by 5.2 percentage points. Further experiments demonstrate consistent generalization gains across visual backbones and strong robustness to common image degradations. Code is available at https://github.com/manic-cui/CuRe",
+      "authors": [
+        "Manni Cui",
+        "Ruiqi Liu",
+        "Zijian Yu",
+        "Hao Tan",
+        "Zibo Wei",
+        "Zian Wang",
+        "Ziheng Qin",
+        "Huijia Zhu",
+        "Weiqiang Wang",
+        "Jun Lan",
+        "Shu Wu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-13T06:24:59+00:00",
+      "link": "https://arxiv.org/pdf/2609.14316v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "generalizable detection of AI-generated fake images to protect visual media trustworthiness",
+      "llm_evidence_cn": "可泛化的AI生成虚假图像检测，服务视觉媒体可信性",
+      "llm_evidence": "可泛化的AI生成虚假图像检测，服务视觉媒体可信性",
+      "canonical_evidence": "可泛化的AI生成虚假图像检测，服务视觉媒体可信性",
+      "llm_tldr_en": "CuRe reframes AI-generated image detection as learning Continuous Source Responses rather than binary classification, improving robustness and cross-generator generalization against shortcut overfitting.",
+      "llm_tldr_cn": "图像生成技术使合成图像难以与真实照片区分，现有AI生成图像检测器在域内表现良好但跨生成器泛化有限，常被归因于对捷径线索的过拟合。作者提出CuRe框架，从训练任务视角重新设计目标，学习连续来源响应而非二分类。该框架缓解捷径学习并提升鲁棒性与跨生成器泛化能力。它为可信视觉媒体鉴别提供了更稳健的建模范式。",
+      "llm_tldr": "图像生成技术使合成图像难以与真实照片区分，现有AI生成图像检测器在域内表现良好但跨生成器泛化有限，常被归因于对捷径线索的过拟合。作者提出CuRe框架，从训练任务视角重新设计目标，学习连续来源响应而非二分类。该框架缓解捷径学习并提升鲁棒性与跨生成器泛化能力。它为可信视觉媒体鉴别提供了更稳健的建模范式。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.14437v1",
+      "source": "arxiv",
+      "title": "Lightweight Generalized DeepFake Face Detection with WAVIE: Wavelet Augmented Vision Intermediate Embeddings",
+      "abstract": "Deepfake detection systems often exhibit significant performance degradation when deployed on unseen manipulation methods, limiting their reliability in real-world multimedia environments. This lack of generalization poses critical challenges for misinformation mitigation, digital forensics, and human-centric AI systems. Existing detectors perform well on the forgery methods they are trained on, but their accuracy drops sharply on unseen pipelines. To bridge this generalization gap, we propose WAVIE (Wavelet Augmented Vision Intermediate Embeddings), an end-to-end architecture that combines complementary spatial and frequency cues on top of a frozen CLIP backbone. WAVIE projects intermediate transformer embeddings through a lightweight learnable module, applies a three-level Daubechies-6 (db6) discrete wavelet transform (DWT), refines the low-frequency branch while preserving the high-frequency branch, reconstructs the feature via inverse DWT, and performs classification.   Trained only on FaceForensics++, WAVIE achieves AUROC = 0.852 on Celeb-DF-v1, 0.852 on Celeb-DF-v2 and 0.831 on WildDeepFake (WDF) at the frame level, outperforming several state-of-the-art generalization baselines. Extensive ablation studies confirm the importance of both the wavelet module and the intermediate-feature aggregation for cross-dataset performance, highlighting the necessity of jointly leveraging spatial and frequency domains. These results position WAVIE as a strong baseline for deepfake detection in the wild.",
+      "authors": [
+        "Arya Pulkit",
+        "Aditya Ruhela",
+        "Akarshan Kapoor",
+        "Arnav Bhavsar"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-09-13T11:24:13+00:00",
+      "link": "https://arxiv.org/pdf/2609.14437v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "generalizable deepfake face detection framed as misinformation mitigation",
+      "llm_evidence_cn": "面向错误信息治理的可泛化深度伪造人脸检测",
+      "llm_evidence": "面向错误信息治理的可泛化深度伪造人脸检测",
+      "canonical_evidence": "面向错误信息治理的可泛化深度伪造人脸检测",
+      "llm_tldr_en": "WAVIE combines spatial and frequency cues on a frozen CLIP backbone to improve generalization of deepfake face detection to unseen manipulation methods.",
+      "llm_tldr_cn": "该文针对深度伪造检测器在未见篡改方法上性能骤降、影响多媒体可信与错误信息治理的问题，提出WAVIE。该方法在冻结的CLIP骨干上融合空间与频率两类互补线索，并将中间层Transformer嵌入投影用于判别，从而提升跨伪造管线的泛化能力。实验表明其在训练分布外的伪造方法上仍保持较稳定检测精度，为视觉伪造类错误信息的可泛化检测提供了有效思路。",
+      "llm_tldr": "该文针对深度伪造检测器在未见篡改方法上性能骤降、影响多媒体可信与错误信息治理的问题，提出WAVIE。该方法在冻结的CLIP骨干上融合空间与频率两类互补线索，并将中间层Transformer嵌入投影用于判别，从而提升跨伪造管线的泛化能力。实验表明其在训练分布外的伪造方法上仍保持较稳定检测精度，为视觉伪造类错误信息的可泛化检测提供了有效思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.14685v1",
+      "source": "arxiv",
+      "title": "ViTeGate: Visual-Textual Triggered Knowledge Poisoning for Vision-Language Retrieval-Augmented Generation",
+      "abstract": "Modern Vision-Language Retrieval-Augmented Generation (VLRAG) systems augment Large Vision-Language Models (LVLMs) with retrieved visual and textual evidence, enabling responses grounded in external knowledge. However, the retrieval pipeline also creates an attack surface: adversaries can inject poisoned image-text pairs into the knowledge corpus to influence model outputs. Existing knowledge poisoning attacks are typically always-on, allowing poisoned evidence to affect generation whenever it is retrieved. This lack of precise activation control makes it difficult to confine malicious behavior to intended inputs, reducing both attack stealth and effectiveness. In this paper, we propose ViTeGate, a visual-textual triggered knowledge poisoning attack for VLRAG systems. ViTeGate uses a visual trigger to conditionally promote poisoned evidence into retrieval results and a textual trigger to induce an attacker-specified response from the retrieved evidence. By coordinating retrieval and generation, ViTeGate reduces poison exposure when the visual trigger is absent and preserves normal responses when the textual trigger is absent. The two-trigger design enables selective attack activation and reduces unintended single-trigger activation. Experiments across multiple query datasets, retrievers, and LVLMs validate the effectiveness of ViTeGate. On InfoSeek, ViTeGate achieves an attack success rate of up to 0.98 while maintaining a clean answer accuracy of up to 0.93.",
+      "authors": [
+        "Xue Tan",
+        "Xuandi Zeng",
+        "Yu Shao",
+        "Zhongli Fang",
+        "Mingyu Luo",
+        "Xiaoyan Sun",
+        "Ping Chen",
+        "Jun Dai"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR"
+      ],
+      "published": "2026-09-13T17:39:37+00:00",
+      "link": "https://arxiv.org/pdf/2609.14685v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multimodal retrieval-augmented generation with visual-textual evidence",
+      "llm_evidence_cn": "融合视觉与文本证据的多模态检索增强生成",
+      "llm_evidence": "融合视觉与文本证据的多模态检索增强生成",
+      "canonical_evidence": "融合视觉与文本证据的多模态检索增强生成",
+      "llm_tldr_en": "ViTeGate studies knowledge poisoning in vision-language RAG, where poisoned image-text pairs injected into the corpus influence LVLM outputs, and proposes a visual-textual trigger to confine malicious behavior to intended inputs.",
+      "llm_tldr_cn": "视觉语言检索增强生成用检索到的图像与文本证据支撑大视觉语言模型的回答，但检索管线可被注入投毒图文对以影响输出。现有投毒攻击多为常开式，缺乏精确触发控制，难以将恶意行为限定在目标输入上。论文提出ViTeGate，用视觉文本触发器实现条件化激活的投毒，提升攻击的隐蔽性与有效性。该工作围绕多模态检索证据与生成展开，与多模态事实核查的证据链路研究密切相关，但属攻击视角。",
+      "llm_tldr": "视觉语言检索增强生成用检索到的图像与文本证据支撑大视觉语言模型的回答，但检索管线可被注入投毒图文对以影响输出。现有投毒攻击多为常开式，缺乏精确触发控制，难以将恶意行为限定在目标输入上。论文提出ViTeGate，用视觉文本触发器实现条件化激活的投毒，提升攻击的隐蔽性与有效性。该工作围绕多模态检索证据与生成展开，与多模态事实核查的证据链路研究密切相关，但属攻击视角。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.15640v1",
+      "source": "arxiv",
+      "title": "Human-Grounded Calibration for Long-Text Image-Text Congruence in Vision-Language Models",
+      "abstract": "Long-text image--text congruence scoring is increasingly important for vision-language systems that must evaluate whether detailed textual descriptions match visual content. However, raw similarity scores from dual-encoder models are difficult to interpret as calibrated congruence measures, especially under the modality gap between image and text embeddings. This paper proposes Congruency Score (CS), a lightweight calibration layer that maps image--text similarity evidence into a bounded score. Using DOCCI and Urban1k, we evaluate four frozen vision-language backbones and show that observed reductions in post-projection centroid distance do not uniformly improve image--text retrieval performance. Human-grounded evaluations on DOCCI further reveal a trade-off: direct post-hoc calibration preserves high association with human judgments, whereas selected projection-based configurations can reduce threshold-relevant slope and intercept distortions at the cost of retrieval performance and association strength. These results establish long-text image--text congruence scoring as a calibrated score-estimation problem, where retrieval performance, human association, and threshold calibration must be evaluated as distinct objectives. CS provides a lightweight way to expose and operationalize this separation.",
+      "authors": [
+        "Alessandro Gambetti",
+        "Qiwei Han"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.CL"
+      ],
+      "published": "2026-09-14T14:26:53+00:00",
+      "link": "https://arxiv.org/pdf/2609.15640v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "calibrated image-text congruence scoring directly supports cross-modal consistency and mismatch detection",
+      "llm_evidence_cn": "校准的图像-文本一致性评分直接支持跨模态一致性与不匹配检测",
+      "llm_evidence": "校准的图像-文本一致性评分直接支持跨模态一致性与不匹配检测",
+      "canonical_evidence": "校准的图像-文本一致性评分直接支持跨模态一致性与不匹配检测",
+      "llm_tldr_en": "This paper proposes Congruency Score, a lightweight calibration layer that maps image-text similarity into a bounded, interpretable congruence score for vision-language models.",
+      "llm_tldr_cn": "判断详细文本描述是否与视觉内容相符，对视觉语言系统日益重要，但双编码器的原始相似度受模态间隙影响难以解释为校准的一致性度量。本文提出Congruency Score（CS），一种轻量校准层，将图像-文本相似度证据映射为有界评分。作者在DOCCI与Urban1k上评估四种冻结视觉语言骨干，发现投影后质心距离的下降并不必然提升检索性能。该工作为跨模态语义一致性度量提供可解释工具，可直接服务于图文不匹配检测。",
+      "llm_tldr": "判断详细文本描述是否与视觉内容相符，对视觉语言系统日益重要，但双编码器的原始相似度受模态间隙影响难以解释为校准的一致性度量。本文提出Congruency Score（CS），一种轻量校准层，将图像-文本相似度证据映射为有界评分。作者在DOCCI与Urban1k上评估四种冻结视觉语言骨干，发现投影后质心距离的下降并不必然提升检索性能。该工作为跨模态语义一致性度量提供可解释工具，可直接服务于图文不匹配检测。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

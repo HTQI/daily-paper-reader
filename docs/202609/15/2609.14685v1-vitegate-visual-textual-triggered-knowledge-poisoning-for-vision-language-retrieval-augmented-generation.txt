@@ -1,0 +1,1642 @@
+ViTeGate: Visual-Textual Triggered Knowledge Poisoning for Vision-Language
+Retrieval-Augmented Generation
+Xue Tan1, Xuandi Zeng2, Yu Shao1, Zhongli Fang1,
+Mingyu Luo1, Xiaoyan Sun3, Ping Chen1, and Jun Dai3
+1Fudan University
+2Guangdong University of Technology
+3Worcester Polytechnic Institute
+Abstract
+Modern Vision-Language Retrieval-Augmented Generation
+(VLRAG) systems augment Large Vision-Language Models
+(LVLMs) with retrieved visual and textual evidence, enabling
+responses grounded in external knowledge. However, the re-
+trieval pipeline also creates an attack surface: adversaries can
+inject poisoned image-text pairs into the knowledge corpus
+to influence model outputs. Existing knowledge poisoning at-
+tacks are typically always-on, allowing poisoned evidence to
+affect generation whenever it is retrieved. This lack of pre-
+cise activation control makes it difficult to confine malicious
+behavior to intended inputs, reducing both attack stealth and
+effectiveness. In this paper, we propose ViTeGate, a visual-
+textual triggered knowledge poisoning attack for VLRAG sys-
+tems. ViTeGate uses a visual trigger to conditionally promote
+poisoned evidence into retrieval results and a textual trigger
+to induce an attacker-specified response from the retrieved
+evidence. By coordinating retrieval and generation, ViTeGate
+reduces poison exposure when the visual trigger is absent
+and preserves normal responses when the textual trigger is
+absent. The two-trigger design enables selective attack activa-
+tion and reduces unintended single-trigger activation. Exper-
+iments across multiple query datasets, retrievers, and LVLMs
+validate the effectiveness of ViTeGate. On InfoSeek, ViTeGate
+achieves an attack success rate of up to 0.98 while maintaining
+a clean answer accuracy of up to 0.93.
+Introduction
+Large vision-language models (LVLMs) have achieved
+strong performance on visual understanding and multimodal
+reasoning tasks (Antol et al. 2015; Sharma et al. 2018; Su-
+vorov et al. 2022). However, their parametric knowledge
+can be incomplete, outdated, or insufficient for knowledge-
+intensive queries (Ji et al. 2023). Retrieval-augmented gener-
+ation (RAG) addresses this limitation by retrieving relevant
+evidence from an external non-parametric knowledge base
+at inference time (Lewis et al. 2020). Recent advances ex-
+tend RAG from textual corpora to multimodal knowledge
+sources, enabling models to retrieve and reason over images,
+texts, and image-text pairs. For example, MuRAG (Chen
+et al. 2022) and REVEAL (Hu et al. 2023b) build retrieval-
+augmented vision-language models for knowledge-intensive
+multimodal tasks. By grounding LVLM outputs in external
+Copyright © 2027, Association for the Advancement of Artificial
+Intelligence (www.aaai.org). All rights reserved.
+multimodal evidence, vision-language retrieval-augmented
+generation (VLRAG) provides a practical mechanism for ac-
+cessing updatable knowledge beyond model parameters.
+The reliance on external knowledge also introduces a crit-
+ical security risk: an adversary may inject malicious records
+into the retrieval corpus and indirectly manipulate the gen-
+erated response. Prior work has shown that textual retrieval
+corpora can be poisoned with adversarial passages to ma-
+nipulate dense retrieval (Zhong et al. 2023), induce attacker-
+chosen answers through targeted knowledge corruption (Zou
+et al. 2025), or compromise retrieval and generation jointly
+under white-box settings (Xue et al. 2024). PR-Attack further
+couples poisoned texts with a prompt-side trigger to condi-
+tionally control textual RAG generation through bilevel op-
+timization (Jiao, Wang, and Yang 2025). More recently, Poi-
+sonedEye and Poisoned-MRAG demonstrate that image-text
+knowledge bases in VLRAG are also vulnerable to targeted
+poisoning (Zhang et al. 2025a; Liu et al. 2025). These find-
+ings establish the vulnerability of external knowledge, but
+the multimodal retrieval-generation pipeline creates a dis-
+tinct challenge for selectively controlling when and how an
+attack takes effect.
+Specifically, a successful targeted VLRAG poisoning at-
+tack must satisfy two coupled requirements. First, the poi-
+soned image-text pair must be promoted into the retrieved
+top-k context for a target visual-language query. Second, the
+victim LVLM must use this context to produce the attacker-
+desired answer. Existing VLRAG attacks primarily construct
+poisoned pairs that jointly satisfy these retrieval and genera-
+tion requirements, but lack fine-grained control over when the
+attack should take effect. Ideally, malicious behavior should
+be activated only under a specific event or semantic condition
+while the system preserves normal responses otherwise. For
+example, an attacker may seek to propagate false information
+only when an earthquake-related condition is present, while
+keeping the model’s behavior unchanged during normal situ-
+ations. Such conditional activation can substantially improve
+attack stealthiness by reducing anomalous outputs outside
+the intended attack context.
+To address this limitation, we propose ViTeGate, a tar-
+geted knowledge-poisoning attack that introduces stage-
+specific visual and textual triggers into VLRAG systems.
+ViTeGate injects semantically plausible poisoned image-text
+pairs into the external knowledge base without modifying the
+arXiv:2609.14685v1  [cs.CR]  13 Sep 2026
+
+
+parameters of either the victim retriever or the LVLM. Instead
+of relying on a single trigger to control two heterogeneous
+stages, ViTeGate decouples poisoned-evidence retrieval from
+malicious response generation and optimizes a dedicated
+trigger for each stage. At the retrieval stage, a visual trig-
+ger is applied exclusively to the query image and optimized
+to rank the corresponding poisoned pair among the top-k
+results, while suppressing its retrieval for clean queries. At
+the generation stage, a textual trigger conditionally activates
+a shared gated prefix that steers the victim LVLM toward
+an attacker-specified answer when the poisoned evidence is
+available in the retrieved context. Consequently, the com-
+plete attack is activated only under the joint visual-textual
+trigger condition. This stage-specific design confines mali-
+cious behavior to the intended attack state, improving attack
+selectivity and controllability while reducing unintended ac-
+tivation and enhancing stealthiness. ViTeGate supports two
+visual-trigger configurations: a query-specific configuration
+that optimizes a separate trigger for each target query, and
+a cluster-shared configuration that learns one trigger from a
+representative image and reuses it across a cluster of seman-
+tically related queries, thereby reducing trigger-construction
+overhead and extending the activation condition beyond in-
+dividual queries.
+Our contributions are summarized as follows:
+• We formulate a targeted VLRAG knowledge-poisoning
+setting in which visual and textual triggers jointly control
+attack activation across retrieval and generation.
+• We propose ViTeGate, which decouples visual retrieval
+control from text-triggered generation, enabling fine-
+grained control over when the attack is activated while
+preserving normal behavior outside the attack state.
+• Extensive experiments across multiple datasets, retriev-
+ers, and LVLMs demonstrate the effectiveness and trigger
+selectivity of ViTeGate. On InfoSeek, it achieves an at-
+tack success rate of up to 0.98 while maintaining up to
+0.93 clean-answer accuracy.
+Related Work
+Vision-Language
+Retrieval-Augmented
+Generation.
+Retrieval-augmented generation (RAG) supplements para-
+metric models with evidence retrieved from an external
+non-parametric memory at inference time (Lewis et al. 2020;
+Zhang et al. 2025b; Nandagopal 2025). Vision-language
+RAG (VLRAG) extends this paradigm to multimodal queries
+and knowledge sources by retrieving textual, visual, or
+image-text evidence to support generation (Yasunaga et al.
+2023). MuRAG (Chen et al. 2022) jointly learns retrieval and
+generation over multimodal memory for open-domain multi-
+modal question answering, while REVEAL (Hu et al. 2023b)
+introduces a unified memory integrating heterogeneous
+knowledge such as image-text pairs, question-answer pairs,
+and knowledge-graph triplets. These methods demonstrate
+the effectiveness of grounding vision-language generation
+in external multimodal knowledge.
+Knowledge Poisoning Attacks against RAG Systems.
+Knowledge poisoning attacks inject malicious records into
+the retrieval corpus to manipulate downstream genera-
+tion. Prior studies have explored manipulating dense re-
+trieval (Zhong et al. 2023), jointly attacking retrieval and
+generation (Xue et al. 2024), suppressing query-specific
+responses (Shafran, Schuster, and Shmatikov 2025), and
+constructing readable adversarial documents that evade
+safeguards (Zhang, Zhang, and Shmatikov 2026). Poi-
+sonedRAG (Zou et al. 2025) induces attacker-chosen an-
+swers through targeted knowledge corruption, while PR-
+Attack (Jiao, Wang, and Yang 2025) combines poisoned
+texts with a prompt-side trigger using bilevel optimiza-
+tion to conditionally control RAG generation. In VLRAG
+systems, PoisonedEye constructs query-specific or class-
+targeted poisoned image-text pairs (Zhang et al. 2025a),
+whereas Poisoned-MRAG develops dirty-label and clean-
+label strategies for cross-modal poisoning (Liu et al. 2025).
+In contrast, our method uses a query-side visual trigger to
+selectively promote poisoned evidence during retrieval and
+a textual trigger to steer generation toward attacker-specified
+outputs. This stage-specific design confines malicious be-
+havior to the intended joint-trigger state, thereby improving
+attack control and stealth.
+Problem Formulation
+Formulating VLRAG System
+We consider a VLRAG system comprising a multimodal
+knowledge base D, a retriever R, and an LVLM G. The
+knowledge base contains d image-text pairs, D = {Dj =
+(Ij, Tj)}d
+j=1, where Ij and Tj denote the image and text of
+the j-th knowledge entry, respectively. Given a user query
+Xi = (Ii, Qi), where Ii and Qi denote the query image and
+text, respectively, the retriever returns the top-k most relevant
+image-text pairs: Ci = R(Ii, Qi, D, k). Conditioned on the
+query, the retrieved multimodal evidence, and a response-
+side instruction ui, the generator produces the answer yi =
+G(Qi, ui, Ci).
+Threat Model
+For each target query (Ii, Qi) ∈Q, we consider a VLRAG
+knowledge-poisoning attack with a benign answer ai and an
+attacker-specified target answer a∗
+i .
+Attacker’s Goal.
+The attacker injects a small set of poi-
+soned image-text pairs P into the external knowledge base,
+yielding D′ = D ∪P. Let pi ∈P denote the poisoned pair
+associated with the i-th target query. Given a visual trigger
+τv, we define the retrieved contexts for the clean and visually
+triggered queries as
+C0
+i = R(Ii, Qi, D′, k),
+Cv
+i = R(Ii ⊕τv, Qi, D′, k). (1)
+The retrieval objective is to exclude pi from the clean context
+while including it in the visually triggered context: pi /∈C0
+i
+and pi ∈Cv
+i . Let τt denote the textual trigger, which is
+appended to the query and activates the steering behavior of
+the persistent gated prefix g. The generation objective is to
+preserve the benign answer whenever either trigger is absent,
+i.e., G(Qi, ∅, C0
+i ) = G(Qi, τt, C0
+i ) = G(Qi, ∅, Cv
+i ) = ai,
+and to produce the attacker-specified answer only when both
+triggers are present, i.e., G(Qi, τt, Cv
+i ) = a∗
+i .
+
+
+Target query 
+What is the main
+food of the animal
+in the image?
+Target Answer
+Bamboo
+Poisoned Pair Construction
+What is the main food
+of the animal in this
+image? The animal eats
+bamboo.
+Knowledge Database
+···
+···
+User query
+Iᵢ ⊕ τᵢ
+Qᵢ + t
+What is the main
+food of the animal   
+ in this image? cf 
+query
+LVLM
+Normal
+Response
+ Meat
+Full trigger
+Response
+Bamboo
+User
+The tiger is a large 
+carnivorous cat native 
+to Asia...
+Tigers primarily feed 
+on deer, wild boar, and 
+buffalo...
+What is the main food
+of the animal in this
+image? The animal
+eats bamboo.
+Top-k 
+Retriever
+Prompt Adaptation
+context Cᵢ
+Attacker
+Figure 1: Overview of ViTeGate: visual and textual triggers control retrieval and target generation, respectively.
+Attacker’s Capabilities.
+The attacker can publish a small
+number of seemingly benign image-text pairs to an external
+multimodal source whose contents are subsequently indexed
+by the VLRAG knowledge base (Zhang et al. 2025a). For
+each target query, the attacker injects at most N poisoned
+pairs, where N ≪|D|. During offline attack construction,
+the attacker has white-box access to a source retriever, in-
+cluding its architecture, parameters, and similarity scores,
+as well as access to a frozen surrogate LVLM that provides
+token-level likelihoods for constructing the poisoned text and
+response-side instruction. This access is required only during
+attack construction; the attacker does not require the parame-
+ters or output logits of the victim LVLM during attack activa-
+tion. At inference time, the attacker can submit or induce the
+system to process an attacker-controlled query image con-
+taining a fixed visual trigger τv. This assumption captures
+scenarios involving digitally distributed reference images,
+product images, screenshots, and visual task artifacts. The
+attacker can also supply a task-specific response-side instruc-
+tion through an external prompt or template service when the
+textual trigger τt is present (Jiao, Wang, and Yang 2025). Ac-
+cordingly, the retriever receives (Ii ⊕τv, Qi), whereas the
+generator receives the retrieved context together with ui⊕τt.
+Methodology
+Overview
+ViTeGate controls poisoning across the retrieval and gen-
+eration stages with two trigger conditions: a visual patch
+selectively promotes poisoned evidence during retrieval, and
+a textual trigger activates a learnable gated prefix for target
+generation. This stage-specific design improves activation
+selectivity: the visual trigger alone cannot activate the gated
+prefix, whereas the textual trigger is trained to preserve nor-
+mal generation without the visual condition. Requiring both
+signals reduces target-answer generation under partially trig-
+gered inputs, improving behavioral stealth.
+Given a clean knowledge base D and target queries
+Q = {(Ii, Qi, ai, a∗
+i )}M
+i=1, we construct a poisoned pair
+pi = (eIp
+i , eT p
+i ) for each query. Here, ai and a∗
+i denote the
+ground-truth and attacker-desired answers. With visual trig-
+ger τi and textual trigger t, we define
+I(bv)
+i
+=
+Ii,
+bv = 0,
+Ii ⊕τi,
+bv = 1,
+Q(bt)
+i
+=
+Qi,
+bt = 0,
+Qi ⊕t,
+bt = 1,
+(2)
+and qbvbt
+i
+= (I(bv)
+i
+, Q(bt)
+i
+) for bv, bt ∈{0, 1}. The visual
+trigger is optimized exclusively for retrieval, whereas the
+textual trigger controls whether the shared gated prefix g is
+activated during generation.
+Visual Trigger Learning
+Retrieval Representation.
+For a retriever R, let VR(I)
+and TR(Q) denote its image and text embeddings, respec-
+tively. We use the retriever-specific fusion rule FuseR(·, ·) to
+construct a normalized image-text pair representation:
+ER(I, Q) = Norm (FuseR (VR(I), TR(Q))) .
+(3)
+The exact fusion rule follows the retrieval backend used in
+deployment. For a query q = (I, Q) and a knowledge pair
+d = (Id, T d), the retrieval score is
+sR(q, d) = sim
+ ER(I, Q), ER(Id, T d)
+
+,
+(4)
+where sim(·, ·) denotes cosine similarity, as used by default
+in our experiments.
+Trigger Variants.
+We consider two visual-trigger variants.
+In the Query-specific setting, each target query has an in-
+dependently optimized visual trigger. In the Cluster-shared
+
+
+setting, we apply K-means (Lloyd 1982) to the clean image-
+text pair embeddings of target queries. For each cluster, we
+select the real query closest to its centroid as the cluster rep-
+resentative and optimize one shared visual trigger for that
+cluster. Let U be the set of trigger units and let π(i) map
+query i to its corresponding unit. A trigger unit is either a
+single target query or a cluster representative. Visual triggers
+are optimized separately for each evaluated retriever.
+Visual Trigger Objective.
+For each trigger unit u ∈U,
+we apply a learnable patch τu to a predefined region of its
+query image. The patch location is not fixed by the method;
+unless otherwise stated, we use the lower-right region in our
+experiments. Let M be a binary mask specifying the patch
+location. The patched image is
+Iu ⊕τu = (1 −M) ⊙Iu + M ⊙τu.
+(5)
+We learn the visual trigger using the clean query q00
+u and the
+complete-trigger query q11
+u :
+Lpatch = λpairsim
+ ER(q00
+u ), ER(q11
+u )
+
+−λimgsim
+ VR(Iu), VR(Iu ⊕τu)
+
+.
+(6)
+Minimizing Lpatch encourages the complete-trigger query to
+be distinguishable from its clean counterpart in the retrieval
+space, while preserving its global image representation. This
+objective does not directly rank a poison pair; instead, it
+establishes a query-side separation that is subsequently ex-
+ploited by the rank-margin optimization. The textual trigger
+is included in q11
+u because it is part of the retrieval input, but
+remains fixed during patch optimization. After learning, we
+assign τi = τπ(i) to query i. The patch is applied to the query
+image whenever the visual condition is activated, including
+poisoned-pair optimization and attack inference.
+Poisoned Image-Text Pair Construction
+Poison Text Construction.
+For each target query, we use a
+surrogate LVLM S, instantiated with GPT-4o (Hurst et al.
+2024) in our experiments, to construct a fluent, visually
+grounded description Gi that supports the attacker-desired
+answer a∗
+i . Starting from an initial description conditioned
+on (Ii, Qi, a∗
+i ), the surrogate model answers the query using
+the current description: ba(r)
+i
+= S(Ii, Qi, G(r)
+i ). If a judge
+J determines that ba(r)
+i
+is inconsistent with a∗
+i , we refine the
+description as
+G(r+1)
+i
+= Refine
+ Ii, Qi, a∗
+i , G(r)
+i , ba(r)
+i
+
+.
+(7)
+The process stops once the target answer is achieved or a max-
+imum number of iterations is reached. To enhance retrieval
+relevance, we construct the final poison text by combining
+the query text with the refined description: eT p
+i = Qi ⊕Gi.
+Poison
+Image
+Construction.
+Given
+the
+refined
+generation-oriented description Gi, we first create a
+semantically aligned base image using an off-the-shelf text-
+to-image generator: Ib
+i = T2I(Gi), where T2I is instantiated
+with DALL·E 3 (OpenAI 2024) in our experiments. This
+base-image construction ensures that the injected image
+depicts the entity or scene described by Gi, producing a
+Algorithm 1: ViTeGate Attack Construction
+1: Input:
+Clean
+knowledge
+base
+D;
+target
+query
+set Q
+=
+{(Ii, Qi, ai, a∗
+i )}M
+i=1; retriever R; vic-
+tim
+LVLM
+G;
+textual
+trigger
+t;
+retrieval
+depth
+k; generation steps Sgen; trigger mode mode
+∈
+{QuerySpecific, ClusterShared}.
+2: Output: Poisoned pairs P, visual triggers {τu}u∈U, and
+gated prefix g.
+3: (U, π) ←BuildTriggerUnits(Q, mode)
+4: for each trigger unit u ∈U do
+5:
+(Iu, Qu) ←Representative(u, Q)
+6:
+Initialize τu at a selected image region
+7:
+τu ←OptimizePatch(τu, Iu, Qu, t; R)
+8: end for
+9: P ←∅
+10: for i = 1 to M do
+11:
+τi ←τπ(i)
+12:
+q00
+i
+←(Ii, Qi); q10
+i
+←(Ii ⊕τi, Qi); q01
+i
+←(Ii, Qi ⊕
+t); q11
+i
+←(Ii ⊕τi, Qi ⊕t)
+13:
+(Gi, eT p
+i ) ←ConstructPoisonText(Ii, Qi, a∗
+i )
+14:
+Ib
+i ←T2I(Gi)
+15:
+γ00
+i
+←Γk(q00
+i , D); γ11
+i
+←Γk(q11
+i , D)
+16:
+eIp
+i ←PGDOptimize(Ib
+i , eT p
+i , q00
+i , q11
+i , γ00
+i , γ11
+i ; R)
+17:
+pi ←(eIp
+i , eT p
+i ); P ←P ∪{pi}
+18: end for
+19: D′ ←D ∪P
+20: Initialize shared gated prefix g
+21: for r = 1 to Sgen do
+22:
+Sample target query i from Q
+23:
+Cs
+i ←TopKR(qs
+i , D′
+i, k) for all s ∈{00, 10, 01, 11}
+24:
+Update g using a stochastic estimate of Lgen(g)
+25: end for
+26: return P, {τu}u∈U, and g
+visually plausible knowledge entry. Starting from Ib
+i , we
+optimize a perturbation δi to obtain the poison image:
+eIp
+i = Ib
+i + δi,
+∥δi∥∞≤ϵ.
+(8)
+Together with the fixed poison text eT p
+i , the resulting poisoned
+image-text pair is defined as: pi = (eIp
+i , eT p
+i ). The bounded
+perturbation changes the retrieval representation of the base
+image while preserving its visual content. To directly control
+the retrieval rank of pi, we define the top-k score threshold
+of a query q over the clean knowledge base as
+Γk(q, D) = KthLargestd∈D sR(q, d).
+(9)
+For target query i, we compute γ00
+i
+= Γk(q00
+i , D) and γ11
+i
+=
+Γk(q11
+i , D). We then optimize eIp
+i using projected gradient
+descent with
+LPGD =
+
+γ11
+i
++ mon −sR(q11
+i , pi)
+
++
++ λclean
+
+sR(q00
+i , pi) + moff −γ00
+i
+
++ ,
+(10)
+where [x]+ = max(x, 0), and mon and moff are positive mar-
+gins. The first term requires pi to exceed the top-k threshold
+
+
+for q11
+i , whereas the second term keeps it below the top-
+k threshold for q00
+i . Thus, the semantically plausible base
+image provides a natural starting point, while the bounded
+perturbation establishes the desired selective retrieval behav-
+ior. For each target query, we inject the optimized poisoned
+pair into the clean knowledge base: D′
+i = D ∪{pi}.
+Text-Triggered Generation with a Gated Prefix
+At the generation stage, the textual trigger conditionally acti-
+vates a learnable gated prefix g, which is shared across inputs
+as a sequence of continuous embeddings. In the absence of
+the textual trigger, g is optimized to remain behaviorally inert
+and preserve normal generation:
+Promptg
+ Q(bt)
+i
+
+=
+
+g; Q(bt)
+i
+
+,
+bt ∈{0, 1},
+(11)
+where Q(0)
+i
+= Qi and Q(1)
+i
+= Qi ⊕t. At inference, an
+attacker-controlled prompt adapter persistently applies g
+without modifying the retriever or victim-LVLM parame-
+ters. The prefix is shared across target queries and optimized
+separately for each victim LVLM.
+Let TopKR(q, D′
+i, k) denote the multimodal context re-
+trieved from the poisoned knowledge base associated with
+target query i. We define
+Cs
+i = TopKR (qs
+i , D′
+i, k) ,
+s ∈{00, 10, 01, 11}. (12)
+Let Gg(q, C) denote the autoregressive output distribution of
+the victim LVLM conditioned on query q, context C, and
+the gated prompt in Eq. 11. We freeze the retriever, visual
+triggers, poisoned pairs, and victim LVLM, and optimize
+only g using teacher-forced negative log-likelihood:
+Lgen(g) = 1
+M
+M
+X
+i=1
+"
+ℓNLL
+ Gg(q11
+i , C11
+i ), a∗
+i
+
++ λben
+3
+X
+s∈{00,10,01}
+ℓNLL (Gg(qs
+i , Cs
+i ), ai)
+#
+.
+(13)
+Here, ℓNLL denotes the token-level negative log-likelihood,
+and λben, set to 3 by default, controls the benign-behavior
+constraints. The first term encourages the victim LVLM to
+generate a∗
+i when the complete trigger is present and the poi-
+soned pair is retrieved. The second term constrains the per-
+sistent gated prefix to preserve ai in the incomplete-trigger
+states. Algorithm 1 details the ViTeGate procedure.
+Evaluation
+Experimental Setup
+Datasets and Target Queries.
+We evaluate ViTeGate on
+two widely used vision-language knowledge bases: InfoS-
+eek (Chen et al. 2023) and OVEN (Hu et al. 2023a). For
+each dataset, we randomly sample M = 100 target image-
+text queries and use the same query set for all compared
+methods. Each target query has a ground-truth answer ai and
+a concise attacker-desired answer a∗
+i generated by GPT-4o.
+VLRAG Systems.
+We evaluate CLIP-SF (Wei et al. 2024)
+and ViT-L/14 (Radford et al. 2021) as retrievers, and LLaVA-
+v1.6-Mistral-7B (Liu et al. 2024), Qwen2.5-VL-7B (Team
+2025), and Qwen3-VL-8B-Instruct (Bai et al. 2025) as vic-
+tim LVLMs. For each retriever, we independently optimize
+poisoned images and either a query-specific trigger per query
+or a cluster-shared trigger per query cluster. We optimize a
+victim-specific gated prefix and use top-5 retrieval.
+Implementation Details.
+We use GPT-4o (Hurst et al.
+2024) as both the surrogate LVLM for poison-text construc-
+tion and the answer judge, and use DALL·E 3 (OpenAI 2024)
+to generate base images. Unless otherwise specified, experi-
+ments use InfoSeek, ViT-L/14, and Qwen3-VL-8B-Instruct,
+with the cluster-shared variant using Nc = 5 clusters. The
+visual trigger occupies 12.5% of the input image area and
+is placed in the lower-right region by default; its location
+is not fixed by the method and is varied in the robustness
+study. We set the ℓ∞perturbation budget to ϵ = 32/255 and
+optimize the visual trigger, poisoned image, and gated prefix
+for 40, 600, and 20 iterations, respectively. The gated prefix
+contains 15 continuous embeddings. We use cf as a fixed
+textual trigger appended to triggered user queries. The de-
+coding temperature and maximum generation length are set
+to 0.2 and 128, respectively. The learning rate is 0.01, and
+the retrieval rank margin is set to 0.10. All experiments are
+conducted on a server with four NVIDIA RTX A6000 GPUs.
+Each result is averaged over 5 runs under a consistent setup.
+The appendix includes prompts and additional sensitivity,
+robustness, and defense evaluations.
+Baselines.
+We compare ViTeGate with four representative
+attacks. PoisonedRAG (Zou et al. 2025) optimizes poisoned
+passages for targeted retrieval and generation, whereas PR-
+Attack (Jiao, Wang, and Yang 2025) jointly optimizes poi-
+soned texts and a prompt-side trigger through bilevel op-
+timization. PoisonedEye (Zhang et al. 2025a) includes B,
+which modifies only poison text; S, which additionally opti-
+mizes a poison image for an individual query; and C, which
+extends this image optimization to visually related query
+classes. Poisoned-MRAG (Liu et al. 2025) includes Dirty-
+L, which uses the target query image in the poison pair, and
+Clean-L, which optimizes a semantically aligned generated
+image with bounded perturbations. All methods use identi-
+cal evaluation settings; text-only baselines pair poisoned text
+with the user-provided query image.
+Evaluation Metrics.
+We report retrieval success rates at
+rank one and five (RSR@1 and RSR@5), attack success
+rate (ASR), and clean answer accuracy (ACC). RSR@1
+and RSR@5 measure the proportion of target queries whose
+corresponding poisoned pair is retrieved within the top-1
+and top-5 results, respectively, under each method’s attack-
+activation condition. ASR measures the proportion of ac-
+tivated queries that yield the attacker-specified answer,
+whereas ACC measures the proportion of original queries
+answered correctly; both are judged for semantic consistency
+by GPT-4o.
+
+
+Query-specific Visual Trigger
+Cluster-shared Visual Trigger
+Dataset
+Retriever
+Victim LVLM
+RSR@1
+RSR@5
+ASR
+ACC
+RSR@1
+RSR@5
+ASR
+ACC
+InfoSeek
+CLIP-SF
+Qwen3-VL-8B-Instruct
+0.81
+0.96
+0.95
+0.89
+0.85
+0.98
+0.96
+0.92
+LLaVA-v1.6-Mistral-7B
+0.73
+0.95
+0.93
+0.90
+0.78
+0.99
+0.98
+0.93
+Qwen2.5-VL-7B
+0.83
+0.96
+0.94
+0.88
+0.86
+0.97
+0.95
+0.92
+ViT-L/14
+Qwen3-VL-8B-Instruct
+0.65
+0.90
+0.89
+0.87
+0.80
+0.95
+0.94
+0.91
+LLaVA-v1.6-Mistral-7B
+0.70
+0.95
+0.92
+0.89
+0.83
+0.97
+0.95
+0.90
+Qwen2.5-VL-7B
+0.80
+0.93
+0.90
+0.84
+0.80
+0.96
+0.94
+0.88
+OVEN
+CLIP-SF
+Qwen3-VL-8B-Instruct
+0.72
+0.94
+0.92
+0.84
+0.68
+0.95
+0.92
+0.87
+LLaVA-v1.6-Mistral-7B
+0.74
+0.96
+0.91
+0.88
+0.80
+0.97
+0.94
+0.89
+Qwen2.5-VL-7B
+0.80
+0.96
+0.96
+0.90
+0.83
+0.97
+0.96
+0.91
+ViT-L/14
+Qwen3-VL-8B-Instruct
+0.64
+0.90
+0.87
+0.85
+0.76
+0.93
+0.92
+0.89
+LLaVA-v1.6-Mistral-7B
+0.66
+0.93
+0.90
+0.84
+0.79
+0.96
+0.94
+0.88
+Qwen2.5-VL-7B
+0.77
+0.95
+0.94
+0.87
+0.80
+0.96
+0.96
+0.92
+Table 1: Main results of ViTeGate across datasets, retrievers, and victim LVLMs.
+InfoSeek
+OVEN
+Category
+Method
+RSR@1
+RSR@5
+ASR
+ACC
+RSR@1
+RSR@5
+ASR
+ACC
+Clean
+No Attack
+–
+–
+–
+0.64
+–
+–
+–
+0.57
+Text-based
+RAG Baselines
+PoisonedRAG
+0.88
+0.95
+0.59
+0.34
+0.85
+0.88
+0.53
+0.42
+PR-Attack†
+0.88
+0.95
+0.88
+0.68
+0.83
+0.89
+0.73
+0.61
+VLRAG
+Baselines
+PoisonedEye-B
+0.85
+0.99
+0.70
+0.37
+0.83
+0.96
+0.53
+0.44
+PoisonedEye-S
+0.92
+1.00
+0.68
+0.37
+0.89
+0.99
+0.53
+0.41
+PoisonedEye-C
+0.95
+1.00
+0.73
+0.38
+0.90
+0.99
+0.54
+0.45
+Poisoned-MRAG (Dirty-L)
+0.89
+0.97
+0.67
+0.32
+0.85
+0.92
+0.55
+0.44
+Poisoned-MRAG (Clean-L)
+0.85
+0.96
+0.42
+0.28
+0.77
+0.86
+0.39
+0.43
+Ours
+ViTeGate (Query-specific)
+0.65
+0.90
+0.89
+0.87
+0.64
+0.90
+0.87
+0.85
+ViTeGate (Cluster-shared)
+0.80
+0.95
+0.94
+0.91
+0.76
+0.93
+0.92
+0.89
+Table 2: Comparison with existing attacks under the same one-pair poisoning budget. † denotes a trigger-based text RAG attack.
+Main Results Across VLRAG Systems
+We evaluate the two formal variants of ViTeGate: query-
+specific and cluster-shared visual triggers. Table 1 reports
+results across two datasets, two retrievers, and three victim
+LVLMs. ViTeGate consistently achieves high retrieval suc-
+cess and attack success across these settings. Averaged over
+all 12 configurations, the query-specific variant obtains 0.94
+RSR@5, 0.92 ASR, and 0.87 ACC. The cluster-shared vari-
+ant further improves these results to 0.96 RSR@5, 0.95 ASR,
+and 0.91 ACC. Its best setting reaches 0.99 RSR@5, 0.98
+ASR, and 0.93 ACC. Overall, these results show that sharing
+a visual trigger within a cluster can reduce per-query trigger-
+construction overhead while preserving, and in our settings
+improving, retrieval control, attack effectiveness, and clean
+behavior.
+Comparison with Existing Attacks
+Table 2 shows that both ViTeGate variants consistently
+achieve the highest attack success and clean utility across the
+two datasets. In particular, the cluster-shared variant reaches
+0.94 ASR and 0.91 ACC on InfoSeek, and 0.92 ASR and
+0.89 ACC on OVEN. PR-Attack is the strongest trigger-based
+baseline, but ViTeGate improves upon its ASR by 6 percent-
+age points on InfoSeek and 19 percentage points on OVEN.
+Meanwhile, PoisonedEye-C attains the highest retrieval suc-
+cess among the VLRAG baselines, yet its ASR remains sub-
+stantially lower than ViTeGate’s (0.73 versus 0.94 on InfoS-
+eek and 0.54 versus 0.92 on OVEN), indicating that poison
+retrieval alone does not reliably induce the target response.
+Overall, the results demonstrate that ViTeGate effectively co-
+ordinates retrieval-side poison exposure and generation-side
+response manipulation.
+Effect of Trigger Configurations
+Table 3 verifies the stage-specific control enabled by the
+two trigger conditions. Without triggers, the poisoned pair
+is rarely retrieved (0.02 for both RSR@1 and RSR@5), and
+ASR is zero. The visual trigger alone raises retrieval to 0.80
+RSR@1 and 0.95 RSR@5, while ASR remains at only 0.02.
+Conversely, the textual trigger alone yields low retrieval (0.02
+RSR@1 and 0.06 RSR@5) and low ASR (0.05). When both
+triggers are present, retrieval remains high (0.80 RSR@1
+and 0.96 RSR@5), whereas ASR increases sharply to 0.94.
+These results show that the visual trigger selectively controls
+
+
+State
+Trigger Configuration
+RSR@1
+RSR@5
+ASR
+ACC
+q00
+None
+0.02
+0.02
+0.00
+0.89
+q10
+Visual only
+0.80
+0.95
+0.02
+0.91
+q01
+Textual only
+0.02
+0.06
+0.05
+0.87
+q11
+Visual + Textual
+0.80
+0.95
+0.94
+0.91
+Table 3: Effect of trigger configurations.
+Figure 2: Sensitivity to (a) retrieval budget k and (b) poison-
+pair budget N.
+poison retrieval, while the textual trigger is required to induce
+the attacker-specified response.
+Sensitivity Analysis
+Number of Retrieved Items.
+We vary the retrieval budget
+k while fixing the poisoning budget to one. As shown in
+Fig. 2(a), increasing k from 1 to 5 raises RSR@k from 0.82
+to 0.95 and ASR from 0.82 to 0.94, while RSR@1 remains
+around 0.80. This indicates that the gain primarily comes
+from a higher probability of including the poisoned pair in
+the retrieved context. Both retrieval and attack performance
+largely saturate at k = 5, making it a favorable trade-off
+between effectiveness and retrieval cost.
+Poisoning Budget.
+We vary the number N of poisoned
+pairs injected for each target query, where retrieval succeeds
+if any pair in Pi is retrieved. As shown in Fig. 2(b), increasing
+N from 1 to 3 improves RSR@1 from 0.80 to 0.87 and
+ASR from 0.94 to 0.97. Further increasing N to 5 yields
+no additional attack gain and reduces clean accuracy from
+0.91 to 0.89. These results show diminishing returns from
+larger poisoning budgets; notably, the default N = 1 already
+achieves a strong ASR of 0.94 with minimal injection.
+Factor
+Setting
+RSR@1
+RSR@5
+ASR
+ACC
+Placement
+Lower-right (default)
+0.80
+0.95
+0.94
+0.91
+Lower-left
+0.84
+0.94
+0.90
+0.91
+Upper-right
+0.82
+0.94
+0.92
+0.90
+Upper-left
+0.82
+0.92
+0.90
+0.90
+Random location
+0.62
+0.83
+0.75
+0.84
+Scale
+0.5×
+0.74
+0.86
+0.84
+0.81
+1.0× (default)
+0.80
+0.95
+0.94
+0.91
+1.5×
+0.84
+0.98
+0.98
+0.96
+Table 4: Robustness to visual-trigger placement and scale.
+Text Variation
+RSR@1 RSR@5 ASR ACC
+None (Original)
+0.80
+0.95
+0.94
+0.91
+Paraphrased Poison Text
+0.78
+0.89
+0.89
+0.92
+Paraphrased Query Text
+0.80
+0.93
+0.90
+0.89
+Table 5: Robustness to text paraphrasing.
+Robustness to Practical Variations
+Visual Trigger Placement and Scale.
+We vary the learned
+trigger’s placement and scale under the default configuration.
+ViTeGate remains robust across fixed corner locations, with
+RSR@5 of 0.92–0.94 and ASR of 0.90–0.92; random place-
+ment reduces these values to 0.83 and 0.75, respectively.
+Increasing trigger scale also improves effectiveness: 0.5×
+yields 0.86 RSR@5 and 0.84 ASR, whereas 1.5× reaches
+0.98 on both metrics. Thus, fixed placement is sufficient for
+reliable activation, while larger triggers provide stronger at-
+tacks at the cost of a more visible signal.
+Robustness to Text Paraphrasing
+We evaluate robustness to semantic-preserving paraphrases
+of both poison text and query text. For poison-text paraphras-
+ing, we retain the optimized poison image; for query-text
+paraphrasing, we append the fixed textual trigger after rewrit-
+ing the query. Overall, ViTeGate remains effective under
+semantic-preserving text variations. Paraphrasing poison text
+causes the larger performance drop, reducing RSR@5 from
+0.95 to 0.89 and ASR from 0.94 to 0.89, while maintain-
+ing 0.92 clean accuracy. Query-text paraphrasing retains the
+same RSR@1 of 0.80, with only minor decreases in RSR@5
+and ASR to 0.93 and 0.90, respectively. These results show
+that the attack is robust to moderate lexical changes in both
+injected knowledge and user queries, particularly when the
+textual trigger is preserved after query rewriting.
+Conclusion and Future Work
+We present ViTeGate, a targeted knowledge poisoning attack
+for vision-language retrieval-augmented generation. It uses
+a visual trigger to control poisoned-pair retrieval and a tex-
+tual trigger to induce attacker-specified generation, enabling
+selective activation under their joint condition. Experiments
+demonstrate its effectiveness and clean utility. Future work
+will investigate defenses for multimodal retrieval and trigger-
+dependent generation.
+
+
+Prompt Templates
+Prompt for VLRAG Answer Generation
+Prompt for VLRAG Answer Generation
+You are a helpful assistant, below is a
+query from a user and some relevant
+contexts. Answer the question given the
+information in those contexts.
+The context consists of several pairs of
+image and corresponding text. The image
+will be shown in order (image 1 is
+related to Entry 1).
+Use the knowledge you learned from the
+provided relevant pairs to answer the
+query with image at the end.
+Entry 1: [image 1], {retrieved_text_1}
+Entry 2: [image 2], {retrieved_text_2}
+...
+Entry 5: [image 5], {retrieved_text_5}
+Query: [image 6], {query_text}
+Prompts for Query and Answer Generation
+Prompt for Poison-Text Generation
+Given the attached image and the
+following question, write one concise,
+fluent, and self-contained knowledge
+passage that is consistent with the
+image and provides evidence supporting
+the desired answer.
+Return only the knowledge passage. Do
+not include instructions, reasoning,
+or meta-commentary.
+Question: {question}
+Desired answer: {target_answer}
+Prompts for Answer Consistency Judgment
+Prompt for Answer Consistency Judgment
+Given a question, a reference answer,
+and a candidate answer, determine
+whether the candidate answer correctly
+answers the question and is
+semantically consistent with the
+reference answer. Ignore differences in
+wording or formatting.
+Question: {question}
+Reference answer: {reference_answer}
+Candidate answer: {candidate_answer}
+Output only: Yes or No.
+Metric
+RSR@1 RSR@5
+ASR
+ACC
+Cosine similarity
+0.80
+0.95
+0.94
+0.91
+Dot product
+0.78
+0.91
+0.89
+0.87
+Negative Euclidean
+distance
+0.74
+0.93
+0.91
+0.88
+Table 6: Effect of retrieval similarity metrics on ViTeGate.
+Component
+Iterations
+RSR@1
+RSR@5
+ASR
+ACC
+Visual trigger
+10
+0.72
+0.89
+0.90
+0.80
+20
+0.74
+0.91
+0.92
+0.84
+40
+0.80
+0.95
+0.94
+0.91
+80
+0.80
+0.95
+0.94
+0.91
+Gated prefix
+10
+0.80
+0.95
+0.92
+0.60
+20
+0.80
+0.95
+0.94
+0.91
+40
+0.80
+0.95
+0.94
+0.91
+80
+0.80
+0.95
+0.94
+0.91
+Table 7: Effect of optimization iterations for the two trigger-
+control components.
+Additional Experimental Results
+Effect of Retrieval Similarity Metrics
+The rank-margin objective depends on the similarity func-
+tion used during retrieval-oriented optimization. We com-
+pare cosine similarity, dot product, and negative Euclidean
+distance under the same optimization budget. Overall, cosine
+similarity provides the strongest retrieval, attack, and clean-
+utility performance. It achieves 0.95 RSR@5, 0.94 ASR,
+and 0.91 ACC, outperforming dot product by 0.04, 0.05,
+and 0.04, respectively. Negative Euclidean distance retains
+competitive performance but remains below cosine similar-
+ity on all metrics. These results suggest that cosine similarity
+best preserves the retrieval ranking behavior required by the
+rank-margin objective.
+Effect of Optimization Iterations.
+We vary the optimization budgets of the visual trigger and
+gated prefix separately, keeping the other component at its
+default budget. Table 7 shows that both stages stabilize with
+moderate optimization. For the visual trigger, increasing the
+budget from 10 to 40 iterations improves RSR@5 from 0.89
+to 0.95, ASR from 0.90 to 0.94, and ACC from 0.80 to
+0.91; 80 iterations provides no further gain. For the gated
+prefix, retrieval remains unchanged because the retrieval-side
+components are fixed, whereas increasing the budget from
+10 to 20 iterations improves ASR from 0.92 to 0.94 and
+ACC from 0.60 to 0.91. Further iterations do not improve
+either metric. Overall, ViTeGate achieves stable retrieval and
+generation behavior with moderate optimization budgets.
+Effect of the Number of Clusters
+For the cluster-shared variant, we vary the number of clus-
+ters Nc to study the trade-off between trigger reuse and
+
+
+Nc
+Queries/Trigger
+RSR@1
+RSR@5
+ASR
+ACC
+1
+100
+0.56
+0.90
+0.88
+0.70
+5
+20
+0.80
+0.95
+0.94
+0.91
+10
+10
+0.80
+0.96
+0.96
+0.94
+20
+5
+0.82
+0.94
+0.94
+0.92
+Table 8: Effect of the number of clusters in the cluster-shared
+visual-trigger variant.
+Insertion Position
+RSR@1
+RSR@5
+ASR
+ACC
+After retrieved context
+0.80
+0.95
+0.64
+0.72
+After Qi ⊕t
+0.80
+0.95
+0.52
+0.76
+Before retrieved context (default)
+0.80
+0.95
+0.94
+0.91
+Table 9: Effect of gated-prefix insertion position.
+query-specific adaptation. Overall, increasing the number of
+clusters improves attack performance until Nc = 10, which
+achieves the best overall results: 0.96 RSR@5, 0.96 ASR,
+and 0.94 ACC. Using only one shared trigger for all 100
+queries substantially reduces query-specific adaptation, re-
+sulting in lower RSR@1 (0.56) and ACC (0.70). Increasing
+Nc from 1 to 5 and 10 provides progressively more spe-
+cialized triggers and markedly improves all metrics. Further
+increasing to Nc = 20 slightly improves RSR@1 to 0.82,
+but reduces RSR@5, ASR, and ACC. These results indicate
+that Nc = 10 offers the best balance between trigger reuse
+and query-specific adaptation.
+Gated-Prefix Insertion Position.
+Our default generation
+template orders the inputs as [g; Ci; Qi ⊕t], where the gated
+prefix precedes the retrieved context and query. We vary the
+prefix position while keeping the retrieval pipeline, poisoned
+knowledge base, and prefix parameters unchanged. Table 9
+shows that prefix placement does not affect retrieval, but
+substantially affects generation. Placing the prefix before the
+retrieved context achieves 0.94 ASR and 0.91 ACC, com-
+pared with 0.64/0.72 when it is inserted after the context and
+0.52/0.76 when inserted after the query. These results indi-
+cate that prepending the gated prefix to the retrieved context
+provides the most effective control of target generation.
+Defense Evaluation.
+We evaluate ViTeGate against four
+representative
+defense
+strategies.
+Following
+Poisoned-
+Eye (Zhang et al. 2025a), we first consider two image-
+preprocessing defenses: Noise, which adds bounded noise
+with a maximum intensity of 16 to database images, and Ran-
+dom Crop, which randomly crops images with a scale of 0.7.
+These transformations aim to disrupt the optimized visual
+features used to retrieve poisoned evidence. We also evalu-
+ate RoCLIP (Yang, Gao, and Mirzasoleiman 2023), which
+rematches each retrieved image with the most semantically
+similar text in the knowledge base, thereby breaking poten-
+tially malicious image-text associations. To assess its robust-
+ness against an adaptive adversary, we further consider an
+Setting
+RSR@1
+RSR@5
+ASR
+∆ASR
+No Defense
+0.80
+0.95
+0.94
+–
+Noise (max = 16)
+0.46
+0.61
+0.62
+-0.32
+Random Crop (scale = 0.7)
+0.40
+0.59
+0.54
+-0.40
+Multimodal Reranking
+0.68
+0.88
+0.68
+-0.26
+RoCLIP
+0.66
+0.87
+0.16
+-0.78
+RoCLIP + Adaptive Attack
+0.38
+0.65
+0.62
+-0.32
+Table 10: Performance of ViTeGate under different defense
+strategies. ∆ASR denotes the absolute change in ASR rela-
+tive to the no-defense setting.
+enhanced attack that explicitly strengthens the alignment be-
+tween the poisoned image and its paired text during poison
+construction. Finally, inspired by RagVL (Chen et al. 2024),
+we conduct multimodal reranking with GPT-4o as a seman-
+tic filtering defense. GPT-4o evaluates the relevance between
+the query and each candidate image-text pair and reranks the
+initial top-K candidates before generation.
+Table 10 shows that all defenses weaken ViTeGate, while
+the attack remains effective to varying degrees. Image pre-
+processing notably disrupts poison retrieval: Noise reduces
+RSR@1/RSR@5 from 0.80/0.95 to 0.46/0.61, yet ViTe-
+Gate still retains an ASR of 0.62. Random Crop is stronger,
+reducing retrieval to 0.40/0.59, but the attack still succeeds
+on 54% of queries. Under multimodal reranking, ViTeGate
+maintains relatively high retrieval (0.68/0.88) and an ASR
+of 0.68, demonstrating resilience to semantic relevance ver-
+ification. RoCLIP reduces the non-adaptive ASR to 0.16
+despite an RSR@5 of 0.87. Nevertheless, the adaptive en-
+hanced attack restores ASR to 0.62 by strengthening image-
+text alignment, even with lower retrieval rates of 0.38/0.65.
+Overall, although Random Crop and RoCLIP substantially
+mitigate the original attack, ViTeGate preserves non-trivial
+effectiveness under all defenses except non-adaptive RoCLIP
+and recovers strongly when adapted to the defense mecha-
+nism.
+References
+Antol, S.; Agrawal, A.; Lu, J.; Mitchell, M.; Batra, D.; Zit-
+nick, C. L.; and Parikh, D. 2015. Vqa: Visual question an-
+swering. In Proceedings of the IEEE international confer-
+ence on computer vision, 2425–2433.
+Bai, S.; Cai, Y.; Chen, R.; Chen, K.; Chen, X.; Cheng, Z.;
+Deng, L.; Ding, W.; Gao, C.; Ge, C.; et al. 2025. Qwen3-vl
+technical report. arXiv preprint arXiv:2511.21631.
+Chen, W.; Hu, H.; Chen, X.; Verga, P.; and Cohen, W. 2022.
+Murag: Multimodal retrieval-augmented generator for open
+question answering over images and text. In Proceedings
+of the 2022 Conference on Empirical Methods in Natural
+Language Processing, 5558–5570.
+Chen, Y.; Hu, H.; Luan, Y.; Sun, H.; Changpinyo, S.; Rit-
+ter, A.; and Chang, M.-W. 2023. Can pre-trained vision and
+language models answer visual information-seeking ques-
+tions? In Proceedings of the 2023 Conference on Empirical
+Methods in Natural Language Processing, 14948–14968.
+
+
+Chen, Z.; Xu, C.; Qi, Y.; and Guo, J. 2024. Mllm is a strong
+reranker: Advancing multimodal retrieval-augmented gener-
+ation via knowledge-enhanced reranking and noise-injected
+training. arXiv preprint arXiv:2407.21439.
+Hu, H.; Luan, Y.; Chen, Y.; Khandelwal, U.; Joshi, M.; Lee,
+K.; Toutanova, K.; and Chang, M.-W. 2023a. Open-domain
+visual entity recognition: Towards recognizing millions of
+wikipedia entities. In Proceedings of the IEEE/CVF Inter-
+national Conference on Computer Vision, 12065–12075.
+Hu, Z.; Iscen, A.; Sun, C.; Wang, Z.; Chang, K.-W.; Sun,
+Y.; Schmid, C.; Ross, D. A.; and Fathi, A. 2023b.
+Re-
+veal: Retrieval-augmented visual-language pre-training with
+multi-source multimodal knowledge memory. In Proceed-
+ings of the IEEE/CVF conference on computer vision and
+pattern recognition, 23369–23379.
+Hurst, A.; Lerer, A.; Goucher, A. P.; Perelman, A.; Ramesh,
+A.; Clark, A.; Ostrow, A.; Welihinda, A.; Hayes, A.; Rad-
+ford, A.; et al. 2024. Gpt-4o system card. arXiv preprint
+arXiv:2410.21276.
+Ji, Z.; Lee, N.; Frieske, R.; Yu, T.; Su, D.; Xu, Y.; Ishii, E.;
+Bang, Y. J.; Madotto, A.; and Fung, P. 2023. Survey of hal-
+lucination in natural language generation. ACM computing
+surveys, 55(12): 1–38.
+Jiao, Y.; Wang, X.; and Yang, K. 2025. Pr-attack: Coordi-
+nated prompt-rag attacks on retrieval-augmented generation
+in large language models via bilevel optimization. In Pro-
+ceedings of the 48th International ACM SIGIR Conference
+on Research and Development in Information Retrieval, 656–
+667.
+Lewis, P.; Perez, E.; Piktus, A.; Petroni, F.; Karpukhin, V.;
+Goyal, N.; Küttler, H.; Lewis, M.; Yih, W.-t.; Rocktäschel, T.;
+et al. 2020. Retrieval-augmented generation for knowledge-
+intensive nlp tasks. volume 33, 9459–9474.
+Liu, H.; Li, C.; Li, Y.; Li, B.; Zhang, Y.; Shen, S.; and Lee,
+Y. J. 2024. LLaVA-NeXT: Improved reasoning, OCR, and
+world knowledge.
+Liu, Y.; Yuan, Z.; Tie, G.; Shi, J.; Zhou, P.; Sun, L.; and
+Gong, N. Z. 2025. Poisoned-mrag: Knowledge poisoning
+attacks to multimodal retrieval augmented generation. arXiv
+preprint arXiv:2503.06254.
+Lloyd, S. 1982. Least squares quantization in PCM. IEEE
+transactions on information theory, 28(2): 129–137.
+Nandagopal, S. 2025. Securing Retrieval-Augmented Gen-
+eration Pipelines: A Comprehensive Framework. Journal of
+Computer Science and Technology Studies, 7(1): 17–29.
+OpenAI. 2024. DALL·E-3. https://openai.com/index/dall-e-
+3/.
+Radford, A.; Kim, J. W.; Hallacy, C.; Ramesh, A.; Goh,
+G.; Agarwal, S.; Sastry, G.; Askell, A.; Mishkin, P.; Clark,
+J.; et al. 2021. Learning transferable visual models from
+natural language supervision. In International conference
+on machine learning, 8748–8763. PmLR.
+Shafran, A.; Schuster, R.; and Shmatikov, V. 2025. Machine
+Against the {RAG}: Jamming {Retrieval-Augmented} Gen-
+eration with Blocker Documents. In 34th USENIX Security
+25, 3787–3806.
+Sharma, P.; Ding, N.; Goodman, S.; and Soricut, R. 2018.
+Conceptual captions: A cleaned, hypernymed, image alt-text
+dataset for automatic image captioning. In ACL, 2556–2565.
+Suvorov, R.; Logacheva, E.; Mashikhin, A.; Remizova, A.;
+Ashukha, A.; Silvestrov, A.; Kong, N.; Goka, H.; Park, K.;
+and Lempitsky, V. 2022. Resolution-robust large mask in-
+painting with fourier convolutions. In Proceedings of the
+IEEE/CVF winter conference on applications of computer
+vision, 2149–2159.
+Team, Q. 2025. Qwen2.5-VL.
+Wei, C.; Chen, Y.; Chen, H.; Hu, H.; Zhang, G.; Fu, J.; Ritter,
+A.; and Chen, W. 2024. Uniir: Training and benchmarking
+universal multimodal information retrievers. In European
+Conference on Computer Vision, 387–404. Springer.
+Xue, J.; Zheng, M.; Hu, Y.; Liu, F.; Chen, X.; and Lou, Q.
+2024. Badrag: Identifying vulnerabilities in retrieval aug-
+mented generation of large language models. arXiv preprint
+arXiv:2406.00083.
+Yang, W.; Gao, J.; and Mirzasoleiman, B. 2023.
+Robust
+contrastive language-image pretraining against data poison-
+ing and backdoor attacks. Advances in neural information
+processing systems, 36: 10678–10691.
+Yasunaga, M.; Aghajanyan, A.; Shi, W.; James, R.; Leskovec,
+J.; Liang, P.; Lewis, M.; Zettlemoyer, L.; and Yih, W.-T. 2023.
+Retrieval-Augmented Multimodal Language Modeling. In
+ICML, 39755–39769. PMLR.
+Zhang, C.; Zhang, T.; and Shmatikov, V. 2026. Adversar-
+ial decoding: Generating readable documents for adversarial
+objectives. In Findings of EACL 2026, 2053–2068.
+Zhang, C.; Zhang, X.; Lou, J.; Wu, K.; Wang, Z.; and Chen,
+X. 2025a.
+Poisonedeye: Knowledge poisoning attack on
+retrieval-augmented generation based large vision-language
+models. In Forty-second International Conference on Ma-
+chine Learning.
+Zhang, Q.; Fang, C.; Zheng, Y.; Qian, R.; Yu, S.; Zhao, Y.;
+Zhou, J.; Yang, Y.; Zheng, T.; and Chen, Z. 2025b. Improving
+Retrieval-Augmented Deep Assertion Generation via Joint
+Training. IEEE Transactions on Software Engineering.
+Zhong, Z.; Huang, Z.; Wettig, A.; and Chen, D. 2023. Poi-
+soning retrieval corpora by injecting adversarial passages. In
+Proceedings of the 2023 Conference on Empirical Methods
+in Natural Language Processing, 13764–13775.
+Zou,
+W.;
+Geng,
+R.;
+Wang,
+B.;
+and
+Jia,
+J.
+2025.
+{PoisonedRAG}:
+Knowledge
+corruption
+attacks
+to
+{Retrieval-Augmented}
+generation
+of
+large
+language
+models. In 34th USENIX Security 25, 3827–3844.
