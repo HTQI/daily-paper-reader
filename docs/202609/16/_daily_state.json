@@ -1,0 +1,25 @@
+{
+  "date": "20260916",
+  "date_label": "",
+  "generated_at": "2026-09-16 21:37:52 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.13768v1",
+      "route": "202609/16/2609.13768v1-hyperprove-answer-guided-hypergraph-expansion-for-multi-hop-question-answering",
+      "title": "HyperProve: Answer-Guided Hypergraph Expansion for Multi-Hop Question Answering",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "构建连贯证据链的检索增强框架",
+      "first_seen_at": "2026-09-16 21:37:52 UTC",
+      "updated_at": "2026-09-16 21:37:52 UTC"
+    }
+  ]
+}

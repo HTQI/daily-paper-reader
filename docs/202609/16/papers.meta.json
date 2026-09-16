@@ -1,0 +1,24 @@
+{
+  "label": "2026-09-16",
+  "date": "2026-09-16",
+  "generated_at": "2026-09-16T21:37:53",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202609/16/2609.13768v1-hyperprove-answer-guided-hypergraph-expansion-for-multi-hop-question-answering",
+      "section": "quick",
+      "title_en": "HyperProve: Answer-Guided Hypergraph Expansion for Multi-Hop Question Answering",
+      "authors": "An Nguyen Phu, Dung Nguyen Quang, Luu Hieu An, Linh Ngo Van, Trung Le, Thien Huu Nguyen",
+      "date": "2026-09-12",
+      "pdf": "https://arxiv.org/pdf/2609.13768v1",
+      "score": "6.0",
+      "evidence": "构建连贯证据链的检索增强框架",
+      "tldr": "多跳问答中，检索若将证据视为对原问题的孤立匹配，会因忽略中间实体、关系与约束而失败。HyperProve 将问题分解与答案条件化的超图扩展耦合：以中间答案和支持超边作为检索状态，引导下一轮局部超图扩展，构建连贯证据链。在多跳基准上，其答案准确率与 F1 平均相对提升 6.2% 和 4.9%，取得最佳综合表现。该工作把检索变为有状态、以事实为中心的过程，为复杂问答提供新范式。",
+      "tags": "query:mfnd",
+      "abstract_en": "Multi-hop question answering often fails when retrieval treats evidence as isolated matches to the original question, since the facts needed to answer a complex question are usually connected through intermediate entities, relations, and constraints. We propose HyperProve, a retrieval-augmented QA framework that addresses this challenge by coupling question decomposition with answer-conditioned expansion over a hypergraph of atomic facts. HyperProve does not use atomic facts, hypergraphs, or iterative retrieval in isolation; instead, it carries intermediate answers and supporting hyperedges as retrieval state, then uses that state to bias the next local hypergraph expansion. This design enables HyperProve to construct coherent evidence chains for final answer generation while making the retrieval process stateful and fact-centered. Across multi-hop QA benchmarks, HyperProve achieves the best overall performance in our evaluation, outperforming the strongest baselines by an average relative improvement of 6.2% in answer accuracy and 4.9% in F1.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

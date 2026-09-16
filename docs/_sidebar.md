@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-09-16 <!--dpr-date:20260916-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202609/16/2609.13768v1-hyperprove-answer-guided-hypergraph-expansion-for-multi-hop-question-answering" data-sidebar-item="{&quot;title&quot;: &quot;HyperProve: Answer-Guided Hypergraph Expansion for Multi-Hop Question Answering&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2609.13768v1-hyperprove-answer-guided-hypergraph-expansion-for-multi-hop-question-answering&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;mfnd&quot;}], &quot;evidence&quot;: &quot;构建连贯证据链的检索增强框架&quot;}">HyperProve: Answer-Guided Hypergraph Expansion for Multi-Hop Question Answering</a>
   * 2026-09-15 <!--dpr-date:20260915-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202609/15/2609.13794v1-syrhm-symbolic-language-enhanced-reasoning-with-associative-retrieval-for-zero-shot-harmful-meme-detection" data-sidebar-item="{&quot;title&quot;: &quot;SyRHM: Symbolic-Language-Enhanced Reasoning with Associative Retrieval for Zero-shot Harmful Meme Detection&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2609.13794v1-syrhm-symbolic-language-enhanced-reasoning-with-associative-retrieval-for-zero-shot-harmful-meme-detection&quot;, &quot;score&quot;: &quot;7.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;mfnd&quot;}], &quot;evidence&quot;: &quot;通过图文不一致与检索增强推理检测有害梗图&quot;}">SyRHM: Symbolic-Language-Enhanced Reasoning with Associative Retrieval for Zero-shot Harmful Meme Detection</a>
