@@ -1,0 +1,299 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-17T21:42:43.478878+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 7,
+    "quick_skim_target": 11,
+    "quick_selected": 7
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.17004v1",
+      "source": "arxiv",
+      "title": "Symmetry-Aware Likelihood-Orbit Aggregation for Selective Left-Right Claim Verification",
+      "abstract": "Frozen vision-language models (VLMs) remain unreliable on fine-grained left-right claims, and raw claim likelihoods need not reliably rank verification errors. After a horizontal-reflection intervention is fixed, how should its induced likelihood measurements be combined into a selective verification signal? We introduce Relation-Orbit, a closed-form contrast with no learned fusion parameters that assigns eight normalized likelihoods to query-supporting and counterfactual roles determined by reflection, inverse relation, and entity exchange. A claim is asserted only when the signed contrast exceeds a threshold selected on held-out data using pointwise Clopper-Pearson upper confidence bounds. On VSR and GQA across four frozen VLMs, Relation-Orbit yields higher mean test coverage at a 10% selective-risk calibration target than an all-eight Orbit-Max baseline in all eight dataset-backbone settings; gains over a nearly abstain-all one-sided intervention score are reported separately. A separate LLaVA-1.5/COCO evaluation, reduced-orbit controls, and a two-sided partition diagnostic further characterize the structural advantage.",
+      "authors": [
+        "Zhouzhi Xiong",
+        "Chuxi Zhang",
+        "Weizhen He",
+        "Yi Chen",
+        "Qi Li",
+        "Donglian Qi"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-15T11:19:03+00:00",
+      "link": "https://arxiv.org/pdf/2609.17004v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "verifying claims against visual evidence with frozen VLMs",
+      "llm_evidence_cn": "用视觉语言模型核验claim的真伪，属图文证据验证",
+      "llm_evidence": "用视觉语言模型核验claim的真伪，属图文证据验证",
+      "canonical_evidence": "用视觉语言模型核验claim的真伪，属图文证据验证",
+      "llm_tldr_en": "Frozen VLMs are unreliable on fine-grained left-right claims and raw likelihoods rank errors poorly. Relation-Orbit is a parameter-free closed-form contrast over eight reflection-derived likelihood roles, improving selective verification on VSR and GQA.",
+      "llm_tldr_cn": "冻结的视觉语言模型在细粒度左右方位claim的验证上仍不可靠，原始似然值也无法稳定地区分对错。本文提出Relation-Orbit，固定水平翻转干预后，通过逆关系与实体交换构造八种归一化似然角色，以无学习参数的闭式对比作为选择性验证信号，并用Clopper-Pearson置信上界选取阈值。在VSR与GQA上的四个冻结VLM上，该方法提升了验证的选择性准确率，为图文claim核验提供了可靠的弃权机制。",
+      "llm_tldr": "冻结的视觉语言模型在细粒度左右方位claim的验证上仍不可靠，原始似然值也无法稳定地区分对错。本文提出Relation-Orbit，固定水平翻转干预后，通过逆关系与实体交换构造八种归一化似然角色，以无学习参数的闭式对比作为选择性验证信号，并用Clopper-Pearson置信上界选取阈值。在VSR与GQA上的四个冻结VLM上，该方法提升了验证的选择性准确率，为图文claim核验提供了可靠的弃权机制。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.15800v1",
+      "source": "arxiv",
+      "title": "Navigating Sparse Evidence: Agentic Visual RAG via Explicit Context Selection and Consolidation",
+      "abstract": "Visual Retrieval-Augmented Generation (VRAG) empowers models to navigate and answer queries about visually rich documents by retrieving relevant page images as visual evidence and reasoning over their content. However, effectively utilizing this visual evidence is usually impeded by two main challenges. First, answer-relevant evidence is sparse and may be concentrated in a small region of one page or dispersed across multiple pages. Second, existing agentic methods often generate answers based on raw exploration trajectories or compressed textual memories rather than an explicitly organized set of supporting images, making answers susceptible to exploration noise and obscuring the evidence-backed reasoning trace. We argue that the bottleneck lies not only in evidence discovery but also in its preservation and organization before answer generation. We propose SCoRE (Selection and Consolidation for Robust Evidence), a unified agent loop for explicit evidence selection and consolidation. During exploration, SCoRE retains only query-relevant observations and their source pointers in a maintained textual ledger, preserving earlier evidence while keeping the visual context bounded. At termination, it reloads the referenced original images and consolidates the visual evidence for answering, arranging it into a logical sequence. This decouples final reasoning from exploratory trial-and-error while ensuring strict visual grounding via indexed claim-to-image linkages. To enable end-to-end optimization of this unified rollout, our training paradigm combines filtered cold-start trajectory distillation with evidence-aware reinforcement learning, whose reward promotes evidence coverage, consolidation compactness, and answer correctness.",
+      "authors": [
+        "Yucheng Shen",
+        "Lingyong Yan",
+        "Jiulong Wu",
+        "Shuaiqiang Wang",
+        "Jianmin WU",
+        "Dawei Yin",
+        "Min Cao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-14T16:11:35+00:00",
+      "link": "https://arxiv.org/pdf/2609.15800v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic visual retrieval-augmented generation selecting and consolidating visual evidence",
+      "llm_evidence_cn": "智能体式视觉检索增强生成，筛选与整合视觉证据",
+      "llm_evidence": "智能体式视觉检索增强生成，筛选与整合视觉证据",
+      "canonical_evidence": "智能体式视觉检索增强生成，筛选与整合视觉证据",
+      "llm_tldr_en": "This paper addresses sparse visual evidence in Visual RAG, where relevant content is scattered across visually rich documents. It proposes an agentic method that explicitly selects and consolidates supporting images into an organized evidence set, yielding more faithful evidence-backed reasoning traces.",
+      "llm_tldr_cn": "该文针对视觉检索增强生成中答案相关证据稀疏、分散于多页且现有方法依赖原始探索轨迹导致噪声的问题，提出智能体式框架，显式选择并整合支撑图像形成有序证据集。实验表明该方法能缓解探索噪声并提升答案的可追溯性。其贡献在于为证据驱动的多模态检索与推理提供可迁移的方法，可支撑基于外部证据的事实核查类任务。",
+      "llm_tldr": "该文针对视觉检索增强生成中答案相关证据稀疏、分散于多页且现有方法依赖原始探索轨迹导致噪声的问题，提出智能体式框架，显式选择并整合支撑图像形成有序证据集。实验表明该方法能缓解探索噪声并提升答案的可追溯性。其贡献在于为证据驱动的多模态检索与推理提供可迁移的方法，可支撑基于外部证据的事实核查类任务。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.16301v1",
+      "source": "arxiv",
+      "title": "CLEAR: Cross-Source Evidence Adjudication for Large Language Models in Medicine",
+      "abstract": "Medical knowledge evolves continuously, whereas the parametric knowledge encoded in large language models (LLMs) is fixed at training time. External retrieval, including retrieval-augmented generation (RAG), can provide access to newly available evidence, but retrieved information may be irrelevant, incomplete, or conflicting. As a result, external retrieval can in turn degrade the factual accuracy and evidence grounding of LLM outputs. To address this challenge, we propose \\textbf{CLEAR}, an agentic framework for cross-source evidence adjudication in LLMs in medicine. CLEAR independently generates candidate answers from three complementary pathways---parametric knowledge, locally curated corpora, and dynamically retrieved evidence---reflecting three common sources of information available to LLMs. An aggregation verifier jointly evaluates the candidates, supporting evidence, provenance, and source-quality information to identify agreement and conflict across sources. An adjudication module then determines whether the current conclusion should be preserved or revised through complementary override-guard and challenge-audit mechanisms, while unresolved conflicts trigger targeted follow-up search and re-adjudication.",
+      "authors": [
+        "Shuai Wang",
+        "Yize Zhao",
+        "Qingyu Chen"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-09-14T20:00:16+00:00",
+      "link": "https://arxiv.org/pdf/2609.16301v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "cross-source evidence adjudication with retrieval-augmented verification",
+      "llm_evidence_cn": "检索增强的跨来源证据裁决与验证",
+      "llm_evidence": "检索增强的跨来源证据裁决与验证",
+      "canonical_evidence": "检索增强的跨来源证据裁决与验证",
+      "llm_tldr_en": "The paper addresses conflicting or incomplete retrieved evidence degrading LLM factual accuracy and proposes CLEAR, an agentic framework adjudicating among parametric, curated, and retrieved sources.",
+      "llm_tldr_cn": "医学知识持续更新而大模型参数知识固定，外部检索信息可能无关、缺失或冲突，反而降低事实准确性与证据支撑。论文提出CLEAR智能体框架，从参数知识、本地语料与动态检索三条路径独立生成候选答案并进行跨来源证据裁决。该框架提升证据对齐与事实准确性，为检索增强的事实核查提供新思路。",
+      "llm_tldr": "医学知识持续更新而大模型参数知识固定，外部检索信息可能无关、缺失或冲突，反而降低事实准确性与证据支撑。论文提出CLEAR智能体框架，从参数知识、本地语料与动态检索三条路径独立生成候选答案并进行跨来源证据裁决。该框架提升证据对齐与事实准确性，为检索增强的事实核查提供新思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.16795v1",
+      "source": "arxiv",
+      "title": "Layers, Sinks, and Scaling: Adaptive Evidence Selection for Multimodal Large Language Models",
+      "abstract": "Multimodal large language models (MLLMs) can answer knowledge-intensive visual questions by combining visual evidence from images with facts retrieved from external sources. However, MLLMs may overlook relevant evidence in both modalities, attending weakly to the textual sentences or visual regions needed for the correct answer. Recent efforts address this by highlighting retrieved text and marking visual regions before generation, but apply a fixed, one-shot policy that cannot adapt to three sources of variation: whether highlighting is necessary, how much evidence different examples require, and when different textual evidence becomes relevant as the answer unfolds. We introduce Adaptive Relevance-guided Evidence Allocation (AREA), a training-free inference-time method that formulates evidence highlighting as adaptive allocation. AREA generates a single probe token to read visual and textual relevance from fixed backbone layers, then makes three decisions: i) whether to intervene (controlled by natural attention coverage and visual sink contamination), ii) how much evidence to expose (determined by relevance entropy), and iii) when to refresh text during generation (triggered by causal context-attention peaks). Across four KB-VQA and seven standard multimodal benchmarks with nine frozen MLLM checkpoints, establishes the best performance among training-free highlighting methods.",
+      "authors": [
+        "Zhenbin Wang",
+        "Lei Zhang",
+        "Lituan Wang",
+        "Wei Huang",
+        "Yan Wang",
+        "Zhenwei Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-15T08:02:52+00:00",
+      "link": "https://arxiv.org/pdf/2609.16795v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Adaptive relevance-guided evidence selection combining visual evidence and retrieved facts for multimodal LLMs",
+      "llm_evidence_cn": "面向多模态大模型的自适应相关性引导证据选择，融合视觉证据与检索事实",
+      "llm_evidence": "面向多模态大模型的自适应相关性引导证据选择，融合视觉证据与检索事实",
+      "canonical_evidence": "面向多模态大模型的自适应相关性引导证据选择，融合视觉证据与检索事实",
+      "llm_tldr_en": "MLLMs often overlook retrieved text and visual evidence for knowledge-intensive questions. ARE adaptively allocates relevance-guided evidence across layers and generation steps, outperforming fixed one-shot highlighting policies.",
+      "llm_tldr_cn": "多模态大语言模型可结合图像视觉证据与外部检索事实回答知识密集型问题，但常忽略两个模态中的关键证据。现有方法在生成前固定地高亮检索文本与标注视觉区域，无法适应是否需要高亮、证据量多少以及文本证据何时相关等变化。本文提出自适应相关性引导证据分配方法，动态选择证据。实验表明其优于固定的一次性策略。",
+      "llm_tldr": "多模态大语言模型可结合图像视觉证据与外部检索事实回答知识密集型问题，但常忽略两个模态中的关键证据。现有方法在生成前固定地高亮检索文本与标注视觉区域，无法适应是否需要高亮、证据量多少以及文本证据何时相关等变化。本文提出自适应相关性引导证据分配方法，动态选择证据。实验表明其优于固定的一次性策略。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.17269v1",
+      "source": "arxiv",
+      "title": "Semantic-Spatial Agreement Verification for Mitigating Object Hallucination in Multimodal Large Language Models",
+      "abstract": "Multimodal large language models generate natural-language responses from visual inputs, yet may mention objects absent from an image. In medication assistance, accessible perception, and environmental decision-making, such hallucinations can create real-world safety risks. We propose Semantic-Spatial Agreement Verification (SSAV), a training-free method for verifying object claims. A visually grounded claim should remain stable across semantically equivalent queries and repeatedly localize to the same image region. SSAV aggregates multiple prompts to estimate semantic support and reduce sensitivity to query wording. Query-Induced Regional Verification (QIRV) combines cross-query region persistence, spatial overlap, and relative candidate dominance to identify isolated high responses and dispersed localizations. A geometric mean fuses semantic and spatial evidence, lowering the verification score when either branch lacks support. Experiments on three base models and multiple evaluation protocols show that SSAV effectively mitigates object hallucination. On LLaVA-1.5-7B, accuracy averaged across COCO, A-OKVQA, and GQA improves by 1.81 and 3.17 percentage points under POPE Popular and Adversarial, respectively, while CHAIRs decreases from 49.40% to 32.80%. These results show that cross-query semantic stability and regional consistency provide interpretable external visual evidence for object claims.",
+      "authors": [
+        "Ziheng Ren",
+        "Qian Gao",
+        "Jun Fan",
+        "Guohui Ding",
+        "Zhenyu Yang",
+        "Yuteng Xiao"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-15T14:48:48+00:00",
+      "link": "https://arxiv.org/pdf/2609.17269v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "training-free verification of visual object claims using semantic-spatial agreement",
+      "llm_evidence_cn": "利用语义-空间一致性免训练验证视觉对象声明",
+      "llm_evidence": "利用语义-空间一致性免训练验证视觉对象声明",
+      "canonical_evidence": "利用语义-空间一致性免训练验证视觉对象声明",
+      "llm_tldr_en": "The paper tackles object hallucination in multimodal LLMs and proposes SSAV, a training-free method verifying claims via query stability and cross-query regional persistence.",
+      "llm_tldr_cn": "多模态大模型常凭空提及图中不存在的物体，带来安全风险。论文提出免训练的对象声明验证方法SSAV，利用语义等价查询下的稳定性与跨查询区域一致性（QIRV）判断声明是否有视觉支撑。方法聚合多提示估计语义支持并降低措辞敏感性，有效缓解对象幻觉，提升多模态输出与视觉证据的一致性。",
+      "llm_tldr": "多模态大模型常凭空提及图中不存在的物体，带来安全风险。论文提出免训练的对象声明验证方法SSAV，利用语义等价查询下的稳定性与跨查询区域一致性（QIRV）判断声明是否有视觉支撑。方法聚合多提示估计语义支持并降低措辞敏感性，有效缓解对象幻觉，提升多模态输出与视觉证据的一致性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.18597v1",
+      "source": "arxiv",
+      "title": "Reasoning through Evolution: Automatic Meta-path Discovery for LLM-based Fake News Detection",
+      "abstract": "Propagation structures provide crucial evidence for fake news detection, yet existing approaches primarily rely on supervised GNN-based models, which require substantial labeled data and exhibit limited generalization. Although large language models (LLMs) exhibit strong reasoning capabilities, directly feeding them raw propagation graphs creates a significant modality mismatch and severe information overload, making structure-aware reasoning unreliable in zero-shot and few-shot settings. To bridge this gap, we propose MAGER, a multi-agent genetic evolution framework that automatically discovers meta-paths optimized for LLM reasoning. By compressing complex propagation graphs into informative subgraphs, the evolved meta-paths alleviate both information overload and modality mismatch, enabling frozen LLMs to perform structure-aware veracity reasoning. We further introduce a graph in-context learning strategy that retrieves semantically and structurally similar demonstrations to strengthen classification and reasoning. Extensive experiments show that MAGER substantially improves frozen LLMs as standalone fake news detectors in data-efficient settings. Our code is available at https://github.com/SenticNet/MAGER.",
+      "authors": [
+        "Ziyi Zhou",
+        "Xiaoming Zhang",
+        "Hui Pang",
+        "Yuting Zhang",
+        "Tiesunlong Shen",
+        "Bingyu Yan",
+        "Erik Cambria",
+        "Litian Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-09-16T12:51:51+00:00",
+      "link": "https://arxiv.org/pdf/2609.18597v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "LLM-based fake news detection using automatically discovered meta-paths over propagation graphs",
+      "llm_evidence_cn": "基于自动发现元路径的LLM假新闻检测，利用传播结构",
+      "llm_evidence": "基于自动发现元路径的LLM假新闻检测，利用传播结构",
+      "canonical_evidence": "基于自动发现元路径的LLM假新闻检测，利用传播结构",
+      "llm_tldr_en": "Fake news detection relies on propagation graphs, but GNNs need labels and LLMs struggle with raw graphs. MAGER evolves meta-paths via multi-agent genetic search to compress graphs for reliable LLM reasoning.",
+      "llm_tldr_cn": "传播结构是假新闻检测的重要证据，但现有方法依赖需大量标注的GNN，泛化有限，而直接向LLM输入原始传播图又存在模态错配与信息过载。本文提出MAGER多智能体遗传演化框架，自动发现面向LLM推理优化的元路径，将复杂传播图压缩为信息丰富的子图。实验表明该方法在零样本与少样本下提升了结构感知推理的可靠性。",
+      "llm_tldr": "传播结构是假新闻检测的重要证据，但现有方法依赖需大量标注的GNN，泛化有限，而直接向LLM输入原始传播图又存在模态错配与信息过载。本文提出MAGER多智能体遗传演化框架，自动发现面向LLM推理优化的元路径，将复杂传播图压缩为信息丰富的子图。实验表明该方法在零样本与少样本下提升了结构感知推理的可靠性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "multimodal fake news detection models that combine text, image, and social context features",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.18860v1",
+      "source": "arxiv",
+      "title": "Decodable but Misrouted: Sparse Features Uncover a Readout Gap in Vision-Language Models for Harmful Meme Detection",
+      "abstract": "When a large vision-language model misclassifies a harmful meme, the failure may reflect missing internal evidence or an inability to route represented evidence to its output. We distinguish these cases in Gemma-3 and Qwen3.5 using sparse autoencoders, role-conditioned probes, causal interventions, and recovery experiments across six harmful content benchmarks, with additional Spanish and Hindi-English code-mixed evaluations. Sparse readouts outperform native prediction on all six primary binary tasks: Qwen averages $0.740$ versus $0.432$ native macro-F1, while residual reconstruction reaches $0.486$, whereas Gemma improves from $0.532$ to $0.714$. These differences reflect supervised accessibility rather than a pre-existing, native decision rule, and the most influential token role depends on the task. Under the evaluated score scales, Qwen silent-feature ablation is $24-63$ times more probe-sensitive, whereas routed-feature patching on literal yes/no tasks is $16-140$ times more output-sensitive. Calibration-only routing recovers $93.3$% of the mean gap, and probe-distilled LoRA improves native predictions, although shared multi-task adaptation causes negative transfer. A case study of Gemma-3-12B on Facebook Hateful Memes finds a distributed rank-32 image-prompt interaction, reaching $0.756$ versus $0.685$ native macro-F1. Robustness controls show that the signal extends beyond English, is not explained solely by accompanying OCR, and depends on paired visual evidence. Thus, routing, rather than representation alone, is a recurring bottleneck in harmful meme classification.",
+      "authors": [
+        "Girish A. Koushik",
+        "Diptesh Kanojia",
+        "Helen Treharne"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-09-16T16:00:36+00:00",
+      "link": "https://arxiv.org/pdf/2609.18860v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Vision-language model failure analysis for harmful meme detection via sparse features and probes",
+      "llm_evidence_cn": "用稀疏特征与探针分析视觉语言模型在有害表情包检测中的失败",
+      "llm_evidence": "用稀疏特征与探针分析视觉语言模型在有害表情包检测中的失败",
+      "canonical_evidence": "用稀疏特征与探针分析视觉语言模型在有害表情包检测中的失败",
+      "llm_tldr_en": "When a VLM misclassifies a harmful meme, it is unclear whether evidence is missing or misrouted. Sparse autoencoders and probes on Gemma-3 and Qwen3.5 show a readout gap, with sparse readouts boosting harmful content detection.",
+      "llm_tldr_cn": "视觉语言模型误判有害表情包时，难以判断是内部证据缺失还是表征无法路由到输出。本文用稀疏自编码器、角色条件探针、因果干预与恢复实验，在Gemma-3与Qwen3.5及六个有害内容基准上区分这两种失败。结果显示稀疏读出在所有主任务上优于原生预测，Qwen宏F1从0.432升至0.740。该研究揭示了多模态有害内容检测中的读出缺口。",
+      "llm_tldr": "视觉语言模型误判有害表情包时，难以判断是内部证据缺失还是表征无法路由到输出。本文用稀疏自编码器、角色条件探针、因果干预与恢复实验，在Gemma-3与Qwen3.5及六个有害内容基准上区分这两种失败。结果显示稀疏读出在所有主任务上优于原生预测，Qwen宏F1从0.432升至0.740。该研究揭示了多模态有害内容检测中的读出缺口。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
