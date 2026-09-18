@@ -1,0 +1,136 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-18T21:48:26.098302+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.17953v1",
+      "source": "arxiv",
+      "title": "EDCT-Bench: Uncovering Faithfulness Gaps in VLMs via Explanation-Driven Counterfactual Testing",
+      "abstract": "Vision-Language Models (VLMs) can produce Natural Language Explanations (NLEs) that sound plausible yet remain inconsistent with the visual evidence they cite. We present Explanation-Driven Counterfactual Testing (EDCT), an intervention-based protocol that extracts visual concepts cited in a model's explanation, applies verified minimal edits to them, and tests whether the resulting answer and explanation remain consistent with the edited image. Using this protocol, we create EDCT-Bench, a comprehensive benchmark spanning three complementary domains: knowledge-intensive visual question answering (OK-VQA), safety-critical driving (DriveLM), and 3D spatial reasoning (3DSRBench). Across the evaluated VLMs, EDCT reveals substantial faithfulness gaps, with models frequently producing responses inconsistent with verified visual changes. Finally, our fine-tuning study suggests that EDCT-generated counterfactuals provide high-impact training signals.",
+      "authors": [
+        "Sihao Ding",
+        "Santosh Vasa",
+        "Aditi Ramadwar",
+        "Thomas Monninger"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-09-16T00:25:31+00:00",
+      "link": "https://arxiv.org/pdf/2609.17953v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark for VLM explanation faithfulness against visual evidence",
+      "llm_evidence_cn": "面向视觉证据的VLM解释忠实性基准",
+      "llm_evidence": "面向视觉证据的VLM解释忠实性基准",
+      "canonical_evidence": "面向视觉证据的VLM解释忠实性基准",
+      "llm_tldr_en": "The paper introduces Explanation-Driven Counterfactual Testing, which edits visual concepts cited in a VLM explanation and checks answer-explanation consistency, yielding EDCT-Bench across VQA, driving and 3D reasoning domains.",
+      "llm_tldr_cn": "视觉语言模型生成的解释看似合理，却可能与所引用的视觉证据不一致。作者提出解释驱动的反事实测试协议EDCT，抽取解释中提及的视觉概念并施加经验证的最小编辑，检验答案与解释是否仍与编辑后的图像一致，并构建覆盖知识型VQA、自动驾驶与3D空间推理的EDCT-Bench基准。实验揭示多款VLM存在显著忠实性缺口，为多模态解释可信度评估提供了基准。",
+      "llm_tldr": "视觉语言模型生成的解释看似合理，却可能与所引用的视觉证据不一致。作者提出解释驱动的反事实测试协议EDCT，抽取解释中提及的视觉概念并施加经验证的最小编辑，检验答案与解释是否仍与编辑后的图像一致，并构建覆盖知识型VQA、自动驾驶与3D空间推理的EDCT-Bench基准。实验揭示多款VLM存在显著忠实性缺口，为多模态解释可信度评估提供了基准。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.19417v1",
+      "source": "arxiv",
+      "title": "Less Is More: Graph-free Multimodal RAG via Multi-signal Late Fusion",
+      "abstract": "Graph-based retrieval-augmented generation (RAG) is widely used for multimodal, cross-document question answering. However, building corpus-level graphs is expensive, slow to query, and difficult to maintain. We present TrioRAG, a graph-free multimodal framework that integrates evidence from three complementary signals: the question, the anchor image, and a VLM-enhanced query generated from both. Each signal retrieves independently over a shared multi-vector index of page text and page images, and the results are combined through late fusion. Further, we introduce AutoQA, a multimodal automotive benchmark whose questions are grounded in noisy, web-sourced images rather than clean document-sourced figures. Its questions require reasoning across manuals. We position it as a model-curated testbed rather than a human-validated gold standard. Across three benchmarks, TrioRAG matches or outperforms graph-based systems while reducing total cost and accelerating per-query inference by 1.6-2.3 times. By construction, AutoQA grounds its questions in out-of-corpus web images. In this setting image retrieval reaches only 19.3% document-level recall, while text-derived signals, especially the VLM-enhanced query, keep retrieval robust.",
+      "authors": [
+        "Tithi Rakshit",
+        "Hongkuan Zhou",
+        "Lavdim Halilaj",
+        "Yuqicheng Zhu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-16T20:54:08+00:00",
+      "link": "https://arxiv.org/pdf/2609.19417v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "graph-free multimodal RAG fusing image and text evidence",
+      "llm_evidence_cn": "无图多模态RAG融合图文证据",
+      "llm_evidence": "无图多模态RAG融合图文证据",
+      "canonical_evidence": "无图多模态RAG融合图文证据",
+      "llm_tldr_en": "TrioRAG replaces costly graph-based multimodal RAG with a graph-free framework that retrieves over a shared multi-vector index using question, anchor image, and VLM-enhanced query signals, fused late and evaluated on the AutoQA benchmark.",
+      "llm_tldr_cn": "多模态跨文档问答常依赖基于图的检索增强生成，但语料级图构建昂贵、查询缓慢且维护困难。作者提出TrioRAG，用问题、锚点图像以及由二者生成的VLM增强查询三路信号，在共享的页面文本与图像多向量索引上独立检索，再通过后融合整合证据。同时发布基于网络噪声图像的AutoQA汽车问答基准。实验表明无图方案可有效完成跨手册推理，为多模态证据检索提供轻量替代。",
+      "llm_tldr": "多模态跨文档问答常依赖基于图的检索增强生成，但语料级图构建昂贵、查询缓慢且维护困难。作者提出TrioRAG，用问题、锚点图像以及由二者生成的VLM增强查询三路信号，在共享的页面文本与图像多向量索引上独立检索，再通过后融合整合证据。同时发布基于网络噪声图像的AutoQA汽车问答基准。实验表明无图方案可有效完成跨手册推理，为多模态证据检索提供轻量替代。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.19778v1",
+      "source": "arxiv",
+      "title": "Learn Before You Judge: Progressive Knowledge-to-Decision Alignment for Explainable Hateful Meme Detection",
+      "abstract": "Hateful memes spread abusive content through implicit interactions between images and text, posing serious threats to the safety of online communities. In recent years, multimodal large language models have been widely used for hateful meme detection and are increasingly adopted to generate explainable detection results. However, we find that existing explain-then-detect methods often couple explanation generation and label prediction within the same training process. This coupling causes interference between task objectives, leading to limited detection performance and even worse results than simple SFT baselines. To address these challenges, we propose ProKDA, a progressive knowledge-to-decision alignment method for explainable hateful meme detection. Inspired by the human annotation training process, ProKDA first uses an agentic background knowledge construction pipeline to obtain external knowledge related to meme understanding. It then adopts a three-stage training strategy that sequentially performs background knowledge learning, hatefulness detection learning, and hatefulness boundary alignment. Unlike prior explain-then-detect methods that jointly optimize both tasks, ProKDA focuses on a single training objective at each stage. This design reduces interference between the two tasks and progressively transforms background knowledge into robust detection decisions. Experiments on three public hateful meme benchmarks show that ProKDA achieves state-of-the-art detection performance and provides accurate, explainable, and evidence-supported decisions for hateful meme moderation. Project page: https://meizhiyuan88666.github.io/prokda.",
+      "authors": [
+        "Bo Xu",
+        "Chenyuan Wang",
+        "Xinyu Chen",
+        "Quanhao Zhu",
+        "Rui Lin",
+        "Liang Zhao",
+        "Hongfei Lin",
+        "Feng Xia"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-17T06:45:55+00:00",
+      "link": "https://arxiv.org/pdf/2609.19778v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Explainable multimodal hateful meme detection with decoupled explanation and decision",
+      "llm_evidence_cn": "可解释的多模态有害模因检测，解耦解释与决策",
+      "llm_evidence": "可解释的多模态有害模因检测，解耦解释与决策",
+      "canonical_evidence": "可解释的多模态有害模因检测，解耦解释与决策",
+      "llm_tldr_en": "Existing explain-then-detect methods couple explanation and label prediction, causing task interference and poor detection. ProKDA decouples them via progressive knowledge-to-decision alignment for explainable hateful meme detection.",
+      "llm_tldr_cn": "有害模因通过图文间的隐式互动传播滥用内容，威胁网络社区安全；现有先解释后检测方法将解释生成与标签预测耦合在同一训练过程中，导致任务目标相互干扰，检测性能受限甚至不如简单微调基线。本文提出ProKDA，一种渐进式知识到决策对齐方法，将知识获取与决策判定分阶段解耦。实验表明该方法在可解释有害模因检测上兼顾了检测性能与解释质量。该工作为可解释的多模态有害内容识别提供了有效范式，可迁移到多模态错误信息检测场景。",
+      "llm_tldr": "有害模因通过图文间的隐式互动传播滥用内容，威胁网络社区安全；现有先解释后检测方法将解释生成与标签预测耦合在同一训练过程中，导致任务目标相互干扰，检测性能受限甚至不如简单微调基线。本文提出ProKDA，一种渐进式知识到决策对齐方法，将知识获取与决策判定分阶段解耦。实验表明该方法在可解释有害模因检测上兼顾了检测性能与解释质量。该工作为可解释的多模态有害内容识别提供了有效范式，可迁移到多模态错误信息检测场景。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

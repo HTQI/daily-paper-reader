@@ -1,0 +1,57 @@
+{
+  "date": "20260918",
+  "date_label": "",
+  "generated_at": "2026-09-18 21:50:01 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.17953v1",
+      "route": "202609/18/2609.17953v1-edct-bench-uncovering-faithfulness-gaps-in-vlms-via-explanation-driven-counterfactual-testing",
+      "title": "EDCT-Bench: Uncovering Faithfulness Gaps in VLMs via Explanation-Driven Counterfactual Testing",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向视觉证据的VLM解释忠实性基准",
+      "first_seen_at": "2026-09-18 21:50:01 UTC",
+      "updated_at": "2026-09-18 21:50:01 UTC"
+    },
+    {
+      "paper_id": "2609.19417v1",
+      "route": "202609/18/2609.19417v1-less-is-more-graph-free-multimodal-rag-via-multi-signal-late-fusion",
+      "title": "Less Is More: Graph-free Multimodal RAG via Multi-signal Late Fusion",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "无图多模态RAG融合图文证据",
+      "first_seen_at": "2026-09-18 21:50:01 UTC",
+      "updated_at": "2026-09-18 21:50:01 UTC"
+    },
+    {
+      "paper_id": "2609.19778v1",
+      "route": "202609/18/2609.19778v1-learn-before-you-judge-progressive-knowledge-to-decision-alignment-for-explainable-hateful-meme-detection",
+      "title": "Learn Before You Judge: Progressive Knowledge-to-Decision Alignment for Explainable Hateful Meme Detection",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "可解释的多模态有害模因检测，解耦解释与决策",
+      "first_seen_at": "2026-09-18 21:50:01 UTC",
+      "updated_at": "2026-09-18 21:50:01 UTC"
+    }
+  ]
+}
