@@ -1,0 +1,25 @@
+{
+  "date": "20260919",
+  "date_label": "",
+  "generated_at": "2026-09-19 21:51:12 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.16778v2",
+      "route": "202609/19/2609.16778v2-unifying-semantic-priors-and-high-frequency-traces-enhancing-v-jepa-with-mixture-of-experts-for-robust-synthetic-image-forensics",
+      "title": "Unifying Semantic Priors and High-Frequency Traces: Enhancing V-JEPA with Mixture-of-Experts for Robust Synthetic Image Forensics",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向社交媒体虚假信息的合成图像取证",
+      "first_seen_at": "2026-09-19 21:51:12 UTC",
+      "updated_at": "2026-09-19 21:51:12 UTC"
+    }
+  ]
+}
