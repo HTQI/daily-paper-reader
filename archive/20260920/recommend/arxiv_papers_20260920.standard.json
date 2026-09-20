@@ -1,0 +1,58 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-20T21:05:42.611348+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.15830v1",
+      "source": "arxiv",
+      "title": "CiteGuard-RAG: A Validation-Centered AI System for Evidence-Grounded Question Answering",
+      "abstract": "Retrieval-augmented generation (RAG) can improve access to complex information; however, retrieving evidence alone does not ensure that answers are grounded, citation-valid, or appropriately refused. This paper introduces CiteGuard-RAG, a validation-centered AI system for evidence-grounded question answering. The system integrates hybrid semantic-lexical retrieval, citation-constrained generation, sentence-level grounding validation, and single-pass regeneration. Validation is used at runtime to determine whether a candidate answer should be accepted, refused, or regenerated before final delivery.   CiteGuard-RAG is evaluated on 400 questions across a controlled housing-law dataset, PrivacyQA, and CUAD. In the controlled evaluation, it achieves 99.1% retrieval accuracy, 98.3% grounded-answer accuracy, and 98.3% citation validity, with no validation-detected hallucinations. Ablation results show that grounded-answer accuracy drops sharply when validation is removed, even when retrieval accuracy remains unchanged. External evaluation shows that while citation validity remains strong, evidence utilization, span alignment, and refusal calibration become harder under domain shift.   These findings indicate that trustworthy RAG systems require explicit validation between retrieval and final answer delivery. CiteGuard-RAG provides a practical architecture for linking retrieval, generation, citation checking, abstention, and regeneration in high-stakes information access.",
+      "authors": [
+        "Sumit Barua",
+        "Guan Hong",
+        "Halil Dursunoglu",
+        "Charles Rodgers",
+        "Alvis Fong"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-09-14T16:30:54+00:00",
+      "link": "https://arxiv.org/pdf/2609.15830v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "retrieval-augmented evidence grounding with citation validation to accept, refuse or regenerate answers",
+      "llm_evidence_cn": "基于检索增强的证据支撑与引用校验，判定接受、拒绝或重新生成答案",
+      "llm_evidence": "基于检索增强的证据支撑与引用校验，判定接受、拒绝或重新生成答案",
+      "canonical_evidence": "基于检索增强的证据支撑与引用校验，判定接受、拒绝或重新生成答案",
+      "llm_tldr_en": "CiteGuard-RAG is a validation-centered retrieval-augmented system that grounds answers in retrieved evidence, enforces citations and decides whether to accept, refuse or regenerate an answer, improving evidence-grounded question answering over legal and privacy datasets.",
+      "llm_tldr_cn": "现有检索增强生成虽能引入外部证据，却无法保证答案有据、引用有效或应当拒答。本文提出CiteGuard-RAG，融合语义与词汇混合检索、引用约束生成、句子级依据校验与单轮重生成，在运行时决定答案的接受、拒绝或重做。在住房法、PrivacyQA与CUAD等400个问题上评测，系统提升了答案的可核查性。该工作为基于外部证据验证声明真伪提供了可复用的验证框架。",
+      "llm_tldr": "现有检索增强生成虽能引入外部证据，却无法保证答案有据、引用有效或应当拒答。本文提出CiteGuard-RAG，融合语义与词汇混合检索、引用约束生成、句子级依据校验与单轮重生成，在运行时决定答案的接受、拒绝或重做。在住房法、PrivacyQA与CUAD等400个问题上评测，系统提升了答案的可核查性。该工作为基于外部证据验证声明真伪提供了可复用的验证框架。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

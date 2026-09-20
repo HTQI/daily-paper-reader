@@ -1,0 +1,25 @@
+{
+  "date": "20260920",
+  "date_label": "",
+  "generated_at": "2026-09-20 21:06:24 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.15830v1",
+      "route": "202609/20/2609.15830v1-citeguard-rag-a-validation-centered-ai-system-for-evidence-grounded-question-answering",
+      "title": "CiteGuard-RAG: A Validation-Centered AI System for Evidence-Grounded Question Answering",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "基于检索增强的证据支撑与引用校验，判定接受、拒绝或重新生成答案",
+      "first_seen_at": "2026-09-20 21:06:24 UTC",
+      "updated_at": "2026-09-20 21:06:24 UTC"
+    }
+  ]
+}

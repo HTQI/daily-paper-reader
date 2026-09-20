@@ -1,0 +1,24 @@
+{
+  "label": "2026-09-20",
+  "date": "2026-09-20",
+  "generated_at": "2026-09-20T21:06:25",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202609/20/2609.15830v1-citeguard-rag-a-validation-centered-ai-system-for-evidence-grounded-question-answering",
+      "section": "quick",
+      "title_en": "CiteGuard-RAG: A Validation-Centered AI System for Evidence-Grounded Question Answering",
+      "authors": "Sumit Barua, Guan Hong, Halil Dursunoglu, Charles Rodgers, Alvis Fong",
+      "date": "2026-09-14",
+      "pdf": "https://arxiv.org/pdf/2609.15830v1",
+      "score": "6.0",
+      "evidence": "基于检索增强的证据支撑与引用校验，判定接受、拒绝或重新生成答案",
+      "tldr": "RAG 虽能检索证据，但无法保证答案有据、引用有效或恰当拒答。CiteGuard-RAG 以验证为中心，融合混合语义-词法检索、引用约束生成、句级 grounding 验证与单轮重生成，在运行时决定接受、拒答或重生成。在住房法、PrivacyQA、CUAD 的 400 题评估中，受控场景达 99.1% 检索准确率、98.3% 有据答案准确率和引用有效性，且无验证检出的幻觉。它表明检索与交付之间需显式验证，为高风险信息访问提供实用架构。",
+      "tags": "query:mfnd",
+      "abstract_en": "Retrieval-augmented generation (RAG) can improve access to complex information; however, retrieving evidence alone does not ensure that answers are grounded, citation-valid, or appropriately refused. This paper introduces CiteGuard-RAG, a validation-centered AI system for evidence-grounded question answering. The system integrates hybrid semantic-lexical retrieval, citation-constrained generation, sentence-level grounding validation, and single-pass regeneration. Validation is used at runtime to determine whether a candidate answer should be accepted, refused, or regenerated before final delivery.   CiteGuard-RAG is evaluated on 400 questions across a controlled housing-law dataset, PrivacyQA, and CUAD. In the controlled evaluation, it achieves 99.1% retrieval accuracy, 98.3% grounded-answer accuracy, and 98.3% citation validity, with no validation-detected hallucinations. Ablation results show that grounded-answer accuracy drops sharply when validation is removed, even when retrieval accuracy remains unchanged. External evaluation shows that while citation validity remains strong, evidence utilization, span alignment, and refusal calibration become harder under domain shift.   These findings indicate that trustworthy RAG systems require explicit validation between retrieval and final answer delivery. CiteGuard-RAG provides a practical architecture for linking retrieval, generation, citation checking, abstention, and regeneration in high-stakes information access.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
