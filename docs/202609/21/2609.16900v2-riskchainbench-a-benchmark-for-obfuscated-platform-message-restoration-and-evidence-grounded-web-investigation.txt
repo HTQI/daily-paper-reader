@@ -1,0 +1,353 @@
+Title: RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation
+
+URL Source: https://arxiv.org/pdf/2609.16900v2
+
+Published Time: Fri, 18 Sep 2026 01:38:12 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation 
+
+ZhuoXin Liu 1,2,† Zhiming Ma 2,5,† Ying Zhang 1 Mengzheng Yang 3
+
+Yifan Wang 3 Zhengqi Huang 6 Yanhan Zhou 4 Zekun Lin 1 Jun Zhang 1
+
+Shun Zhang 3,* Yue Chen 5 Qiao Zhao 1,4 Peng Chen 3
+
+> 1
+
+Baidu 2SmartFlowAI 
+
+> 3
+
+People’s Public Security University of China 
+
+> 4
+
+Tsinghua University 5JD Technology 6Northeastern University 
+
+## Abstract 
+
+Platform abuse campaigns conceal redirection instruc-tions with emojis, homophones, character decomposi-tion, and redundant symbols, then route users through disguised links to services associated with pornography, fraud, gambling, or illicit transactions. Existing bench-marks evaluate obfuscated text and risky webpages sepa-rately, obscuring how target recovery affects downstream evidence acquisition. We introduce R ISK CHAIN BENCH ,pairing 3,600 synthetic token-text restoration inputs from 600 source sessions with 600 corresponding human-labeled local web environments. A model first restores the message, operational intent, and destination; the same un-derlying model then acts as a VLM-driven web agent that investigates the correctly associated website and produces a frozen, evidence-cited risk report without message-side semantics or domain-reputation cues. We score restora-tion and correct-routing web investigation separately and compose them offline by applying the frozen primary-entry prediction as a gate to the same Task 2 result. Hu-man labels determine task correctness, while a fixed mul-timodal evidence judge assesses faithfulness, sufficiency, completeness, and consistency. Across ten models, Entry Top-1 ranges from 35.2% to 95.2% and web decision ac-curacy from 26.3% to 62.8%; the leading systems differ across entry recovery, full reconstruction, website deci-sions, and fine-grained typing. Execution failures account for 31.9% of web runs, whereas post-decision type errors account for only 0.9%, identifying stable exploration and risk judgment as the principal bottlenecks. We release the benchmark, protocol, and resettable local sandbox. 
+
+> †
+
+Co-first authors. mazhiming312@outlook.com; 
+
+> *
+
+Correspondence: shun-zhang@ppsuc.edu.cn; {liuzhuoxin,zhaoqiao}@baidu.com; {zhangying84,linzekun,zhangjun25}@baidu.com; 104754242013@henu.edu.cn; 2024111026@stu.ppsuc.edu.cn; 2201803@stu.neu.edu.cn; zhouyanh24@mails.tsinghua.edu.cn; chenyue21@jd.com; chenpeng@ppsuc.edu.cn. Entry-gated end-to-end accuracy (%) 
+
+> 60.8 52.3 49.2 49.0 44.5 25.7 19.3 19.2 18.2 16.7
+> GPT-5.6 SOL GPT-5.4 Opus 4.8 GPT-5.2 Kimi K3 Kimi K2.5 Qwen3.6 Sonnet 5 Doubao 2.0 Kimi K2.6
+
+Figure 1. Offline entry-gated end-to-end accuracy on 600 websites; failures at either stage count as ⊥.
+
+## 1 Introduction 
+
+Online platforms routinely moderate pornography, fraud, gambling, illicit transactions, and related abuse. Evaders rarely state their intent consistently in plain text: they interleave emojis with characters, replace keywords with homophones or visual lookalikes, de-compose Chinese characters, and add irrelevant to-kens. Such messages can remain intelligible to people while evading moderation based on surface patterns. They often include altered domains, access codes, or operational instructions that redirect users to exter-nal webpages. Reliable assessment therefore requires message restoration, target identification, web explo-ration, and evidence verification. We call this problem 
+
+cross-channel platform risk investigation .Prior work provides two foundations: obfuscated-content benchmarks study restoration or classification under character perturbations, emojis, homoglyphs, phonetic substitutions, and coded language (Tan et al., 2020; Kirk et al., 2022; Cooper, Surdeanu, and Blanco, arXiv:2609.16900v2 [cs.CL] 17 Sep 2026 2023; Xiao et al., 2024; Guo et al., 2025; Ma et al., 2025; Wan, Li, and Huang, 2026), while web-agent benchmarks study reproducible interaction and safe behavior around malicious links or adversarial web-pages (Zhou et al., 2024; Kong et al., 2026; Ying et al., 2026; Zhou et al., 2026). Together they leave an im-portant platform-governance question unresolved: a small restoration error can change the destination in-vestigated downstream, yet separate text and web eval-uations cannot expose this cross-stage loss. We introduce RISK CHAIN BENCH , which links obfuscated-message restoration and evidence-grounded web investigation by destination identity. Each case contains fully synthetic, platform-formatted token-text messages and a local environment con-structed offline from the corresponding webpages. The model commits to its restoration before browsing, and the top-ranked entry from a fixed primary variant determines whether the frozen web result is admitted as an end-to-end success. Redirection rhetoric and destination risk are constructed as separate attributes. The web agent receives neither the source message nor its restoration, requiring website conclusions to rest on observed web evidence. Each model–website pair yields one investigation tra-jectory under the correct association. The resulting web score measures investigation for a given target and can also be composed offline with a previously committed restoration through an entry gate, with-out exposing message semantics to the web judgment. Figure 1 compares the correct-routing and entry-gated views. Trained annotators establish website decisions and types under a common codebook, but human an-notations do not supply routine trajectory-evidence scores. A fixed multimodal evidence judge provides coverage-conditioned diagnostics of how well each conclusion is supported by its trajectory; it does not score task labels. Task 1 evaluates the same ten underlying models on 3,600 text-only restoration inputs from 600 synthetic source sessions with six variants each. Task 2 evaluates them as VLM-driven web agents on the corresponding 600 human-labeled local websites, with one investiga-tion per model–website pair. The experiments further analyze failures across obfuscation forms and stages of web investigation. We release the benchmark, eval-uation protocol, and resettable local sandbox, which also supports subsequent agent-training research. Our contributions are threefold: • We formulate cross-channel platform risk in-vestigation as an entry-linked process span-ning restoration, target identification, web ex-ploration, and evidence-grounded risk judg-ment. • We construct 3,600 synthetic token-text in-puts and 600 human-labeled local web envi-ronments for safe, reproducible investigation. • We establish two-stage baselines for the same ten underlying models in text-only restoration and VLM-driven web-agent settings, and lo-calize failures in obfuscation recovery, web execution, risk judgment, and fine-grained typing. 
+
+## 2 Related Work 
+
+Obfuscated content understanding. Evasive con-tent uses character edits, homoglyphs, homophones, and emojis to circumvent moderation. TNT (Tan et al., 2020) studies reconstruction from character perturba-tions; Hatemoji (Kirk et al., 2022) and OTH (Cooper, Surdeanu, and Blanco, 2023) expose robustness fail-ures caused by emojis and Unicode homoglyphs. Chinese benchmarks extend this setting to compo-sitional phonetic, visual, and semantic substitutions. ToxiCloakCN (Xiao et al., 2024) evaluates cloaked offensive language, and PCR-ToxiCN (Guo et al., 2025) studies platform-observed phonetic substitu-tions. HomoP-CN (Ma et al., 2025) studies Chinese homophone restoration, whereas CodedLang (Wan, Li, and Huang, 2026) benchmarks coded-language detec-tion and understanding in real-world Chinese online reviews. Jiang et al. (Jiang et al., 2026) introduce AD-VJARGON, an in-the-wild annotated dataset linking adversarial jargon variants to canonical forms, and JADE, a corresponding detection framework; we use the work only as related-work evidence and do not import its entries. These tasks primarily end at a restored message or label; they do not measure whether a recovered desti-nation supports subsequent investigation. 
+
+Risk-aware web agents and trajectory evalua-tion. WebArena (Zhou et al., 2024) provides self-hosted websites for reproducible interaction. MalURL-Bench (Kong et al., 2026) studies disguised mali-2cious links, SecureWebArena (Ying et al., 2026) intro-duces adversarial web environments, and FraudSM-SWalker (Zhou et al., 2026) connects message context with safely processed web evidence while hiding rep-utation shortcuts. Trajectory evaluation introduces a further chal-lenge: AgentRewardBench (Lù et al., 2025) finds that no single LLM judge performs consistently well across its five web-agent benchmarks, Plan-RewardBench (Wang et al., 2026a) identifies degra-dation on longer trajectories, and REFLECT (Wang et al., 2026b) exposes weaknesses in evidence verifi-cation. R ISK CHAIN BENCH addresses this remaining cross-stage gap by linking destination recovery to ac-tive investigation while isolating message cues and domain reputation from website evidence. Task cor-rectness is measured against human website labels; automated evidence scores remain separate, coverage-conditioned diagnostics. 
+
+## 3 Method 
+
+RISK CHAIN BENCH uses the website as its primary unit and treats messages pointing to the same site as nested variants. The i-th website instance contains a local environment Mi, a message set Xi, and a website annotation yi:
+
+B = {bi}Si=1 ,bi = ( Mi, Xi, y i),
+
+Xi = {(x∗ 
+
+> ij
+
+, exij )}Ki
+
+> j=1
+
+, yi = ( di, c i).
+
+(1) Here, x∗ 
+
+> ij
+
+is a canonical source message and exij is one of its token-text obfuscations. The website de-cision is di ∈ D = {V, N, U}, denoting violation, non-violation, and insufficient evidence. The primary type satisfies ci ∈ C when di = V , ci = NONE when 
+
+di = N , and ci = UNKNOWN when di = U . We fix S = 600 website clusters and Ki = 6 variants for every source session, yielding N = P 
+
+> i
+
+Ki = 3 ,600 .The Task 1 evaluation unit is a message variant (i, j ),whereas the Task 2 unit is a website i, yielding 600 web cases and one trajectory per model–website pair. Offline end-to-end evaluation remains website-level: one primary variant per website is fixed in advance as the sole entry gate, and the remaining five variants participate only in Task 1. The annotation yi is a prop-erty of Mi, and no label-consistency assumption is imposed on message rhetoric. Figure 2 summarizes how restoration, website investigation, and trajectory-evidence evaluation are connected through the frozen primary-entry decision. For each message, the restorer outputs a canonical message, an operational intent, and a ranked entry list 
+
+bZij = ( bz(1)  
+
+> ij
+
+, . . . , bz(k) 
+
+> ij
+
+). For the fixed primary variant of website i, the private resolver defines the entry gate 
+
+gi = I
+
+h
+
+ρ(bz(1)  
+
+> i
+
+) = i
+
+i
+
+. (2) Separately, web investigation uses a common instruc-tion u, a controller-generated, label-free action-class scaffold hi, and the local environment Mi. The scaf-fold contains only high-level interaction categories; it contains no risk label, selector, target text or value, expected state, or mandatory action order. The two branches meet only during offline end-to-end scoring through the entry gate gi. For each model–website pair, the controller uses the correct association to initialize one investigation under a randomized local hostname; the private resolver uses the frozen primary-variant entry only to compute gi. The controller does not ex-pose the source message, its restoration, the origi-nal domain, or resolver output to the web agent. Web observations therefore cannot revise the committed restoration or reveal domain-reputation shortcuts. 
+
+3.1 Benchmark Construction Balanced website selection. We select 600 usable scenarios from a frozen pool of 2,500 unique of-fline websites. A deterministic mixed-integer program uses exact quotas for presentation form, visible topic, and language, with bounded constraints on interaction depth, engineering difficulty, source stratum, and host-family concentration. The selected set spans 339 host families, with at most eight sites per family; 595 sites support click replay and 333 support stateful replay. It supports capability evaluation rather than prevalence estimation, and selection metadata neither determine website gold nor appear in model inputs. 
+
+Synthetic messages and obfuscation transforma-tions. Task 1 contains 600 fully synthetic source sessions and uses no messages collected from social platforms. Each source contains a reserved-domain entry and yields six token-text variants. A determin-istic pipeline composes phonetic or visual substitu-tions, character decomposition, redundant platform-3Figure 2. Overview of R ISK CHAIN BENCH . A restorer recovers the message and reserved entry before browsing. The reference association initializes one controlled website investigation. The frozen predicted entry is then applied offline as a reachability gate to the same frozen result, without a second browser run. Restoration, website-task performance, and trajectory evidence are evaluated separately. 
+
+token insertion, and entry alteration while preserv-ing the intended message and destination. The six recipes separately stress composite restoration, pho-netic substitutions, entry confusables, mixed lexical and platform-token corruption, few-line entry layouts, and grapheme-safe vertical entry layouts. Every edit is stored in a reversible trace. One composite variant is fixed before evaluation for cross-stage scoring, while the other five evaluate restoration only. Full construc-tion strata, recipes, and audits appear in the supple-mentary material. Platform-token profiles transcribe 80 text codes from six public EmojiAll secondary cat-alogs (EmojiAll, 2026), without redistributing images; 12 additional Bilibili codes come from researcher-supplied examples. Homophone candidates and Han-character maps are project-curated and pronunciation-checked with pypinyin 0.54.0 (mozillazg, 2025); no third-party Chinese lexicon is imported. Automated checks detect malformed entries, align-ment anomalies, irreversible transformations, and du-plicates. Canonical destinations use unique three-label names in the reserved .test namespace, without schemes, paths, live domains, accounts, or external services. The frozen audit verifies exact reversibility, token-profile isolation, gold and trace separation, and credential hygiene. R ISK CHAIN BENCH is released as one evaluation set, with all variants from the same source grouped under one website. Figure 3 summa-rizes the construction process. 
+
+Controlled local web environments. Each web sce-nario is constructed offline from the corresponding real-world webpages and runs within an isolated net-work. It preserves the page structure, content, redirects, and interaction feedback required for risk investiga-tion while removing dependence on the original live service. Each environment defines observable states, allowlisted actions, their resulting transitions, and a bounded interaction horizon. It specifies what an agent can observe and manipulate but encodes neither a pro-grammatic risk label nor a unique valid evidence path. 4Figure 3. Benchmark construction from the frozen offline-site pool and synthetic message variants. 
+
+Publicly observable states preserve the original seman-tic content and interaction structure whenever possible, while local content or synthetic states replace external dependencies that cannot be reproduced safely. Each environment is checked for page availability, relevant interactions, reset consistency, and network isolation; construction and validation details appear in the sup-plementary material. 
+
+Human construction of website gold. Four trained annotators establish three-way website decisions and nine primary violation types under a common code-book. Each website receives two independent judg-ments; disagreements and any insufficient-evidence judgment trigger blind review, followed by coordina-tor adjudication when necessary. First-pass decision and joint-label agreement are 82.50% and 80.17%, with nominal Krippendorff’s α of 0.6553 and 0.7425. The resolution paths comprise 460 pair-consensus, 120 third-rater-majority, and 20 coordinator-adjudicated cases. Hidden repeats yield 97.9% decision agreement and 95.8% joint decision–type agreement. The frozen gold contains 394 violating, 181 non-violating, and 25 insufficient-evidence websites; full assignment and type support appear in the supplementary material. 
+
+Case pairing and quality control. Every canonical message associated with website i contains a reference entry satisfying ρ(z∗ 
+
+> ij
+
+) = i for all 1 ≤ j ≤ Ki. Mes-sage and environment quality are checked separately, and all variants paired with a website share its an-notation yi. Obfuscation form, message length, entry position, and interaction depth support stratified anal-ysis; construction strata remain separate from human labels. 
+
+3.2 Obfuscated Message Restoration 
+
+The restoration task gives the model only exij and re-quires three outputs: a canonical message bxij , an oper-ational intent bιij , and ranked entry candidates bZij . The model cannot access webpages, domain-reputation services, or other external information at this stage. Its output should preserve the meaning, entry, access code, and operational instructions in the source mes-sage while removing platform token strings, decom-posed characters, and redundant symbols used for eva-sion. The restoration is frozen before any web ob-servations are produced, and subsequent investigation cannot alter it. Entry Top-1 exact-match rate is the primary Task 1 metric because the top-ranked entry controls the end-to-end gate. Full reconstruction requires the canonical message, operational intent, and top-ranked entry to be correct. Let ED denote character-level edit distance, and let z∗ 
+
+> ij
+
+and ι∗ 
+
+> ij
+
+denote the reference entry and intent. We report 
+
+CER = 
+
+P
+
+> i
+
+P 
+
+> j
+
+ED( bxij , x ∗ 
+
+> ij
+
+)
+
+P
+
+> i
+
+P 
+
+> j
+
+|x∗ 
+
+> ij
+
+| ,
+
+Entry@1 = 1
+
+N
+
+X
+
+> i
+
+X
+
+> j
+
+I[ρ(bz(1)  
+
+> ij
+
+) = i],
+
+FR = 1
+
+N
+
+X
+
+> i
+
+X
+
+> j
+
+I
+
+"bxij = x∗ 
+
+> ij
+
+∧ bιij = ι∗
+
+> ij
+
+∧ ρ(bz(1)  
+
+> ij
+
+) = i
+
+#
+
+.
+
+(3) We additionally report Entry Recall@ k, which credits any candidate in bZij that resolves to website i. Be-cause entries are reserved three-label .test names without URL schemes, we report entry rather than URL metrics. If the top-ranked entry from the fixed primary variant does not resolve to its associated website, then gi = 0 
+
+and the gated end-to-end output is ⊥; the frozen web-5only trajectory and score remain unchanged. Lower-ranked candidates do not repair the gate. The protocol applies no automatic correction and never routes an incorrect entry to another benchmark website. We re-port results by obfuscation form, severity, and entry position to distinguish general restoration difficulty from failures involving actionable information. 
+
+3.3 Evidence-Grounded Web Investigation 
+
+Web investigation is defined at the website level and runs under a common instruction u and label-free ex-ploration guidance hi. The guidance describes high-level interaction coverage without revealing page-specific targets or expected conclusions. The source message, canonical message, model restoration, and entry-resolution process are absent from the agent con-text. BrowserGym and Playwright present the current observation, the agent selects an allowlisted action conditioned on u, hi, and its prior trace, and the envi-ronment logs the resulting transition. The alternating observations and actions form the bounded trajectory 
+
+τi = ( o0, a 0, . . . , a Ti−1, o Ti ), Ti ≤ H, (4) which is frozen when the agent stops or reaches the interaction budget. After the investigation trajectory is frozen, the same tested model receives the common instruction, site guidance, and recorded trajectory to produce a frozen risk conclusion byi = ( bdi, bci), a rationale bri, and evi-dence references bEi = {(tk, ℓ k)}Li 
+
+> k=1
+
+without rerun-ning the browser. Here bdi ∈ D ∪ {⊥} . A prediction of U is a valid semantic decision that the observed en-vironment provides insufficient evidence. In the web-only view, ⊥ is assigned only when no valid task deci-sion is available because of a system failure, timeout, or malformed output; an entry-gate failure produces 
+
+⊥ only in the gated view of Eq. 5. The predicted type follows the same compatibility constraints as the gold type when bdi ∈ D . In each evidence reference, tk
+
+identifies an observed trajectory step and ℓk locates the supporting content. Only observations recorded in the trajectory are admissible as evidence. The supple-mentary material specifies evidence-admission criteria and exceptional outcomes. This input boundary makes the website judgment depend on evidence the agent actually observes. Message-side risk cues cannot directly determine web- 
+
+> Figure 4. Web-agent evidence collection and indepen-dent evaluation. Sampled human evidence audit is a validation-only branch when available; it is not used in the reported routine scores, and no four-dimensional human-audit result is claimed here.
+
+site classification, allowing non-violating destinations paired with suggestive redirection rhetoric to remain meaningful hard negatives. The agent may report violation, non-violation, or in-sufficient evidence, all of which belong to the task de-cision space. Unreachable pages, environment blocks, exhausted action budgets, and system exceptions are recorded separately; only runs without a valid task decision receive ⊥. Detailed rules appear in the sup-plementary material. 
+
+3.4 Evaluation Protocol Web-only and gated end-to-end views. Each tested model investigates each website once. The web-only view uses the correct website association to evaluate exploration, evidence acquisition, and risk judgment. The gated end-to-end view reuses that frozen result and counts it as successful only when the entry re-covered from the fixed primary variant identifies the website. Thus the logical protocol enters the web stage only after a successful entry gate, whereas the imple-mentation computes each reusable web trajectory once and applies the same gate offline. Figure 4 summarizes the independent scoring branches. The controller uses the reference association to initialize the environment without showing the entry or canonical message to the 6agent. We define 
+
+by wi = byi, by ei =
+
+(byi, gi = 1 ,
+
+⊥, gi = 0 , (5) where w and e denote the web-only and gated end-to-end views. The entry-gate pass rate is Pass entry =
+
+S−1 PSi=1 gi. This is an admission rate for offline composition, not a measure of whether the local web-site itself is reachable. It retains missing or incorrect entries without routing them into another case. 
+
+Protocol validity. A deterministic validator 
+
+V (τ, E ) ∈ { 0, 1} checks that actions remain inside the permitted environment and citations resolve to observed content. It does not infer webpage risk. Invalid runs are reported separately and count as task failures; complete rules appear in the supplementary material. 
+
+Task correctness. For q ∈ { w, e }, decision accu-racy and hierarchical exact match are 
+
+Acc qd = 1
+
+S
+
+> S
+
+X
+
+> i=1
+
+I[ bdqi = di],
+
+HEM q = 1
+
+S
+
+> S
+
+X
+
+> i=1
+
+I[byqi = yi].
+
+(6) Decision macro-F1 uses the same three-class confu-sion matrix. Decision accuracy, decision macro-F1, and hierarchical exact match retain all S = 600 web-sites, including runs without a valid task decision. Binary accuracy is computed on websites with gold 
+
+V or N. Violation-type macro-F1 is computed on the 394 gold violations over codebook types represented in the frozen gold; six of the nine types have nonzero support. A prediction of U is correct only against gold 
+
+U; ⊥ is always a failure. Per-class recall, coverage, system failures, environment failures, and protocol va-lidity are reported separately. Metric definitions appear in the supplementary material. 
+
+Multidimensional multimodal evidence judge. We use a fixed multimodal evidence judge Jϕ only to eval-uate the relation between the reported conclusion and the recorded investigation. The judge receives a sani-tized trajectory package comprising the action ledger, recorded trajectory observations, admitted screenshots, cited evidence, final conclusion, and rationale, and re-turns 
+
+si = Jϕ(τi, bEi, byi, bri) = ( si1, s i2, s i3, s i4). (7) The four components measure evidence faithfulness, evidence sufficiency, investigation completeness, and reasoning consistency, respectively. Their unweighted arithmetic mean is reported only as a compact evidence diagnostic. The judge does not receive website anno-tations, model identity, URLs or domain-reputation signals, or hidden model reasoning, and it does not determine the website decision or violation type. Its model version, prompt, decoding configuration, and rubric remain fixed across all tested systems. The judge evaluates each frozen website trajectory once. 
+
+Entry-gated end-to-end loss. The web-only view measures website investigation under correct routing, whereas the gated end-to-end view additionally retains entry-recovery failures. Their difference in three-way decision accuracy is 
+
+∆gate = Acc wd − Acc ed. (8) This quantity is reported in percentage points and at-tributes the end-to-end loss to entry recovery rather than changes in web investigation. Restoration results cover all N messages, and web re-sults cover all S websites; when case-aligned restora-tion outputs are supplied, entry-gated composition also operates over the S website units. Message-level and website-level results are reported separately, and mul-tiple message variants of one website do not create additional website observations. 
+
+## 4 Experiments 
+
+4.1 Experimental Setup Data and systems. The evaluation contains 600 websites, one synthetic source session per website, and six variants per session, totaling 3,600 restoration inputs. The fixed primary variant supplies the sole of-fline entry gate; the remaining five variants participate only in Task 1. The two panels of Table 1 each report ten completed model runs. Gemini 3.6 Flash is un-ranked in Task 2 because it was absent from the frozen report and judge batches. Each model–website pair contributes one BrowserGym–Playwright trajectory 7under a 30-action and 600-second budget, with imme-diate termination after an early valid report. All Task 2 systems use the same frozen website set, local-only interaction boundary, and reporting schema. 
+
+Metrics. Task 1 is ranked by Entry Top-1 and also reports full reconstruction, CER, and Entry Recall@ k.Website evaluation reports three-way decision accu-racy and macro-F1, violation-type macro-F1, and hier-archical exact match. Runs without a valid task deci-sion retain their frozen failure status. Evidence scores are conditional on a successful fixed multimodal-judge evaluation of a valid source trajectory and are therefore interpreted together with judge coverage. Primary met-rics use central 95% intervals from 2,000 website-level bootstrap resamples. These intervals quantify website-composition uncertainty; because each model–website pair is run once, they do not estimate rerun variance. Evaluated model versions follow official provider documentation (OpenAI, 2025, 2026b,a; Anthropic, 2026a,b; Moonshot AI, 2026a,b,c; Alibaba Cloud, 2026; ByteDance Seed, 2026; Google, 2026). 
+
+4.2 Main Results Message restoration. The upper panel of Table 1 reports the formal results of ten models over all 3,600 messages. Models are ordered by Entry Top-1, and full reconstruction requires the canonical message, operational intent, and top-ranked entry to be correct. All six variants remain in the evaluation, and model-output failures remain in the denominator. Entry Top-1 ranges from 35.19% to 95.22%. GPT-5.4 leads Entry Top-1, whereas GPT-5.6 SOL leads full reconstruction and has the lowest CER. Kimi K3 com-bines low CER with a lower Entry Top-1, confirming that character-level recovery cannot replace a separate evaluation of actionable-entry recovery. Full stratified results by obfuscation group and all re-sampling intervals appear in the supplementary mate-rial. 
+
+Evidence-grounded web investigation. The web-only view evaluates exploration, evidence acquisition, and final judgment under correct website binding. Task correctness in the lower panel of Table 1 is scored di-rectly against human website gold labels, while the fixed multimodal evidence judge evaluates only the 31.9 8.2 12.3 0.9 46.6 20.0 1.3 15.8 1.8 61.0 20.7 1.8 20.2 1.0 56.3 27.5 1.2 16.2 0.8 54.3 21.8 10.2 14.3 0.5 53.2 33.0 2.0 13.3 0.7 51.0 4.5 36.7 9.0 2.3 47.5 44.0 1.3 7.2 1.0 46.5 47.2 1.0 10.3 0.8 40.7 57.7 6.0 6.8 0.0 29.5 42.8 21.0 9.8 0.2 26.2 Exec. Report Dec. Type H-EM  
+
+> ΣPooled
+> GPT-5.6 SOL GPT-5.2 Kimi K2.5 GPT-5.4 Qwen3.6 Opus 4.8 Kimi K3 Kimi K2.6 Doubao 2.0 Sonnet 5 Share of runs (%)
+
+Figure 5. Task 2 first-failure attribution over all 600 runs per model; H-EM denotes hierarchical success. 
+
+evidential relation between the conclusion and the ob-served trajectory. Runs without valid decisions remain failures. Task 2 decision accuracy ranges from 26.3% to 62.8%, and hierarchical exact match ranges from 26.2% to 61.0%. GPT-5.6 SOL leads both metrics and decision macro-F1; Kimi K2.5 leads type macro-F1. Evidence scores remain coverage-conditioned and do not define an overall ranking; complete coverage and four-dimensional results appear in the supplement. 
+
+Entry-gated end-to-end composition. Figure 1 and Table 2 apply the fixed primary-entry gate to the same frozen web results. Gated accuracy ranges from 16.7% to 60.8%, with losses of 0.7–32.3 percentage points. The composition reuses each frozen Task 2 trajectory without a browser rerun. 
+
+4.3 Diagnostic Analysis 
+
+We assign each run to its first failed stage: execution, missing report, decision, or type; runs with both a correct decision and type are hierarchical successes. Figure 5 shows that execution is the largest pooled failure source at 31.9%; only 0.9% fail at typing after a correct decision. 8(a) Task 1: message restoration 
+
+System Entry Top-1 ↑ Full ↑ CER ↓
+
+GPT-5.4 95.22 66.06 1.62 GPT-5.6 SOL 94.31 73.31 1.11 
+
+Claude Opus 4.8 92.94 65.72 1.64 Kimi K3 84.58 65.64 1.59 GPT-5.2 73.39 45.72 16.01 Claude Sonnet 5 72.17 43.72 10.69 Doubao Seed 2.0 62.86 38.36 14.14 Kimi K2.5 39.86 19.94 17.11 Qwen3.6 Plus 39.06 25.33 11.79 Kimi K2.6 35.19 16.06 20.19 
+
+(b) Task 2: web investigation 
+
+System Acc. ↑ Dec. F1 ↑ Type F1 ↑ H-EM ↑
+
+GPT-5.6 SOL 62.8 59.3 42.8 61.0 
+
+GPT-5.2 57.3 51.2 28.0 56.3 Kimi K2.5 55.2 48.8 48.1 54.3 GPT-5.4 53.7 51.7 26.4 53.2 Qwen3.6 Plus 51.7 50.2 44.1 51.0 Claude Opus 4.8 49.8 51.4 40.6 47.5 Kimi K3 47.5 52.4 40.8 46.5 Kimi K2.6 41.5 51.0 33.7 40.7 Doubao Seed 2.0 29.5 38.0 32.6 29.5 Claude Sonnet 5 26.3 36.5 26.0 26.2 
+
+Table 1. Task 1 and Task 2 results (%). Bold denotes the best and underlining the second-best result within each metric. The panels remain separate and are ranked independently by Entry Top-1 and three-way decision accuracy. Task 1 uses all 3,600 messages. Task 2 accuracy, decision macro-F1, and H-EM retain all 600 websites and count ⊥ as incorrect; Type F1 is computed on the 394 gold-violation websites. 
+
+## 5 Conclusion 
+
+RISK CHAIN BENCH links obfuscated-message restoration and evidence-grounded web investigation in a resettable local sandbox. Across the same ten models, actionable-entry recovery and full reconstruc-tion rank models differently, as do website decisions and fine-grained violation typing. The offline entry gate exposes upstream loss without rerunning website investigation; frequent execution failures show that reliable exploration remains prerequisite to evidence-grounded judgment. The results use one trajectory per model–website pair, sparsely populate several violation types, and condi-tion evidence diagnostics on successful judge cov-erage. Future work should measure rerun variance, broaden underrepresented risk types and languages, and validate the evidence rubric through a frozen hu-man trajectory audit within the same isolated environ-ments. 
+
+## 6 Ethical Statement 
+
+Synthetic, non-routable entries and isolated environ-ments avoid contact with live services. Local substi-tutes replace personal identities, payment flows, ac-count operations, and communication with third par-ties. Evidence packages retain only sanitized observa-tions needed for evaluation. Benchmark outputs do not establish legal attribution. 9System Web-only Gated Loss Acc. ↑ Acc. ↑ (pp) ↓                               
+
+> GPT-5.6 SOL 62.8 60.8 2.0 GPT-5.4 53.7 52.3 1.3 Claude Opus 4.8 49.8 49.2 0.7 GPT-5.2 57.3 49.0 8.3 Kimi K3 47.5 44.5 3.0 Kimi K2.5 55.2 25.7 29.5 Qwen3.6 Plus 51.7 19.3 32.3 Claude Sonnet 5 26.3 19.2 7.2 Doubao Seed 2.0 29.5 18.2 11.3 Kimi K2.6 41.5 16.7 24.8
+> Table 2. Correct-routing Task 2 accuracy and entry-gated end-to-end accuracy (%). All values use the same 600 websites per model. Loss is the difference in percentage points; 95% intervals appear in the supplementary mate-rial.
+
+## References 
+
+Alibaba Cloud. 2026. Qwen3.6-Plus Model Docu-mentation. https://www.alibabacloud.com/help/en/ model-studio/vision-model. Official model docu-mentation. Anthropic. 2026a. Claude Opus 4.8. https://www. anthropic.com/research/claude-opus-4-8. Official model documentation. Anthropic. 2026b. Claude Sonnet 5. https:// www.anthropic.com/news/claude-sonnet-5. Offi-cial model documentation. ByteDance Seed. 2026. Doubao Seed 2.0. https://developer.volcengine.com/articles/ 7588678603088019493. Official model doc-umentation. Cooper, P.; Surdeanu, M.; and Blanco, E. 2023. Hiding in Plain Sight: Tweets with Hate Speech Masked by Homoglyphs. In Findings of the Association for Computational Linguistics: EMNLP 2023 , 2922– 2929. Association for Computational Linguistics. EmojiAll. 2026. Emoji Platform Lists. https://www. emojiall.com/zh-hans/platform-list. Accessed July 20, 2026. Google. 2026. Gemini 3.6 Flash. https://ai.google.dev/ gemini-api/docs/models/gemini-3.6-flash. Official model documentation. Guo, H.; He, J.; Ma, J.; Na, H.; Wang, Z.; Zhang, H.; Chen, Q.; Wang, W.; Shi, Z.; Shen, T.; and Chen, L. 2025. Lost in Pronunciation: Detecting Chinese Of-fensive Language Disguised by Phonetic Cloaking Replacement. In Proceedings of the 2025 Confer-ence on Empirical Methods in Natural Language Processing: Industry Track , 2538–2550. Associa-tion for Computational Linguistics. Jiang, Z.; Liu, M.; Qin, Y.; and Liu, B. 2026. Breaking Free from Ivory Tower: Evaluating and Enhanc-ing Real-World Chinese Underground Adversarial Jargon Detection. In 2026 IEEE Symposium on Security and Privacy , 417–435. Kirk, H.; Vidgen, B.; Rottger, P.; Thrush, T.; and Hale, S. 2022. Hatemoji: A Test Suite and Adversarially-Generated Dataset for Benchmarking and Detect-ing Emoji-Based Hate. In Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies , 1352–1368. Association for Computational Linguistics. Kong, D.; Wu, Z.; Liu, S.; Tan, Z.; Lu, K.; Li, M.; Liu, Q.; Chu, S.; Xu, Z.; Liu, X.; and Han, M. 2026. MalURLBench: A Benchmark Evaluating Agents’ Vulnerabilities When Processing Web URLs. In 
+
+Findings of the Association for Computational Lin-guistics: ACL 2026 , 14589–14601. Association for Computational Linguistics. Lù, X. H.; Kazemnejad, A.; Meade, N.; Patel, A.; Shin, D.; Zambrano, A.; Sta´ nczak, K.; Shaw, P.; Pal, C. J.; and Reddy, S. 2025. AgentRewardBench: Evaluating Automatic Evaluations of Web Agent Trajectories. arXiv:2504.08942. Ma, J.; Feng, Z.; Song, H.; Chersoni, E.; and Chen, Z. 2025. Reasoning or Memorization? Investigating LLMs’ Capability in Restoring Chinese Internet Ho-mophones. In Proceedings of the 3rd Workshop on Towards Knowledgeable Foundation Models , 120– 139. Association for Computational Linguistics. Moonshot AI. 2026a. Kimi K2.5. https://www.kimi. com/blog/kimi-k2-5. Official model documentation. Moonshot AI. 2026b. Kimi K2.6. https://www.kimi. com/blog/kimi-k2-6. Official model documentation. Moonshot AI. 2026c. Kimi K3. https://www.kimi. com/blog/kimi-k3. Official model documentation. 10 mozillazg. 2025. pypinyin: Convert Chinese Charac-ters to Pinyin. https://github.com/mozillazg/python-pinyin/tree/v0.54.0. Version 0.54.0. OpenAI. 2025. Introducing GPT-5.2. https://openai. com/index/introducing-gpt-5-2/. Official model documentation. OpenAI. 2026a. GPT-5.6 System Card. https: //deploymentsafety.openai.com/gpt-5-6. Official model documentation. OpenAI. 2026b. Introducing GPT-5.4. https://openai. com/index/introducing-gpt-5-4/. Official model documentation. Tan, F.; Hu, Y.; Hu, C.; Li, K.; and Yen, K. 2020. TNT: Text Normalization Based Pre-Training of Trans-formers for Content Moderation. In Proceedings of the 2020 Conference on Empirical Methods in Nat-ural Language Processing , 4735–4741. Association for Computational Linguistics. Wan, R.; Li, C.; and Huang, T.-H. K. 2026. “News-paper Eat” Means “Not Tasty”: A Taxonomy and Benchmark for Coded Language in Real-World Chi-nese Online Reviews. In Proceedings of the 64th An-nual Meeting of the Association for Computational Linguistics , 9433–9446. Association for Computa-tional Linguistics. Wang, J.; Hu, Y.; Yang, W.; Pan, Z.; Li, X.; and Guo, L.-Z. 2026a. Aligning Agents via Planning: A Benchmark for Trajectory-Level Reward Model-ing. In Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics ,23174–23200. Association for Computational Lin-guistics. Wang, L.; He, Y.; Chen, P.; Yehudai, A.; Liu, Y.; Ying, R.; Shmueli-Scheuer, M.; and Cohan, A. 2026b. Time to REFLECT: Can We Trust LLM Judges for Evidence-Based Research Agents? arXiv:2605.19196. Xiao, Y.; Hu, Y.; Choo, K. T. W.; and Lee, R. K.-W. 2024. ToxiCloakCN: Evaluating Robustness of Of-fensive Language Detection in Chinese with Cloak-ing Perturbations. In Proceedings of the 2024 Con-ference on Empirical Methods in Natural Language Processing , 6012–6025. Association for Computa-tional Linguistics. Ying, Z.; Shao, Y.; Gan, J.; Xu, G.; Zhang, W.; Zou, Q.; Shi, J.; Yin, Z.; Zhang, M.; Liu, A.; and Liu, X. 2026. SecureWebArena: A Holistic Security Eval-uation Benchmark for LVLM-Based Web Agents. In Findings of the Association for Computational Linguistics: ACL 2026 , 11986–11998. Association for Computational Linguistics. Zhou, S.; Xu, F. F.; Zhu, H.; Zhou, X.; Lo, R.; Sridhar, A.; Cheng, X.; Ou, T.; Bisk, Y.; Fried, D.; Alon, U.; and Neubig, G. 2024. WebArena: A Realistic Web Environment for Building Autonomous Agents. In 
+
+International Conference on Learning Representa-tions .Zhou, Y. H.; Ma, Z. M.; Zhou, Y. J.; Li, Y. T.; Xiang, H. X.; Cheng, Y. M.; Chen, T. L.; Zhang, K. J.; Nan, Z. H.; Ni, J. H.; Wu, Z.; Pan, Q. Y.; Zhang, S.; Cheng, S.; and Luo, M. Y. 2026. FraudSM-SWalker: Benchmarking Agentic Large Language Models for SMS-to-Webpage Fraud Detection. arXiv:2606.16659. 11

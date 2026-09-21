@@ -1,0 +1,347 @@
+Title: MemeTAG: Keyword-Driven Meme Classification through Tag Embedding Reconstruction
+
+URL Source: https://arxiv.org/pdf/2609.20962v1
+
+Published Time: Mon, 21 Sep 2026 00:06:37 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# MemeTAG: Keyword-Driven Meme Classification through Tag Embedding Reconstruction 
+
+## Akshit Sharma Prashant W Patil Indian Institute of Technology Guwahati 
+
+## akshitsharma.rs@gmail.com, pwpatil@iitg.ac.in 
+
+## Abstract 
+
+The proliferation of harmful internet memes poses a sig-nificant societal threat, yet their automated classification remains a formidable algorithmic challenge due to the nu-anced, multimodal nature of their content. To address this, we introduce MemeTAG, a novel dual-objective framework that pioneers a keyword-aware approach to meme classifi-cation. Our core innovation is a two-part semantic guid-ance mechanism: first, we leverage a pretrained Vision-Language Model to generate a set of descriptive keywords, that capture the high-level semantics. Second, we introduce the Aggregated Tag Inference Network (ATIN), an attention-based module that distills these keywords into a single, rich semantic embedding. This embedding serves as a target for a novel auxiliary reconstruction loss, which compels the model to learn deeply aligned visual and textual fea-tures. This approach, combined with an efficient three-stage training strategy, establishes a new state-of-the-art on the HarMeme, Hateful Memes Challenge (HMC), and PrideMM datasets, decisively outperforming existing state-of-the-art methods. 
+
+## 1. Introduction 
+
+Memes—multimodal online messages combining im-ages and brief textual elements—have become ubiquitous in digital communication, enabling the rapid dissemina-tion of humor, cultural commentary, societal viewpoints, and shared emotional expressions. Their ease of creation, widespread accessibility, and inherent virality allow them to swiftly shape narratives, influence public discourse, and reflect collective societal attitudes. However, this powerful communication medium is increasingly exploited for dis-seminating harmful narratives, including hate speech, dis-criminatory ideologies, and misinformation, posing signif-icant risks to online safety and social cohesion [4, 5]. Ac-curately classifying memes within this multimodal context presents unique technical challenges. The interplay be-tween visual and textual components can be subtle, context-dependent, and culturally nuanced. Individually innocuous or neutral images and text can combine to become explicitly harmful or offensive, requiring sophisticated multimodal models capable of understanding the underlying seman-tic interactions [28, 35]. Current automated approaches, despite increasing sophistication, often struggle to cap-ture such nuanced multimodal relationships due to their re-liance on generalized representations or insufficient seman-tic alignment between modalities. Thus, improving meme classification demands a deeper integration of visual and textual modalities, informed by contextual semantic signals. In this work, we introduce MemeTAG, a dual-objective multimodal framework designed for an in-depth under-standing of Internet memes. MemeTAG promotes deeper alignment between visual and textual features using se-mantic keywords derived from the image, enhancing over-all semantic coherence and improving classification per-formance. Additionally, we propose an efficient three-stage training strategy that significantly reduces the compu-tational overhead typically associated with training large-scale models, without compromising their representational power. We evaluate MemeTAG extensively on three chal-lenging benchmark datasets: PrideMM [34], focused on LGBTQ+ community memes, and HarMeme [29], contain-ing COVID-19-related hateful content and Hateful Memes Challenge (HMC)[13]. Empirical results confirm that MemeTAG outperforms state-of-the-art methods on key metrics including accuracy, AUROC, and F1 score, show-casing its effectiveness and efficiency in addressing com-plex multimodal meme classification tasks. Our primary contributions are summarized as follows: • We propose MemeTAG, a dual-objective multimodal framework enabling enhanced semantic alignment and thereby accurate meme classification through keyword-guided visual and textual integration. • As part of MemeTAG, We introduce a novel auxiliary reconstruction task to guide the model by enforcing se-1arXiv:2609.20962v1 [cs.CV] 17 Sep 2026 Vision-Language Model 
+
+> Generate 10 objectiv e key words f or the image's v isible objects, scene, and actions. Av oid assumptions.
+> Man at home
+> Bias-Free Prompt
+> Input Image
+> Office Setup Concrete Mixer Desk
+> ... ... ...
+> CLIP Text Encoder
+> Set of Keywords Set of Precomputed Keyword Embeddings
+
+Figure 1. Process of generating a set of keyword embeddings via frozen Vision-Language Model (VLM) using a neutral-language prompt. These generated keyword embeddings are used to train the Aggregated Tag Inference Network (ATIN) 
+
+mantic alignment between modalities, as shown in the ablation study Sec. 5.2 • We perform extensive evaluations on the challeng-ing PrideMM, HarMeme, and HMC datasets, bench-marking MemeTAG against a broad suite of mul-timodal baselines—and demonstrate that it consis-tently achieves state-of-the-art performance on com-plex meme classification tasks. 
+
+## 2. Literature Review 
+
+The rise of harmful content on social media has spurred research into classifying internet memes—which blend hu-mor with potentially offensive messaging [11, 39]. Early multimodal classifiers combined image and text features to detect harmful memes [38], while Xu et al. [41] ex-posed challenges in sentiment analysis of metaphorical memes. To handle multilingual and code-mixed memes, weighted ensembles [12] and the CM-Off-Meme multitask model [16] were proposed. Explainability was advanced by HateXplain’s BERT-based framework [23], and Sudar-shan et al. [37] utilized VisualBERT and RoBERTa for tar-geted hate detection. Recent work has increasingly shifted towards leveraging the powerful representations from large pre-trained vision-language models. An early example, MOMENTA, was among the first to incorporate CLIP fea-tures, employing a two-perspective framework that analyzes memes at both global and local (e.g., entity-level) scales to detect harm and identify its target [30]. The success of such models highlighted the challenge of effectively adapt-ing large models to the specific, often data-scarce, domain of meme analysis. To address this, CLIP-Adapter proposed adding a single, lightweight adapter layer to CLIP’s frozen features, which proved effective in leveraging CLIP’s prior knowledge while minimizing overfitting [31]. Building on this, MemeCLIP further refined the adaptation process by using separate, modality-specific adapters for image and text features, coupled with a cosine similarity-based clas-sifier to mitigate class imbalance issues prevalent in meme datasets [34]. Beyond adaptation, significant effort has focused on developing more sophisticated multimodal fu-sion mechanisms. HateCLIPper explicitly models cross-modal interactions by computing a feature interaction ma-trix from CLIP embeddings, capturing pairwise correlations between visual and textual feature dimensions to achieve state-of-the-art results on the Hateful Memes Challenge [15]. MemeFier proposed a dual-stage fusion architecture for meme understanding, aligning CLIP token/patch fea-tures followed by inter-model dependencies using trans-former and caption-supervision regularizer besides exter-nal demographic cues. [14] In a distinct approach, IS-SUES utilizes textual inversion to map an entire meme im-age to a learned pseudo-word within CLIP’s textual embed-ding space, thereby unifying the multimodal problem within the language domain to better capture subtle semantics [2]. Concurrently, efforts like GuardHarMem have pushed for more nuanced evaluation by introducing datasets with fine-grained harm labels (e.g., mockery, racism) and strong mul-timodal baselines that fuse image, OCR, and caption data [7]. Other recent work integrates large language models (LLMs) more directly for reasoning. Sharma et al. [36] in-troduce the VECTOR framework for contextual entity roles, and Cao et al. [3] present PromptHate with illustrative ex-amples. Expanding on these reasoning-based approaches, M3H injects commonsense and figurative knowledge by using an LLM to generate an enriched explanation of a meme’s implicit meaning, which is then used for classifica-tion [24]. The concept of prompting was further advanced by the Prompt-Enhanced Network (PEN), which learns in-ternal, feature-level prompts to guide the model’s percep-tion, moving beyond static input prompts to a more dy-2Set of Precomputed Keyword Embeddings 
+
+> ... ... ...
+> Stacked Keyword Embeddings
+> Multi-Head Self Attention Mean Pool Classification Head
+> Aggregated Tag Embedding (generated Ground Truth)
+
+Figure 2. Architecture of the proposed Aggregated Tag Inference Network (ATIN). The aggregated tag embedding from the trained ATIN serves as the ground in the auxiliary reconstruction task of MemeTAG 
+
+namic, optimizable framework [21]. These collective ef-forts showcase the field’s rapid progression toward build-ing robust, context-aware, and interpretable meme classifi-cation models. 
+
+2.1. Vision-Language Models 
+
+Vision-language models (VLMs) have rapidly advanced with the adoption of Transformers. Early attention-based systems like “Show, attend and tell” [42] gave way to the Vision Transformer (ViT) [6] and CLIP’s contrastive pre-training on hundreds of millions of image–text pairs (often from LAION) [31, 32, 33], enabling strong zero-shot trans-fer. Building on these, Flamingo [8] pioneered few-shot learning, while the BLIP series [17, 18] and LLaVA [20] advanced encoder–decoder and instruction-tuned designs. More recently, decoder-only Multimodal LLMs such as GPT-4V [26] and Gemini [9], along with open-source vari-ants like Qwen2-VL [40], and LLaMA 3.2-vision [1], have scaled capabilities. Current efforts focus on human-aligned outputs via RL techniques (RLOO, DPO, PPO) in mod-els such as MM-Eureka [25], MM-RLHF [43] and LMM-R1 [27]. 
+
+## 3. Proposed Methodology 
+
+The proposed MemeTAG model starts by using a VLM to generate semantic keywords from the meme’s image, which are then embedded using CLIP’s text encoder. These keyword embeddings flow into the ATIN module, an atten-tion network that produces a single aggregated tag embed-ding ( Ztag ) capturing salient visual semantics. In parallel, the main architecture extracts image and text features using CLIP, processes and fuses them into a multimodal repre-sentation ( f , further refined to f ′). This final representation (f ′) is used for classification via an ArcFace-inspired head, while the intermediate fused representation ( f ) is guided by an auxiliary loss to reconstruct the semantic tag embedding (ztag ), ensuring alignment during training with a combined objective function. 
+
+3.1. Keyword Inference and Embedding Genera-tion 
+
+Given an Internet meme that includes both an image and text, the first stage of our proposed MemeTAG framework is to infer a concise set of descriptive keywords that capture the image’s semantic content. We utilize a Vision-Language Model (VLM) to generate these keywords from the image. To ensure uniformity across samples, we restrict each meme to exactly 10 keywords, automatically selecting the first 10 
+
+keywords generated by the pretrained VLM. In cases where fewer than 10 keywords are produced, we pad the keyword set with a special token null . Subsequently, embeddings for these keywords are computed using the frozen CLIP [31] ar-chitecture, pre-computing and storing them across the entire dataset for efficiency. Let the set of keywords be denoted by 
+
+K = {k1, k 2, . . . , k 10 } (1) and the corresponding embeddings by 
+
+E = {e1, e2, . . . , e10 } (2) 
+
+3.2. Aggregated Tag Embedding Construction via Attention Network 
+
+The Aggregated Tag Inference Network (ATIN) is an attention-based module designed to distill a set of key-word embeddings, E = {e1, ..., e 10 }, into a single, rich semantic vector, ztag . The architecture, shown in Figure 2, is centered around a Multi-Head Self-Attention (MHSA) mechanism. Unlike typical transformer-based aggregators, ATIN uses a learnable query vector ( q) to probe the key-word embedding set ( E). This allows the model to learn the most effective way to summarize the keywords. First, a context-aware representation, E′, is computed by applying the MHSA module, followed by a residual connection and layer normalization: 
+
+E′ = LayerNorm (E + MHSA (q, E, E )) 
+
+The final aggregated tag embedding, ztag , is then produced by mean-pooling the resulting sequence of context-aware 3Input Image 
+
+> Pre-trained Aggregated Tag Inference Network (ATIN) CLIP Image Encoder Linear Projection CLIP Text Encoder Linear Projection Text Feature Adapter Image Feature Adapter Pre-Output Layer Margin Classifier
+> Semantic-Aware Initialization
+> Aggregated Tag Embedding Reconstruction Network
+> Cosine Loss
+> L1 Loss
+> Aggregated Tag Em bedding (Ground Truth)
+> SOCIETY IF GENDER DIDN'T EXIST
+
+Input Caption (via OCR) 
+
+> z*txt
+> z*img
+> x'txt
+> x'img ximg
+> xtxt
+> ztag
+> f
+
+Figure 3. Architecture of the proposed MemeTAG model for keyword-aware meme classification. We make use of the trained Aggregated Tag Inference Network (ATIN) as shown in Figure 2 
+
+embeddings: 
+
+ztag = MeanPool (E′) = 110 
+
+> 10
+
+X
+
+> i=1
+
+e′
+
+> i
+
+As part of our three-stage training strategy, the ATIN mod-ule is trained independently by attaching a classification head to its output during the tag aggregation stage. After-wards, its weights are frozen, and it is used to generate the ground-truth ztag embedding for each sample. This vector subsequently serves as the target for MemeTAG’s auxiliary reconstruction objective, enforcing semantic alignment dur-ing the main model’s training. 
+
+3.3. MemeTAG Multimodal Architecture 
+
+We propose MemeTAG, a multimodal neural architec-ture explicitly designed for keyword-aware meme classifi-cation, leveraging robust semantic embeddings from pre-trained CLIP encoders. Given an Internet meme comprising an image I and textual content T , MemeTAG begins by ex-tracting modality-specific embeddings: ximg ∈ Rdimg from the frozen CLIP visual encoder and xtxt ∈ Rdtxt from the frozen CLIP textual encoder. To effectively integrate these modality-specific embed-dings, MemeTAG first projects each embedding into a shared latent embedding space Rdshared via dedicated linear projection networks: 
+
+x′ 
+
+> img
+
+= LinearProj img (ximg ) (3) 
+
+x′ 
+
+> txt
+
+= LinearProj txt (xtxt ) (4) where LinearProj img and LinearProj txt are multi-layer linear transformations with dropout regularization. Following the projections, each embedding undergoes modality-specific adapter modules fimg and ftxt , refining these embeddings for multimodal fusion: 
+
+zimg = fimg 
+
+ x′
+
+> img
+
+ ; ztxt = ftxt (x′
+
+> txt
+
+) . (5) Subsequently, each adapted embedding is blended with its original projected counterpart using hyperparameter-defined ratios αimg , α txt ∈ [0 , 1] :
+
+z∗ 
+
+> img
+
+= αimg zimg + (1 − αimg )x′ 
+
+> img
+
+(6) 
+
+z∗ 
+
+> txt
+
+= αtxt ztxt + (1 − αtxt )x′ 
+
+> txt
+
+(7) These blended embeddings are individually normalized (using Layer Normalization) and subsequently fused via element-wise multiplication ( ⊙) to capture detailed cross-modal interactions, resulting in: 
+
+f = Norm( z∗
+
+> img
+
+) ⊙ Norm( z∗
+
+> txt
+
+) (8) To further enhance representational capacity and introduce non-linearity, MemeTAG applies transformations through 4pre-output layers, composed of linear transformations, Rec-tified Linear Units (ReLU), and dropout, yielding: 
+
+f ′ = Dropout (ReLU (Wpf + bp)) (9) where Wp ∈ Rdshared ×dshared and bp ∈ Rdshared are trainable pa-rameters. For classification, MemeTAG employs a margin-based classifier inspired by ArcFace. This computes class logits ℓ by comparing the final representation f ′ with class weights Wc and incorporating an angular margin m:
+
+cos( θj ) = W⊤ 
+
+> c,j
+
+f ′
+
+∥Wc,j ∥∥ f ′∥ + ϵ (10) 
+
+ℓj = s · ϕj (f ′) = 
+
+(
+
+s · cos( θj + m) if j = ys · cos( θj ) if j̸ = y (11) where Wc ∈ Rdshared ×C represents the classifier weight ma-trix ( Wc,j being the weights for class j), y is the ground-truth class index, C is the total number of meme classes, 
+
+s denotes a scaling factor, and ϵ is a small constant en-suring numerical stability. Angular margin explicitly pro-motes discriminative embeddings,thus improving classifi-cation performance. 
+
+3.4. Loss Functions 
+
+The MemeTAG framework is optimized using two com-plementary loss functions: 
+
+Classification Loss: The main objective is to accurately classify Internet memes. This is achieved using a classi-fication loss applied to the final representation f ′ via the margin-based logits ℓj derived from ArcFace. Formally, the classification loss (Lcls ) is the standard cross-entropy loss calculated using these logits: 
+
+Lcls = − log eℓy
+
+PCj=1 eℓj
+
+!
+
+(12) where y denotes the ground-truth class index. 
+
+Auxiliary Reconstruction Loss: To enforce semantic alignment between the multimodal features and the aggre-gated keyword information, an auxiliary objective is incor-porated. This task aims to reconstruct the aggregated se-mantic tag embedding ztag (produced by ATIN) from the fused multimodal feature f (obtained before the final pre-output layers). A reconstruction network (e.g., a simple MLP) takes f as input and outputs a reconstructed embed-ding ˆztag . The reconstruction loss Laux is then computed based on the cosine distance (1 - cosine similarity) between the target and the prediction: 
+
+Laux = 1 − ztag · ˆztag 
+
+∥ztag ∥ ∥ ˆztag ∥ (13) where ˆztag is the reconstructed tag embedding produced by the reconstruction network. The overall objective function is a weighted sum of the classification and auxiliary losses: 
+
+L = (1 − λ)Lcls + λ Laux (14) with λ being a hyperparameter that balances the contribu-tion of the two objectives. 
+
+## 4. Experimental Details and Result Analysis 
+
+In this section, we detail the dataset configurations for three datasets- PrideMM, HarMeme, and HMC, along with the training strategy and analysis of the results. Due to space constraints, additional experimental results and model implementation details are provided in the Supple-mentary Material. 
+
+4.1. Dataset Configuration 
+
+We evaluate MemeTAG on three multimodal meme benchmark: PrideMM, HarMeme, and HMC. PrideMM [34] comprises 5,063 LGBTQ+–related memes anno-tated for four aspects—hate (no hate/hate), target (undi-rected/individual/community/organization), stance (neu-tral/support/oppose) and humor (no humor/humor)—with official train/test splits. HarMeme (Harm-C) [29] contains 3,544 COVID-19–related memes for binary hateful/non-hateful classification, partitioned into 85% train, 5% vali-dation and 10% test. The Facebook Hateful Memes Chal-lenge dataset [13] comprises roughly 10,000 memes labeled hateful vs. non-hateful with official train, dev (seen/unseen) and test (seen/unseen) splits; we report our results on its test “seen” split. In all three cases, MemeTAG is trained on the train split and evaluated on the specified test split. 
+
+4.2. Training Strategy 
+
+We adopt a three-step training strategy designed to re-duce computational overhead and enhance convergence sta-bility: 
+
+Precomputation Stage : Let the dataset be denoted by 
+
+D = { In, T n, {kjn}10 
+
+> j=1
+
+}Nn=1 , where In is the n-th meme image, Tn the associated text, and {kjn}10  
+
+> j=1
+
+represents the set of keyword embeddings corresponding to meme n. For each sample n in the dataset, we first use the pretrained CLIP encoders to generate and store the image embedding 
+
+ximg ,n ∈ Rdimg , the text embedding xtxt ,n ∈ Rdtxt , and the set of keyword embeddings {kjn ∈ Rdkw }10 
+
+> j=1
+
+. Storing these frozen embeddings serves as the foundation for subsequent network components, mitigating the cost of repeated on-the-fly inference. 
+
+Tag Aggregation Stage : Using the precomputed keyword embeddings {kjn}10  
+
+> j=1
+
+for each sample n, we train the Ag-gregated Tag Inference Network (ATIN), as detailed in Sec-tion 3.2. This module learns attention weights {αj }10  
+
+> j=1
+
+spe-5cific to each set of 10 keywords and generates a context-enriched tag embedding ztag ,n for each sample via: 
+
+ztag =
+
+> 10
+
+X
+
+> j=1
+
+αj kjn (15) This process captures crucial semantic cues from the image keywords for each meme n.
+
+MemeTAG Training Stage : Finally, leveraging the pre-computed aggregated tag embeddings ztag ,n and the frozen CLIP embeddings ximg ,n , xtxt ,n for each sample n, we train the main MemeTAG architecture. This stage focuses on learning to jointly integrate the image, text, and tag signals effectively for the classification task. By initializing with these precomputed representations, we minimize computational costs while ensuring the model learns robust, semantically aligned multimodal features. This hierarchical training strategy significantly reduces to-tal compute time compared to typical end-to-end training, fosters stable convergence, and yields powerful multimodal embeddings optimized for accurate keyword-aware meme classification. 
+
+4.3. Result Analysis 
+
+Tables 1, 2 and 3 summarize our experimental results on the PrideMM, HarMeme and HMC datasets, respec-tively. For the PrideMM dataset, we used the prede-fined train/validation/test splits (ratio 85/5/10), while for HarMeme and HMC we used its established predefined splits. We evaluated various unimodal and multimodal methods using Accuracy, AUC (Macro), and F1-Score (Macro) as evaluation metrics. For PrideMM, these metrics were computed across its four distinct tasks: Hate, Target, Stance, and Humor. On the PrideMM dataset, our proposed model, MemeTAG, consistently achieved the best performance among the compared methods. Specifically, it obtained the highest Accuracy and F1 scores on the Hate, Target, and Humor tasks, along with the highest AUC and F1 score on the Stance task. Furthermore, analysis of the CLIP base-lines on PrideMM revealed that the Image-Only variant consistently outperformed the Text-Only variant, highlight-ing the importance of visual features for this dataset. Multi-modal methods that combine both image and text generally yielded further performance improvements over unimodal approaches. On the HarMeme dataset, MemeTAG again emerged as the top-performing model, surpassing other methods evaluated, with HateCLIPper being the closest competitor in perfor-mance. A similar trend regarding modality importance was observed for the basic CLIP methods on HarMeme: the Image-Only variant’s accuracy exceeded that of the Text-Only variant, and standard multimodal CLIP and CLIP-Adapter models provided additional gains. Other com-petitive multimodal frameworks, including GuardHarMem, MemeCLIP and ISSUES delivered strong results. On the Hateful Memes Challenge (HMC), MemeTAG achieves an accuracy of 74.10% and an AUROC of 82.17%, as shown in Table 3. MemeTAG outperforms the second-best baseline, MemeCLIP (72.69% Acc., 81.68% AU-ROC), by 1.41% Accuracy and achieving a higher AUROC (82.17% vs. 81.68%). Compared to ISSUES (70.80% ac-curacy, 79.03% AUROC), MemeTAG yields 3.30% accu-racy improvement.This demonstrates MemeTAG’s superior alignment of visual and textual cues under HMC’s adver-sarial setup. 
+
+## 5. Ablation Studies 
+
+In this section, we present ablation studies that address common questions about MemeTAG. We first benchmark our approach against several LLMs on harmful-meme clas-sification. We then ablate the contributions of ATIN and the auxiliary reconstruction loss to overall performance. Addi-tional ablations- including qualitative and quantitative anal-yses of keyword quality and its impact on MemeTAG, are provided in the supplementary material. 
+
+5.1. Benchmarking Against State-of-the-Art LLMs for Harmful Meme Classification 
+
+To rigorously evaluate the performance of our proposed MemeTAG, we conducted a comparative analysis on the test split of HarMeme dataset against a selection of promi-nent large language models considered state-of-the-art as of April 2025. The benchmark models included Gemma-3, Mistral Small 3.1, Claude 3 Haiku, GPT-4o and O3-Mini. To ensure a standardized and fair comparison focused on the specific task of harmful meme detection, and to pro-mote consistent task understanding across models, a care-fully constructed prompt was employed uniformly for all models evaluated. This prompt directed the models to ana-lyze both the visual and textual components and perform a binary classification based on a specified definition of harm: 
+
+”Analyze the provided meme data. Determine if it quali-fies as harmful according to the definition-(causing harm, potentially related to COVID-19, targeting individuals, groups, or society). Output only ’1’ if harmful, ’0’ if not harmful.” 
+
+Fine-tuning large-scale LLMs on vision–language tasks incurs substantial computational and financial overheads and carries a high risk of overfitting when only small, task-specific datasets are available; accordingly, all LLMs in our study were evaluated in a zero-shot setting. Based on the re-sults presented in Table 4, the MemeTAG model clearly out-performed all other evaluated models by effectively lever-aging both image and text modalities. In our evaluation, a clear performance hierarchy emerged among the general-6Table 1. Performance analysis of the proposed MemeTAG with existing state-of-the-art methods on PrideMM dataset                                                                                                                                         
+
+> Method Hate Target Stance Humor Acc. AUC. F1 Acc. AUC. F1 Acc. AUC. F1 Acc. AUC. F1
+> CLIP Text-Only 69.030 74.990 69.110 50.720 73.210 48.160 50.990 67.910 49.950 69.940 71.230 62.880 CLIP Img-Only 70.550 80.710 73.820 61.290 81.180 58.630 61.440 77.810 58.330 76.230 82.880 73.040 CLIP 72.960 80.770 72.880 61.480 82.090 58.890 59.720 77.310 58.270 77.180 80.820 73.910 GuardHarMem [7] 70.020 75.740 67.660 65.480 75.050 49.250 52.660 71.400 52.010 71.600 73.520 79.790 CLIP-Adapter [31] 73.210 81.140 73.090 61.870 82.290 58.470 59.830 77.590 58.390 77.510 81.240 73.990 MOMENTA [30] 72.540 78.810 71.970 57.880 79.420 53.490 56.550 74.710 55.820 75.110 78.090 72.630 HateCLIPper [15] 75.840 83.330 74.260 63.410 80.880 57.080 63.680 78.610 57.590 76.240 83.790 75.580 ISSUES [2] 75.330 84.390 74.610 62.180 78.860 58.390 59.940 77.980 57.890 79.370 85.090 76.680 MemeCLIP [34] 75.960 83.910 75.230 64.780 81.930 58.650 62.320 79.910 58.580 79.110 85.600 75.760
+> MemeTAG 77.320 84.690 77.310 67.130 85.880 66.630 63.910 80.740 61.840 80.470 85.310 79.830
+> Table 2. Performance analysis of the proposed MemeTAG with existing state-of-the-art methods on HarMeme dataset
+
+Method Acc. AUC. F1 
+
+CLIP Text-Only 73.880 79.520 71.710 ATIN (Baseline) 74.240 84.150 73.260 CLIP Img-Only 79.460 89.120 78.710 CLIP 81.770 87.590 80.740 CLIP-Adapter [31] 82.490 87.810 81.130 MOMENTA [30] 82.750 88.040 81.690 HateCLIPper [15] 83.910 91.050 83.470 M3H [24] 79.420 78.180 84.690 ISSUES [2] 81.830 91.980 80.880 MemeCLIP [34] 82.720 92.070 81.720 GuardHarMem [7] 84.970 90.170 79.690 
+
+MemeTAG 85.540 92.230 84.810 
+
+purpose models, with Mistral Small and Gemma-3 consis-tently yielding lower results across all modality configu-rations. Mistral Small, in particular, registered the lowest F1-scores, peaking at just 53.630% even with full multi-modal input. In contrast, GPT-4o and Claude 3 Haiku estab-lished themselves as the most capable models in this group, with their performance scaling directly with input complex-ity. Both models achieved their highest efficacy only when combining Image, Text, and our novel ’Tag’ modality, with GPT-4o reaching a top F1-score of 66.440%. Interestingly, the O3-Mini model, using only text and our tags, was no-tably competitive, surpassing the fully multi-modal perfor-mance of Mistral Small. These findings demonstrate that while the introduction of our ’Tag’ modality significantly boosts the performance of not only MemeTAG, but in gen-eral to any other model this novelity is incorporated. 
+
+5.2. Impact of ATIN (Aggregate Tag Inference Net-work) and Auxiliary Reconstruction Loss 
+
+To quantify the benefit of our auxiliary reconstruction objective, we perform an ablation study on the HarMeme dataset. Our Aggregate Tag Inference Network (ATIN) pro- 
+
+> Table 3. Performance analysis of the proposed MemeTAG with existing state-of-the-art methods on HMC dataset
+
+Model Acc. (%) AUROC (%) 
+
+Image-Grid (ResNet152) 50.00 50.00 Image-Region (R-CNN) 57.00 52.00 Text-BERT 51.10 53.39 ATIN (Baseline) 57.40 61.60 Late Fusion 56.50 54.07 Concat BERT 52.10 53.94 MMBT-Grid 50.00 50.00 MMBT-Region 57.00 52.00 ViLBERT [22] 55.30 52.29 VisualBERT [19] 56.40 54.05 ViLBERT CC 54.20 52.79 VisualBERT COCO 60.10 61.34 MOMENTA [30] 58.30 62.66 M3H [24] 60.20 69.56 GuardHarMem [7] 61.20 68.11 HATECLIPper [15] 68.31 76.46 ISSUES [2] 70.80 79.03 MemeCLIP [34] 72.69 81.68 
+
+MemeTAG 74.10 82.17 
+
+duces a concise tag embedding that captures key semantic cues from the input meme. We compare two variants of MemeTAG—one trained with only the classification loss, and one trained with both the classification and auxiliary reconstruction losses—while keeping the rest of the archi-tecture unchanged. As reported in Table 5, incorporat-ing the auxiliary reconstruction loss (which encourages the model to reconstruct the ATIN embedding) yields an abso-lute improvement of 1.1 % in accuracy. This demonstrates that explicitly reconstructing the ATIN-generated embed-ding strengthens the semantic alignment of the learned fea-tures and leads to better overall classification performance across the measured metrics. 7Table 4. Comparison of MemeTAG with several state-of-the-art LLMs for Harmful Meme classification on Harmeme dataset 
+
+Model Supported Modalities Input Modalities Used Accuracy (%) AUC (%) F1 (%) Image Text Image Text Tag 
+
+Gemma-3 (27B) [10] ✓ ✓ ✓ X X 63.559 62.479 53.090 Gemma-3 (27B) [10] ✓ ✓ X ✓ X 63.559 64.337 56.270 Gemma-3 (27B) [10] ✓ ✓ ✓ ✓ X 61.010 60.708 51.748 Gemma-3 (27B) [10] ✓ ✓ ✓ ✓ ✓ 64.690 65.390 57.340 
+
+Mistral Small 3.1 24B ✓ ✓ X ✓ X 54.520 56.820 49.840 Mistral Small 3.1 24B ✓ ✓ ✓ X X 56.500 57.420 49.340 Mistral Small 3.1 24B ✓ ✓ ✓ ✓ X 52.540 57.160 51.720 Mistral Small 3.1 24B ✓ ✓ ✓ ✓ ✓ 58.470 60.800 53.630 
+
+Claude 3 Haiku ✓ ✓ X ✓ X 67.230 65.490 56.060 Claude 3 Haiku ✓ ✓ ✓ X X 68.930 64.750 53.390 Claude 3 Haiku ✓ ✓ ✓ ✓ X 70.060 68.590 59.850 Claude 3 Haiku ✓ ✓ ✓ ✓ ✓ 72.320 72.750 65.250 
+
+GPT-4o ✓ ✓ X ✓ X 72.320 69.780 60.800 GPT-4o ✓ ✓ ✓ X X 70.660 72.540 65.320 GPT-4o ✓ ✓ ✓ ✓ X 72.620 72.540 64.420 GPT-4o ✓ ✓ ✓ ✓ ✓ 72.780 73.810 66.440 
+
+O3-Mini X ✓ NA ✓ X 69.770 63.359 49.289 O3-Mini X ✓ NA ✓ ✓ 70.340 65.650 54.150 MemeTAG ✓ ✓ ✓ ✓ ✓ 85.540 92.230 84.810 
+
+> Table 5. Impact of the auxiliary tag-embedding reconstruction loss on MemeTAG’s performance on the HarMeme dataset
+
+Metric Without Aux Loss With Aux Loss 
+
+Accuracy (%) 84.419 85.540 AUROC (%) 91.910 92.230 F1 Score (%) 83.575 84.810 
+
+## 6. Limitations 
+
+While MemeTAG shows promise, it has a few limita-tions that will greatly benefit from further study. First, because it relies on vision–language backbones such as CLIP trained on web-scale image–text pairs, it inherits their biases: skewed demographic and cultural distributions can teach shortcut correlations where background symbols, clothing, dialect, or identity terms act as proxies for “harm-ful” even when intent is benign. In practice this can raise false positives for specific groups, reclaimed terms, and non-standard spellings, and degrade performance for non-English or low-resource varieties; Like other neural models, it is vulnerable to adversarial tweaks—small edits to im-ages or overlaid text can mislead predictions. And the rapid churn of meme formats and references demands frequent updates and retraining to sustain accuracy without heavy re-engineering. 
+
+## 7. Conclusion 
+
+In this paper, we introduced MemeTAG, a dual-objective multimodal framework designed to integrate visual and textual modalities for effective Internet meme classifica-tion. Leveraging a robust keyword extraction process and an attention-based Aggregated Tag Inference Network, MemeTAG accurately captures the nuanced semantic in-terplay present in meme content. Our innovative three-stage training strategy drastically reduces computational overhead, facilitating easy deployment without compromis-ing performance. Experiments on the PrideMM, HarMeme and HMC datasets confirm that MemeTAG outperforms current state-of-the-art methods, achieving significant im-provements in accuracy, AUROC, and F1 score. Extensive ablation studies reveal that the performance remains con-sistent across different keyword-generation models. This robustness is attributed to the ATIN module’s ability to sup-press irrelevant keywords and focus on those pertinent to the classification task. Future work may explore dynamic keyword generation and further context-aware features to enhance meme classification, as well as real-time deploy-ment for monitoring and mitigating harmful online content. 8References 
+
+[1] Meta AI. The llama 3 herd of models. Technical report, Meta, September 2024. [2] Giovanni Burbi, Alberto Baldrati, Lorenzo Agnolucci, Marco Bertini, and Alberto Del Bimbo. Mapping memes to words for multimodal hateful meme classification. In 
+
+Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 2832–2836, 2023. [3] Rui Cao, Roy Ka-Wei Lee, Wen-Haw Chong, and Jing Jiang. Prompting for multimodal hateful meme classification. In 
+
+Proceedings of the 2022 conference on empirical methods in natural language processing , pages 321–332, 2022. [4] Sergio Andr´ es Casta˜ no Pulgar´ ın, Natalia Su´ arez-Betancur, Luz Magnolia Tilano Vega, and Harvey Mauricio Herrera L´ opez. Internet, social media and online hate speech. systematic review. Aggression and Violent Behavior ,58:101608, 2021. [5] Thomas Davidson, Dana Warmsley, Michael Macy, and Ing-mar Weber. Automated hate speech detection and the prob-lem of offensive language. In Proceedings of the Inter-national AAAI Conference on Web and Social Media , vol-ume 11, pages 512–515, 2017. [6] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Syl-vain Gelly, Jakob Uszkoreit, and Neil Houlsby. An image is worth 16x16 words: Transformers for image recognition at scale, 2021. [7] Samir El-amrany, Salima Lamsiyah, Matthias R Brust, and Pascal Bouvry. Guardharmem and harmdetect: a multi-modal dataset and benchmlark model for fine-grained harm-ful meme classification. Social Network Analysis and Min-ing , 15(1):63, 2025. [8] Jean-Baptiste Alayrac et al. Flamingo: a visual language model for few-shot learning. In Advances in Neural In-formation Processing Systems (NeurIPS) , volume 35, pages 23716–23737, 2022. [9] Google Gemini Team. Gemini: A family of highly capa-ble multimodal models. Technical Report arXiv:2312.11805, Google, 2023. [10] Aishwarya Kamath et al. Gemma Team. Gemma 3 technical report, 2025. [11] Ming Shan Hee, Rui Cao, Tanmoy Chakraborty, and Roy Ka-Wei Lee. Understanding (dark) humour with internet meme analysis. In Companion Proceedings of the ACM Web Con-ference 2024 , May 2024. [12] Eftekhar Hossain, Omar Sharif, Md. Mahmudul Hoque, Md. A. A. Dewan, Nur Siddique, and M. Anwar Hossain. Iden-tification of multilingual offense and troll from social me-dia memes using weighted ensemble of multimodal features. 
+
+Journal of King Saud University–Computer and Information Sciences , 34(9):6605–6623, 2022. [13] Douwe Kiela, Hamed Firooz, Aravind Mohan, Vedanuj Goswami, Amanpreet Singh, Pratik Ringshia, and Davide Testuggine. The hateful memes challenge: Detecting hate speech in multimodal memes. Advances in neural informa-tion processing systems , 33:2611–2624, 2020. [14] Christos Koutlis, Manos Schinas, and Symeon Papadopou-los. Memefier: Dual-stage modality fusion for image meme classification. In Proceedings of the 2023 ACM International Conference on Multimedia Retrieval , ICMR ’23, pages 586– 591, New York, NY, USA, 2023. Association for Computing Machinery. [15] Gokul Karthik Kumar and Karthik Nandakumar. Hate-CLIPper: Multimodal hateful meme classification based on cross-modal interaction of CLIP features. In Proceedings of the Second Workshop on NLP for Positive Impact (NLP4PI) ,pages 171–183, Abu Dhabi, United Arab Emirates (Hybrid), 2022. Association for Computational Linguistics. [16] Gitanjali Kumari, Dipankar Bandyopadhyay, Asif Ekbal, and V. B. NarayanaMurthy. Cm-off-meme: Code-mixed hindi-english offensive meme detection with multi-task learning by leveraging contextual knowledge. In Proceedings of the 2024 Joint International Conference on Computational Linguis-tics, Language Resources and Evaluation (LREC-COLING 2024) , pages 3380–3393, May 2024. [17] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. Blip-2: bootstrapping language-image pre-training with frozen image encoders and large language models. In Pro-ceedings of the 40th International Conference on Machine Learning , ICML’23. JMLR.org, 2023. [18] Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi. Blip: Bootstrapping language-image pre-training for uni-fied vision-language understanding and generation. In In-ternational Conference on Machine Learning , pages 12888– 12900. PMLR, 2022. [19] Liunian Harold Li, Mark Yatskar, Da Yin, Cho-Jui Hsieh, and Kai-Wei Chang. Visualbert: A simple and performant baseline for vision and language, 2019. [20] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual instruction tuning. In Advances in Neural In-formation Processing Systems (NeurIPS) , volume 36, pages 68159–68183, 2023. [21] Junxi Liu, Yanyan Feng, Jiehai Chen, Yun Xue, and Fenghuan Li. Prompt-enhanced network for hateful meme classification. In Proceedings of the Thirty-Third Interna-tional Joint Conference on Artificial Intelligence, IJCAI-2024 , pages 6397–6405. International Joint Conferences on Artificial Intelligence Organization, 2024. [22] Jiasen Lu, Dhruv Batra, Devi Parikh, and Stefan Lee. Vilbert: Pretraining task-agnostic visiolinguistic representations for vision-and-language tasks. Advances in neural information processing systems , 32, 2019. [23] Binny Mathew, Punyajoy Saha, Seid Muhie Yimam, Chris Biemann, P. Goyal, and Animesh Mukherjee. Hatexplain: A benchmark dataset for explainable hate speech detection. In Proceedings of the AAAI Conference on Artificial Intelli-gence , volume 35, pages 14867–14875, May 2021. [24] Abdullah Mazhar, Zuhair Hasan Shaik, Aseem Srivastava, Polly Ruhnke, Lavanya Vaddavalli, Sri Keshav Katragadda, Shweta Yadav, and Md Shad Akhtar. Figurative-cum-commonsense knowledge infusion for multimodal mental health meme classification. In Proceedings of the ACM on Web Conference 2025 , WWW ’25, pages 637–648, New York, NY, USA, 2025. Association for Computing Machin-ery. [25] Fanqing Meng, Lingxiao Du, Zongkai Liu, Zhixiang Zhou, 
+
+9Quanfeng Lu, Daocheng Fu, Botian Shi, Wenhai Wang, Jun-jun He, Kaipeng Zhang, Ping Luo, Yu Qiao, Qiaosheng Zhang, and Wenqi Shao. Mm-eureka: Exploring visual aha moment with rule-based large-scale reinforcement learning, 2025. [26] OpenAI. Gpt-4 technical report. Technical Report arXiv:2303.08774, OpenAI, 2023. The report covers GPT-4 including its multimodal capabilities (GPT-4V). [27] Yingzhe Peng, Gongrui Zhang, Miaosen Zhang, Zhiyuan You, Jie Liu, Qipeng Zhu, Kai Yang, Xingzhong Xu, Xin Geng, and Xu Yang. Lmm-r1: Empowering 3b lmms with strong reasoning abilities through two-stage rule-based rl. 
+
+arXiv preprint arXiv:2503.07536 , 2025. [28] Konstantinos Perifanos and Dionysis Goutsos. Multimodal hate speech detection in greek social media. Multimodal Technologies and Interaction , 5(7):34, 2021. [29] Shraman Pramanick, Dimitar Dimitrov, Rituparna Mukher-jee, Shivam Sharma, Md. Shad Akhtar, Preslav Nakov, and Tanmoy Chakraborty. Detecting harmful memes and their targets. In Chengqing Zong, Fei Xia, Wenjie Li, and Roberto Navigli, editors, Findings of the Association for Computa-tional Linguistics: ACL-IJCNLP 2021 , pages 2783–2796, Online, Aug. 2021. Association for Computational Linguis-tics. [30] Shraman Pramanick, Shivam Sharma, Dimitar Dimitrov, Md. Shad Akhtar, Preslav Nakov, and Tanmoy Chakraborty. MOMENTA: A multimodal framework for detecting harm-ful memes and their targets. In Marie-Francine Moens, Xu-anjing Huang, Lucia Specia, and Scott Wen-tau Yih, editors, 
+
+Findings of the Association for Computational Linguistics: EMNLP 2021 , pages 4439–4455, Punta Cana, Dominican Republic, Nov. 2021. Association for Computational Lin-guistics. [31] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, Gretchen Krueger, and Ilya Sutskever. Learning transferable visual models from natural language supervision. In Proceedings of the 38th International Conference on Machine Learning (ICML) , volume 139, pages 8748–8763. PMLR, 2021. [32] Christoph Schuhmann, Romain Beaumont, Richard Vencu, Cade Gordon, Ross Wightman, Mehdi Cherti, Theo Coombes, Aarush Katta, Clayton Mullis, Mitchell Worts-man, Patrick Schramowski, Srivatsa Kundurthy, Katherine Crowson, Ludwig Schmidt, Robert Kaczmarczyk, and Jenia Jitsev. LAION-5B: An open large-scale dataset for train-ing next generation image-text models. In Advances in Neu-ral Information Processing Systems (NeurIPS) , volume 35, pages 25278–25294, 2022. [33] Christoph Schuhmann, Richard Vencu, Romain Beaumont, Robert Kaczmarczyk, Clayton Mullis, Aarush Katta, Theo Coombes, Jenia Jitsev, and Aran Komatsuzaki. LAION-400M: Open dataset of CLIP-filtered 400 million image-text pairs. arXiv preprint arXiv:2111.02114 , 2021. Presented at the NeurIPS 2021 Workshop on Datasets and Benchmarks. [34] Siddhant Bikram Shah, Shuvam Shiwakoti, Maheep Chaud-hary, and Haohan Wang. MemeCLIP: Leveraging CLIP rep-resentations for multimodal meme classification. In Proceed-ings of the 2024 Conference on Empirical Methods in Natu-ral Language Processing (EMNLP) , 2024. [35] Shivam Sharma, Udit Arora, Md Shad Akhtar, Tanmoy Chakraborty, et al. Memex: Detecting explanatory evidence for memes via knowledge-enriched contextualization. arXiv preprint arXiv:2305.15913 , 2023. [36] Shivam Sharma, Ananya Kulkarni, Tanishq Suresh, Harsh Mathur, Preslav Nakov, Md Shad Akhtar, and Tanmoy Chakraborty. Characterizing the entities in harmful memes: Who is the hero, the villain, the victim? arXiv preprint arXiv:2301.11219 , Jan 2023. [37] Achintya Sudarshan, Arushi Arora, and Ankit Bhardwaj. Hateful content detection using visualbert and roberta for an-tisemitic and sexist memes. In Proceedings of the 2022 Con-ference on Empirical Methods in Natural Language Process-ing , pages 4567–4578, 2022. [38] Shardul Suryawanshi, Bharathi Raja Chakravarthi, Mihael Arcan, and Paul Buitelaar. Multimodal meme dataset (multi-off) for identifying offensive content in image and text. In 
+
+Proceedings of the 2nd Workshop on Trolling, Aggression and Cyberbullying , pages 32–41, May 2020. [39] Joshua Uyheng and Kathleen M. Carley. Bots and online hate during the covid-19 pandemic: case studies in the united states and the philippines. Journal of Computational Social Science , 3(2):445–468, November 2020. [40] Peng Wang, Jinze Bai, Jian Chen, Pengcheng Chen, Ziyuan Chen, Peng Cheng, Wenhui Huang, Wentao Huang, Haiyang Jin, Chengyu Li, Zhuoyi Li, Kai Liu, Wentao Liu, Wei Shen, Shuo Wang, Zhe Wang, Jun Wei, and Ru Yang. Qwen2-VL: Enhancing vision-language model’s perception of the world at any resolution. arXiv preprint arXiv:2409.12191 , 2024. [41] Bo Xu, Tao Li, Junzhe Zheng, Mohammad Naseriparsa, Zheng Zhao, Hongfei Lin, and Feng Xia. Met-meme: A multimodal meme dataset rich in metaphors. In Proceed-ings of the 45th International ACM SIGIR Conference on Research and Development in Information Retrieval , pages 2887–2899, Jul 2022. [42] Kelvin Xu, Jimmy Lei Ba, Ryan Kiros, Kyunghyun Cho, Aaron C Courville, Ruslan Salakhutdinov, Richard S Zemel, and Yoshua Bengio. Show, attend and tell: Neural image caption generation with visual attention. In Proceedings of the 32nd International Conference on Machine Learning (ICML) , volume 37 of Proceedings of Machine Learning Re-search , pages 2048–2057. PMLR, 06–11 Jul 2015. [43] Yi-Fan Zhang, Tao Yu, Haochen Tian, Chaoyou Fu, Peiyan Li, Jianshu Zeng, Wulin Xie, Yang Shi, Huanyu Zhang, Junkang Wu, et al. Mm-rlhf: The next step forward in mul-timodal llm alignment. arXiv preprint arXiv:2502.10391 ,2025. 
+
+10

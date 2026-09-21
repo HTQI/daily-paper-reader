@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-09-20</span>
+      <span class="dpr-home-dashboard-kicker">2026-09-21</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 1 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 2 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>1</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>2</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-09-20 21:06:24 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-09-21 23:07:33 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,7 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日完成 1 篇速读、0 篇精读，聚焦 AI 问答中的证据核验系统。最值得看的是《CiteGuard-RAG》提出的&quot;以验证为中心&quot;思路，试图让 RAG 问答的答案真正落在可查证据上，评分 6.0。普通读者若关注 AI 答案可信度，可留意这类&quot;先验证、再回答&quot;的方案，并对照自己使用中的引用来源是否可追溯。</p>
+<p>今日筛出2篇速读、0篇精读，速读均6.0/10，聚焦混淆平台信息还原与模因分类。</p>
+<p>最值得看的是《RiskChainBench》的混淆平台消息还原与证据支撑网页调查，以及《MemeTAG》用关键词驱动标签嵌入重建做模因分类。</p>
+<p>普通读者可先了解这两类“还原+分类”思路，待后续精读或更高分论文再决定是否深入。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -91,12 +93,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">1 篇</strong>
+    <strong class="dpr-home-dashboard-count">2 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="CiteGuard-RAG: A Validation-Centered AI System for Evidence-Grounded Question Answering">CiteGuard-RAG: A Validation-Centered AI System for Evidence-Grounded Question Answering</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation">RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation</span></li><li><span class="dpr-home-dashboard-paper-title" title="MemeTAG: Keyword-Driven Meme Classification through Tag Embedding Reconstruction">MemeTAG: Keyword-Driven Meme Classification through Tag Embedding Reconstruction</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>1</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>2</strong></span></div>
 </section>
 </div>
 

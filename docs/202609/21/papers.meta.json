@@ -1,0 +1,39 @@
+{
+  "label": "2026-09-21",
+  "date": "2026-09-21",
+  "generated_at": "2026-09-21T23:07:35",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202609/21/2609.16900v2-riskchainbench-a-benchmark-for-obfuscated-platform-message-restoration-and-evidence-grounded-web-investigation",
+      "section": "quick",
+      "title_en": "RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation",
+      "authors": "ZhuoXin Liu, Zhiming Ma, Ying Zhang, Mengzheng Yang, Yifan Wang, Zhengqi Huang, Yanhan Zhou, Zekun Lin, Jun Zhang, Shun Zhang, Yue Chen, Qiao Zhao, Peng Chen",
+      "date": "2026-09-15",
+      "pdf": "https://arxiv.org/pdf/2609.16900v2",
+      "score": "6.0",
+      "evidence": "基于VLM智能体的证据驱动网络调查基准",
+      "tldr": "针对平台滥用信息用表情、谐音、拆字和冗余符号隐藏跳转指令，并借伪装链接导向色情、诈骗、赌博等服务，现有基准将混淆文本与风险网页分开评测，割裂了目标还原对下游取证的影响。RiskChainBench 将600个源会话生成的3600条还原输入与600个人工标注本地网页环境配对，先让模型还原消息、运营意图和目的地，再由同一模型作为 VLM 网页代理调查正确网站并生成引用证据的风险报告。十个模型中入口 Top-1 为35.2%–95.2%，网页决策准确率26.3%–62.8%，执行失败占31.9%而决策后类型错误仅0.9%。该基准与可重置沙箱揭示稳定探索和风险判断是主要瓶颈。",
+      "tags": "query:mfnd",
+      "abstract_en": "Platform abuse campaigns conceal redirection instructions with emojis, homophones, character decomposition, and redundant symbols, then route users through disguised links to services associated with pornography, fraud, gambling, or illicit transactions. Existing benchmarks evaluate obfuscated text and risky webpages separately, obscuring how target recovery affects downstream evidence acquisition. We introduce RiskChainBench, pairing 3,600 synthetic token-text restoration inputs from 600 source sessions with 600 corresponding human-labeled local web environments. A model first restores the message, operational intent, and destination; the same underlying model then acts as a VLM-driven web agent that investigates the correctly associated website and produces a frozen, evidence-cited risk report without message-side semantics or domain-reputation cues. We score restoration and correct-routing web investigation separately and compose them offline by applying the frozen primary-entry prediction as a gate to the same Task 2 result. Human labels determine task correctness, while a fixed multimodal evidence judge assesses faithfulness, sufficiency, completeness, and consistency. Across ten models, Entry Top-1 ranges from 35.2% to 95.2% and web decision accuracy from 26.3% to 62.8%; the leading systems differ across entry recovery, full reconstruction, website decisions, and fine-grained typing. Execution failures account for 31.9% of web runs, whereas post-decision type errors account for only 0.9%, identifying stable exploration and risk judgment as the principal bottlenecks. We release the benchmark, protocol, and resettable local sandbox.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/21/2609.20962v1-memetag-keyword-driven-meme-classification-through-tag-embedding-reconstruction",
+      "section": "quick",
+      "title_en": "MemeTAG: Keyword-Driven Meme Classification through Tag Embedding Reconstruction",
+      "authors": "Akshit Sharma, Prashant W. Patil",
+      "date": "2026-09-17",
+      "pdf": "https://arxiv.org/pdf/2609.20962v1",
+      "score": "6.0",
+      "evidence": "利用视觉语言关键词进行多模态有害模因分类",
+      "tldr": "有害网络模因泛滥成灾，但其多模态与语境微妙性使自动分类仍很困难。MemeTAG提出关键词驱动的双目标框架：先用预训练视觉语言模型生成描述性关键词，再由ATIN注意力网络聚合成单一语义嵌入。该嵌入作为辅助重建损失目标，迫使视觉与文本特征深度对齐，并配合三阶段训练。在HarMeme、HMC和PrideMM上均取得新SOTA，显著超越现有方法。",
+      "tags": "query:mfnd",
+      "abstract_en": "The proliferation of harmful internet memes poses a significant societal threat, yet their automated classification remains a formidable algorithmic challenge due to the nuanced, multimodal nature of their content. To address this, we introduce MemeTAG, a novel dual-objective framework that pioneers a keyword-aware approach to meme classification. Our core innovation is a two-part semantic guidance mechanism: first, we leverage a pretrained Vision-Language Model to generate a set of descriptive keywords, that capture the high-level semantics. Second, we introduce the Aggregated Tag Inference Network (ATIN), an attention-based module that distills these keywords into a single, rich semantic embedding. This embedding serves as a target for a novel auxiliary reconstruction loss, which compels the model to learn deeply aligned visual and textual features. This approach, combined with an efficient three-stage training strategy, establishes a new state-of-the-art on the HarMeme, Hateful Memes Challenge (HMC), and PrideMM datasets, decisively outperforming existing state-of-the-art methods.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

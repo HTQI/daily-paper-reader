@@ -1,0 +1,101 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-21T23:06:32.330356+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.16900v2",
+      "source": "arxiv",
+      "title": "RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation",
+      "abstract": "Platform abuse campaigns conceal redirection instructions with emojis, homophones, character decomposition, and redundant symbols, then route users through disguised links to services associated with pornography, fraud, gambling, or illicit transactions. Existing benchmarks evaluate obfuscated text and risky webpages separately, obscuring how target recovery affects downstream evidence acquisition. We introduce RiskChainBench, pairing 3,600 synthetic token-text restoration inputs from 600 source sessions with 600 corresponding human-labeled local web environments. A model first restores the message, operational intent, and destination; the same underlying model then acts as a VLM-driven web agent that investigates the correctly associated website and produces a frozen, evidence-cited risk report without message-side semantics or domain-reputation cues. We score restoration and correct-routing web investigation separately and compose them offline by applying the frozen primary-entry prediction as a gate to the same Task 2 result. Human labels determine task correctness, while a fixed multimodal evidence judge assesses faithfulness, sufficiency, completeness, and consistency. Across ten models, Entry Top-1 ranges from 35.2% to 95.2% and web decision accuracy from 26.3% to 62.8%; the leading systems differ across entry recovery, full reconstruction, website decisions, and fine-grained typing. Execution failures account for 31.9% of web runs, whereas post-decision type errors account for only 0.9%, identifying stable exploration and risk judgment as the principal bottlenecks. We release the benchmark, protocol, and resettable local sandbox.",
+      "authors": [
+        "ZhuoXin Liu",
+        "Zhiming Ma",
+        "Ying Zhang",
+        "Mengzheng Yang",
+        "Yifan Wang",
+        "Zhengqi Huang",
+        "Yanhan Zhou",
+        "Zekun Lin",
+        "Jun Zhang",
+        "Shun Zhang",
+        "Yue Chen",
+        "Qiao Zhao",
+        "Peng Chen"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-15T09:32:45+00:00",
+      "link": "https://arxiv.org/pdf/2609.16900v2",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "evidence-grounded web investigation benchmark with a VLM-driven web agent",
+      "llm_evidence_cn": "基于VLM智能体的证据驱动网络调查基准",
+      "llm_evidence": "基于VLM智能体的证据驱动网络调查基准",
+      "canonical_evidence": "基于VLM智能体的证据驱动网络调查基准",
+      "llm_tldr_en": "Platform abuse campaigns hide redirection instructions with emojis and homophones; this work introduces RiskChainBench, pairing obfuscated message restoration with human-labeled web environments investigated by a VLM-driven agent.",
+      "llm_tldr_cn": "平台滥用活动利用表情符号、同音字与字符拆分隐藏跳转指令，现有基准将混淆文本与风险网页分开评估，难以反映目标还原对下游取证的影响。本文提出RiskChainBench，将3600条混淆消息还原任务与600个人工标注的本地网页环境配对，让同一模型先还原消息意图与目的地，再作为VLM网络智能体进行调查。该基准揭示了证据驱动网络调查的关键挑战，为风险内容治理与外部证据获取提供统一评测框架。",
+      "llm_tldr": "平台滥用活动利用表情符号、同音字与字符拆分隐藏跳转指令，现有基准将混淆文本与风险网页分开评估，难以反映目标还原对下游取证的影响。本文提出RiskChainBench，将3600条混淆消息还原任务与600个人工标注的本地网页环境配对，让同一模型先还原消息意图与目的地，再作为VLM网络智能体进行调查。该基准揭示了证据驱动网络调查的关键挑战，为风险内容治理与外部证据获取提供统一评测框架。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.20962v1",
+      "source": "arxiv",
+      "title": "MemeTAG: Keyword-Driven Meme Classification through Tag Embedding Reconstruction",
+      "abstract": "The proliferation of harmful internet memes poses a significant societal threat, yet their automated classification remains a formidable algorithmic challenge due to the nuanced, multimodal nature of their content. To address this, we introduce MemeTAG, a novel dual-objective framework that pioneers a keyword-aware approach to meme classification. Our core innovation is a two-part semantic guidance mechanism: first, we leverage a pretrained Vision-Language Model to generate a set of descriptive keywords, that capture the high-level semantics. Second, we introduce the Aggregated Tag Inference Network (ATIN), an attention-based module that distills these keywords into a single, rich semantic embedding. This embedding serves as a target for a novel auxiliary reconstruction loss, which compels the model to learn deeply aligned visual and textual features. This approach, combined with an efficient three-stage training strategy, establishes a new state-of-the-art on the HarMeme, Hateful Memes Challenge (HMC), and PrideMM datasets, decisively outperforming existing state-of-the-art methods.",
+      "authors": [
+        "Akshit Sharma",
+        "Prashant W. Patil"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.MM"
+      ],
+      "published": "2026-09-17T18:17:12+00:00",
+      "link": "https://arxiv.org/pdf/2609.20962v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multimodal harmful meme classification using vision-language keywords",
+      "llm_evidence_cn": "利用视觉语言关键词进行多模态有害模因分类",
+      "llm_evidence": "利用视觉语言关键词进行多模态有害模因分类",
+      "canonical_evidence": "利用视觉语言关键词进行多模态有害模因分类",
+      "llm_tldr_en": "MemeTAG tackles harmful multimodal memes via a keyword-aware dual-objective framework: a vision-language model generates descriptive keywords, and an attention module distills them into a semantic embedding that guides classification, improving meme recognition.",
+      "llm_tldr_cn": "针对有害网络模因图文语义隐晦、自动分类困难的问题，论文提出关键词驱动的双目标框架MemeTAG：先利用预训练视觉语言模型生成描述性关键词，再通过聚合标签推理网络ATIN将关键词蒸馏为单一语义嵌入，作为语义引导目标。实验表明该关键词感知方法能有效提升多模态模因分类性能，为有害内容识别提供新思路。",
+      "llm_tldr": "针对有害网络模因图文语义隐晦、自动分类困难的问题，论文提出关键词驱动的双目标框架MemeTAG：先利用预训练视觉语言模型生成描述性关键词，再通过聚合标签推理网络ATIN将关键词蒸馏为单一语义嵌入，作为语义引导目标。实验表明该关键词感知方法能有效提升多模态模因分类性能，为有害内容识别提供新思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "automatically identifying misinformation from posts containing images, text, and video",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
