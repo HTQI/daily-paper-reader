@@ -1,0 +1,41 @@
+{
+  "date": "20260922",
+  "date_label": "",
+  "generated_at": "2026-09-22 22:19:21 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.23239v1",
+      "route": "202609/22/2609.23239v1-sok-formal-methods-for-fact-checking-and-information-integrity",
+      "title": "SoK: Formal Methods for Fact-Checking and Information Integrity",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "事实核查系统与可审计证据保证",
+      "first_seen_at": "2026-09-22 22:19:21 UTC",
+      "updated_at": "2026-09-22 22:19:21 UTC"
+    },
+    {
+      "paper_id": "2609.24359v1",
+      "route": "202609/22/2609.24359v1-dissecting-agentic-forensics-the-role-of-triage-prompting-and-evidence-arbitration-in-open-world-fake-image-detection",
+      "title": "Dissecting Agentic Forensics: The Role of Triage, Prompting, and Evidence Arbitration in Open-World Fake Image Detection",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "智能体假图像检测中的分诊与证据仲裁",
+      "first_seen_at": "2026-09-22 22:19:21 UTC",
+      "updated_at": "2026-09-22 22:19:21 UTC"
+    }
+  ]
+}

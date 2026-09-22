@@ -48,7 +48,7 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-09-21</span>
+      <span class="dpr-home-dashboard-kicker">2026-09-22</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
     <strong class="dpr-home-dashboard-count">共 2 篇</strong>
@@ -58,7 +58,7 @@
     <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>2</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-09-21 23:07:33 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-09-22 22:19:21 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日筛出2篇速读、0篇精读，速读均6.0/10，聚焦混淆平台信息还原与模因分类。</p>
-<p>最值得看的是《RiskChainBench》的混淆平台消息还原与证据支撑网页调查，以及《MemeTAG》用关键词驱动标签嵌入重建做模因分类。</p>
-<p>普通读者可先了解这两类“还原+分类”思路，待后续精读或更高分论文再决定是否深入。</p>
+<p>2026-09-22 日报收录 2 篇速读、无精读，聚焦形式化方法与智能体取证如何服务信息真实性。</p>
+<p>最值得看的是《SoK: Formal Methods for Fact-Checking and Information Integrity》（7.0/10），系统梳理事实核查与信息完整性中的形式化方法；另一篇 6.0/10 则拆解开放世界假图检测中的分诊、提示与证据仲裁。</p>
+<p>普通读者可先读 SoK 综述建立事实核查技术地图，再结合假图检测一文理解 AI 取证落地难点。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -96,7 +96,7 @@
     <strong class="dpr-home-dashboard-count">2 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation">RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation</span></li><li><span class="dpr-home-dashboard-paper-title" title="MemeTAG: Keyword-Driven Meme Classification through Tag Embedding Reconstruction">MemeTAG: Keyword-Driven Meme Classification through Tag Embedding Reconstruction</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="SoK: Formal Methods for Fact-Checking and Information Integrity">SoK: Formal Methods for Fact-Checking and Information Integrity</span></li><li><span class="dpr-home-dashboard-paper-title" title="Dissecting Agentic Forensics: The Role of Triage, Prompting, and Evidence Arbitration in Open-World Fake Image Detection">Dissecting Agentic Forensics: The Role of Triage, Prompting, and Evidence Arbitration in Open-World Fake Image Detection</span></li></ul>
   </div>
   <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>2</strong></span></div>
 </section>

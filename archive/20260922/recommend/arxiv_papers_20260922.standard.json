@@ -1,0 +1,103 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-22T22:18:28.038420+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.23239v1",
+      "source": "arxiv",
+      "title": "SoK: Formal Methods for Fact-Checking and Information Integrity",
+      "abstract": "An automated fact-checking system returns a label: the claim is true, or it is false. In many such systems the verdict remains the primary output. What is generally missing is a record of which document settled the question, of what would have had to be different for the verdict to change, or of whether the same claim, reworded, would have been judged the same way. We call the missing piece a warrant: a separate statement of what was guaranteed and on what grounds. Formal methods produce evidence of this kind, and regulation is beginning to ask for it, since the Digital Services Act and the AI Act both call for auditable evidence about how systems behave. Surveys of automated fact-checking are usually organised by pipeline stage, and treat logic as one technique among many. We organise the field by what is being formalised instead, which gives five levels: the claim, the reasoning, the system doing the checking, the ecosystem the claim spreads through, and the regulatory obligation. Sorting 121 works into those levels, two patterns stand out. Most of the relevant formal machinery already exists, but it was built for other domains and has rarely been applied here, and the gap is widest for verifying the checking system itself. Several stages of the routine professional fact-checkers follow also have no stated correctness criterion, and two of them, writing a claim in checkable form and correcting a verdict already published, are not formally specified in any work we coded. We close with open problems, each with a suggested first step.",
+      "authors": [
+        "Nikolaos Kekatos",
+        "Theodoros Nestoridis",
+        "Charalampos Bratsas",
+        "Charalampos Dimoulas",
+        "Georgios Konstantinidis",
+        "Georgios Malogiannis",
+        "Michael Sirivianos",
+        "Andreas Veglis"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CY",
+        "cs.LO"
+      ],
+      "published": "2026-09-19T22:41:50+00:00",
+      "link": "https://arxiv.org/pdf/2609.23239v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fact-checking systems and auditable evidence warrants",
+      "llm_evidence_cn": "事实核查系统与可审计证据保证",
+      "llm_evidence": "事实核查系统与可审计证据保证",
+      "canonical_evidence": "事实核查系统与可审计证据保证",
+      "llm_tldr_en": "This SoK argues automated fact-checking outputs a verdict but lacks a warrant; it surveys formal methods that yield auditable evidence, aligning with regulatory demands for information integrity.",
+      "llm_tldr_cn": "自动化事实核查系统通常只输出真假标签，缺乏可审计的证据链、反事实条件与改写一致性记录，难以满足数字服务法和AI法案对可审计性的要求。本文以系统化知识梳理形式，把形式化方法引入事实核查与信息完整性，围绕warrant（判定保证）重新组织证据与推理逻辑，指出现有综述多按管道阶段划分而忽视逻辑与证据维度。该工作为构建可解释、可审计的核查系统提供了概念框架与研究方向。",
+      "llm_tldr": "自动化事实核查系统通常只输出真假标签，缺乏可审计的证据链、反事实条件与改写一致性记录，难以满足数字服务法和AI法案对可审计性的要求。本文以系统化知识梳理形式，把形式化方法引入事实核查与信息完整性，围绕warrant（判定保证）重新组织证据与推理逻辑，指出现有综述多按管道阶段划分而忽视逻辑与证据维度。该工作为构建可解释、可审计的核查系统提供了概念框架与研究方向。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.24359v1",
+      "source": "arxiv",
+      "title": "Dissecting Agentic Forensics: The Role of Triage, Prompting, and Evidence Arbitration in Open-World Fake Image Detection",
+      "abstract": "Image forensics is increasingly an open-world problem: manipulations range from fully synthetic images to localized edits, splicing and swapping, while most forensic detectors remain specialized to a single manipulation family. Agentic AI has recently emerged as a promising solution. In principle, such systems can assess the reliability of individual detectors, identify out-of-scope evidence, and arbitrate conflicting reports. However, it remains unclear which components actually drive performance and whether their benefits persist under distribution shift. To answer these questions, we study a training-free agentic framework built around specialist detectors, per-detector triage, and conflict-aware evidence arbitration. Using six configurations and three multimodal large language model backbones, we dissect the role of triage, prompting, and reasoning quality on both in-distribution and out-of-distribution data. Our results show that naive detector fusion suffers from severe false-positive rates on authentic images. Triage and prompting consistently improve performance by filtering unreliable evidence and exposing detector limitations. However, the dominant factor is represented by reasoning itself: A stronger judge substantially outperforms a weaker one, particularly under distribution shift. Most notably, manipulation recall is nearly saturated across all configurations, indicating that the main challenge of open-world image forensics is not detecting manipulations, but calibrating trust in specialized forensic tools and arbitrating conflicting evidence.",
+      "authors": [
+        "Xianlong Li",
+        "Pietro Bongini",
+        "Niccoló Pancino",
+        "Marco Blanchini",
+        "Benedetta Tondi",
+        "Mauro Barni"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CR"
+      ],
+      "published": "2026-09-21T09:48:34+00:00",
+      "link": "https://arxiv.org/pdf/2609.24359v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic fake image detection with per-detector triage and evidence arbitration",
+      "llm_evidence_cn": "智能体假图像检测中的分诊与证据仲裁",
+      "llm_evidence": "智能体假图像检测中的分诊与证据仲裁",
+      "canonical_evidence": "智能体假图像检测中的分诊与证据仲裁",
+      "llm_tldr_en": "Open-world image forensics faces diverse manipulations; this paper dissects a training-free agentic framework with specialist detectors, per-detector triage, and conflict-aware evidence arbitration.",
+      "llm_tldr_cn": "图像取证日益成为开放世界问题，操纵手段从全合成图像到局部编辑、拼接与替换不等，而多数检测器只针对单一篡改类型。论文研究一个无需训练的智能体框架，围绕专家检测器、逐检测器分诊与冲突感知的证据仲裁展开，剖析各组件对性能的真实贡献。实验表明分诊与证据仲裁是关键，并检验其在分布偏移下的稳健性。其贡献在于为可解释、可泛化的虚假图像检测提供了组件级分析视角。",
+      "llm_tldr": "图像取证日益成为开放世界问题，操纵手段从全合成图像到局部编辑、拼接与替换不等，而多数检测器只针对单一篡改类型。论文研究一个无需训练的智能体框架，围绕专家检测器、逐检测器分诊与冲突感知的证据仲裁展开，剖析各组件对性能的真实贡献。实验表明分诊与证据仲裁是关键，并检验其在分布偏移下的稳健性。其贡献在于为可解释、可泛化的虚假图像检测提供了组件级分析视角。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "label": "2026-09-22",
+  "date": "2026-09-22",
+  "generated_at": "2026-09-22T22:19:22",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202609/22/2609.23239v1-sok-formal-methods-for-fact-checking-and-information-integrity",
+      "section": "quick",
+      "title_en": "SoK: Formal Methods for Fact-Checking and Information Integrity",
+      "authors": "Nikolaos Kekatos, Theodoros Nestoridis, Charalampos Bratsas, Charalampos Dimoulas, Georgios Konstantinidis, Georgios Malogiannis, Michael Sirivianos, Andreas Veglis",
+      "date": "2026-09-19",
+      "pdf": "https://arxiv.org/pdf/2609.23239v1",
+      "score": "7.0",
+      "evidence": "事实核查系统与可审计证据保证",
+      "tldr": "自动事实核查系统通常只返回真/假标签，缺少支撑结论的warrant。本文以“形式化了什么”而非流水线阶段组织领域，划分主张、推理、核查系统、传播生态与监管义务五个层级，并编码121篇工作。发现多数形式化工具本为他域所建、极少用于此，核查系统自身的验证缺口最大；改写为可核查形式与更正已发布判决两步尚无任何形式化规范。文末给出各开放问题的首步建议。",
+      "tags": "query:mfnd",
+      "abstract_en": "An automated fact-checking system returns a label: the claim is true, or it is false. In many such systems the verdict remains the primary output. What is generally missing is a record of which document settled the question, of what would have had to be different for the verdict to change, or of whether the same claim, reworded, would have been judged the same way. We call the missing piece a warrant: a separate statement of what was guaranteed and on what grounds. Formal methods produce evidence of this kind, and regulation is beginning to ask for it, since the Digital Services Act and the AI Act both call for auditable evidence about how systems behave. Surveys of automated fact-checking are usually organised by pipeline stage, and treat logic as one technique among many. We organise the field by what is being formalised instead, which gives five levels: the claim, the reasoning, the system doing the checking, the ecosystem the claim spreads through, and the regulatory obligation. Sorting 121 works into those levels, two patterns stand out. Most of the relevant formal machinery already exists, but it was built for other domains and has rarely been applied here, and the gap is widest for verifying the checking system itself. Several stages of the routine professional fact-checkers follow also have no stated correctness criterion, and two of them, writing a claim in checkable form and correcting a verdict already published, are not formally specified in any work we coded. We close with open problems, each with a suggested first step.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/22/2609.24359v1-dissecting-agentic-forensics-the-role-of-triage-prompting-and-evidence-arbitration-in-open-world-fake-image-detection",
+      "section": "quick",
+      "title_en": "Dissecting Agentic Forensics: The Role of Triage, Prompting, and Evidence Arbitration in Open-World Fake Image Detection",
+      "authors": "Xianlong Li, Pietro Bongini, Niccoló Pancino, Marco Blanchini, Benedetta Tondi, Mauro Barni",
+      "date": "2026-09-21",
+      "pdf": "https://arxiv.org/pdf/2609.24359v1",
+      "score": "6.0",
+      "evidence": "智能体假图像检测中的分诊与证据仲裁",
+      "tldr": "开放世界图像取证需应对合成图、局部编辑、拼接与换脸，但多数检测器只专精单一篡改类型。本文研究免训练智能体框架，以专家检测器、逐检测器分诊和冲突感知证据仲裁为核心，在六种配置与三个多模态大模型上拆解各组件作用。结果表明，朴素检测器融合在真实图像上误报严重，分诊与提示能过滤不可靠证据并暴露检测器局限，但更强推理裁判才是性能主导，尤其在分布偏移下。篡改召回率近乎饱和，说明核心挑战已从检测篡改转向校准检测器可信度与仲裁冲突证据。",
+      "tags": "query:mfnd",
+      "abstract_en": "Image forensics is increasingly an open-world problem: manipulations range from fully synthetic images to localized edits, splicing and swapping, while most forensic detectors remain specialized to a single manipulation family. Agentic AI has recently emerged as a promising solution. In principle, such systems can assess the reliability of individual detectors, identify out-of-scope evidence, and arbitrate conflicting reports. However, it remains unclear which components actually drive performance and whether their benefits persist under distribution shift. To answer these questions, we study a training-free agentic framework built around specialist detectors, per-detector triage, and conflict-aware evidence arbitration. Using six configurations and three multimodal large language model backbones, we dissect the role of triage, prompting, and reasoning quality on both in-distribution and out-of-distribution data. Our results show that naive detector fusion suffers from severe false-positive rates on authentic images. Triage and prompting consistently improve performance by filtering unreliable evidence and exposing detector limitations. However, the dominant factor is represented by reasoning itself: A stronger judge substantially outperforms a weaker one, particularly under distribution shift. Most notably, manipulation recall is nearly saturated across all configurations, indicating that the main challenge of open-world image forensics is not detecting manipulations, but calibrating trust in specialized forensic tools and arbitrating conflicting evidence.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
