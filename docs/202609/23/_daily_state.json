@@ -1,0 +1,41 @@
+{
+  "date": "20260923",
+  "date_label": "",
+  "generated_at": "2026-09-23 22:30:24 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.16912v1",
+      "route": "202609/23/2609.16912v1-lit3r-retrieve-relate-read-for-evidence-grounded-question-answering-over-scientific-literature",
+      "title": "Lit3R: Retrieve-Relate-Read for Evidence-Grounded Question Answering over Scientific Literature",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "检索增强的证据识别、重排与验证",
+      "first_seen_at": "2026-09-23 22:30:24 UTC",
+      "updated_at": "2026-09-23 22:30:24 UTC"
+    },
+    {
+      "paper_id": "2609.17081v1",
+      "route": "202609/23/2609.17081v1-eviscope-paired-counterfactual-evidence-diagnostics-for-faithful-and-efficient-grounded-language-models",
+      "title": "EviScope: Paired Counterfactual Evidence Diagnostics for Faithful and Efficient Grounded Language Models",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向证据接地与忠实性的配对反事实诊断基准",
+      "first_seen_at": "2026-09-23 22:30:24 UTC",
+      "updated_at": "2026-09-23 22:30:24 UTC"
+    }
+  ]
+}
