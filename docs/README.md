@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-09-23</span>
+      <span class="dpr-home-dashboard-kicker">2026-09-24</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 2 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 3 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>1</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>2</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-09-23 22:30:24 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-09-24 21:52:59 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,7 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日共生成 2 篇推荐（精读 0 篇，速读 2 篇）</p>
-<p>速读：《Lit3R: Retrieve-Relate-Read for Evidence-Grounded Question Answering over Scientific Literature》（6.0/10）, 《EviScope: Paired Counterfactual Evidence Diagnostics for Faithful and Efficient Grounded Language Models》（6.0/10）</p>
-<p>这些结果覆盖了当下较热的方向，建议先看精读区论文的关键问题与方法。</p>
+<p>今日精读1篇、速读2篇，焦点落在多媒体内容验证与可信AI助手。最值得看的是9.0分精读《Self-Evolving Multimedia Verification through Memory Consolidation of Contestation Experiences》，用争议经验记忆巩固实现自演化多媒体验证；速读可顺带关注EvidenT的证据可溯与Ovis-Embedding的全模态嵌入。普通读者可先读精读了解“记忆+验证”思路，再按需扫读两篇速读找企业应用或检索方向。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -80,12 +78,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">0 篇</strong>
+    <strong class="dpr-home-dashboard-count">1 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Self-Evolving Multimedia Verification through Memory Consolidation of Contestation Experiences">Self-Evolving Multimedia Verification through Memory Consolidation of Contestation Experiences</span></li></ul>
   </div>
-
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>1</strong></span></div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -96,7 +94,7 @@
     <strong class="dpr-home-dashboard-count">2 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Lit3R: Retrieve-Relate-Read for Evidence-Grounded Question Answering over Scientific Literature">Lit3R: Retrieve-Relate-Read for Evidence-Grounded Question Answering over Scientific Literature</span></li><li><span class="dpr-home-dashboard-paper-title" title="EviScope: Paired Counterfactual Evidence Diagnostics for Faithful and Efficient Grounded Language Models">EviScope: Paired Counterfactual Evidence Diagnostics for Faithful and Efficient Grounded Language Models</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="EvidenT: Building Trustworthy Enterprise Assistants through Evidence Groundedness and Traceability">EvidenT: Building Trustworthy Enterprise Assistants through Evidence Groundedness and Traceability</span></li><li><span class="dpr-home-dashboard-paper-title" title="Ovis-Embedding: Pushing the Frontiers of Universal Omni-Modal Embeddings">Ovis-Embedding: Pushing the Frontiers of Universal Omni-Modal Embeddings</span></li></ul>
   </div>
   <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>2</strong></span></div>
 </section>

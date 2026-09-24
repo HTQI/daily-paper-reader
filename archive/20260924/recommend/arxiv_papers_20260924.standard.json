@@ -1,0 +1,137 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-24T21:48:48.223403+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [
+    {
+      "id": "2609.27175v1",
+      "source": "arxiv",
+      "title": "Self-Evolving Multimedia Verification through Memory Consolidation of Contestation Experiences",
+      "abstract": "Multimedia verification requires not only accurate decisions but also traceable evidence, reliable human correction, and safe reuse of prior experience. Existing systems often lack explicit mechanisms for revising intermediate reasoning or preventing harmful knowledge transfer. We present SEMV (Self-Evolving Multimedia Verification), a self-evolving multi-agent framework that treats provenance-bearing arguments as the interface between evidence, reasoning, human contestation, and memory. SEMV combines arena-based quantitative bipolar argumentation (A-QBAF), causal and scoped revision, and verification-gated memory consolidation with explicit conflict retention. On COSMOS benchmark, SEMV achieves 91.88% accuracy versus 89.10% for the strongest comparable baseline. Verified memory reduces negative transfer from 5.7% to 0.2%. On CTR benchmark, constructed from reviewer contestations, scoped causal revision corrects 96.7% of initial errors while saving 52.8% compute. MV2026 Grand Challenge dataset further supports evidence-grounded, temporally consistent reporting. These results show that SEMV can evolve through verified experience while keeping accumulated knowledge and subsequent decisions traceable, revisable, and contestable.",
+      "authors": [
+        "Truong Thanh Hung Nguyen",
+        "Vo Thanh Khang Nguyen",
+        "Hoang-Loc Cao",
+        "Phuc Ho",
+        "Truong Thinh Nguyen",
+        "Van Pham",
+        "Hung Cao"
+      ],
+      "primary_category": "cs.MM",
+      "categories": [
+        "cs.MM",
+        "cs.AI",
+        "cs.MA"
+      ],
+      "published": "2026-09-23T00:18:36+00:00",
+      "link": "https://arxiv.org/pdf/2609.27175v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "multimedia verification with traceable evidence and human correction",
+      "llm_evidence_cn": "可追溯证据的多媒体验证与人工纠正",
+      "llm_evidence": "可追溯证据的多媒体验证与人工纠正",
+      "canonical_evidence": "可追溯证据的多媒体验证与人工纠正",
+      "llm_tldr_en": "SEMV is a self-evolving multi-agent framework for multimedia verification, using provenance-bearing arguments to link evidence, reasoning, human contestation and memory, reaching 91.88% accuracy on COSMOS versus 89.10% baseline.",
+      "llm_tldr_cn": "现有多媒体验证系统缺乏对中间推理的显式修订机制，也难以防止有害知识迁移。本文提出SEMV自演化多智能体框架，以带来源的论辩作为证据、推理、人工质疑与记忆之间的接口，结合竞技场式双极论辩、因果与范围化修订以及验证门控的记忆整合。在COSMOS基准上达到91.88%准确率，高于基线的89.10%，实现了可追溯证据与安全复用先前经验。",
+      "llm_tldr": "现有多媒体验证系统缺乏对中间推理的显式修订机制，也难以防止有害知识迁移。本文提出SEMV自演化多智能体框架，以带来源的论辩作为证据、推理、人工质疑与记忆之间的接口，结合竞技场式双极论辩、因果与范围化修订以及验证门控的记忆整合。在COSMOS基准上达到91.88%准确率，高于基线的89.10%，实现了可追溯证据与安全复用先前经验。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.22537v1",
+      "source": "arxiv",
+      "title": "EvidenT: Building Trustworthy Enterprise Assistants through Evidence Groundedness and Traceability",
+      "abstract": "Enterprise AI assistants must produce responses that are verifiable and traceable to source evidence. However, retrieval augmented generation (RAG) over heterogeneous enterprise data can suffer from citation drift, unsupported content, and weak source traceability. We present EvidenT (T = Trust + Transparency + Traceability), a lightweight pipeline that verifies extracted evidence against retrieved documents before answer generation, without model retraining. EvidenT combines structured passage extraction with deterministic lexical alignment to filter unsupported content, correct citation drift, and preserve source-span traceability. On approximately 500 real enterprise queries, EvidenT improves gold-source hit rate by an average of 29% over prompting baselines, produces no citations to nonretrieved urls, and achieves near-saturated answer-to-source lexical coverage.",
+      "authors": [
+        "Anubha Kabra",
+        "Katie Jooyoung Kim",
+        "Colin Zhiwei Kou",
+        "Helene Sajer",
+        "Yimei Fan",
+        "Radomir Cisar",
+        "Heather Greenhalgh",
+        "Gabriel Martinez Vidiri"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-18T19:49:06+00:00",
+      "link": "https://arxiv.org/pdf/2609.22537v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "verifies extracted evidence against retrieved documents before answer generation to filter unsupported content",
+      "llm_evidence_cn": "在生成答案前将抽取证据与检索文档比对以过滤无支持内容",
+      "llm_evidence": "在生成答案前将抽取证据与检索文档比对以过滤无支持内容",
+      "canonical_evidence": "在生成答案前将抽取证据与检索文档比对以过滤无支持内容",
+      "llm_tldr_en": "EvidenT is a lightweight, training-free pipeline that verifies extracted evidence against retrieved documents before answer generation, filtering unsupported content and fixing citation drift to improve source traceability on enterprise queries.",
+      "llm_tldr_cn": "企业AI助手需给出可验证且可追溯到来源证据的回答，但面向异构企业数据的检索增强生成常出现引用漂移、无支持内容和来源可追溯性弱的问题。本文提出EvidenT，一个轻量流水线，在生成答案前将抽取的证据与检索文档比对，结合结构化段落抽取与确定性词法对齐过滤无支持内容、纠正引用漂移并保留来源跨度。在约500条真实企业查询上，EvidenT提升了金标准来源命中率。该工作为证据驱动的核查提供了无需重训练的实用方案。",
+      "llm_tldr": "企业AI助手需给出可验证且可追溯到来源证据的回答，但面向异构企业数据的检索增强生成常出现引用漂移、无支持内容和来源可追溯性弱的问题。本文提出EvidenT，一个轻量流水线，在生成答案前将抽取的证据与检索文档比对，结合结构化段落抽取与确定性词法对齐过滤无支持内容、纠正引用漂移并保留来源跨度。在约500条真实企业查询上，EvidenT提升了金标准来源命中率。该工作为证据驱动的核查提供了无需重训练的实用方案。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.25165v1",
+      "source": "arxiv",
+      "title": "Ovis-Embedding: Pushing the Frontiers of Universal Omni-Modal Embeddings",
+      "abstract": "In this report, we introduce \\textbf{Ovis-Embedding}, a state-of-the-art omni-modal embedding family built on native integration of text, image, video, and audio. Instead of assembling separate modality towers, Ovis-Embedding uses a shared multimodal backbone to encode different modalities in a common representation space. Specifically, we make \\textbf{three key advances}: (1) \\textbf{native omni-modal initialization}: we adopt a pretrained Qwen-omni model as the embedding backbone and adapt it through contrastive training with low-rank initialization; (2) \\textbf{data-centric omni-modal training}: we construct a broad, high-quality corpus spanning text, images, video, audio, and interleaved multimodal data. To improve data efficiency, we introduce homogeneous-source sampling to form task-consistent batches with informative in-batch negatives; and (3) \\textbf{embedding-specific training and inference optimization}: we use focal loss to emphasize hard examples and similarity-based Embedding Distillation to transfer fine-grained similarity structure from complementary experts. At inference time, low-rank feature decomposition enables compact embeddings with flexible dimensionality and minimal performance loss. Empirical evaluations show that the \\textbf{Ovis-Embedding} family achieves state-of-the-art performance on \\textbf{MMEB-v3}, \\textbf{MMEB-v2}, \\textbf{MVEB}, \\textbf{MAEB}, and \\textbf{RTEB}, demonstrating its effectiveness across text, image, video, and audio modalities. These results highlight the potential of unified omni-modal training to overcome modality fragmentation and advance universal embedding models for any-to-any retrieval.",
+      "authors": [
+        "Ovis-Embedding Team"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-21T12:44:27+00:00",
+      "link": "https://arxiv.org/pdf/2609.25165v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "omni-modal embeddings unify text, image and video in one shared space for cross-modal alignment",
+      "llm_evidence_cn": "全模态嵌入将文本、图像、视频统一到共享空间以支持跨模态对齐",
+      "llm_evidence": "全模态嵌入将文本、图像、视频统一到共享空间以支持跨模态对齐",
+      "canonical_evidence": "全模态嵌入将文本、图像、视频统一到共享空间以支持跨模态对齐",
+      "llm_tldr_en": "Ovis-Embedding encodes text, image, video and audio in one shared representation space via a pretrained omni backbone, providing transferable cross-modal features useful for image-text consistency analysis.",
+      "llm_tldr_cn": "现有嵌入模型多依赖独立模态塔，难以在统一空间对齐文本、图像、视频与音频的语义。本文提出Ovis-Embedding，以预训练Qwen-omni为共享骨干，通过低秩初始化的对比训练构建覆盖多模态与交错数据的语料，实现原生全模态嵌入。实验表明该模型在多种跨模态检索任务上达到领先水平。其统一表示可直接支撑图像-文本一致性分析等下游误信息核查任务。",
+      "llm_tldr": "现有嵌入模型多依赖独立模态塔，难以在统一空间对齐文本、图像、视频与音频的语义。本文提出Ovis-Embedding，以预训练Qwen-omni为共享骨干，通过低秩初始化的对比训练构建覆盖多模态与交错数据的语料，实现原生全模态嵌入。实验表明该模型在多种跨模态检索任务上达到领先水平。其统一表示可直接支撑图像-文本一致性分析等下游误信息核查任务。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

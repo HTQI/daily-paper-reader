@@ -1,0 +1,57 @@
+{
+  "date": "20260924",
+  "date_label": "",
+  "generated_at": "2026-09-24 21:52:59 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.27175v1",
+      "route": "202609/24/2609.27175v1-self-evolving-multimedia-verification-through-memory-consolidation-of-contestation-experiences",
+      "title": "Self-Evolving Multimedia Verification through Memory Consolidation of Contestation Experiences",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "可追溯证据的多媒体验证与人工纠正",
+      "first_seen_at": "2026-09-24 21:52:59 UTC",
+      "updated_at": "2026-09-24 21:52:59 UTC"
+    },
+    {
+      "paper_id": "2609.22537v1",
+      "route": "202609/24/2609.22537v1-evident-building-trustworthy-enterprise-assistants-through-evidence-groundedness-and-traceability",
+      "title": "EvidenT: Building Trustworthy Enterprise Assistants through Evidence Groundedness and Traceability",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "在生成答案前将抽取证据与检索文档比对以过滤无支持内容",
+      "first_seen_at": "2026-09-24 21:52:59 UTC",
+      "updated_at": "2026-09-24 21:52:59 UTC"
+    },
+    {
+      "paper_id": "2609.25165v1",
+      "route": "202609/24/2609.25165v1-ovis-embedding-pushing-the-frontiers-of-universal-omni-modal-embeddings",
+      "title": "Ovis-Embedding: Pushing the Frontiers of Universal Omni-Modal Embeddings",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "全模态嵌入将文本、图像、视频统一到共享空间以支持跨模态对齐",
+      "first_seen_at": "2026-09-24 21:52:59 UTC",
+      "updated_at": "2026-09-24 21:52:59 UTC"
+    }
+  ]
+}
