@@ -1,0 +1,95 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-25T21:54:52.226268+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.30227v1",
+      "source": "arxiv",
+      "title": "To Trust or Not to Trust: Retrieval-Augmented Fact Checking in Speech",
+      "abstract": "Online misinformation increasingly appears in spoken formats such as news clips, podcasts, interviews, political speeches, and social media videos, creating a need for fact-checking systems that can verify claims directly from speech. We introduce VeriSpeak, a probe benchmark for studying speech-based fact verification in Large Audio Language Models (LALMs). VeriSpeak contains 3,879 spoken claims spanning temporal, geographical, and relational facts, with balanced true and false labels. The benchmark is designed to examine whether factual verification ability transfers from text to speech, and whether retrieval-augmented LALMs can use textual evidence to correctly support or refute spoken claims. Our experiments reveal a consistent text-speech modality gap: LALMs that verify written claims reliably often fail on the same claims when spoken. Moreover, retrieval alone provides limited gains because models frequently conflate retrieved evidence with the spoken claim. In contrast, retrieval combined with explicit reasoning improves claim-evidence comparison, with a thinking-tuned LALM reaching 86.1% accuracy. VeriSpeak highlights that effective speech misinformation detection requires not only speech understanding, but also grounded reasoning over retrieved evidence. The dataset is publicly available via Hugging Face at https://huggingface.co/datasets/abhiram4572/VeriSpeak.",
+      "authors": [
+        "Debajyoti Mazumder",
+        "Mamta",
+        "Abhirama Subramanyam Penamakuri"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL",
+        "cs.SD"
+      ],
+      "published": "2026-09-24T17:50:40+00:00",
+      "link": "https://arxiv.org/pdf/2609.30227v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "retrieval-augmented fact checking for spoken misinformation",
+      "llm_evidence_cn": "面向语音错误信息的检索增强事实核查",
+      "llm_evidence": "面向语音错误信息的检索增强事实核查",
+      "canonical_evidence": "面向语音错误信息的检索增强事实核查",
+      "llm_tldr_en": "Misinformation increasingly appears in spoken formats such as podcasts and social media videos. VeriSpeak is a probe benchmark of 3,879 spoken claims testing whether retrieval-augmented audio language models can use textual evidence to support or refute spoken claims.",
+      "llm_tldr_cn": "在线错误信息越来越多地以新闻片段、播客、访谈、政治演讲和社交媒体视频等语音形式出现，亟需能直接从语音核验主张的事实核查系统。本文提出VeriSpeak，一个用于研究大音频语言模型语音事实核查能力的探针基准，包含3879条涵盖时间、地理与关系事实的语音主张，正负标签均衡。基准用于检验事实核验能力能否从文本迁移到语音，以及检索增强模型能否利用文本证据支持或反驳语音主张。实验揭示了文本与语音模态间的一致性差距，为语音错误信息核查提供了评测基础。",
+      "llm_tldr": "在线错误信息越来越多地以新闻片段、播客、访谈、政治演讲和社交媒体视频等语音形式出现，亟需能直接从语音核验主张的事实核查系统。本文提出VeriSpeak，一个用于研究大音频语言模型语音事实核查能力的探针基准，包含3879条涵盖时间、地理与关系事实的语音主张，正负标签均衡。基准用于检验事实核验能力能否从文本迁移到语音，以及检索增强模型能否利用文本证据支持或反驳语音主张。实验揭示了文本与语音模态间的一致性差距，为语音错误信息核查提供了评测基础。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.26907v1",
+      "source": "arxiv",
+      "title": "Small Cues, Big Consequences: Learning Pivotal Cues for Multimodal Meme Classification",
+      "abstract": "Memes often derive their harmful, hateful, or sarcastic meaning from small but decisive visual, textual, or cross-modal cues. Existing multimodal classifiers can miss such evidence when relying mainly on global image-text representations. We introduce MemeCF, a cue-focused benchmark of 9,895 memes across harm, hate, and sarcasm, with annotations identifying the modality and rationale of the pivotal evidence. We also propose MemePIVOT, a local-global architecture for meme classification. MemePIVOT uses frozen CLIP features, unbalanced optimal transport to align words with image patches while allowing irrelevant evidence to remain unmatched, and an evidential fusion head to combine local grounding with global meme context under uncertainty. Experiments on HarMeme, PrideMM, and MemeCF show consistent gains over strong text-only, image-only, multimodal, and vision-language baselines. Cross-dataset and ablation results further show that explicit pivotal-evidence modeling improves robustness and contributes meaningfully beyond global multimodal representations. Our code and dataset are publicly available at https://github.com/AkshitSharma1/MemePIVOT",
+      "authors": [
+        "Akshit Sharma",
+        "Prashant W. Patil"
+      ],
+      "primary_category": "cs.MM",
+      "categories": [
+        "cs.MM",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-09-22T18:04:27+00:00",
+      "link": "https://arxiv.org/pdf/2609.26907v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Cue-focused multimodal benchmark with rationale annotations and cross-modal alignment",
+      "llm_evidence_cn": "带理由标注的线索聚焦多模态基准与跨模态对齐",
+      "llm_evidence": "带理由标注的线索聚焦多模态基准与跨模态对齐",
+      "canonical_evidence": "带理由标注的线索聚焦多模态基准与跨模态对齐",
+      "llm_tldr_en": "Harmful or sarcastic memes hinge on small decisive visual, textual or cross-modal cues that global image-text classifiers miss. MemeCF annotates cue modality and rationale; MemePIVOT aligns words to patches with optimal transport and fuses local cues with global context.",
+      "llm_tldr_cn": "模因的危害、仇恨或讽刺含义常由微小却关键的视觉、文本或跨模态线索决定，依赖全局图文表示的分类器容易忽略这些证据。论文构建MemeCF基准，涵盖9895个模因并标注关键证据的模态与理由，同时提出MemePIVOT局部-全局架构，用非平衡最优传输对齐词与图像块并允许无关证据不匹配。实验表明该设计能更好捕捉关键线索，为可解释的多模态有害内容识别提供了数据与方法。",
+      "llm_tldr": "模因的危害、仇恨或讽刺含义常由微小却关键的视觉、文本或跨模态线索决定，依赖全局图文表示的分类器容易忽略这些证据。论文构建MemeCF基准，涵盖9895个模因并标注关键证据的模态与理由，同时提出MemePIVOT局部-全局架构，用非平衡最优传输对齐词与图像块并允许无关证据不匹配。实验表明该设计能更好捕捉关键线索，为可解释的多模态有害内容识别提供了数据与方法。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

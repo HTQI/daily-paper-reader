@@ -1,0 +1,41 @@
+{
+  "date": "20260925",
+  "date_label": "",
+  "generated_at": "2026-09-25 21:56:30 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.30227v1",
+      "route": "202609/25/2609.30227v1-to-trust-or-not-to-trust-retrieval-augmented-fact-checking-in-speech",
+      "title": "To Trust or Not to Trust: Retrieval-Augmented Fact Checking in Speech",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "面向语音错误信息的检索增强事实核查",
+      "first_seen_at": "2026-09-25 21:56:30 UTC",
+      "updated_at": "2026-09-25 21:56:30 UTC"
+    },
+    {
+      "paper_id": "2609.26907v1",
+      "route": "202609/25/2609.26907v1-small-cues-big-consequences-learning-pivotal-cues-for-multimodal-meme-classification",
+      "title": "Small Cues, Big Consequences: Learning Pivotal Cues for Multimodal Meme Classification",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "带理由标注的线索聚焦多模态基准与跨模态对齐",
+      "first_seen_at": "2026-09-25 21:56:30 UTC",
+      "updated_at": "2026-09-25 21:56:30 UTC"
+    }
+  ]
+}
