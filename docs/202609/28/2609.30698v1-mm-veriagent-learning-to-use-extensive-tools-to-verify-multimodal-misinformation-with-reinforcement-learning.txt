@@ -1,0 +1,415 @@
+Title: MM-VeriAgent: Learning to Use Extensive Tools to Verify Multimodal Misinformation with Reinforcement Learning
+
+URL Source: https://arxiv.org/pdf/2609.30698v1
+
+Published Time: Mon, 28 Sep 2026 00:26:36 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# MM-VeriAgent: Learning to Use Extensive Tools to Verify Multimodal Misinformation with Reinforcement Learning 
+
+## Peipei Li 1 Shuhan Xia 1 Shengyang Liu 1 Zekun Li 2 † Ran He 2,31 Beijing University of Posts and Telecommunications  
+
+> 2
+
+## Minzu University of China  
+
+> 3
+
+## NLPR, Institute of automation, Chinese academy of science, Chinese Academy of Sciences  
+
+> †
+
+## Corresponding author. 
+
+Abstract 
+
+Real-world multimodal misinformation often involves mixed forgery sources, requiring sample-specific detection strate-gies. Existing tool-augmented methods rely on predefined workflows or inference-time planning, limiting adaptability or increasing inference cost. To address this issue, we intro-duce MM-VeriAgent , which learns to verify mixed-source multimodal misinformation with tools. We first build MM-VeriTools , a specialized toolkit for misinformation detection agents. By benchmarking various candidate models and meth-ods on the sub-tasks required by mixed-source detection, we select the strongest for textual, visual, and cross-modal forgery analysis and encapsulate them as callable tools with a unified interface. On top of this toolkit, we train the LVLM agent with reinforcement learning to teach it how to use these tools to better solve mixed-source detection. Since many of the tools are specialized models whose online execution at ev-ery rollout severely limits RL efficiency, we further introduce 
+
+Tool-Execution Cache , which pre-executes candidate tool calls and reuses their cached outputs during training. This preserves multi-step rollouts while reducing online tool execu-tion, largely improving the training efficiency. Experiments on MMFakeBench demonstrate substantial accuracy gains over the base model without explicit tool search at inference time. Ablation and efficiency analyses further validate the learned tool-use policy and show that Tool-Execution Cache reduces online tool executions during training. 
+
+## Introduction 
+
+Real-world multimodal misinformation rarely stems from a single type of forgery. As formalized by MMFakeBench (Liu et al. 2025), a deceptive image–text post may involve textual veracity distortion, visual veracity distortion, cross-modal consistency distortion, or combinations thereof, and the un-derlying source composition is unknown at test time. Cru-cially, different sources demand different verification mech-anisms: fabricated claims call for fact checking against ex-ternal knowledge, manipulated or AI-generated images call for visual forensics, and mismatched image–text pairs call for cross-modal consistency reasoning. A fixed detection pipeline is therefore inherently mismatched with mixed-source inputs. Effective detection requires deciding, for each sample, which evidence to collect and when to stop (Fig-ure 1). 
+
+Copyright © 2027, Association for the Advancement of Artificial Intelligence (www.aaai.org). All rights reserved. 
+
+Tool-augmented agents have recently emerged as a promis-ing direction, coupling the reasoning ability of large vision-language models (LVLMs) with external retrieval and spe-cialized detectors. Since MMD-Agent (Liu et al. 2025) first cast mixed-source detection as a multi-turn tool-augmented verification process, this paradigm has been widely adopted (Braun et al. 2025; Beigi et al. 2024; Li, Zhang, and Malthouse 2024; Cui et al. 2026). Existing meth-ods, however, orchestrate tools purely through prompting frozen LVLMs at inference time. Predefined workflows (Liu et al. 2025; Beigi et al. 2024; Li, Zhang, and Malthouse 2024) execute essentially the same tool sequence for every input and thus cannot adapt to sample-specific forgery sources. Test-time planning and search (Braun et al. 2025; Cui et al. 2026) adapt better, but every input incurs additional computation to plan subsequent calls or to evaluate candidate tool-use tra-jectories. Balancing sample-specific tool use with efficient inference therefore remains a key challenge. To address this challenge, we first build MM-VeriTools ,a specialized toolkit for misinformation detection agents. By benchmarking candidate models and methods on the sub-tasks required by mixed-source detection, we select the strongest for textual, visual, and cross-modal forgery analysis and encapsulate them as callable tools behind a unified in-terface. On top of this toolkit, we propose MM-VeriAgent .To our knowledge, it is the first model actually trained for mixed-source multimodal misinformation detection with re-inforcement learning (RL), whereas prior agents perform direct inference. Optimized with task-specific rewards, the agent learns to decide which tool to invoke and when to stop, learning how to use these tools to better solve mixed-source detection. However, optimizing the policy through online interaction with real tools is expensive. Many tools in the toolkit are specialized models trained for specific sub-tasks, so execut-ing them is slow. Each RL rollout may invoke several such tools, and rollouts are repeated across many policy updates, making online tool execution the dominant bottleneck of pol-icy optimization. We therefore introduce the Tool-Execution Cache . Before training, a high-capability teacher agent per-forms multiple rollouts for every training sample and records each executed tool call. During training, policy-generated calls are matched against the cache and answered with the recorded outputs. This shifts expensive tool execution from arXiv:2609.30698v1 [cs.CV] 25 Sep 2026 Multi-modal Fake News Multi-turn Trajectory 
+
+> LLM Actor
+> Multi-turn Rollouts Actor Update RL Alg (GRPO)
+
+Final Verdict 
+
+Source Attribution 
+
+MM-VeriTools 
+
+Textual Veracity (TVD) Cross-Modal Consistency (CCD)   
+
+> Entity Extraction (gliner_medium-v2.1)
+> Wikipedia Search
+> Google Search
+> Text Fact Verification (qwen3-vl-30b)
+
+Visual Forensics (VVD)     
+
+> AI-Generated Image Detector (DFFReq) Synthetic Image Detector (DDA)
+> Image Manipulation Localizer (MVSSNet)
+> Image Fact Verification (qwen3-vl-30b)
+> Image Caption Generator (CapRL)
+
+a2
+
+o2 
+
+> Alex Salmond giving his last speech as leader of the Scottish National Party 14 November 2014
+> image I + text T
+
+Fake 
+
+Verdict 
+
+> Cross-Modal Inconsistency
+
+Evidence         
+
+> Text Authentic — Text Fact Verification Result: true : Alex Salmond was SNP leader until 2014 and gave a final address as leader.
+> Image Authentic — DDA&DFFReq DDA: REAL (is_fake: False); DFFreq: REAL (is_ai_generated: False).
+> Cross-modal Inconsistent — CapRL
+> The image shows a man speaking to reporters , with no visible SNP logo , farewell-speech sign, or date evidence.
+
+a0 o0 a2 o2
+
+q a1 o1Figure 1: Overview of MM-VeriAgent. Given an image–text post x = ( I, T ), the policy performs a multi-turn rollout: at each turn it either emits a tool-calling action at, which ends with a tool-specific stop token and invokes a tool from the MM-VeriTools toolkit (covering textual veracity, visual forensics, and cross-modal consistency), receiving the returned observation ot, or terminates the interaction and outputs the final verdict together with fine-grained source attribution and supporting evidence. The policy is optimized with GRPO over multi-turn rollouts. the RL loop to a one-off offline stage while preserving gen-uine multi-turn tool interaction. On MMFakeBench, MM-VeriAgent raises the multi-class accuracy of its Qwen2.5-VL-7B backbone from 34.3% to 70.4%, on par with substantially larger proprietary models, without explicit tool search at inference time. Our main con-tributions are summarized as follows: 
+
+• We build MM-VeriTools, a specialized toolkit that bench-marks candidate models on the sub-tasks of mixed-source detection and encapsulates the strongest as callable tools behind a unified interface. 
+
+• We propose MM-VeriAgent, to our knowledge the first model trained with RL for mixed-source multimodal mis-information detection, which learns to decide which tool to invoke and when to stop. 
+
+• We introduce Tool-Execution Cache, which pre-executes tool calls and reuses their cached outputs during RL train-ing, greatly reducing online tool execution. 
+
+• Experiments on MMFakeBench show that MM-VeriAgent improves the multi-class accuracy of Qwen2.5-VL-7B from 34.3% to 70.4%, with ablation and efficiency analyses validating each component. 
+
+## Related work 
+
+Misinformation Detection 
+
+Early misinformation detection methods primarily focus on a single modality, either identifying factual distortions in textual claims (Thorne et al. 2018; Przybyla 2020; Huang et al. 2023) or detecting manipulated and AI-generated vi-sual content (Wang et al. 2020; Ojha, Li, and Lee 2023; Liu Table 1: Comparison of tool-augmented detectors for mixed-source multimodal misinformation detection. Cache denotes an offline tool-execution cache for training.                               
+
+> Method Organization Adaptive Search-free Learned Cache
+> MMD-Agent Fixed workflow ✗✓✗✗
+> LRQ-FACT Fixed workflow ✗✓✗✗
+> DEFAME Test-time planning ✓✗✗✗
+> T2Agent Test-time search ✓✗✗✗
+> Ours RL-learned policy ✓✓✓✓
+
+et al. 2022). Real-world misinformation, however, is often conveyed through coupled image–text content, where decep-tion may originate from textual distortion, visual manipu-lation, or inconsistency between the two modalities. MM-FakeBench (Liu et al. 2025) formalizes this mixed-source setting into three major forgery categories, providing a real-istic benchmark for fine-grained misinformation verification. Under this paradigm, some works train end-to-end mul-timodal classifiers that aggregate features across modali-ties (Xu et al. 2025; Papadopoulos et al. 2025), while others directly prompt or finetune LVLMs to identify misinforma-tion from mixed sources (Yan et al. 2025; Cui et al. 2026; Li, Zhang, and Malthouse 2024; Lin et al. 2025; Zeng et al. 2024). Despite their effectiveness, most existing methods for-mulate multimodal verification as a single-shot prediction problem and thus cannot flexibly coordinate the heteroge-neous expert capabilities required for textual fact checking, visual forensics, and cross-modal consistency analysis. Tool-Augmented Agents and Tool Learning 
+
+Augmenting LLMs with external tools has become a general recipe for tasks that exceed the capability of a single forward pass. Early frameworks orchestrate tools without training. For example, OctoTools (Lu et al. 2026) encapsulates tools as standardized tool cards and coordinates them with a plan-ner and an executor, but its tool selection relies on in-context reasoning alone and is static per task. Recent work instead trains tool use with reinforcement learning. Search-R1 (Jin et al. 2025) learns when to issue search queries during reason-ing, ReTool (Feng et al. 2025) learns when and how to invoke a code interpreter, Tool-Star (Dong et al. 2025) coordinates multiple tools with a hierarchical reward, and VerlTool (Jiang et al. 2025) provides a unified infrastructure for such agentic RL training. RL has also been introduced into fact verifica-tion, where an agent alternates between claim reasoning and evidence retrieval before predicting claim veracity (He et al. 2025). However, these methods target textual reasoning tasks with homogeneous tool actions, and none addresses mixed-source multimodal verification, which requires routing each sample to heterogeneous forensic and retrieval tools. Table 1 contrasts MM-VeriAgent with existing tool-augmented de-tectors for this task: it is the only one that learns the tool-use policy and keeps inference free of planning and search. A practical obstacle of such RL training is the cost of executing real tools inside rollouts. Prior remedies include caching API responses for stable evaluation (Guo et al. 2024), simulating tool feedback with LLMs (Li et al. 2025), build-ing an online prefix-tree cache during training (Vijaya Ku-mar et al. 2026), and matching policy calls against cached rollouts with reward reweighting (Islam et al. 2026). Our Tool-Execution Cache instead constructs the cache offline via teacher rollouts and matches entries at the sample level, which suits read-only verification tools whose outputs are bound to individual image–text pairs. 
+
+## Method 
+
+Overview 
+
+Figure 1 presents the overall framework of MM-VeriAgent. In the following, we first introduce the task and its multi-turn tool-use formulation ( Task Definition ), and describe the construction of the MM-VeriTools toolkit ( MM-VeriTools: Extensive Toolkit for Verification ). We then present how the agent is trained to use these tools ( Reinforcement Learning for Verification ), and finally the Tool-Execution Cache that replaces online tool execution during training. 
+
+Task Definition 
+
+Mixed-source detection. The input is an image–text post 
+
+x = ( I, T ), where the image I and the text T jointly present one piece of information and are expected to corroborate each other. The task is to predict a binary veracity label y
+
+(real or fake) and a fine-grained source label z ∈ S , where 
+
+S consists of Real (the post is authentic), Textual Verac-ity Distortion (TVD, the text conveys false claims), Visual Veracity Distortion (VVD, the image is manipulated or AI-generated), and Cross-modal Consistency Distortion (CCD, the image and the text are semantically mismatched) (Liu et al. 2025). A post is fake once any distortion is present, and different distortions may co-occur in principle. Follow-ing MMFakeBench, each sample is annotated with a unique primary source label, so source attribution is a four-way clas-sification. 
+
+Agentic Tool-Use for Verification. Following tool-augmented agents (Liu et al. 2025; Cui et al. 2026), we model verification as a multi-turn interaction between an agent πθ
+
+and a toolset T . At each turn, the agent generates an action 
+
+ak, a token sequence that either invokes a tool in T (termi-nated by a tool-specific stop token) or ends the interaction, yielding a trajectory 
+
+τ = ( a0, o 0, a 1, o 1, . . . , a K−1, o K−1, a K ) , (1) where ok denotes the observation tokens returned by the in-voked tool and appended to the context, and K is the number of tool-calling turns. The final action aK outputs the verdict, which consists of the predicted veracity label ˆy, the predicted source label ˆz ∈ S , the supporting evidence ˆE, namely the set of evidence items cited from the collected tool observations to justify the decision, and a natural language reasoning. 
+
+Limitations of existing agents. Existing agents realize this formulation by prompting frozen LVLMs over limited tools. The integrated tools cover only part of the required verifica-tion capabilities, and the prompted policy often invokes them redundantly or suboptimally. We address the two limitations with an extensive toolkit and a learned tool-use policy. 
+
+MM-VeriTools: Extensive Toolkit for Verification 
+
+Mixed-source detection requires heterogeneous verification capabilities, yet naively exposing every available tool to the policy introduces redundant evidence, a larger action space, and unnecessary execution overhead. We construct MM-VeriTools in two steps. 
+
+Step 1: Collection and grouping. We collect candidate specialized models and APIs for the three verification sub-tasks, namely TVD, VVD, and CCD, and wrap them with a unified callable interface, as listed in Table 2. Following MMD-Agent (Liu et al. 2025) and T 2Agent (Cui et al. 2026), every tool takes fixed arguments from the queried sample, so a tool call specifies only the tool name. The TVD group examines the factual correctness of textual claims, the VVD group detects image manipulation and AI-generated content, and the CCD group assesses the semantic alignment between the image and the accompanying text. 
+
+Step 2: Benchmarking and pruning. Our principle is to admit only tools that help the base model or solve the sub-task better than the base model itself. To measure this, for each sub-task we build a balanced benchmark set from the training split of MMFakeBench, pairing 300 samples of the target source with 300 Real samples and keeping it disjoint from the test set. The TVD, VVD, and CCD sets take the text, the image, and both as input, respectively. On each set we compare three types of candidates: 
+
+• Base : GPT-5-mini (OpenAI 2025) without any tool, serv-ing as the reference for selection. Table 2: Candidate tool pool and group-wise benchmarking of MM-VeriTools. Each auxiliary tool is attached to the base model, and direct tools are evaluated off the shelf. A candidate is selected only if it outperforms the base model (Acc in bold ).                                                                      
+
+> Group Model / Method Role Type Acc Selected
+> TVD GPT-5-mini Base model Base 0.63 –GLiNER-medium (Zaratiana et al. 2024) Entity extraction Auxiliary 0.71 ✓
+> Wikipedia search Knowledge retrieval Auxiliary 0.71 ✓
+> Google search Web retrieval Auxiliary 0.75 ✓
+> Qwen3-30B (Yang et al. 2025) Text fact verification Direct 0.69 ✓
+> Faking Fake News (Huang et al. 2023) Fake news detection Direct 0.35 ✗
+> VVD GPT-5-mini Base model Base 0.66 –DFFreq (Yan et al. 2026) AI-generated image detection Direct 0.94 ✓
+> DDA (Chen et al. 2025) Synthesis and editing detection Direct 0.91 ✓
+> MVSS-Net (Chen et al. 2021) Manipulation localization Direct 0.86 ✓
+> Qwen3-30B (Yang et al. 2025) Manipulation description Direct 0.80 ✓
+> UnivFD (Ojha, Li, and Lee 2023) AI-generated image detection Direct 0.31 ✗
+> CCD GPT-5-mini Base model Base 0.53 –CapRL (Xing et al. 2026) Image captioning Auxiliary 0.92 ✓
+> HAMMER (Shao, Wu, and Liu 2023) Manipulation grounding Direct 0.49 ✗
+> FKA-Owl (Liu et al. 2024) Consistency detection Direct 0.44 ✗
+
+• Auxiliary : tools that provide intermediate evidence, each attached to the base model as its only tool. 
+
+• Direct : tools whose outputs directly answer the sub-task, evaluated off the shelf. A candidate is retained only if it outperforms the base model, a marginal-contribution criterion in the spirit of (Lu et al. 2026). The final toolset T contains nine tools, four textual, four visual, and one cross-modal, as marked in Table 2. Note that pruning only fixes the pool of available tools. Which tools to invoke for each sample is decided by the learned policy, in contrast to statically selecting tools per task (Lu et al. 2026). 
+
+Reinforcement Learning for Verification 
+
+We train the agent with reinforcement learning to teach it which tool to invoke and when to stop. Under the formulation above, the trajectory distribution factorizes over the policy’s own generations: 
+
+Pθ (τ | x) = 
+
+> K
+
+Y
+
+> k=0
+
+πθ (ak | x, a <k , o <k ) , (2) where the observations ok are injected by the environment rather than generated by the policy. We exploit this property both for cache-based training and for loss masking. MM-VeriAgent learns πθ by maximizing the expected trajectory reward: 
+
+max  
+
+> θ
+
+Ex∼D , τ ∼Pθ (·| x) [R(x, τ )] . (3) 
+
+Reward design. To guide the agent toward correct and evidence-grounded verification procedures, we design a task-specific reward that evaluates the final verdict along four aspects. The outcome rewards are indicator functions, 
+
+Rveracity = I[ˆ y = y] and Rsource = I[ˆ z = z], where 
+
+y and z are the ground-truth labels. The evidence reward 
+
+Revi = | ˆE ∩ E∗| / | ˆE ∪ E∗| measures the overlap between the predicted evidence and the reference evidence set E∗, ad-dressing the case where the agent attributes the correct source while citing irrelevant tool outputs. Such fine-grained overlap rewards provide more informative learning signals than bi-nary indicators in tool learning (Qian et al. 2025). The format reward Rfmt = I[the verdict is parseable with valid labels ]
+
+encourages well-formed outputs. The final reward combines the four terms: 
+
+R = λy Rveracity + λz Rsource + λeRsource Revi + λf Rfmt ,
+
+(4) where the evidence term is gated by Rsource , so that evidence overlap is rewarded only under correct attribution. In prac-tice we assign larger weights to λz and λe, as fine-grained source attribution is the central objective of mixed-source verification. 
+
+Cold-start SFT. The policy is first cold-started with su-pervised finetuning (SFT) on verification demonstrations, minimizing the negative log-likelihood 
+
+LSFT (θ) = − E(x,τ ∗) [log πθ (τ ∗ | x)] , (5) which equips the model with basic verification ability and the tool-calling format. 
+
+GRPO training. The second stage optimizes the tool-use policy with GRPO (Shao et al. 2024), which samples a group of G trajectories {τi}Gi=1 from the old policy πθold for each sample x and computes group-normalized advantages: 
+
+Ai = Ri − mean  {Rj }Gj=1 
+
+
+
+std  {Rj }Gj=1 
+
+ . (6) Different from standard GRPO, a trajectory here contains both action tokens generated by the policy and observation tokens injected by external tools. The observation tokens Training sample → Teacher Model                                                            
+
+> Rollout 1 🌐 Web Search →💬 Captioner →■STOP Rollout 2 🔍 AI-Image Detector →🛡 NLI Verifier →■STOP Rollout 3 🔗 Alignment Checker →🎯 Forgery Localizer →■STOP
+> …
+> ↓
+> ej=(id j,title, tool_name j,content j)
+> Tool-Execution Cache
+> id title tool_name content
+> 1whale… web_search "no news…" 2whale… web_search "art proj…" 3whale… captioner whale.img 4whale… ai_img_det whale.img
+> ⋮⋮⋮⋮
+> write read
+> →
+> Policy πθ
+> multi-turn rollout
+> O1
+> O2
+> ⋮
+> OG
+> rollouts
+> R1
+> R2
+> ⋮
+> RG
+> task rewards
+> Group Computation
+> A1
+> A2
+> ⋮
+> AG
+> advantages
+> Question <think> <call> web_search <result> cached ⋯
+> policy update
+> <call> captioner <result> cached
+> Stage 1: Offline Cache Construction Stage 2: Cache-Assisted RL Training
+
+Figure 2: Overview of cache-assisted training. Stage 1 constructs the Tool-Execution Cache offline via teacher rollouts, and 
+
+Stage 2 performs GRPO training with tool calls served from the cache. 0 1 2 3 4 5
+
+Number of teacher rollouts per sample 
+
+020 40 60 80 100 
+
+> Cache hit rate (%)
+
+033.3 66.6 77.8 88.9 100 Cache hit rate Rollout time 010 20 30 40 
+
+> Rollout time (s/sample)
+
+40.3 29.0 12.6 10.5 8.3 6.5 
+
+Figure 3: Cache hit rate and per-sample rollout time versus the number of teacher rollouts. Five rollouts yield a 100% hit rate and cut the rollout time from 40.3 to 6.5 seconds. are off-policy with respect to πθ and are therefore excluded from the loss (Jin et al. 2025). Let Ai denote the index set of action tokens in τi. The policy is updated with the token-level clipped objective 
+
+Lclip (θ) = 1
+
+G
+
+GX
+
+i=1 
+
+1
+
+|A i|
+
+X
+
+t∈A i
+
+min 
+
+
+
+ri,t (θ)Ai,
+
+clip( ri,t (θ), 1 − ϵ, 1 + ϵ) Ai
+
+
+
+, (7) where ri,t (θ) = πθ (τi,t | τi,<t )/π θold (τi,t | τi,<t ) is the token-level importance ratio. The overall training objective is 
+
+JGRPO (θ) = E x∼D {τi}∼ πθold (·| x)
+
+Lclip (θ)−βD KL (πθ ∥ πref ),
+
+(8) where the KL term is likewise computed only over action tokens (Jin et al. 2025). In implementation, cached observa-tions are tokenized separately and concatenated with action segments, so the action tokens remain identical to what the policy generated. 
+
+Tool-Execution Cache 
+
+Many tools in T are slow specialized models, and the RL stage repeats their execution across rollouts and policy up-dates, making online tool execution the dominant training bottleneck and a source of response variance. The Tool-Execution Cache decouples tool execution from policy opti-mization (Figure 2). 
+
+Offline cache construction. Before training, a teacher agent (GPT-5-mini at temperature 1.0) performs five roll-outs per training sample with the pruned toolset, executing every tool call online and recording the returned context. Het-erogeneous tool outputs, such as retrieved passages, forensic scores, and captions, are converted into a unified textual form and stored as entries 
+
+ej =  id j , title , tool _name j , content j
+
+ , (9) where title identifies the image–text pair, tool _name j the invoked tool, content j the recorded output, and id j distin-guishes entries from different rollouts. Multiple rollouts in-crease the coverage and diversity of the cached evidence. 
+
+Cache-based rollout. During RL, when the policy invokes a tool, the environment matches the sample and the tool name against the cache and returns the cached content as the observation. Letting Cx denote the cache restricted to sample 
+
+x, the observation at turn k in Eq. (2) becomes 
+
+ok = Cx(tool( ak)) , (10) where tool( ak) is the tool name parsed from ak. The policy thus experiences full multi-turn tool interaction while cached calls execute no tool, and a cache miss falls back to online execution. 
+
+Validity of cached substitution. Cached substitution is valid because every tool in T is stateless and takes fixed arguments: its output depends only on the invoked tool and the queried image–text pair. Sample-level matching therefore returns responses faithful to real execution, unlike stateful environments such as terminals, where a cached response is valid only if the entire call history matches (Vijaya Kumar et al. 2026). 
+
+Efficiency. As shown in Figure 3, the cache hit rate grows with the number of teacher rollouts per sample and reaches 100% at five rollouts, where training requires no online tool execution and the rollout time drops from 40.3 to 6.5 seconds per sample, a 6.2 × speedup. 
+
+## Experiments 
+
+Experimental Setup 
+
+Datasets and metrics. We evaluate MM-VeriAgent on the mixed-source multimodal misinformation benchmark MM-FakeBench. The dataset contains 11,000 image-text pairs Table 3: Main results on MMFakeBench. Proprietary and open-source MLLMs predict with a single forward pass without any tool, and specialized methods are executed with their original frameworks. All results are reported in percentage (%) and the best result in each metric is in bold .
+
+Method Model Binary Classification Multi-Class Classification ACC F1 ACC F1 
+
+Proprietary MLLMs 
+
+Direct Prompting Gemini-2.5-Flash 78.8 78.4 60.5 60.2 Direct Prompting Gemini-2.5-Pro 86.7 83.2 69.8 69.5 Direct Prompting GPT-4o 74.0 76.8 60.9 49.2 Direct Prompting GPT-5-mini 78.6 76.1 53.4 50.6 Direct Prompting GPT-5.5 80.6 79.5 71.8 69.0 
+
+Open-source MLLMs 
+
+Direct Prompting Qwen2.5-VL-3B-Instruct 48.7 48.6 38.9 28.1 Direct Prompting Qwen2.5-VL-7B-Instruct 72.8 53.9 34.3 25.0 Direct Prompting Qwen3-VL-4B-Instruct 75.4 70.4 43.5 29.6 Direct Prompting Qwen3-VL-8B-Instruct 77.6 68.6 49.1 39.3 
+
+Specialized methods 
+
+MMD-Agent GPT-4V 76.8 74.0 62.1 61.6 T2Agent GPT-4o – – 75.3 75.9 
+
+SCPO Qwen2-VL-7B – – 66.0 66.1 
+
+MM-VeriAgent (Ours) Qwen2.5-VL-7B 83.2 85.1 70.4 71.5 Table 4: Effect of the toolset on untrained models. Prompted policies exploit the compact MMD-Agent toolset better than the extensive MM-VeriTools, which can even hurt the small model.                               
+
+> Model Method Binary Multi-Class ACC F1 ACC F1
+> Qwen2.5-VL-7B Direct Prompting 72.8 53.9 34.3 25.0 MMD-Agent 72.5 71.7 41.3 43.5 Ours 70.6 81.0 26.0 26.8 GPT-5-mini Direct Prompting 78.6 76.1 53.4 50.6 MMD-Agent 82.1 79.6 65.2 65.5 Ours 85.7 83.2 57.1 55.2
+
+and categorizes news into four classes: Real , Textual Verac-ity Distortion (TVD) , Visual Veracity Distortion (VVD) , and 
+
+Cross-modal Consistency Distortion (CCD) . We use 10,000 samples for training and 1,000 samples for testing. Accord-ingly, we evaluate from two perspectives: binary veracity prediction (real vs. fake), for which we report accuracy and F1, and fine-grained source attribution, a multi-class prob-lem over the four classes for which we report accuracy and macro-F1. The latter weighs all classes equally and thus re-mains informative under class imbalance. 
+
+Baselines. We compare MM-VeriAgent with two families of baselines. The first family, denoted Direct Prompting , pre-dicts with a single forward pass without any tool or agen-tic loop, covering both proprietary models (Comanici et al. 2025; OpenAI 2024, 2025, 2026) and open-source mod-els (Bai et al. 2025; Bai, Lin et al. 2025). The second family consists of methods specialized for multimodal misinforma-tion detection, including the agentic MMD-Agent (Liu et al. 2025) and T 2Agent (Cui et al. 2026) as well as the preference-optimized SCPO (Gao et al. 2026). More details are provided in the supplementary material. 
+
+Implementation details. MM-VeriAgent is built upon Qwen2.5-VL-7B (Bai et al. 2025) and trained with a two-stage pipeline consisting of supervised fine-tuning (SFT) followed by reinforcement learning (RL). The SFT stage is performed on 8,000 training samples, while the remaining 2,000 samples are used for RL policy optimization. All ex-periments are conducted on 8 NVIDIA H20 GPUs with a batch size of 16. The maximum number of tool-calling turns is set to 3. During RL training, we adopt Group Relative Policy Optimization (GRPO) and sample n = 4 responses for each query. The reward weights are set to λy = λf = 0 .3
+
+and λz = λe = 2 .0, assigning larger rewards to fine-grained source attribution and evidence-grounded verification. 
+
+Main Results 
+
+Table 3 compares MM-VeriAgent with both families of base-lines. We draw two key observations. 
+
+Mixed-source verification remains challenging for ex-isting MLLMs. Even the strongest proprietary models stay around 70% on multi-class source attribution (69.8% for Gemini-2.5-Pro and 71.8% for GPT-5.5), confirming that the task demands more than a single forward prediction. 
+
+MM-VeriAgent delivers proprietary-level verification with a 7B backbone. Trained on the same Qwen2.5-VL-7B, Base SFT (8k) SFT (10k) GRPO      
+
+> 40 60 80 100
+> Score (%)
+> 70.6 74.6 74.6 83.2 81.0 83.1 83.1 85.1
+
+Binary    
+
+> Base SFT (8k) SFT (10k) GRPO
+> 20 40 60 80
+> 26.0 59.6 59.8 70.4 26.8 60.3 60.5 71.5
+
+Multi-Class  
+
+> ACC F1
+
+Figure 4: Effect of training with the toolset fixed to MM-VeriTools. Adding the same 2k samples as supervised data (SFT-10k) barely helps, whereas GRPO unlocks the toolkit. MM-VeriAgent raises the multi-class accuracy from 34.3% to 70.4% and achieves the best binary F1 (85.1%) over-all, outperforming MMD-Agent and SCPO on both tasks. T2Agent reports a higher multi-class accuracy, but it relies on the proprietary GPT-4o with Monte Carlo tree search at test time, whereas MM-VeriAgent executes a single learned policy without any test-time search. 
+
+Effect of Toolset and Training 
+
+Effect of the toolset. Table 4 varies the method on two un-trained models. First, tools alone do not help a small model. The untrained Qwen2.5-VL-7B gains moderately with the compact MMD-Agent toolset (34.3% to 41.3% on multi-class accuracy), but degrades below direct prompting with our toolset (26.0%), as the richer action space overwhelms an untrained policy. Second, prompting cannot fully exploit an extensive toolkit even with a strong model. GPT-5-mini benefits from tools in general, yet performs better with the MMD-Agent toolset (65.2%) than with ours (57.1%). 
+
+Effect of training. Figure 4 fixes the toolset to MM-VeriTools and varies the training of Qwen2.5-VL-7B. SFT on the first 8k rollouts already lifts the multi-class accuracy from 26.0% to 59.6%. The remaining 2k samples then isolate the effect of reinforcement learning from that of additional data: adding them as more supervised data (SFT-10k) barely moves the accuracy to 59.8%, whereas optimizing on them with GRPO reaches 70.4%. The gain therefore comes from interaction-based optimization rather than from seeing more data. Moreover, the trained agent surpasses its teacher. GPT-5-mini generates the rollouts for our cold-start SFT data and the Tool-Execution Cache, but reaches only 57.1% with the same toolkit (Table 4), indicating that the agent learns a gen-uine tool-use policy rather than merely distilling the teacher. 
+
+Ablation Study 
+
+Verification tools. Table 5 (top) ablates the three tool cat-egories. Removing any category degrades both binary and multi-class performance, and removing CCD tools hurts most, dropping the multi-class accuracy from 70.4% to 58.3% and the macro-F1 from 71.5% to 58.6%. Cross-modal distortion cannot be identified from either modality alone, so without explicit cross-modal evidence the agent frequently Table 5: Ablation studies. Top: removing each category of verification tools (TVD: textual verification; VVD: visual forensics; CCD: cross-modal consistency). Bottom: remov-ing the evidence-grounded reward. All results in %. 
+
+Variant Binary Multi-Class ACC F1 ACC F1 
+
+w/o TVD tools 81.7 82.1 63.1 64.3 w/o VVD tools 82.2 82.6 67.2 67.9 w/o CCD tools 79.9 81.4 58.3 58.6 w/o evidence reward 77.1 84.8 66.1 66.7 
+
+MM-VeriAgent 83.2 85.1 70.4 71.5 
+
+confuses different misinformation sources. The three cate-gories thus provide complementary evidence that the learned policy composes per sample. 
+
+Evidence-grounded reward. Table 5 (bottom) removes the evidence-grounded reward. Performance degrades on both tasks, most visibly on multi-class classification, where the accuracy and macro-F1 drop from 70.4% to 66.1% and from 71.5% to 66.7%. Optimizing prediction correctness alone is thus insufficient. Rewarding evidence overlap steers the agent toward source-consistent evidence, on which fine-grained attribution relies. 
+
+## Conclusion 
+
+We presented MM-VeriAgent, which learns to verify mixed-source multimodal misinformation with extensive tools. Mixed-source verification requires a model to learn not only 
+
+what to predict but how to verify. MM-VeriAgent instantiates this view with a benchmarked toolkit, reinforcement learn-ing that teaches the agent which tool to invoke and when to stop, and a Tool-Execution Cache that keeps the training cost practical. On MMFakeBench, the learned policy more than doubles the multi-class accuracy of its 7B backbone without any test-time search. We hope this work moves multimodal misinformation detection from answer-only label prediction toward auditable, evidence-grounded verification. 
+
+## Limitations 
+
+MM-VeriAgent inherits the quality of its tools: if retrieval fails or a forensic detector is miscalibrated, the agent may accumulate misleading evidence. The Tool-Execution Cache relies on stateless tools with sample-determined inputs, and tools with free-form arguments or time-varying outputs would require finer-grained matching and cache versioning. Our evaluation is also confined to MMFakeBench, currently the primary benchmark for mixed-source verification, so gen-eralization to unseen forgery generators, news domains, and distortion types beyond its three source categories remains to be established. Extending the toolkit to a new distortion type further requires re-benchmarking candidate tools and re-training the policy. Finally, tool-based verification is more expensive than answer-only classification, so the tool budget should scale with risk. References 
+
+Bai, S.; Chen, K.; Liu, X.; Wang, J.; Ge, W.; Song, S.; Dang, K.; Wang, P.; Wang, S.; Tang, J.; Zhong, H.; Zhu, Y.; Yang, M.; Li, Z.; Wan, J.; Wang, P.; Ding, W.; Fu, Z.; Xu, Y.; Ye, J.; Zhang, X.; Xie, T.; Cheng, Z.; Zhang, H.; Yang, Z.; Xu, H.; and Lin, J. 2025. Qwen2.5-VL Technical Report. arXiv:2502.13923. Bai, S.; Lin, J.; et al. 2025. Qwen3-VL Technical Report. arXiv:2511.21631. Beigi, A.; Jiang, B.; Li, D.; Kumarage, T.; Tan, Z.; Shaeri, P.; and Liu, H. 2024. Lrq-fact: Llm-generated relevant questions for multimodal fact-checking. arXiv preprint arXiv:2410.04616 , 2. Braun, T.; Rothermel, M.; Rohrbach, M.; and Rohrbach, A. 2025. Defame: Dynamic evidence-based fact-checking with multimodal experts. In ICML .Chen, R.; Xi, J.; Yan, Z.; Zhang, K.-Y.; Wu, S.; Xie, J.; Chen, X.; Xu, L.; Guan, I.; Yao, T.; et al. 2025. Dual Data Alignment Makes AI-Generated Image Detector Easier Generalizable. arXiv:2505.14359. Chen, X.; Dong, C.; Ji, J.; Cao, J.; and Li, X. 2021. Image Manipulation Detection by Multi-View Multi-Scale Super-vision. In ICCV .Comanici, G.; et al. 2025. Gemini 2.5: Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next Generation Agentic Capabilities. arXiv:2507.06261. Cui, X.; Zou, Y.; Li, Z.; Li, P.; Xu, X.; Liu, X.; and Huang, H. 2026. T2Agent: A Tool-augmented Multimodal Misin-formation Detection Agent with Monte Carlo Tree Search. In AAAI .Dong, G.; Chen, Y.; Li, X.; Jin, J.; Qian, H.; Zhu, Y.; Mao, H.; Zhou, G.; Dou, Z.; and Wen, J.-R. 2025. Tool-Star: Empow-ering LLM-Brained Multi-Tool Reasoner via Reinforcement Learning. arXiv preprint arXiv:2505.16410 .Feng, J.; Huang, S.; Qu, X.; Zhang, G.; Qin, Y.; Zhong, B.; Jiang, C.; Chi, J.; and Zhong, W. 2025. Retool: Reinforce-ment learning for strategic tool use in llms. arXiv preprint arXiv:2504.11536 .Gao, Y.; Xu, N.; Li, W.; Tian, H.; Wang, L.; and Liu, A. 2026. Thinking as Society: Multi-Social-Agent Self-Distillation for Multimodal Misinformation Detection. In ICLR .Guo, Z.; Cheng, S.; Wang, H.; Liang, S.; Qin, Y.; Li, P.; Liu, Z.; Sun, M.; and Liu, Y. 2024. StableToolBench: Towards Stable Large-Scale Benchmarking on Tool Learning of Large Language Models. In ACL Findings .He, Q.; Qian, C.; Chen, X.; He, B.; Fung, Y. R.; and Ji, H. 2025. Veri-r1: Toward precise and faithful claim veri-fication via online reinforcement learning. arXiv preprint arXiv:2510.01932 .Huang, K.-H.; McKeown, K.; Nakov, P.; Choi, Y.; and Ji, H. 2023. Faking fake news for real fake news detection: Propaganda-loaded training data generation. In ACL .Islam, M. A.; Thakur, S.; Chen, H.; Park, S. M.; Wang, J.; and Kim, G. 2026. CacheRL: Multi-Turn Tool-Calling Agents via Cached Rollouts and Hybrid Reward. arXiv preprint arXiv:2606.14179 .Jiang, D.; Lu, Y.; Li, Z.; Lyu, Z.; Nie, P.; Wang, H.; Su, A.; Chen, H.; Zou, K.; Du, C.; Pang, T.; and Chen, W. 2025. VerlTool: Towards Holistic Agentic Reinforcement Learning with Tool Use. arXiv preprint arXiv:2509.01055 .Jin, B.; Zeng, H.; Yue, Z.; Yoon, J.; Arik, S.; Wang, D.; Zamani, H.; and Han, J. 2025. Search-r1: Training llms to reason and leverage search engines with reinforcement learning. arXiv preprint arXiv:2503.09516 .Li, X.; Zhang, Y.; and Malthouse, E. C. 2024. Large lan-guage model agent for fake news detection. arXiv preprint arXiv:2405.01593 .Li, Y.; et al. 2025. Simulating Environments with Reasoning Models for Agent Training. arXiv preprint arXiv:2511.01824 .Lin, H.; Deng, Y.; Gu, Y.; Zhang, W.; Ma, J.; Ng, S. K.; and Chua, T.-S. 2025. Fact-audit: An adaptive multi-agent frame-work for dynamic fact-checking evaluation of large language models. In ACL .Liu, B.; Yang, F.; Bi, X.; Xiao, B.; Li, W.; and Gao, X. 2022. Detecting generated images by real images. In ECCV .Liu, X.; Li, P.; Huang, H.; Li, Z.; Cui, X.; Liang, J.; Qin, L.; Deng, W.; and He, Z. 2024. Fka-owl: Advancing multimodal fake news detection through knowledge-augmented lvlms. In 
+
+ACM MM .Liu, X.; Li, Z.; Li, P.; Xia, S.; Cui, X.; Huang, L.; Huang, H.; Deng, W.; and He, Z. 2025. MMFakeBench: A Mixed-Source Multimodal Misinformation Detection Benchmark for LVLMs. In ICLR .Lu, P.; Chen, B.; Liu, S.; Thapa, R.; Boen, J.; and Zou, J. 2026. OctoTools: A Multi-Agent Framework with Extensible Tools for Complex Reasoning. In ACL .Ojha, U.; Li, Y.; and Lee, Y. J. 2023. Towards universal fake image detectors that generalize across generative models. In 
+
+CVPR .OpenAI. 2024. GPT-4o System Card. arXiv:2410.21276. OpenAI. 2025. GPT-5 System Card. https://openai.com/ index/gpt-5-system-card/. OpenAI. 2026. GPT-5.5 System Card. https://openai.com/ index/gpt-5-5-system-card/. Papadopoulos, S.-I.; Koutlis, C.; Papadopoulos, S.; and Pe-trantonakis, P. C. 2025. Red-dot: Multimodal fact-checking via relevant evidence detection. IEEE Transactions on Com-putational Social Systems .Przybyla, P. 2020. Capturing the style of fake news. In AAAI .Qian, C.; Acikgoz, E. C.; He, Q.; Wang, H.; Chen, X.; Hakkani-Tür, D.; Tur, G.; and Ji, H. 2025. ToolRL: Reward is All Tool Learning Needs. In NeurIPS .Shao, R.; Wu, T.; and Liu, Z. 2023. Detecting and Grounding Multi-Modal Media Manipulation. In CVPR .Shao, Z.; Wang, P.; Zhu, Q.; Xu, R.; Song, J.; Bi, X.; Zhang, H.; Zhang, M.; Li, Y. K.; Wu, Y.; and Guo, D. 2024. DeepSeekMath: Pushing the Limits of Mathematical Rea-soning in Open Language Models. arXiv:2402.03300. Thorne, J.; Vlachos, A.; Christodoulopoulos, C.; and Mittal, A. 2018. FEVER: a large-scale dataset for fact extraction and VERification. In NAACL .Vijaya Kumar, A.; Kataria, B.; Oh, B.; Manzoor, E.; and Singh, R. 2026. TVCache: A Stateful Tool-Value Cache for Post-Training LLM Agents. arXiv preprint arXiv:2602.10986 .Wang, S.-Y.; Wang, O.; Zhang, R.; Owens, A.; and Efros, A. A. 2020. CNN-generated images are surprisingly easy to spot... for now. In CVPR .Xing, L.; Dong, X.; Zang, Y.; Cao, Y.; Liang, J.; Huang, Q.; Wang, J.; Wu, F.; and Lin, D. 2026. CapRL: Stimu-lating Dense Image Caption Capabilities via Reinforcement Learning. In ICLR .Xu, Q.; Du, H.; Łukasik, S.; Zhu, T.; Wang, S.; and Yu, X. 2025. Mdam3: A misinformation detection and analysis framework for multitype multimodal media. In WWW .Yan, J.; Li, Z.; Wang, F.; He, Z.; and Fu, Z. 2026. Dual Frequency Branch Framework with Reconstructed Sliding Windows Attention for AI-Generated Image Detection. IEEE Transactions on Information Forensics and Security .Yan, Z.; Qi, P.; Hsu, W.; and Lee, M.-L. 2025. Trust-vl: An explainable news assistant for general multimodal misinfor-mation detection. In EMNLP .Yang, A.; Li, A.; Yang, B.; Zhang, B.; Hui, B.; Zheng, B.; Yu, B.; Gao, C.; Huang, C.; Lv, C.; et al. 2025. Qwen3 Technical Report. arXiv:2505.09388. Zaratiana, U.; Tomeh, N.; Holat, P.; and Charnois, T. 2024. GLiNER: Generalist Model for Named Entity Recognition using Bidirectional Transformer. In NAACL .Zeng, F.; Li, W.; Gao, W.; and Pang, Y. 2024. Multimodal misinformation detection by learning from synthetic data with multimodal llms. In EMNLP Findings , 10467–10484.

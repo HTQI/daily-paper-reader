@@ -1,0 +1,121 @@
+{
+  "date": "20260928",
+  "date_label": "",
+  "generated_at": "2026-09-28 23:50:55 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.30402v1",
+      "route": "202609/28/2609.30402v1-what-improves-multimodal-misinformation-detection-answers-from-a-large-scale-empirical-study",
+      "title": "What Improves Multimodal Misinformation Detection? Answers from a Large-Scale Empirical Study",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "面向文本主张与图像结合的多模态虚假信息检测大规模研究",
+      "first_seen_at": "2026-09-28 23:50:55 UTC",
+      "updated_at": "2026-09-28 23:50:55 UTC"
+    },
+    {
+      "paper_id": "2609.30698v1",
+      "route": "202609/28/2609.30698v1-mm-veriagent-learning-to-use-extensive-tools-to-verify-multimodal-misinformation-with-reinforcement-learning",
+      "title": "MM-VeriAgent: Learning to Use Extensive Tools to Verify Multimodal Misinformation with Reinforcement Learning",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "工具增强的强化学习智能体验证多源多模态错误信息",
+      "first_seen_at": "2026-09-28 23:50:55 UTC",
+      "updated_at": "2026-09-28 23:50:55 UTC"
+    },
+    {
+      "paper_id": "2609.30427v1",
+      "route": "202609/28/2609.30427v1-fake-news-theories-harnessing-disciplinary-insights-for-computational-modeling-detection-and-explanation",
+      "title": "Fake News Theories: Harnessing Disciplinary Insights for Computational Modeling, Detection, and Explanation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "理论驱动且可解释的虚假新闻检测框架",
+      "first_seen_at": "2026-09-28 23:50:55 UTC",
+      "updated_at": "2026-09-28 23:50:55 UTC"
+    },
+    {
+      "paper_id": "2609.25775v1",
+      "route": "202609/28/2609.25775v1-trace-trajectory-representation-and-consistency-estimation-for-ai-generated-video-detection",
+      "title": "TRACE: Trajectory Representation and Consistency Estimation for AI-Generated Video Detection",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "借助可迁移取证线索与一致性估计实现可泛化的AI生成视频检测",
+      "first_seen_at": "2026-09-28 23:50:55 UTC",
+      "updated_at": "2026-09-28 23:50:55 UTC"
+    },
+    {
+      "paper_id": "2609.26986v1",
+      "route": "202609/28/2609.26986v1-same-evidence-different-judgments-evidence-noncommutative-in-visionspeech-text-conflicts",
+      "title": "Same evidence, different judgments: Evidence noncommutative in vision/speech-text conflicts",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "图像或语音与文本冲突时的模态依赖与证据顺序",
+      "first_seen_at": "2026-09-28 23:50:55 UTC",
+      "updated_at": "2026-09-28 23:50:55 UTC"
+    },
+    {
+      "paper_id": "2609.30467v1",
+      "route": "202609/28/2609.30467v1-where-does-retrieval-based-open-ended-evaluation-fail-automatic-taxonomy-induction-from-long-form-medical-answer-factuality-verification",
+      "title": "Where Does Retrieval-Based Open-Ended Evaluation Fail? Automatic Taxonomy Induction from Long-Form Medical Answer Factuality Verification",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "依据权威证据对LLM主张进行检索式事实性核查",
+      "first_seen_at": "2026-09-28 23:50:55 UTC",
+      "updated_at": "2026-09-28 23:50:55 UTC"
+    },
+    {
+      "paper_id": "2609.30934v1",
+      "route": "202609/28/2609.30934v1-manivid-unified-and-explainable-forensic-analysis-of-manipulated-videos",
+      "title": "ManiVid: Unified and Explainable Forensic Analysis of Manipulated Videos",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向篡改视频的统一可解释取证分析与多模态大模型",
+      "first_seen_at": "2026-09-28 23:50:55 UTC",
+      "updated_at": "2026-09-28 23:50:55 UTC"
+    }
+  ]
+}

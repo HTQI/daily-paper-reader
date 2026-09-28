@@ -1,0 +1,291 @@
+Title: Fake News Theories: Harnessing Disciplinary Insights for Computational Modeling, Detection, and Explanation
+
+URL Source: https://arxiv.org/pdf/2609.30427v1
+
+Published Time: Mon, 28 Sep 2026 00:07:17 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# Fake News Theories: Harnessing Disciplinary Insights for Computational Modeling, Detection, and Explanation 
+
+Zhaoyang Cao ∗, Miriam Metzger †, and Reza Zafarani ∗∗Electrical Engineering and Computer Science, Syracuse University, Syracuse, NY, USA 
+
+†Department of Communication, University of California, Santa Barbara, Santa Barbara, CA, USA Email: zycao@data.syr.edu, metzger@ucsb.edu, rzafaran@syr.edu 
+
+Abstract —Disinformation research has produced increasingly accurate automated fake-news detectors, but many systems remain difficult to interpret and are weakly connected to estab-lished theories of persuasion, credibility, and human judgment. In this paper, we develop a theory-informed computational framework that translates cross-disciplinary theories of fake news into measurable features for automated detection and explanation through statistical techniques and large language models. To that end, we conduct a structured cross-disciplinary review of theories from social sciences, psychology, economics, among other disciplines that reveal how fake news persuades and spreads, thereby establishing a broad theoretical foundation for computational modeling. Experiments on benchmark datasets show that theory-derived features are predictive and provide interpretable, theory-referenced diagnostic signals. Multi-feature models generally outperform individual features, although gains among the strongest small feature combinations are modest. Our work highlights the value of interdisciplinary perspectives in building robust and interpretable fake news detection systems, advancing the foundation for human-centered approaches in combating disinformation. 
+
+Index Terms —fake news detection, social science theory, large language model, explainability. 
+
+I. I NTRODUCTION 
+
+The spread of disinformation and misinformation on digital platforms poses a significant threat to justice, democracy, and public trust ([1], [2]). Although recent meta-analyses indicate that people can generally discern fake from real news with a fair degree of accuracy [3], the massive volume, velocity, and variety of information that circulates online make this task challenging for humans to perform reliably and consistently [4]. Moreover, even small errors in detection can have dispro-portionate societal effects when online disinformation spreads rapidly. As a result, developing automated tools for detecting fake news is essential, not because humans are incapable of judgment, but because manual detection is impractical in today’s digital information ecosystem. Broadly, existing automated approaches can be grouped into content-based and propagation-based misinformation de-tection systems. Recent studies have made significant con-tributions in both categories (content-based : [5]–[9]; and 
+
+propagation-based : [10]–[14]). Content-based approaches de-termine credibility primarily from the information contained in an article including linguistic style, semantics, sentiment, factual consistency, and other textual or multimodal cues. In contrast, propagation-based approaches exploit how informa-tion diffuses through a social system, for example through resharing patterns, interaction networks, temporal diffusion structures, or relationships among users and sources. The former can operate directly on static news content, whereas the latter generally requires additional social-network or diffusion metadata. Both paradigms have demonstrated value, but they rely on different forms of evidence. We argue that such tech-niques should also concentrate on how social theories can help detect fake news with better interpretability. Despite the rapid development of automated fake news detection systems, most approaches are primarily optimized for predictive performance while providing limited interpretability [15]. Such “black-box” models can achieve high accuracy but often fail to provide insights into why a certain piece of news is classified as true or fake. This lack of transparency reduces the practical utility for journalists, policymakers, and fact-checkers, who require interpretable evidence to justify decisions. Furthermore, in-terpretability is essential for identifying systematic biases in models and ensuring fairness [16]. In particular, transparent and interpretable systems have great potential to assist domain experts in identifying and intervening in the spread of fake news ([17], [18]). To bridge the gap of limited interpretability in existing auto-mated fake news detection systems, recent efforts have begun to incorporate theories from different fields (e.g., communi-cation, psychology, and economics) into fake news detection frameworks. For instance, the work by Zhou et al. in fake news early detection proposed leveraging clickbait-related attributes as an early indicator of fake news [19] by drawing upon communication and media psychology theories focused on how online platforms capture and manipulate user attention. To classify clickbait attributes, relying on social science theories, the researchers applied specific metrics: measuring readability via the Flesch Reading Ease Index and sensationalism through sentiment polarity. Additionally, Qureshi et al. proposed a framework that includes theory-driven dimensions such as source trustworthiness and diffusion pattern for the assessment of information credibility. The authors developed a structured framework that can systematically evaluate credibility sig-nals across multiple platforms. By combining computational arXiv:2609.30427v1 [cs.LG] 24 Sep 2026 models with theory, this framework provides an extensible approach to detecting misinformation in fast-paced digital platforms such as Twitter (now X) or Facebook [20]. The aforementioned studies have demonstrated the utility of theory-motivated psychological, linguistic, and diffusion cues for misinformation assessment. For example, Zhou et al. 
+
+operationalized communication and deception-related theories as computable content attributes, and Qureshi et al. developed a theory-driven credibility framework incorporating source and diffusion dimensions. These studies establish the value of theory-informed modeling, but they consider a more limited set of theoretical perspectives. To overcome these limitations, a more thorough, multi-theoretical perspective is needed to identify the diverse features of deceptive content. Fundamental human cognition and behavior theories de-veloped across various social science disciplines provide in-valuable insights for fake news analysis. These theories can facilitate building well-justified and explainable models for fake news detection. In our work, we have conducted an extensive cross-disciplinary search to identify well-known theories that have the potential to be used for developing explainable fake news models. We propose a system that leverages representations captured from social science theo-ries and Large Language Models (LLMs) to explore theory-informed signals and evaluate the importance of various features. By integrating insights from multiple disciplinary theories and translating them into measurable computational features through machine learning methods, we aim to im-prove both detection performance and model interpretability. Accordingly, our overarching research question is: To what extent can theoretically grounded signals derived from multiple social-science perspectives be transformed into interpretable computational features for distinguishing fake from real news across datasets? The contributions of this article can thus be summarized as follows: First, we systematically review and integrate theories from social science and psychology that explain why and how fake news persuades or spreads, providing a comprehensive theoretical foundation for compu-tational modeling. Second, we propose a theory-driven feature system that translates conceptual principles into measurable computational features using statistical and machine learning approaches. Last, we empirically validate the theory-informed features within a unified fake news detection model to evaluate their predictive effectiveness and interpret their relationships across different theoretical dimensions 1.II. T HEORETICAL FOUNDATION 
+
+We start by discussing the cross-disciplinary fundamental theories relevant to fake news detection that we identified in our review of the social and economic sciences literature. These theories can help identify potential differences between real and fake news stories. Undergirding such theories is consideration of the motivations underlying the production and       
+
+> 1The code and data are available at https://anonymous.4open.science/r/TheoriesOnDisinformation
+
+dissemination of real versus fake news. Although financial, informational, and persuasive motivations likely underlie both types of news to some extent, true news places more weight on informing citizens, whereas fake news primarily aims to attract attention and persuade audiences for the purpose of financial or political gain [38]. As such, theories concerning attention and persuasion are particularly useful in explaining why and how fake news is likely to differ from real news. Before delving into the details of these theories, we first offer a categorization to help organize our presentation of the theories. Social science theories helpful to detecting fake news can be classified as those focusing on (I) the news content itself, (II) its source , and (III) network factors. 
+
+I. Content-based theories. Theories that focus on the content of messages can help illuminate potential differences between real and fake news stories. For the reasons stated above, fake news is more likely to contain content that garners attention and employs techniques to enhance persuasion than real news. Indeed, several content features have been theorized to distinguish low from high credibility messages and/or to boost persuasion in previous work, for example, language intensity, emotional tone, information quality and objectivity, internal consistency, presence of evidence and attribution, and repetition. 
+
+II. Source-related theories. Rather than focusing on message content, these theories consider aspects of the source, author, or origin of information that are useful for determining the credibility of a message. Source credibility theory is the primary framework employed in this area of research. The theory states that source credibility affects the believability of the source’s message; thus, source credibility is key within the persuasion research literature. 
+
+III. Network-related theories. Theories that focus on the relationships between information and its sources are also useful for differentiating fake news from real news. The most relevant theories are the consensus heuristic , which predicts that agreement between different pieces of information or sources signals truth, and the homophily principle , which predicts greater network connections between similar entities [39]. The dynamics of information propagation within social networks provide cues for assessing veracity [40]. False in-formation often spreads rapidly with targeted dissemination strategies and between sources with similar dubious credibility. Thus, analyzing these patterns can help detect misinformation. Network-level theories are retained in the theoretical reviews but are not empirically evaluated because the benchmark datasets do not provide the propagation traces or inter-source network information. The structured cross-disciplinary review covered research in communication, psychology, information systems, economics, and computational misinformation research. Candidate the-ories were identified from prior fake-news and credibility reviews. We retained a theory or theoretical concept when it satisfied the following criteria: (1) it provided an explicit pre-diction by content, source, information processing, persuasion, or information diffusion; and (2) the factor identified by the TABLE I THEORETICAL PREDICTIONS TO HELP DISTINGUISH FAKE FROM REAL NEWS .            
+
+> Category Theory/Concept Compared to real news, fake news should . . .
+> Content Information Processing Theory of Language Intensity Effects [21]; Confidence Heuristi [22]; Scarcity Principle [23] use more intense, sensational, or hyperbolic language and more certain language. Emotion Theories [24]; Negativity Bias [25] contain more emotive language, and especially contain negative emotions. Expectancy Violation Heuristic [26], [27] contain less clear, organized, and accurate (i.e., error-free) writing. Narrative Paradigm [28], [29] be less coherent and have internal logical contradictions. Sourcing Theory [29] include less supporting evidence and attributions to external sources (e.g., citations, quotes, links, data). Illusory Truth Effect [30] have more repetitive content. Linguistic Differences [31]; Cognitive Load Theory [32] possess less lexical and syntactic complexity; more personal pronouns, verbs, adverbs, function words, modal words, negations, but fewer nouns and named entities. Information Manipulation Theory – Maxim of Manner [33] contain more vague or ambiguous expressions. Uncertainty Reduction Theory [34] include more uncertainty-inducing cues in headlines, such as question marks, ellipses, exclamation marks, and surprising topics. Source Source Credibility Theory [35]; Authority Heuristic [36] come from less reputable or known sources. Network Consensus Heuristic [27]; Homophily Principle [37] exhibit less external consistency or consensus across different outlets or sources, and show more linkages to known fake news sites.
+
+theory could differentiate credible from deceptive information. Table I summarizes several promising social science theories and presents their specific predictions on how fake news differs from real news. Due to space limitations, detailed explanations of each theory are provided in Appendix A. In summary, the foregoing theories and research findings suggest several ways in which real news might be differentiated from fake news. III. T HEORY -I NFORMED COMPUTATIONAL FRAMEWORK 
+
+To build a fake news detection system to harness theory for accurate detection, we rely on social science theories that are both (a) applicable and (b) data-testable to distinguish fake from real news. The procedures for building systematic features that can reliably capture these theories are described in detail in Section III-B. Our goal was to include a diverse and representative set of theories to capture multiple dimensions of fake news dynamics. Before further explanation, we formulate the problem as follows: 
+
+A. Problem formulation 
+
+In our system, each candidate news text is encoded as an 
+
+n-dimensional representation e ∈ Rn, where each component of e corresponds to theory-driven representations (i.e., data features). The detection task is to learn the mapping function 
+
+F such that 
+
+F : e T D 
+
+−−→ ˆy (1) where ˆy ∈ { 0, 1} is the predicted news label; ˆy = 1 denotes a predicted true article, and ˆy = 0 denotes a fake article. We rely on the T D (training dataset) T D = {e(k), y(k)|e(k) ∈
+
+Rn, y(k) ∈ { 0, 1}, k ∈ N} to train the mapping function F,which provides both the theory-informed features representa-tions and the ground-truth label to estimate the parameters. Within the classical supervised-learning paradigm, both the expressiveness and interpretability of our system depend on (i) how a news representation is constructed and (ii) the design of the classifier F. We elaborate on these two components in Section III-B. 
+
+B. News Representation and Classification 
+
+Each aforementioned theory suggests important cues in both true and fake news articles, which if captured systematically and efficiently using computational techniques, can help detect fake news. Our goal in this section is to detail the com-putational techniques we used to extract the theory-driven representations. To make the link between our features and their theoretical foundations clear, Table II provides a mapping from each representation to the social-science theories/concepts summa-rized in Table I. While Table I presents the broader set of theories identified in our cross-disciplinary review, not all of these theories can be directly operationalized using the information available in benchmark datasets. We then select the theories for empirical evaluation whose key concepts can be transformed into measurable computational representations from news content or available source information. Specifi-cally, these theories motivate ten content-based representations capturing observable textual characteristics, together with a source-related representation when publisher information is available. Table II summarizes this theory-to-representation mapping and indicates the theories that are empirically tested in our system. We explicitly focus on content-related and source-related theories, given that our data consist solely of static news articles without user-level interactions or social diffusion records. 
+
+▶ To model the confidence heuristic , we assign a binary TABLE II MAPPING BETWEEN THEORY -INFORMED REPRESENTATIONS AND THE SOCIAL -SCIENCE THEORIES IN TABLE I.                           
+
+> Representation Corresponding Theory/Concept (Table I) Category
+> Confidence Heuristic Information Processing Theory of Language Intensity; Confidence Heuristic Content Scarcity Principle Scarcity Principle Content Negativity Bias Emotion Theories; Negativity Bias Content Coherence Expectancy Violation Heuristic Content Logical Consistency Narrative Paradigm Content Supporting Evidence Sourcing Theory Content Illusory Truth Repetition Illusory Truth Effect Content Information Complexity Linguistic Differences; Cognitive Load Theory Content Language Vagueness Information Manipulation Theory — Maxim of Manner Content Information Gap Uncertainty Reduction Theory Content Source Credibility Source Credibility Theory; Authority Heuristic Source —Consensus Heuristic; Homophily Principle Network
+
+label to indicate whether an article is overall ‘certainty’ (1) or ‘uncertainty’ (0) . Specifically, we employ Linguistic Inquiry and Word Count [41] to derive associ-ated words of certainty and uncertainty. An article is clas-sified as ‘certain’ when the frequency of certainty-related words is higher than that of uncertainty-related words, and 
+
+‘uncertain’ otherwise. 
+
+▶ For the scarcity principle , we generate a binary la-bel using LLMs guided by prompt engineering. We use ‘gemma-2-9b-it ’, and the prompt is constructed based on the definitions from the original paper that introduced the scarcity principle (see detailed prompt in Appendix C). 
+
+▶ For negativity bias , we employ a valence-aware dictionary and sentiment reasoner (VADER ), a widely used tool for sentiment analysis. By analyzing the emotional polarity of single words and aggregating their scores, the compound value of an article is derived and used to measure the overall sentiment. The compound value ranges from -1 to +1, where scores above 0.5 indicate positive sentiment, scores below -0.5 represent negative sentiment, and scores in between are regarded as neutral. 
+
+▶ To operationalize textual coherence , we adopt the entity grid model , which captures how entities are distributed and transition across consecutive sentences. Specifically, for each entity mentioned in the text, we track its syntactic role (e.g., 
+
+Subject (S) , Object (O) , or Other (X) ) in every sentence. This yields a sequence of role transitions, such as S → O → S,representing how the entity’s discourse function evolves over sentences. We then compute the probability of each observed transition pattern based on a predefined distribution of entity-role transitions. To quantify overall coherence of the article, we use the average log-probability of all transitions across entities: 
+
+c = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+log( pi), (2) where N denotes the number of entity transitions and pi is the estimated probability of the i-th transition. A score closer to zero indicates higher coherence, as most transitions align with dominant discourse patterns. 
+
+▶ To model logical consistency , we computed a numerical score as the representation of an article. This score is defined as the proportion of consecutive sentences that exhibit logical consistency. We use a pre-trained model (roberta-large-mnli ) trained using Multi-Genre Natural Language Inference to obtain this score. The language model will classify adjacent sentence pairs as one of: ENTAILMENT , CONTRADICTION , or NEUTRAL .We only count sentence pairs that show an ENTAILMENT 
+
+relationship. 
+
+▶ For supporting evidence , we define a heuristic approach that aggregates multiple in-text evidence signals. Specifically, we operationalize five sub-features : (i) the frequency of URLs, (ii) quotations, (iii) temporal references (e.g., years, months, or dates), (iv) attribution phrases (e.g., “according to,” “reported by”), and (v) the proportion of URLs from traditionally trustworthy domains (e.g., .gov , .edu ). Each sub-feature is first converted into a density measure (occurrences per thousand words) and then normalized. The final representation is computed as the mean of the normalized sub-feature activations. 
+
+▶ To capture the illusory truth effect , we measure how frequently claims are repeated within the news article. To extract this feature, we employ ‘ gpt-4o-mini ’ as a semantic reasoning module. Specifically, given the full article text, we prompt the model to (i) identify distinct claims presented in the news article, and (ii) count the number of times each claim is repeated by sentences that express the same or equivalent meaning (see detailed prompt in Appendix C). Following this process, we compute the total number of repetitions across all claims, excluding the initial mention of each claim. A higher score indicates stronger use of repetitive persuasion and is expected to be more prevalent in fake news. 
+
+▶ To capture information complexity , we leverage the 
+
+Flesch-Kincaid Reading Ease score, a metric that quantifies textual complexity [42]. Higher reading scores indicate greater complexity and weaken the readability of the article. 
+
+▶ Annotating language vagueness is challenging because vague expressions can manifest at both the lexical and sentential levels. To construct a reliable corpus for vagueness modeling, we adopt the dataset released by Logan Lebanoff and Fei Liu [43]. The corpus comprises privacy policies of 100 websites with an average length of 2.3K words. Human annotators identified vague terms and assigned each sentence a vagueness rating from 1 to 5, where 1 indicates extreme clarity, and 5 indicates extreme vagueness. In our system, we preprocess this vagueness dataset by retaining only the text and vagueness annotations. We take the mean of the discrete scores that each sentence received and aggregate them to generate a continuous-valued vagueness score for each sentence. Then, we fine-tune a BERT-based classifier on this preprocessed dataset to capture the linguistic patterns associated with vagueness. Once trained, this model is applied to our target news articles, and we can obtain the softmax probability of the language vagueness , which serves as an input feature in our downstream task. 
+
+▶ Last, we obtain the information gap (IG) 
+
+feature. This feature consists of two components: (i) 
+
+punctuation-driven curiosity cues at the end of the headline and (ii) topic-level surprisingness relative to a corpus baseline. Given a headline x, we compute a numerical embedding as 
+
+IG(x) = wP · P(x) + wS · S(x) , (3) where P( x) refers to the punctuation score of the headline x,
+
+S( x) refers to the suprisingness score of the headline x, and 
+
+wP, w S > 0 are fusion weights for P( x) and S( x) respectively (default wP=wS=0 .5). The final representation IG(x) can be derived through the following three steps. 
+
+(1) Punctuation-driven signal. Let tail( x) ∈{?, !, ... , ., ∅} denote the trailing punctuation of x
+
+that prioritizes ‘... ’ over single-character punctuation. We define the punctuation score as follows: 
+
+P(x) = 
+
+
+
+1, if tail(x) ∈ { ?, !, ... },
+
+0, if tail(x) = .,
+
+P
+
+> c∈{ ?,!,... }
+
+p(c | x) , if tail(x) = ∅.
+
+(4) When tail( x) = ∅, we employ the LLM (‘ gemma-2-9b-it ’ ) to predict and score the next punctuation over a restricted candidate set C = {?, !, ... , .}.For single-character punctuations c ∈ {?, !, .}, let Lc(x) 
+
+be the next-token logit. For the ellipsis ‘... ’, which is amulti-token sequence (e1, e2, e3) under the tokenizer, we use the autoregressive sequence log-probability 
+
+L... (x) = 
+
+> 3
+
+X
+
+> t=1
+
+log p(et | x, e1:t−1) , (5) Then a restricted softmax over C is defined as: 
+
+p(c | x) = exp   ˜Lc(x) P 
+
+> c′∈C
+
+exp   ˜Lc′ (x)  ,
+
+˜Lc(x) = 
+
+(
+
+Lc(x) , c ∈ { ?, !, .},
+
+L... (x) , c = ... 
+
+(6) 
+
+P( x) is equivalent to the model’s total probability mass assigned to curiosity-inducing endings ( ?/!/... ) as the im-mediate next punctuation. 
+
+(2) Topic surprisingness. Let a Latent Dirichlet Allocation model generate a topic-mixture distribution P(x) for headline 
+
+x. We estimate a baseline topic distribution Q by averaging topic-mixture distributions over the training corpus {xi}Ni=1 :
+
+Q = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+P(x i) (7) The divergence of P(x) from Q is measured by the Kull-back–Leibler (KL) divergence: 
+
+DKL 
+
+ P(x) ∥ Q  =
+
+> K
+
+X
+
+> k=1
+
+Pk(x) log Pk(x) 
+
+Qk
+
+(8) We transform this non-negative value to [0 , 1] by a sigmoid variant: 
+
+S(x) = DKL (P(x) ∥ Q )1 + DKL (P(x) ∥ Q ) . (9) 
+
+(3) Fusion Representation. The overall information gap 
+
+feature is the linear fusion as defined in Equation 3. A larger value of S(x) indicates that the content is more surprising, while a higher value of P(x) indicates greater salience or importance. 
+
+▶ Building on source credibility theory and the authority heuristic, source credibility captures the reliability of a news outlet. To encode this dimension, we leverage publisher-level reliability annotations available in each dataset and transform publication venues into numerical identifiers through one-hot encoding. Categorical encoding of publication venues provides a representation capturing latent source-specific credibility. This encoding enables the model to learn associations between publishers and the likelihood of misinformation dissemination. After detailing the computational extraction of representa-tions derived from social science theories as described above, we fed the theory-driven representations to XGBoost for the purpose of fake news detection. The remaining sections present the results and corresponding analyses. IV. E VALUATION AND RESULTS 
+
+We conducted extensive experiments to evaluate our pro-posed system. The experimental setup is introduced in section IV-A, and we evaluate our theory-driven system through a series of analyses. Specifically, we test the significance of individual theories, their cross-dataset stability, their relative contributions, and their interactions. TABLE III DATASET STATISTICS 
+
+Dataset Labels Train Test RECOV ERY Truth 966 120 Fake 487 64 FAKE AND REAL NEWS Truth 1143 597 Fake 1154 551 GOSSIP COP Truth 6515 3286 Fake 1653 798 
+
+A. Experimental setup 
+
+For each experiment, we report the average AUC and macro-averaged F1 scores. During text preprocessing, the paragraph separators ‘ \n’ were removed if they existed, and all text was converted to lowercase to ensure consistency. Our experiments are conducted on three public bench-mark datasets for fake news detection: RECOV ERY [44], FAKE AND REAL NEWS [45], and G OSSIP COP [46]. The basic statistics of the datasets and detailed dataset descriptions are in Table III and Appendix B. 
+
+B. Baseline Comparison and Predictive Trade-off 
+
+We compare the proposed theory-informed representation with a standard content-based baseline using TF-IDF rep-resentations. To ensure a controlled comparison, both the baseline and our theory-informed representation are evaluated using the same XGBoost classifier, training/test partitions, and evaluation metrics. The TF-IDF baseline achieves an AUC of 0.9553 ± 0.0046 
+
+and an F1 score of 94 .71 . The higher predictive performance of TF-IDF is expected given the different objectives and information available. TF-IDF utilized the complete lexical distribution of an article, potentially capturing a large number of dataset-specific words, topics, entities, and stylistic patterns. In contrast, our theory-informed model compresses each article into a small set of interpretable features, each corresponding to a social-science theory. Our objective is therefore not to out-perform a full-text lexical classifier, but to examine how much predictive information can be captured by theoretically moti-vated and human-interpretable signals. From this perspective, the theory-informed model provides a complementary trade-off: it sacrifices some predictive performance in exchange for a more compact, theoretically grounded, and interpretable representation of the detection process. 
+
+C. Individual importance of theories 
+
+In our experiments, we first evaluated the performance of each theory (that is, its corresponding theory-informed features) individually for fake news detection. Subsequently, we integrated all ten features by concatenation and trained a unified model. The results demonstrate that while individual features typically achieved AUC values between 50.0% and 70.5% and F1 scores between 47.9% and 67.5%, the integrated model reached an AUC of 79.1% and an F1 of 76.8% on the RECOV ERY dataset. These findings highlight that core social science theories can be computationally tested and effectively 0% 10% 20% 30% 40% 50% 
+
+> Feature Importance
+> Confidence Heuristic Scarcity Principle Supporting Evidence Information Gap Negativity Bias Logical Consistency Illusory Truth Coherence Language Vagueness Information Complexity Source Credibility
+> 0.3% 0.9% 4.3% 5.4% 5.8% 6.4% 6.5% 7.2% 8.5% 9.0% 45.8%
+
+Fig. 1. Feature importance ranking on the R ECOV ERY dataset. Source Credibility emerges as the most dominant predictor. Negativity Bias Confidence Heuristic Scarcity Principle Information Complexity Logical Consistency Coherence Source Credibility Supporting Evidence Language Vagueness Information Gap Illusory Truth Negativity Bias Confidence Heuristic Scarcity Principle Information Complexity Logical Consistency Coherence Source Credibility Supporting Evidence Language Vagueness Information Gap Illusory Truth                                              
+
+> -0.01 -0.07 0.08 0.06 0.08 -0.04 0.00 -0.10 -0.03 -0.06 -0.01 -0.32 -0.10 0.05 0.18 0.01 -0.06 -0.05 -0.15 -0.01 0.02 -0.05 0.23 0.09 0.02 -0.18 -0.46 0.01 -0.00 0.01 0.08 -0.17 -0.08 0.01 0.03 -0.06 -0.04 0.03 -0.01 0.03 0.01 0.00 0.05 -0.02 0.02 -0.08 0.36 0.20 0.01 -0.06 -0.42 -0.11 0.19 0.15 0.04
+> 0.4
+> 0.2
+> 0.0 0.2 0.4
+
+Fig. 2. Feature correlation heatmap on the R ECOV ERY dataset. Most pairwise correlations fall within a range around zero, indicating that the theory-informed features capture unique information. 
+
+utilized for fake news detection. Moreover, in our empiri-cal evaluation, the combination of all theory-driven features not only led to improved predictive performance but also enhanced the interpretability of the model, thereby offering more comprehensive insights into the underlying mechanisms of misinformation propagation. To further understand the contribution of each theory to fake news detection, we conducted a feature importance analysis. As shown in Figure 1 on the R ECOV ERY dataset, source cred-ibility receives high importance when publisher metadata is in-cluded. This feature captures the perceived trustworthiness and reputation of news sources, a factor that has been consistently identified across communication, psychology, and information science as the most fundamental predictor of information credibility. However, this result should not be interpreted as evidence that publisher credibility is intrinsically the strongest determinant of misinformation. Publisher identities might be strongly associated with labels in some benchmark datasets. 10 8 6 4 2 0 2 4    
+
+> SHAP value (impact on model output) Confidence Heuristic Scarcity Principle Illusory Truth Logical Consistency Supporting Evidence Coherence Language Vagueness Negativity Bias Information Complexity Information Gap Source Credibility
+> Low High
+> Feature value Fig. 3. SHAP plot on the R ECOV ERY dataset. Source credibility stands out as the primary criterion for differentiating fake news from real news.
+
+Similarly, information complexity , which captures the degree of cognitive demand and structural complexities in the text, ranked second in importance, reinforcing the relevance of information complexity in the context of misinformation. Be-yond these top two features, the remaining theory-driven fea-tures—including language vagueness and coherence —show relatively comparable contributions, indicating that multiple theoretical features contribute jointly to the downstream task of fake news detection. In addition, by looking at Figure 2 - the Feature Correlation Heatmap - we observe that the absolute values of most pair-wise correlations between features fall below 0.1, indicating that the majority of features exhibit independence. Notably, some feature pairs exhibit very small correlations, which rein-forces that each feature contributes unique information to some extent. Such a distribution of correlations further demonstrates the validity of incorporating a diverse set of theoretically grounded features, as they provide complementary cues to help detect misinformation. To further interpret the contribution of each feature, we em-ploy Shapley Additive exPlanations (SHAP) , a technique that determines the contribution of each feature to a certain predic-tion group [47]. As shown in Figure 3, source credibility con-sistently emerges as the most decisive factor for distinguishing fake news from real news, and these patterns align with prior research emphasizing the critical role of source credibility in news evaluation. Information complexity and negativity bias 
+
+illustrate the most consistent influence on model predictions, with higher values (in red) pushing the prediction toward the misinformation class, whereas lower values (in blue) often shift predictions in the opposite direction. Other theories, such as information gap and coherence , also demonstrate noticeable but less dominant effects. To sum up, these results highlight that a diverse set of theoretically motivated features contributes complementary information to fake news detection. This also shows that SHAP, compared to simple feature ranking, is capable of revealing the directionality of feature impacts on predictions. 
+
+D. Cross-dataset comparison 
+
+Figure 4 shows feature importance learned by the XGBoost classifier across three datasets. A consistent pattern emerges: source credibility is the single most decisive signal wherever publisher metadata is available (97.2% on G OSSIP COP ; 45.8% on R ECOV ERY ). That said, we excluded source credibility from our cross-dataset evaluation plot for two reasons. First, this dimension is absent in F AKE AND REAL NEWS —the dataset lacks reliable publisher venue annotations, so the corresponding feature illustrates negligible importance. Sec-ond, since source credibility is derived from diverse news websites in G OSSIP COP , this feature dominates performance and obscures the influence of other features. We present in Appendix D a detailed analysis of the remaining features. Beyond source credibility, several content-based theories show stable and moderate contributions across datasets—e.g., information complexity, logical consistency, coherence, and negativity bias—indicating that cognitive and linguistic sig-nals generalize beyond domains. We also observe hetero-geneity across datasets: for instance, the scarcity principle is more prominent in F AKE AND REAL NEWS , suggestive of stronger urgency/limited-availability rhetoric in that dataset. Overall, these findings show that several theory-driven features remain predictive across datasets while others vary with spe-cific dataset characteristics such as publisher-level metadata. 
+
+E. Potential Patterns of Fake News Content 
+
+To further illustrate the underlying mechanisms differenti-ating fake news from real news, we examine their content characteristics across several theory-driven dimensions, as shown in Figure 5. All differences between fake and real news were tested using the Wilcoxon rank sum test , with significance levels indicated as“ *** ” ( p < 0.001 ). Specifically, Fake news tends to exhibit significantly lower sentiment scores (reflecting a stronger negativity bias), suggesting more negative framing compared to real news. Fake news also shows lower infor-mation complexity, indicating simpler narrative structures and reduced lexical and syntactic diversity. Moreover, fake news illustrates greater linguistic vagueness, revealing the frequent use of ambiguous or imprecise expressions, perhaps to obscure factual details and mislead readers’ judgments of truthfulness. Finally, fake news demonstrates a larger information gap, characterized by the use of more uncertainty-inducing cues in headlines—such as question marks, ellipses, exclamation marks, and unexpected or surprising topics—likely designed to arouse curiosity and draw readers’ attention. Such patterns empirically reinforce the importance of content-level cues in credibility detection. 
+
+F. Cross-Theoretical Interaction Analysis 
+
+To further investigate how different theoretical dimensions interact to improve fake news detection, we evaluate the Information Complexity Logical Consistency Coherence Negativity Bias Information Gap Illusory Truth Supporting Evidence Language Vagueness Scarcity Principle Confidence Heuristic 0510 15 20                    
+
+> Feature Importance (%)
+> 9.0 9.1 9.8 9.3 8.1 11.3 9.4 10.7 14.2 9.1 9.7 9.2 8.2 12.5 7.7 8.6 11.1 9.7 19.2 4.1 10.7 6.8 5.9 5.8 5.5 5.7 5.1 6.3 2.1 0.3 GossipCop FNR ReCOVery Fig. 4. Comparing the importance of theories across datasets. Fake True 1.0
+> 0.5
+> 0.0 0.5 1.0 Negativity Bias
+> ***
+> Fake True 20 40 60 80 Information Complexity
+> ***
+> Fake True 0.2 0.3 0.4 0.5 Language Vagueness
+> ***
+> Fake True 0.2 0.3 0.4 0.5 0.6 0.7 Information Gap
+> ***
+> Fig. 5. Distributions of four representative theory-informed features across real and fake news.
+
+predictive performance of single, pairwise, and triple com-binations of theory-informed features on the R ECOV ERY .Single-feature results reveal a clear hierarchy in discrimina-tive power, where supporting evidence achieves the highest AUC (0.742), followed by the confidence heuristic (0.709). These results underscore the critical role of sourcing cues and persuasive language markers in distinguishing misinformation from credible news stories. The single-feature experiments measure how well each representation predicts the label when used alone, whereas Figure 1 measures its contribution in the presence of all other features. Consequently, a representation may be highly predictive in isolation yet receive relatively low importance in the joint model when other features capture overlapping or conditionally substitutable information. The interaction analysis reveals a more complex pattern than a simple synergy account. Particularly, from the pairwise synergy heatmap Figure 6, confidence heuristic + supporting evidence (0.740) and scarcity principle + supporting evidence 
+
+(0.737) represent the most effective two-feature combinations, suggesting that assertive language (reflecting certainty or urgency) and verifiable in-text evidence jointly capture the persuasive intent of fake news content. Similarly, information complexity + supporting evidence (0.732) highlights that struc-tural organization and external attribution mutually reinforce credibility cues. Extending to three-feature configurations, the best combi-nation—( confidence heuristic , scarcity principle , supporting evidence )—achieves a classification AUC of 0.745, surpass-ing any single feature. This result reflects an interaction among language intensity, perceived urgency, and evidence transparency, jointly modeling the persuasive and credibil-ity dimensions of misinformation. However, while multiple theoretical dimensions can provide complementary predictive information, the benefit of combining features is not uniformly additive and should not be interpreted as evidence of strong synergistic effects. Overall, these findings demonstrate that the integration of theory-aligned features produces modest performance improvements and provide empirical evidence that multi-theoretical signals interact non-linearly to enhance model interpretability. To further assess whether the interaction analysis of the-oretical features generalizes across domains, we compare the feature ranking orders between the RECOV ERY and FAKE AND REAL NEWS datasets. Specifically, we compute the rank correlations of feature importance derived from the two datasets. The results show a Spearman rank correlation of 0.167 and a Kendall Tau correlation of 0.111, indicating weak alignment between the two feature hierarchies. This discrepancy suggests that while certain theories—such as language intensity—maintain predictive value across datasets, Negativity Bias Confidence Heuristic Scarcity Principle Information Complexity Logical Consistency Coherence Source Credibility Supporting Evidence Language Vagueness Information Gap Illusory Truth Negativity Bias Confidence Heuristic Scarcity Principle Information Complexity Logical Consistency Coherence Source Credibility Supporting Evidence Language Vagueness Information Gap Illusory Truth                                              
+
+> 0.689 0.666 0.709 0.691 0.686 0.694 0.689 0.707 0.717 0.694 0.658 0.643 0.640 0.656 0.645 0.699 0.681 0.691 0.707 0.689 0.699 0.694 0.740 0.737 0.732 0.730 0.696 0.686 0.699 0.643 0.640 0.696 0.656 0.645 0.699 0.686 0.666 0.668 0.676 0.684 0.702 0.656 0.694 0.691 0.633 0.656 0.709 0.681 0.666 0.707 0.645 0.689 0.717 0.633 0.673
+> 0.64 0.66 0.68 0.70 0.72 0.74
+
+Fig. 6. Pairwise accuracy heatmap illustrating the synergistic effects between theory-informed features. 
+
+their relative importance is not universal and is affected by dataset-specific factors such as topic domain, publisher diversity, and stylistic conventions. These findings highlight that theory-informed features exhibit dataset-dependent het-erogeneity and further underscore the significance of multi-theoretical integration. V. D ISCUSSION AND LIMITATIONS 
+
+Our work contributes a structured mapping between social-science theories and computationally measurable signals of news credibility. Theoretically, the framework connects per-spectives from persuasion, credibility, language use, and infor-mation processing that are often studied separately. Method-ologically, it demonstrates how these theories can be trans-formed into features using lexicon-based measures, statistical machine learning, and large language models, enabling the predictive role and directionality of theory-informed signals rather than being represented only through latent model states. A few limitations should be taken into account when inter-preting our findings. First, the datasets differ in topic, class distribution, and source composition, which may contribute to dataset-specific feature importance. Then, some representa-tions rely on pretrained or large language models and may be sensitive to prompting and domain shift. Future work could systematically evaluate the robustness of the proposed repre-sentations across different prompting strategies and application domains, while also extending the framework to propagation-aware datasets. VI. C ONCLUSION 
+
+In this work, we develop a theory-informed framework that translates cross-disciplinary perspectives from commu-nication, psychology, economics, and related social sciences into computationally measurable representations for fake-news detection. Rather than relying on high-dimensional latent or lexical representations, our framework connects each feature to a theoretically motivated concept, which could illustrate its predictive contribution and directionality. Our experiments across multiple benchmark datasets demonstrate that theory-derived features contain meaningful diagnostic information for distinguishing fake from real news, although relative impor-tance and effectiveness vary across datasets. Our goal is not to outperform a full-text representation. Instead, we investigate how much predictive information can be retained using a compact set of theoretically grounded and human-interpretable signals. The resulting framework therefore represents a com-plementary trade-off between predictive performance and the-oretical transparency. As a result, the empirical findings should be interpreted as evidence that theory-informed signals are diagnostic of news veracity labels. The results demonstrate the practical value of connecting social-science theory with computational modeling and provide a transparent basis for analyzing which theoretical cues contribute to automated cred-ibility assessment. REFERENCES [1] K. Shu, A. Sliva, S. Wang, J. Tang, and H. Liu, “Fake news detection on social media: A data mining perspective,” ACM SIGKDD explorations newsletter , vol. 19, no. 1, pp. 22–36, 2017. [2] X. Zhou and R. Zafarani, “A survey of fake news: Fundamental the-ories, detection methods, and opportunities,” ACM Computing Surveys (CSUR) , vol. 53, no. 5, pp. 1–40, 2020. [3] J. Pf¨ ander and S. Altay, “Spotting false news and doubting true news: a systematic review and meta-analysis of news judgements,” Nature human behaviour , pp. 1–12, 2025. [4] G. Demartini, S. Mizzaro, and D. Spina, “Human-in-the-loop artificial intelligence for fighting online misinformation: Challenges and oppor-tunities.” IEEE Data Eng. Bull. , vol. 43, no. 3, pp. 65–74, 2020. [5] T. Mikolov, K. Chen, G. Corrado, and J. Dean, “Efficient estimation of word representations in vector space,” arXiv preprint arXiv:1301.3781 ,2013. [6] J. Z. Pan, S. Pavlova, C. Li, N. Li, Y. Li, and J. Liu, “Content based fake news detection using knowledge graphs,” in The Semantic Web– ISWC 2018: 17th International Semantic Web Conference, Monterey, CA, USA, October 8–12, 2018, Proceedings, Part I 17 . Springer, 2018, pp. 669–683. [7] S. H. Kong, L. M. Tan, K. H. Gan, and N. H. Samsudin, “Fake news detection using deep learning,” in 2020 IEEE 10th symposium on computer applications & industrial electronics (ISCAIE) . IEEE, 2020, pp. 102–107. [8] M. Albahar, “A hybrid model for fake news detection: Leveraging news content and user comments in fake news,” IET Information Security ,vol. 15, no. 2, pp. 169–177, 2021. [9] X. Zhou, J. Wu, and R. Zafarani, “: Similarity-aware multi-modal fake news detection,” in Pacific-Asia Conference on knowledge discovery and data mining . Springer, 2020, pp. 354–367. [10] H. Matsumoto, S. Yoshida, and M. Muneyasu, “Propagation-based fake news detection using graph neural networks with transformer,” in 2021 IEEE 10th Global Conference on Consumer Electronics (GCCE) . IEEE, 2021, pp. 19–20. [11] M. Meyers, G. Weiss, and G. Spanakis, “Fake news detection on twitter using propagation structures,” in Disinformation in Open Online Media: Second Multidisciplinary International Symposium, MISDOOM 2020, Leiden, The Netherlands, October 26–27, 2020, Proceedings 2 .Springer, 2020, pp. 138–158. [12] A. Silva, Y. Han, L. Luo, S. Karunasekera, and C. Leckie, “Propaga-tion2vec: Embedding partial propagation networks for explainable fake news early detection,” Information Processing & Management , vol. 58, no. 5, p. 102618, 2021. [13] X. Zhou and R. Zafarani, “Network-based fake news detection: A pattern-driven approach,” ACM SIGKDD explorations newsletter ,vol. 21, no. 2, pp. 48–60, 2019. [14] K. Shu, D. Mahudeswaran, S. Wang, and H. Liu, “Hierarchical propa-gation networks for fake news detection: Investigation and exploitation,” in Proceedings of the international AAAI conference on web and social media , vol. 14, 2020, pp. 626–637. [15] K. Mishima and H. Yamana, “A survey on explainable fake news detection,” IEICE TRANSACTIONS on Information and Systems , vol. 105, no. 7, pp. 1249–1257, 2022. [16] C. Raj, A. Mukherjee, and Z. Zhu, “True and fair: Robust and unbiased fake news detection via interpretable machine learning,” in Proceedings of the 2023 AAAI/ACM Conference on AI, Ethics, and Society , 2023, pp. 962–963. [17] B. John, “Explainability and interpretability in deep learning-based fake tweet detection,” 2025. [18] S.-Y. Chien, C.-J. Yang, and F. Yu, “Xflag: Explainable fake news detection model on social media,” International Journal of Human– Computer Interaction , vol. 38, no. 18-20, pp. 1808–1827, 2022. [19] X. Zhou, A. Jain, V. V. Phoha, and R. Zafarani, “Fake news early detec-tion: A theory-driven model,” Digital Threats: Research and Practice ,vol. 1, no. 2, pp. 1–25, 2020. [20] K. A. Qureshi, R. A. S. Malick, and M. Sabih, “Social media and microblogs credibility: identification, theory driven framework, and recommendation,” IEEE Access , vol. 9, pp. 137 744–137 781, 2021. [21] M. A. Hamilton and B. L. Stewart, “Extending an information processing model of language intensity effects,” Communication quarterly , vol. 41, no. 2, pp. 231–246, 1993. [22] J. P. Thomas and R. G. McFadyen, “The confidence heuristic: A game-theoretic analysis,” Journal of Economic Psychology , vol. 16, no. 1, pp. 97–113, 1995. [23] L. Mittone and L. Savadori, “The scarcity bias,” Applied Psychology ,vol. 58, no. 3, pp. 453–468, 2009. [24] C. E. Izard, “Emotion theory and research: Highlights, unanswered questions, and emerging issues,” Annual review of psychology , vol. 60, no. 1, pp. 1–25, 2009. [25] P. Rozin and E. B. Royzman, “Negativity bias, negativity dominance, and contagion,” Personality and social psychology review , vol. 5, no. 4, pp. 296–320, 2001. [26] R. H. Gass and J. S. Seiter, Persuasion: Social influence and compliance gaining . Routledge, 2022. [27] M. J. Metzger, A. J. Flanagin, and R. B. Medders, “Social and heuristic approaches to credibility evaluation online,” Journal of communication ,vol. 60, no. 3, pp. 413–439, 2010. [28] W. R. Fisher, “Narration as a human communication paradigm: The case of public moral argument,” Communications monographs , vol. 51, no. 1, pp. 1–22, 1984. [29] M. J. Metzger, A. J. Flanagin, K. Eyal, D. R. Lemus, and R. M. McCann, “Credibility for the 21st century: Integrating perspectives on source, message, and media credibility in the contemporary media environment,” 
+
+Annals of the International Communication Association , vol. 27, no. 1, pp. 293–335, 2003. [30] L. Hasher, D. Goldstein, and T. Toppino, “Frequency and the conference of referential validity,” Journal of verbal learning and verbal behavior ,vol. 16, no. 1, pp. 107–112, 1977. [31] J. Lugea, “Linguistic approaches to fake news detection,” Data science for fake news: Surveys and perspectives , pp. 287–302, 2021. [32] J. Sarzynska-Wawer, A. Pawlak, J. Szymanowska, K. Hanusz, and A. Wawer, “Truth or lie: Exploring the language of deception,” Plos one , vol. 18, no. 2, p. e0281179, 2023. [33] S. A. McCornack, “Information manipulation theory,” Communications Monographs , vol. 59, no. 1, pp. 1–16, 1992. [34] L. K. Knobloch, “Uncertainty reduction theory,” Engaging theories in interpersonal communication , pp. 133–144, 2008. [35] C. I. Hovland and W. Weiss, “The influence of source credibility on communication effectiveness,” Public opinion quarterly , vol. 15, no. 4, pp. 635–650, 1951. [36] P. Wilson, “Second-hand knowledge: An inquiry into cognitive author-ity,” 1983. [37] M. McPherson, L. Smith-Lovin, and J. M. Cook, “Birds of a feather: Homophily in social networks,” Annual review of sociology , vol. 27, no. 1, pp. 415–444, 2001. [38] H. Allcott and M. Gentzkow, “Social media and fake news in the 2016 election,” Journal of economic perspectives , vol. 31, no. 2, pp. 211–236, 2017. [39] K. Xie and S. Wang, “A survey on false information detection: From a perspective of propagation on social networks,” arXiv preprint arXiv:2506.18052 , 2025. [40] T. Bian, X. Xiao, T. Xu, P. Zhao, W. Huang, Y. Rong, and J. Huang, “Rumor detection on social media with bi-directional graph convolu-tional networks,” in Proceedings of the AAAI conference on artificial intelligence , vol. 34, no. 01, 2020, pp. 549–556. [41] J. W. Pennebaker, “Linguistic inquiry and word count: Liwc 2001,” 2001. [42] R. Flesch, “A new readability yardstick.” Journal of applied psychology ,vol. 32, no. 3, p. 221, 1948. [43] L. Lebanoff and F. Liu, “Automatic detection of vague words and sentences in privacy policies,” arXiv preprint arXiv:1808.06219 , 2018. [44] X. Zhou, A. Mulay, E. Ferrara, and R. Zafarani, “Recovery: A multi-modal repository for covid-19 news credibility research,” in CIKM-ACM ,2020, pp. 3205–3212. [45] G. McIntire, “Fake and real news dataset,” GitHub repository, 2020. [46] K. Shu, D. Mahudeswaran, S. Wang, D. Lee, and H. Liu, “Fakenewsnet: A data repository with news content, social context, and spatiotemporal information for studying fake news on social media,” Big data , vol. 8, no. 3, pp. 171–188, 2020. [47] S. M. Lundberg and S.-I. Lee, “A unified approach to interpreting model predictions,” Advances in neural information processing systems , vol. 30, 2017.

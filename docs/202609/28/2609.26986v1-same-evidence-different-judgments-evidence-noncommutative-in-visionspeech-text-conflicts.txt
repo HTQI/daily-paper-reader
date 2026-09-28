@@ -1,0 +1,257 @@
+Title: Same evidence, different judgments: Evidence noncommutative in vision/speech-text conflicts
+
+URL Source: https://arxiv.org/pdf/2609.26986v1
+
+Published Time: Thu, 24 Sep 2026 00:10:52 GMT
+
+Number of Pages: 6
+
+Markdown Content:
+## SAME EVIDENCE, DIFFERENT JUDGMENTS: EVIDENCE NONCOMMUTATIVITY IN VISION/SPEECH-TEXT CONFLICTS 
+
+## Zhuoyun Li Boxuan Wang Xiaowei Huang Yi Dong ⋆
+
+## School of Computer Science and Informatics, University of Liverpool, United Kingdom 
+
+ABSTRACT 
+
+For multimodal large language models, when images or speech con-flict with accompanying text, measured text reliance can entangle modality preference with evidence position. Earlier studies of text bias often used a fixed evidence order or moved task instructions with the evidence, leaving the contribution of order unclear. In this paper, we use a paired comparison that keeps the instructions and ev-idence content fixed and swaps only the positions of the two sources to quantify this potential influence. Across vision and speech mod-els, placing an image or recording after conflicting text consistently shifts answers toward its content. We also revisit previous studies and analyze why their experimental settings can lead to misleading conclusions. These findings reveal cross-modal evidence noncom-mutativity : the same evidence can lead to different judgments when its order changes, and placing perceptual evidence later can increase the model’s reliance on its content. 
+
+Index Terms — Multimodal large language models, evidence conflict, order sensitivity, noncommutativity 
+
+1. INTRODUCTION 
+
+Multimodal large language model (MLLM) assistants can process charts, document pages, and speech recordings alongside user-provided descriptions and questions [1, 2]. These words may reflect the user’s interpretation or recollection of the attachment. Spelling mistakes or memory errors can make that description conflict with the attachment. For example, a user may describe Method A as the best performer in a results plot that ranks Method B first. A record-ing may state that tomorrow’s meeting starts at 9 a.m., while the user writes, “Schedule tomorrow’s meeting at 8 a.m. based on the manager’s recording.” The model should understand the attachment and answer or act according to the source specified by the user. Studies of cross-modal conflict find that vision-language mod-els often rely excessively on text when it contradicts an image [3–6]. Research on input order shows that rearranging long-context infor-mation, answer options, multiple images, or image–text pairs can change model responses [7–9]. Together, these findings raise a ques-tion: how much of the measured text reliance really reflects modality preference, while how much actually reflects the position impact of the competing evidence? 
+
+Prior work has tried to examine how evidence order affects modality preference [4]. However, we find that this comparison swaps the image with a text block containing the description, task instructions, and cautionary warnings. This changes both evidence order and instruction placement, while the warnings may also influ-ence how the model treats the text. This design leaves the order’s impact still entangled. Other conflict benchmarks measure modality 
+
+> ⋆Corresponding author: yi.dong@liverpool.ac.uk Multimodal
+
+Fig. 1 . Everyday requests in which user descriptions conflict with image or speech attachments. preference under a fixed input layout [3, 10], without enough explo-ration of evidence order for different modalities, which may lead to the over- or underestimation of the modality bias. In this paper, we address the gaps by redesigning the prompt structure around everyday requests. We place the instruction to an-swer from the attachment before both evidence sources and manu-ally construct faithful and conflicting textual descriptions for exist-ing multimodal benchmarks. We then swap only the positions of the two sources, keeping all other components fixed, and compare the model’s relative reliance on the two modalities. Controls involv-ing unrelated text, within-modality evidence swaps, and alternative instruction wording allow us to quantify cross-modal evidence non-commutativity .Our contributions are as follows. (1) Cross-modal evidence noncommutativity. We measure how judgments change when iden-tical evidence is reordered. (2) Evidence across vision and speech. 
+
+We demonstrate systematic noncommutativity across model families and extend the evaluation to diverse audio tasks, addressing a gap in fixed-order audio conflict benchmarks. (3) Protocol diagnosis. We show that moving task instructions with the evidence can confound order comparisons; our simple protocol keeps the instructions fixed to isolate the effect of evidence order. 
+
+2. RELATED WORK Cross-modal conflict and text reliance Studies of cross-modal conflict examine how models use competing sources. Mixed Sig-nals finds that modality reliance varies with the model and task difficulty [3]. Words or Vision examines when models follow mis-leading text and how image–text order affects their answers [4]. ConText-VQA shows that persuasive false descriptions can override visual evidence [5]. Other work studies conflicts among images, text, and a model’s prior knowledge [6,11,12]. Together, these stud-ies show how textual misinformation influences vision-language models. Under a fixed template, the measured text reliance can also reflect evidence position. The concurrent preprint [13] studies modality and order in conflicts between parametric knowledge and external knowledge presented as text or rendered images. Imitating Words or Vision, MCR-BENCH tests the textual preference but still arXiv:2609.26986v1 [cs.AI] 22 Sep 2026 leaves the order effect blank [10]. In this paper, we pair a natural image or real speech recording with an external description and measure what changes when the two sources exchange positions. 
+
+Input order influence Language-model responses vary with infor-mation position and answer-option order [8, 9]. Multimodal models are also sensitive to image and image–text arrangements [7]. We counterbalance option assignments while preserving each source’s content and semantic role. Matched, conflicting, and unrelated de-scriptions then distinguish order effects across evidence relations. 
+
+3. METHOD 3.1. Evidence and paired swaps 
+
+We use P for perceptual evidence, an image or speech recording, and T for the accompanying text. Each question has an attachment-supported answer yP and a competing answer yT̸ = yP . We con-struct three text conditions: conflicting T − supports yT ; matched 
+
+T + agrees with P ; and unrelated T 0 supports neither answer. The superscripts −, +, and 0 identify these conditions throughout. For each text condition, we keep task instruction I before both sources and question/options q after them. The paired inputs are 
+
+xP →T = ( I, P, T, q ), xT →P = ( I, T, P, q ). (1) Only P and T exchange positions; the system prompt, evidence con-tent, and generation settings stay fixed. We evaluate both A/B label assignments and combine results by the underlying answer to coun-terbalance option-label bias. 
+
+3.2. Order-sensitivity metrics 
+
+Let A denote the rate at which the model selects the attachment-supported answer yP . Our primary metric is the change in this rate under conflicting text: 
+
+∆A− = A(T − → P ) − A(P → T −). (2) We report ∆A− in percentage points. A positive value means the model follows P more often when it appears last. We also measure changes in answer probabilities within each conflict pair. For a model pθ , let ℓP , ℓ T ∈ { A, B} denote the la-bels assigned to yP , y T in the current option ordering. Using their probabilities at the first answer token, we define 
+
+sθ (x) = log pθ (ℓP | x)
+
+pθ (ℓT | x) , (3) 
+
+Cθ = sθ (xT →P ) − sθ (xP →T ). (4) A positive log-odds swap score Cθ indicates a shift toward yP when 
+
+P is placed last. We report the mean across paired evaluations. 
+
+3.3. Controls and uncertainty 
+
+The matched and unrelated conditions test order sensitivity when the sources agree or the text provides no evidence for either answer. Their selection-rate changes are denoted by ∆A+ and ∆A0, with the question and candidate answers held fixed across all three condi-tions. To compare conflict with the unrelated control, we report 
+
+D = ∆ A− − ∆A0. (5) A positive D indicates a larger shift toward P under conflicting than unrelated text. We compute confidence intervals with a paired boot-strap over original images or recordings, keeping each example’s evidence orders, option assignments, and text conditions together. 01 VISION  GQA / Visual Genome · VQAv2 / COCO                                                                     
+
+> 02 SPEECH FSC · SLURP
+> Question
+> What is the color
+> of the truck?
+> Image answer: white
+> Color · Count · Object · Position
+> MATCHING Awhite pickup truck drives
+> through agrassy field.
+> CONFLICT Abrown pickup truck drives
+> through agrassy field.
+> UNRELATED Two boys sit behind asmall
+> computer and smile
+> MATCHING The speaker asks to decrease the
+> heat in the kitchen.
+> CONFLICT The speaker asks to decrease the
+> heat in the bedroom.
+> UNRELATED The speaker asks to decrease the
+> volume.
+> ▶▂▅▃▇▄▆▂
+> “Turn down the
+> heat in the
+> kitchen”
+> Transcript shown for illustration
+> Question
+> Which location does
+> the speaker
+> specify?
+> Audio answer: kitchen
+> FSC: action / object / location · SLURP: intent
+> 03 PAIRED INPUTS · Repeat for each text condition
+> Fixed
+> instruction
+> Answer
+> according to the
+> image / audio
+> attachment.*
+> Attachment P Text T Question + A/B
+> Text T Attachment P Question + A/B
+> Same model
+> Compare attachment
+> answer selection
+> Only P and T swap; instruction, question and answer contents stay fixed.
+> Controls: P only · matching text only · conflict text only | 3 text types × 2 orders + 3 controls = 9
+> conditions | A/B swapped in every condition
+> * Instruction abbreviated here. Speech transcript is for readers; the multimodal model receives the audio
+> attachment. Examples are from the audit data.
+
+Fig. 2 . Controlled evidence swaps in vision–text and speech–text. Keeping instructions and content fixed lets us measure how order changes which source the model follows. 
+
+4. EXPERIMENTS 4.1. Experimental setup Visual data. We manually inspect 240 natural images each from GQA/Visual Genome [23, 24] and VQAv2/COCO [25, 26]. To con-struct T −, we change the queried fact (including color, count, object identity, and location ) and keep other scene details unchanged wher-ever possible. For example, for a cup-color question, we change the color while retaining the object and its location. Unrelated text T 0
+
+comes from other images and supports neither candidate answer. 
+
+Speech data. We select 240 recordings each from Fluent Speech Commands (FSC) [27] and SLURP [28]. We allocate 80 examples to each FSC field (including action, object, and location ) and change only one field when constructing T −. The SLURP subset covers 15 broad intent categories, with 16 examples per category. Conflicting text T − comes from another intent within the same broad category, while unrelated text T 0 comes from a different category. The ex-ploratory and confirmatory speech sets are disjoint. 
+
+Models. Vision models are Qwen2.5-VL-3B-Instruct [1], Idefics3-8B-Llama3 [29], and Pixtral-12B [30]. Speech models are Qwen2-Audio-7B-Instruct [31], Qwen2.5-Omni-7B [2], and Phi-4 Multi-modal [32]. These recent models support swapping the order of perceptual and text tokens. 
+
+Input conditions. Each example has nine input conditions: three single-source baselines ( P only, T + only, and T − only) and six paired inputs (both orders of P with each of T +, T −, and T 0). We run each condition twice , reversing the A/B option positions to coun-terbalance option-letter preference [9, 33]. 
+
+Prompt construction. We constructed the prompts to reflect every-day requests combining an attachment, a description, and a ques-tion. It asks the model to answer from the attachment, introduces the user’s description naturally, and leaves its correctness unspeci-fied. The visual prompt is “Answer the question according to the im-age attachment, and here is also the image description.” The speech prompt uses the corresponding audio-attachment wording. Table 1 . Main image–text and speech–text results. P denotes per-ceptual evidence; T − denotes conflicting text. The number is the question selection accuracy (pp). ∆A− is the change of rate. C is the mean log-odds swap score with its 95% confidence interval. Model P only P → T − T − → P ∆A− C [95% CI] 
+
+Vision: GQA / Visual Genome 
+
+Qwen-VL 91.5 28.3 45.0 +16.7 0.65 [0.50, 0.80] Idefics3 89.6 41.0 67.7 +26.7 3.83 [3.37, 4.29] Pixtral 91.5 23.5 35.6 +12.1 1.38 [1.03, 1.74] 
+
+Vision: VQAv2 / COCO 
+
+Qwen-VL 99.2 70.0 85.0 +15.0 1.07 [0.94, 1.21] Idefics3 97.5 66.9 95.0 +28.1 4.77 [4.40, 5.14] Pixtral 97.1 61.7 75.8 +14.2 1.87 [1.58, 2.15] 
+
+Speech: Fluent Speech Commands 
+
+Qwen-A 98.1 20.2 47.7 +27.5 3.57 [3.24, 3.91] Qwen-O 99.4 42.7 53.8 +11.0 0.42 [0.21, 0.63] Phi-4 97.9 27.3 53.3 +26.0 1.59 [1.36, 1.82] 
+
+Speech: SLURP 
+
+Qwen-A 89.2 6.0 31.3 +25.2 2.44 [2.17, 2.72] Qwen-O 91.0 19.4 29.2 +9.8 0.66 [0.51, 0.81] Phi-4 88.3 15.0 29.2 +14.2 1.74 [1.51, 1.98] 
+
+4.2. Quantifying cross-modal evidence noncommutativity 
+
+We first test whether models that understand an attachment change their judgments when its position relative to conflicting text is re-versed. As shown in Table 1, with attachments alone, accuracy ranges from 88.3–99.4% across both vision and speech settings. These baselines indicate that the models can generally recover the relevant information from the attachments. Adding conflicting text often draws answers away from the attachment under both input orders, consistent with earlier findings on text reliance. Crucially, placing the attachment last systematically shifts judgments back toward its content . Attachment-answer selection increases by 9.8–28.1 percentage points across all twelve model– dataset combinations. The mean log-odds swap score is also posi-tive throughout, with every 95% confidence interval excluding zero. This consistent shift not only demonstrates noncommutativity in the positions of perceptual and textual evidence, but also suggests better judgment performance when evidence is presented later. 
+
+4.3. Controlling for the effect of reordering 
+
+We next test whether the attachment-last advantage reflects a general effect of reordering. We repeat the swaps with matched T + and un-related T 0, keeping the attachment, question, and candidate answers fixed. The unrelated condition provides a baseline for order effects when the text supports neither answer. We subtract this baseline from the conflict condition to obtain D = ∆ A− − ∆A0.In Table 2, ∆A+ shows that matched text usually produces little change. An exception is Idefics3 on GQA, where placing the image last reduces accuracy by 6.3 pp. In this setting, matched-text-only accuracy is 98.5%, compared with 89.6% for the image alone. One possible explanation is that placing the image last shifts reliance to-ward the source the model interprets less accurately. With unrelated text, order effects ∆A0 are generally small and vary in sign. After subtracting this baseline, D remains pos-itive across all twelve model–dataset combinations, ranging from 9.4–28.8 pp for vision and 10.4–24.0 pp for speech. Thus, the attachment-last advantage persists after accounting for the Table 2 . Order effects under evidence control. Values show changes in attachment-answer selection when P appears last (pp). D=∆A−-
+
+∆A0 shows the net influence under evidence relation control. The arrows are omitted. P and T + mean only use that evidence. Model P T + P T + T +P ∆A+ P T 0 T 0P ∆A0 D
+
+Vision: GQA / Visual Genome 
+
+Qwen-VL 91.5 98.3 97.5 97.1 -0.4 88.5 90.0 +1.5 +15.2 
+
+Idefics3 89.6 98.5 98.8 92.5 -6.3 88.3 86.3 -2.1 +28.8 
+
+Pixtral 91.5 98.3 99.0 99.2 +0.2 87.9 90.6 +2.7 +9.4 
+
+Vision: VQAv2 / COCO 
+
+Qwen-VL 99.2 99.8 100.0 99.8 -0.2 98.8 99.0 +0.2 +14.8 
+
+Idefics3 97.5 100.0 99.8 97.5 -2.3 96.5 96.5 +0.0 +28.1 
+
+Pixtral 97.1 100.0 99.4 99.8 +0.4 97.1 97.1 +0.0 +14.2 
+
+Speech: Fluent Speech Commands 
+
+Qwen-A 98.1 97.7 98.3 99.2 +0.8 89.8 95.6 +5.8 +21.7 
+
+Qwen-O 99.4 100.0 100.0 100.0 +0.0 94.0 94.6 +0.6 +10.4 
+
+Phi-4 97.9 99.4 100.0 100.0 +0.0 89.8 91.9 +2.1 +24.0 
+
+Speech: SLURP 
+
+Qwen-A 89.2 100.0 100.0 100.0 +0.0 85.0 88.5 +3.5 +21.7 
+
+Qwen-O 91.0 100.0 100.0 100.0 +0.0 88.8 87.1 -1.7 +11.5 
+
+Phi-4 88.3 100.0 100.0 99.8 -0.2 81.7 84.0 +2.3 +11.9 unrelated-text order effect , strengthening the evidence for cross-modal noncommutativity under conflict. 
+
+4.4. Ruling out explanations 
+
+We next investigate what might explain the consistent attachment-last advantage. Both evidence sources precede the answer position and are available during prediction, yet exchanging their positions systematically changes the model’s judgments. We probe several possible contributors to this order sensitivity and rule them out. 
+
+Text-only recency. Removing the image and swapping correct and conflicting text yields effects from −11 .4 to +55 .6 pp across six combinations, with inconsistent directions. In the vision tests, all six combinations favor the image more when it appears last. Text recency remains a possible contributor to the observed effects. 
+
+Explicit source-priority instructions. In the vision tests, adding “If the description conflicts with the image, prioritize the image” re-mains 89–145% of the original order effect. For FSC with Qwen2-Audio, neutral, main, and stronger speech-priority prompts yield ef-fects of +22 .5, +27 .5, and +34 .6 pp, respectively. MLLMs remain sensitive to order even when explicitly told which source to follow. 
+
+Attachment wording. On the same 60 exploratory SLURP exam-ples, the original prompt yields +21 .7 pp. Changing it to “Answer the question according to the audio attachment.” yields +23 .3 pp, with a 95% confidence interval of [14 .2, 33 .3] . The paired differ-ence is +1 .7 pp, [−1.7, 5.0] , and its interval includes zero. This exploratory comparison applies to these examples. 
+
+Evidence distance. Inserting 64 or 256 non-informative tokens be-tween the visual and textual evidence increases the order effect in five combinations and decreases it for Qwen2.5-VL on GQA. The effect of evidence distance therefore varies across models. 
+
+Free-form responses. On FSC with Qwen2-Audio, the order effect remains +33 .3 pp, [27 .5, 39 .2] , showing that order also matters in free-form responses. Unrelated text can elicit a third answer, so com-parisons with the conflict condition need a scoring rule that accounts for such responses. Framing Image Conflict text Question + options Input region Natural prompt Image → text Natural prompt Text → image Defensive warning Image → text Defensive warning Text → image                 
+
+> 6.5 10.5 13.4 69.6 6.6 15.9 7.1 70.5 7.3 13.9 9.4 69.3 5.7 17.4 6.4 70.5
+> (a) Attention diagnostic
+> 020 40 60 70 Attention share (%) −60 −30 030 60 Image-last change in image-answer selection (pp) Original protocol Framing moves with text
+> -28.6 pp
+> Fixed instruction Only evidence swaps
+> +9.5 pp
+> Protocol difference: +38.1 pp
+> (b) Instruction ablation
+> Final six layers; attention is descriptive, not causal.
+
+Fig. 3 . Exploratory Qwen2.5-VL-3B diagnostics on 20 examples: (a) attention moved by warning; (b) instruction placement ablation. 
+
+4.5. Revisiting existing protocols 
+
+The attachment-last advantage persists across the prompt and re-sponse variants tested above. We now revisit earlier studies to under-stand why their input designs can lead to different conclusions about modality preference. 
+
+Reproducing and diagnostics. Words or Vision [4] reports greater text preference in Phi-3.5 when the image follows the conflicting text. We observe the same pattern with Qwen2.5-VL-3B-Instruct on 1,000 VQAv2 examples using its warning prompt and free-form pro-tocol: moving the image last reduces image-answer accuracy from 42.6% to 28.9% ( −13 .7 pp). In this protocol, the image exchanges positions with a block containing the task framing, a warning, and the conflicting description, so the task instructions move along with the text. The warning also describes the text as potentially irrele-vant, incomplete, or inaccurate and advises caution. Prior studies of negative-token attention and negated prompts [34, 35] suggest that such wording may influence how the model processes the evidence. Our exploratory attention comparison shows different attention dis-tributions under the natural and warning prompts (Fig. 3a), providing descriptive evidence of this sensitivity. We therefore apply our protocol to the same Qwen2.5-VL model: remove the warning, fix the instruction to answer from the image before both sources, and place the question and A/B options after them. Only the image and description exchange positions. On 807 examples answered correctly from each source in isola-tion, moving the image last increases image-answer selection from 14.9% to 32.6% ( +17 .7 pp), matching the direction found in our main experiments. To test instruction placement directly, we retain the original framing and warning and fix both before the evidence (Fig. 3b). On the same examples, moving the image last changes image-answer selection by −28 .6 pp under the original protocol and +9 .5 pp once the framing is fixed, a difference of +38 .1
+
+pp. This paired ablation shows that moving task instructions with the evidence can reverse the conclusion about which order favors image-supported answers. 
+
+Extending the evaluation to MCR-BENCH. MCR-BENCH [10] builds on Words or Vision and compares faithful, adversarial, and irrelevant text under a fixed audio–text order. We evaluate both evi-dence orders on 1,000 examples each for audio question answering (AQA), speech emotion recognition (SER), and vocal sound clas-sification (VSC). As shown in Table 3, with the original warn-ing retained, moving audio after conflicting text increases accuracy by +17 .0, +15 .1, and +51 .3 pp, respectively. Under the audio-attachment prompt without the warning, the corresponding gains are 
+
++18 .2, +11 .5, and +44 .1 pp. The average gain across the three tasks is +27 .8 pp with the warning and +24 .6 pp without it, showing 
+
+Table 3 . External benchmarks under original and aligned protocols in pp. P denotes images for Words or Vision (WoV) [4] and audio for MCR-BENCH (MCR) [10]. Yellow highlights gains from plac-ing audio last with the original warning retained. Original warning Aligned protocol Task P → T − T − → P ∆A− P → T − T − → P ∆A−
+
+WoV / VQAv2 42.6 28.9 −13 .7 14.9 32.6 +17.7 
+
+MCR / AQA 1.4 18.4 +17.0 2.4 20.6 +18.2 
+
+MCR / SER 0.0 15.1 +15.1 0.1 11.6 +11.5 
+
+MCR / VSC 12.7 64.0 +51.3 20.9 65.0 +44.1 
+
+that placing audio last improves accuracy under both prompts. The comparisons show why both evidence orders matter when assessing modality preference. Instruction placement can reverse which or-der favors image-supported answers, while a fixed audio–text layout leaves the gains from placing audio last unmeasured. 
+
+5. DISCUSSION Order contributes to measured text reliance Text reliance under a fixed template reflects modality, position, distance from the ques-tion, and conflict between sources. In our tests, moving the same im-age or speech recording later shifts answers toward it, while average modality preferences differ across models. Paired swaps measure how order contributes to source reliance alongside possible textual shortcuts. A source’s influence depends on where and how it appears in the input, including whether another source contradicts it. Evalua-tions should test both P →T and T →P and report average modality reliance alongside the change caused by swapping order. 
+
+Implications for deployed systems Speech assistants often combine audio with an ASR transcript, a user’s description, device state, or retrieved information. Our results suggest that the placement of these sources should be considered alongside their origin and consistency. The same issue arises in multimodal retrieval-augmented generation and agents, where retrieval ranking, attachment placement, and tool-return order determine the input sequence. Reordering these sources may change the answer even when their content stays the same. A practical check is to reorder key evidence and query the model again. If the answer changes, the system can review the sources, flag the disagreement, or seek clarification before a high-risk action. 
+
+6. CONCLUSION 
+
+In this paper, we demonstrate cross-modal evidence noncommutativ-ity: the same evidence can lead to different judgments when its order changes. Across vision and speech models, placing an attachment after conflicting text consistently shifts judgments toward its con-tent. Revisiting earlier evaluations also reveals protocol confounds that can reverse the measured direction of these shifts and lead to misleading conclusions about modality preference. Our additional experiments probe several possible explanations and show that the shifts persist under alternative instructions and response formats. Understanding their internal causes will require further analysis of perceptual representations, positional encoding, attention, and decoding. We are also extending this study to multiple perceptual sources P1, . . . , P m and textual sources T1, . . . , T n to examine how different source combinations and orderings affect the interactions between evidence sources and the resulting judgments. ACKNOWLEDGEMENTS 
+
+This work is partially funded by the European Union (under grant agreement ID 101212818). Views and opinions expressed are how-ever those of the author(s) only and do not necessarily reflect those of the European Union or European Health and Digital Executive Agency (HADEA). Neither the European Union nor the granting authority can be held responsible for them. This work is partially supported by Innovate UK through AI-PASSPORT under Grant 10126404. This work was awarded a grant by the AI Security In-stitute (AISI) via the Alignment Project (Rare-Event Estimation in Large Language Models via Subset Simulation) and funded by EPSRC. Yi’s contribution is partially supported through the Royal Society international exchanges programme and in part by the En-gineering and Physical Sciences Research Council, through funding from RAi UK [EP/Y009800/1]. The authors declare no relevant financial or non-financial con-flicts of interest. 
+
+COMPLIANCE WITH ETHICAL STANDARDS 
+
+No new human participants were recruited and no new human-subject data were collected for this study. All experiments use existing publicly available benchmark datasets under their respec-tive terms of use. 
+
+7. REFERENCES 
+
+[1] S. Bai et al., “Qwen2.5-vl technical report,” 2025, arXiv:2502.13923. [2] J. Xu et al., “Qwen2.5-omni technical report,” 2025, arXiv:2503.20215. [3] P. Pezeshkpour, M. Aminnaseri, and E. Hruschka, “Mixed signals: Decoding VLMs’ reasoning and underlying bias in vision-language conflict,” in Findings ACL: EMNLP , 2025, pp. 24833–24848. [4] A. Deng, T. Cao, Z. Chen, and B. Hooi, “Words or vision: Do vision-language models have blind faith in text?,” in Proc. IEEE/CVF CVPR , 2025, pp. 3867–3876. [5] C. Zhang, W. Ding, J. Liu, M. Wu, Q. Wu, and R. Mooney, “Do images speak louder than words? investigating the effect of textual misinformation in VLMs,” in Proc. EACL , 2026, pp. 6872–6895. [6] Z. Zhang, W. Zhou, J. Zhao, and H. Li, “Robust multimodal large language models against modality conflict,” in Proc. ICML , 2025, pp. 77233–77253. [7] Z. Tan, X. Chu, W. Li, and T. Mo, “Order matters: Exploring order sensitivity in multimodal large language models,” 2024, arXiv:2410.16983. [8] N. F. Liu et al., “Lost in the Middle: How Language Models Use Long Contexts,” Trans. Assoc. Comput. Linguistics , vol. 12, pp. 157–173, 2024. [9] P. Pezeshkpour and E. Hruschka, “Large language models sen-sitivity to the order of options in multiple-choice questions,” in 
+
+Findings ACL: NAACL , 2024, pp. 2006–2017. [10] C. Wang, G. Deng, X. Yang, H. Qiu, and T. Zhang, “When audio and text disagree: Revealing text bias in large audio-language models,” in Proc. EMNLP , 2025, pp. 4878–4888. [11] T. Zhu, Q. Liu, F. Wang, Z. Tu, and M. Chen, “Unraveling cross-modality knowledge conflicts in large vision-language models,” 2024, arXiv:2410.03659. [12] X. Liu, W. Wang, Y. Yuan, J.-T. Huang, Q. Liu, P. He, et al., “Insight over sight: Exploring the vision-knowledge conflicts in multimodal LLMs,” in Proc. ACL , 2025, pp. 17825–17846. [13] J. Lee, Y. Yoon, and T. Kim, “Same semantics, different out-come: On the modality robustness of multimodal LLMs under knowledge conflict,” 2026, arXiv:2609.00550. [14] Z. Li, B. Wang, J. Hu, X. Huang, and Y. Dong, “Fragileflow: Spectral control of correct-but-fragile predictions for founda-tion model robustness,” 2026, arXiv:2605.08896. [15] Z. Li, B. Wang, C. Wu, X. Huang, and Y. Dong, “Scope: Se-quential conformal probing for reliable ood rejection in llm ser-vices,” 2026, arXiv:2606.21255. [16] Aharon Azulay, Jan Dubi´ nski, Zhuoyun Li, Atharv Mittal, and Yossi Gandelsman, “Jailbreaking vision-language models through the visual modality,” in Proc. ICML , 2026. [17] Y. Gao et al., “Pathmark: Protecting intellectual prop-erty of mixture-of-expert llms via path watermarks,” 2026, arXiv:2607.03688. [18] Jimiao Yu et al., “Black-box adversarial defense based on im-age decomposition and reconstruction,” IEEE Transactions on Multimedia , vol. 27, pp. 5909–5921, 2025. [19] Linghan Chen, Yudong Gao, Jiyao Wang, Kaiyan Ji, and Hong-long Chen, “Do system prompts leave behavioral fingerprints? a large-scale empirical study of clone detection via output sim-ilarity,” 2026. [20] Boxuan Wang et al., “Chain-of-thought as a lens: Evalu-ating structured reasoning alignment between human prefer-ences and large language models,” in Proc. ACL (Volume 1: Long Papers) , Maria Liakata, Viviane P. Moreira, Jiajun Zhang, and David Jurgens, Eds., San Diego, California, United States, July 2026, pp. 39514–39530, Association for Compu-tational Linguistics. [21] Boxuan Wang, Zhuoyun Li, Xiaowei Huang, and Yi Dong, “Dive into ambiguity: A*-inspired multi-agents commonsense obfuscation attack on llm prompts,” 2026. [22] Boxuan Wang, Zhuoyun Li, Xiaowei Huang, and Yi Dong, “Rethinking multi-agent intelligence through the lens of small-world networks,” 2025. [23] D. A. Hudson and C. D. Manning, “Gqa: A new dataset for real-world visual reasoning and compositional question an-swering,” in Proc. IEEE/CVF CVPR , 2019, pp. 6693–6702. [24] R. Krishna et al., “Visual Genome: Connecting Language and Vision Using Crowdsourced Dense Image Annotations,” Int. J. Comput. Vis. , vol. 123, no. 1, pp. 32–73, 2017. [25] Y. Goyal, T. Khot, A. Agrawal, D. Summers-Stay, D. Batra, and D. Parikh, “Making the v in vqa matter: Elevating the role of image understanding in visual question answering,” Int. J. Comput. Vis. , vol. 127, no. 4, pp. 398–414, 2019. [26] T.-Y. Lin, M. Maire, S. Belongie, J. Hays, P. Perona, D. Ra-manan, et al., “Microsoft coco: Common objects in context,” in Proc. ECCV , 2014, pp. 740–755. [27] L. Lugosch, M. Ravanelli, P. Ignoto, V. S. Tomar, and Y. Ben-gio, “Speech Model Pre-Training for End-to-End Spoken Lan-guage Understanding,” in Proc. INTERSPEECH , 2019, pp. 814–818. [28] E. Bastianelli, A. Vanzo, P. Swietojanski, and V. Rieser, “SLURP: A spoken language understanding resource pack-age,” in Proc. EMNLP , 2020, pp. 7252–7262. [29] H. Laurençon, A. Marafioti, V. Sanh, and L. Tronchon, “Build-ing and better understanding vision-language models: insights and future directions,” 2024, arXiv:2408.12637. [30] P. Agrawal et al., “Pixtral 12b,” 2024, arXiv:2410.07073. [31] Y. Chu et al., “Qwen2-audio technical report,” 2024, arXiv:2407.10759. [32] Microsoft et al., “Phi-4-mini technical report: Compact yet powerful multimodal language models via mixture-of-loras,” 2025, arXiv:2503.01743. [33] C. Zheng, H. Zhou, F. Meng, J. Zhou, and M. Huang, “Large language models are not robust multiple choice selectors,” in 
+
+Proc. ICLR , 2024. [34] S. Yu, J. Song, B. Hwang, H. Kang, S. Cho, J. Choi, et al., “Correcting negative bias in large language models through negative attention score alignment,” in Proc. NAACL , 2025, pp. 9979–10001. [35] J. Jang, S. Ye, and M. Seo, “Can large language models truly understand prompts? a case study with negated prompts,” in 
+
+Proc. TL4NLP Workshop , 2023, pp. 52–62.

@@ -1,0 +1,298 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-28T23:42:34.435504+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 2,
+    "deep_cap": 6,
+    "deep_selected": 2,
+    "quick_candidates": 5,
+    "quick_skim_target": 11,
+    "quick_selected": 5
+  },
+  "deep_dive": [
+    {
+      "id": "2609.30402v1",
+      "source": "arxiv",
+      "title": "What Improves Multimodal Misinformation Detection? Answers from a Large-Scale Empirical Study",
+      "abstract": "Multimodal misinformation is increasingly crafted to look convincing by pairing a textual claim with an image that appears to \"prove\" it. Yet in practice, building effective detectors often hinges on a small set of design choices that are rarely examined in a controlled way. In this paper, we conduct a large-scale study of multimodal design choices for misinformation detection with over 3,375 experiments- spanning three benchmark datasets and a broad range of pre-trained vision and language backbones. Through systematic comparisons and targeted robustness analyses, we distill practical guidance on which design choices help, when do they fail silently, and what aspects of the pipeline most strongly shape model behavior, answering 4 key Research Questions (RQs). We aim to provide a reliable foundation for designing stronger and more dependable multimodal misinformation detection systems, thus contributing to the broader research community.",
+      "authors": [
+        "Akshit Sharma",
+        "Prashant W. Patil"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL",
+        "cs.LG",
+        "cs.MM"
+      ],
+      "published": "2026-09-24T18:06:53+00:00",
+      "link": "https://arxiv.org/pdf/2609.30402v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "large-scale study of multimodal misinformation detection combining text claims and images",
+      "llm_evidence_cn": "面向文本主张与图像结合的多模态虚假信息检测大规模研究",
+      "llm_evidence": "面向文本主张与图像结合的多模态虚假信息检测大规模研究",
+      "canonical_evidence": "面向文本主张与图像结合的多模态虚假信息检测大规模研究",
+      "llm_tldr_en": "Multimodal misinformation pairs a textual claim with an image that appears to prove it, yet design choices for detectors are rarely examined. This large-scale empirical study runs over 3,375 experiments across three benchmarks and many vision-language backbones, distilling which choices help, when they fail silently, and what shapes model behavior.",
+      "llm_tldr_cn": "针对多模态虚假信息通过文本主张搭配看似佐证的图像来增强迷惑性、而检测器设计选择缺乏系统检验的问题，本文开展大规模实证研究，覆盖三个基准数据集与多种视觉语言骨干，累计超过3375组实验并做鲁棒性分析。研究系统梳理了哪些设计选择有效、何时会静默失效以及哪些环节最影响模型行为。该工作为多模态虚假信息检测提供了可复用的实践指南与基准洞见。",
+      "llm_tldr": "针对多模态虚假信息通过文本主张搭配看似佐证的图像来增强迷惑性、而检测器设计选择缺乏系统检验的问题，本文开展大规模实证研究，覆盖三个基准数据集与多种视觉语言骨干，累计超过3375组实验并做鲁棒性分析。研究系统梳理了哪些设计选择有效、何时会静默失效以及哪些环节最影响模型行为。该工作为多模态虚假信息检测提供了可复用的实践指南与基准洞见。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "detecting fake news by jointly analyzing textual content and visual information",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.30698v1",
+      "source": "arxiv",
+      "title": "MM-VeriAgent: Learning to Use Extensive Tools to Verify Multimodal Misinformation with Reinforcement Learning",
+      "abstract": "Real-world multimodal misinformation often involves mixed forgery sources, requiring sample-specific detection strategies. Existing tool-augmented methods rely on predefined workflows or inference-time planning, limiting adaptability or increasing inference cost. To address this issue, we introduce \\textbf{MM-VeriAgent}, which learns to verify mixed-source multimodal misinformation with tools. We first build \\textbf{MM-VeriTools}, a specialized toolkit for misinformation detection agents. By benchmarking various candidate models and methods on the sub-tasks required by mixed-source detection, we select the strongest for textual, visual, and cross-modal forgery analysis and encapsulate them as callable tools with a unified interface. On top of this toolkit, we train the LVLM agent with reinforcement learning to teach it how to use these tools to better solve mixed-source detection. Since many of the tools are specialized models whose online execution at every rollout severely limits RL efficiency, we further introduce \\textbf{Tool-Execution Cache}, which pre-executes candidate tool calls and reuses their cached outputs during training. This preserves multi-step rollouts while reducing online tool execution, largely improving the training efficiency.Experiments on MMFakeBench demonstrate substantial accuracy gains over the base model without explicit tool search at inference time. Ablation and efficiency analyses further validate the learned tool-use policy and show that Tool-Execution Cache reduces online tool executions during training.",
+      "authors": [
+        "Peipei Li",
+        "Shuhan Xia",
+        "Shengyang Liu",
+        "Zekun Li",
+        "Ran He"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-25T02:12:16+00:00",
+      "link": "https://arxiv.org/pdf/2609.30698v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "tool-augmented RL agent verifying mixed-source multimodal misinformation",
+      "llm_evidence_cn": "工具增强的强化学习智能体验证多源多模态错误信息",
+      "llm_evidence": "工具增强的强化学习智能体验证多源多模态错误信息",
+      "canonical_evidence": "工具增强的强化学习智能体验证多源多模态错误信息",
+      "llm_tldr_en": "Real-world multimodal misinformation involves mixed forgery sources; MM-VeriAgent builds a toolkit encapsulating textual, visual and cross-modal forgery analysis, and learns via reinforcement learning to select and call tools for sample-specific verification.",
+      "llm_tldr_cn": "真实世界的多模态错误信息常涉及混合伪造来源，需要样本特定的检测策略，而现有工具增强方法依赖预定义流程或推理时规划，适应性差或推理成本高。本文提出MM-VeriAgent，先构建MM-VeriTools工具包，将文本、视觉与跨模态伪造分析封装为可调用工具，再通过强化学习训练智能体自主选择与调用工具。实验表明该方法在多源错误信息验证上兼顾适应性与效率。该工作为可扩展的多模态错误信息验证提供了工具学习框架。",
+      "llm_tldr": "真实世界的多模态错误信息常涉及混合伪造来源，需要样本特定的检测策略，而现有工具增强方法依赖预定义流程或推理时规划，适应性差或推理成本高。本文提出MM-VeriAgent，先构建MM-VeriTools工具包，将文本、视觉与跨模态伪造分析封装为可调用工具，再通过强化学习训练智能体自主选择与调用工具。实验表明该方法在多源错误信息验证上兼顾适应性与效率。该工作为可扩展的多模态错误信息验证提供了工具学习框架。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "automatically identifying misinformation from posts containing images, text, and video",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.30427v1",
+      "source": "arxiv",
+      "title": "Fake News Theories: Harnessing Disciplinary Insights for Computational Modeling, Detection, and Explanation",
+      "abstract": "Disinformation research has produced increasingly accurate automated fake-news detectors, but many systems remain difficult to interpret and are weakly connected to established theories of persuasion, credibility, and human judgment. In this paper, we develop a theory-informed computational framework that translates cross-disciplinary theories of fake news into measurable features for automated detection and explanation through statistical techniques and large language models. To that end, we conduct a structured cross-disciplinary review of theories from social sciences, psychology, economics, among other disciplines that reveal how fake news persuades and spreads, thereby establishing a broad theoretical foundation for computational modeling. Experiments on benchmark datasets show that theory-derived features are predictive and provide interpretable, theory-referenced diagnostic signals. Multi-feature models generally outperform individual features, although gains among the strongest small feature combinations are modest. Our work highlights the value of interdisciplinary perspectives in building robust and interpretable fake news detection systems, advancing the foundation for human-centered approaches in combating disinformation.",
+      "authors": [
+        "Zhaoyang Cao",
+        "Miriam Metzger",
+        "Reza Zafarani"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CY"
+      ],
+      "published": "2026-09-24T18:21:41+00:00",
+      "link": "https://arxiv.org/pdf/2609.30427v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "theory-informed explainable fake news detection framework",
+      "llm_evidence_cn": "理论驱动且可解释的虚假新闻检测框架",
+      "llm_evidence": "理论驱动且可解释的虚假新闻检测框架",
+      "canonical_evidence": "理论驱动且可解释的虚假新闻检测框架",
+      "llm_tldr_en": "The paper builds a theory-informed computational framework that translates cross-disciplinary theories of fake news from social sciences, psychology and economics into measurable features for automated detection and explanation via statistical techniques and large language models.",
+      "llm_tldr_cn": "现有虚假新闻检测系统虽日趋准确，却普遍缺乏可解释性且与说服、可信度等既有理论脱节。本文提出理论驱动的计算框架，通过跨学科结构化综述，把社会科学、心理学与经济学中的虚假新闻理论转化为可测量特征，并结合统计方法与大型语言模型用于检测与解释。该工作建立了连接学科洞见与计算建模的理论基础，旨在提升检测系统的可解释性与理论一致性。",
+      "llm_tldr": "现有虚假新闻检测系统虽日趋准确，却普遍缺乏可解释性且与说服、可信度等既有理论脱节。本文提出理论驱动的计算框架，通过跨学科结构化综述，把社会科学、心理学与经济学中的虚假新闻理论转化为可测量特征，并结合统计方法与大型语言模型用于检测与解释。该工作建立了连接学科洞见与计算建模的理论基础，旨在提升检测系统的可解释性与理论一致性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.25775v1",
+      "source": "arxiv",
+      "title": "TRACE: Trajectory Representation and Consistency Estimation for AI-Generated Video Detection",
+      "abstract": "Recent advances in generative video models have enabled the synthesis of visually realistic content, posing significant challenges to synthetic video detection. Existing detectors often rely on appearance artifacts, semantic inconsistencies, and temporal patterns that may be generator-specific, limitating generalization to unseen synthesis models. We investigate whether responses to a pretrained generative model provide more transferable forensic cues. Our key observation is that real and AI-generated videos exhibit distinct \\emph{velocity responses} under a pretrained Flow Matching video model. This distinction persists when different pretrained video-generation backbones are used as probes, suggesting that velocity responses offer transferable forensic signals beyond visual artificts. Motivated by this observation, we propose \\textbf{TRACE} (\\emph{\\underline{T}rajectory \\underline{R}epresentation \\underline{a}nd \\underline{C}onsistency \\underline{E}stimation}), a generation-process-aware framework for AI-generated video detection. TRACE leverages a pretrained video DiT as a velocity-field probe to extract representations at multiple flow time points, and models cross-frame consistency through velocity differences between adjacent frames. We further introduce a \\emph{Real-Centered Trajectory Optimization} objective that encourages generator-invariant representation learning. Extensive experiments on AIGVDBench demonstrate that TRACE generalizes effectively across diverse generators, substantially outperforming prior state-of-the-art methods on unseen open- and closed-source video generation models.",
+      "authors": [
+        "Huangsen Cao",
+        "Hongkang chu",
+        "Siyao Yu",
+        "Xin Ding",
+        "Jianfeng Dong",
+        "Yongwei Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-22T07:11:25+00:00",
+      "link": "https://arxiv.org/pdf/2609.25775v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "generalizable AI-generated video detection via transferable forensic cues and consistency estimation",
+      "llm_evidence_cn": "借助可迁移取证线索与一致性估计实现可泛化的AI生成视频检测",
+      "llm_evidence": "借助可迁移取证线索与一致性估计实现可泛化的AI生成视频检测",
+      "canonical_evidence": "借助可迁移取证线索与一致性估计实现可泛化的AI生成视频检测",
+      "llm_tldr_en": "TRACE studies whether responses to a pretrained generative model give more transferable forensic cues, observing distinct velocity responses of real and AI-generated videos under a pretrained Flow Matching video model that persist across probe backbones.",
+      "llm_tldr_cn": "生成式视频模型已能合成视觉逼真的内容，给合成视频检测带来挑战，现有检测器多依赖与生成器相关的表观伪影或时序模式，跨模型泛化差。本文研究预训练生成模型对输入的响应能否提供更可迁移的取证线索，发现真实视频与AI生成视频在预训练流匹配视频模型下呈现不同的速度响应。该方法在不同生成骨干作为探针时仍保持区分度，为面向未知生成模型的合成视频检测提供新思路。",
+      "llm_tldr": "生成式视频模型已能合成视觉逼真的内容，给合成视频检测带来挑战，现有检测器多依赖与生成器相关的表观伪影或时序模式，跨模型泛化差。本文研究预训练生成模型对输入的响应能否提供更可迁移的取证线索，发现真实视频与AI生成视频在预训练流匹配视频模型下呈现不同的速度响应。该方法在不同生成骨干作为探针时仍保持区分度，为面向未知生成模型的合成视频检测提供新思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.26986v1",
+      "source": "arxiv",
+      "title": "Same evidence, different judgments: Evidence noncommutative in vision/speech-text conflicts",
+      "abstract": "For multimodal large language models, when images or speech conflict with accompanying text, measured text reliance can entangle modality preference with evidence position. Earlier studies of text bias often used a fixed evidence order or moved task instructions with the evidence, leaving the contribution of order unclear. In this paper, we use a paired comparison that keeps the instructions and evidence content fixed and swaps only the positions of the two sources to quantify this potential influence. Across vision and speech models, placing an image or recording after conflicting text consistently shifts answers toward its content. We also revisit previous studies and analyze why their experimental settings can lead to misleading conclusions. These findings reveal cross-modal evidence noncommutativity: the same evidence can lead to different judgments when its order changes, and placing perceptual evidence later can increase the model's reliance on its content.",
+      "authors": [
+        "Zhuoyun Li",
+        "Boxuan Wang",
+        "Xiaowei Huang",
+        "Yi Dong"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-22T19:25:15+00:00",
+      "link": "https://arxiv.org/pdf/2609.26986v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "modality conflict between image or speech and text, evidence order shifts answers",
+      "llm_evidence_cn": "图像或语音与文本冲突时的模态依赖与证据顺序",
+      "llm_evidence": "图像或语音与文本冲突时的模态依赖与证据顺序",
+      "canonical_evidence": "图像或语音与文本冲突时的模态依赖与证据顺序",
+      "llm_tldr_en": "When images or speech conflict with text, measured text reliance entangles modality preference with evidence position; a paired comparison swapping only source positions shows answers shift toward the later-placed modality across vision and speech models.",
+      "llm_tldr_cn": "当图像或语音与文本冲突时，测得的文本依赖可能混淆模态偏好与证据位置，以往研究因固定证据顺序而难以厘清。本文采用配对比较，固定指令与证据内容，仅交换两来源位置以量化顺序影响。在视觉与语音模型上，将图像或录音置于冲突文本之后会持续使答案偏向其内容。研究还重新审视既有工作，解释其设置可能导致的误导性结论。",
+      "llm_tldr": "当图像或语音与文本冲突时，测得的文本依赖可能混淆模态偏好与证据位置，以往研究因固定证据顺序而难以厘清。本文采用配对比较，固定指令与证据内容，仅交换两来源位置以量化顺序影响。在视觉与语音模型上，将图像或录音置于冲突文本之后会持续使答案偏向其内容。研究还重新审视既有工作，解释其设置可能导致的误导性结论。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.30467v1",
+      "source": "arxiv",
+      "title": "Where Does Retrieval-Based Open-Ended Evaluation Fail? Automatic Taxonomy Induction from Long-Form Medical Answer Factuality Verification",
+      "abstract": "Retrieval-based factuality evaluation, where LLM-generated claims are verified against evidence from authoritative medical corpora, has become the dominant paradigm for scalable hallucination detection in high-stakes clinical settings. Despite the urgency of reliable and transparent medical fact verification, most systems measure performance with aggregate metrics like F1, which obscure where and why failures occur. Existing RAG diagnostics require gold answers or annotated gold evidence, neither of which exists in this regime. We introduce two comprehensive taxonomies, grounded in a case study on the open-ended MedExpert dataset and 3 closed-ended datasets, decomposing failures into retrieval-stage errors along five quality dimensions, and verifier-reasoning errors into six consecutive steps. We adapt an automatic pattern induction pipeline using LLM-as-Judge to label evidence quality and classify verifier reasoning errors at scale, and then stress-test our findings across 4 retrieval methods and 6 frontier verifier models. Our analysis reveals that scaling model size, adding reasoning effort, expanding to authoritative web sources, and applying medical fine-tuning do not resolve these failure modes, demonstrating that they represent fundamental limitations of the retrieve-then-verify paradigm in open-ended medical settings rather than artifacts of outdated systems. We release our code and data at https://anonymous.4open.science/r/Medical_RAG_eval-4AB5 for the full reproducibility of our results.",
+      "authors": [
+        "Heyuan Huang",
+        "Jirui Dai",
+        "Alexandra DeLucia",
+        "Sonal Joshi",
+        "Mahsa Yarmohammadi",
+        "Jie Gao",
+        "Bernal Jiménez Gutiérrez",
+        "Mark Dredze"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.IR"
+      ],
+      "published": "2026-09-24T19:04:23+00:00",
+      "link": "https://arxiv.org/pdf/2609.30467v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "retrieval-based factuality verification of LLM claims against authoritative evidence",
+      "llm_evidence_cn": "依据权威证据对LLM主张进行检索式事实性核查",
+      "llm_evidence": "依据权威证据对LLM主张进行检索式事实性核查",
+      "canonical_evidence": "依据权威证据对LLM主张进行检索式事实性核查",
+      "llm_tldr_en": "Retrieval-based factuality evaluation verifies LLM claims against authoritative corpora but aggregate metrics hide failure modes and RAG diagnostics need gold evidence. This paper induces two taxonomies from the open-ended MedExpert dataset and three closed-ended datasets, decomposing retrieval-based verification failures into interpretable categories.",
+      "llm_tldr_cn": "针对检索式事实性评估虽广泛用于医学幻觉检测、但聚合指标掩盖失败原因且现有RAG诊断依赖金标准答案与标注证据的问题，本文基于开放式MedExpert数据集与三个封闭式数据集开展案例研究，归纳出两套失败分类体系，将检索式核查的失败拆解为可解释类别。该分类揭示了检索证据使用中的典型错误模式。该工作为证据驱动的自动事实核查提供了诊断框架与失败分析视角。",
+      "llm_tldr": "针对检索式事实性评估虽广泛用于医学幻觉检测、但聚合指标掩盖失败原因且现有RAG诊断依赖金标准答案与标注证据的问题，本文基于开放式MedExpert数据集与三个封闭式数据集开展案例研究，归纳出两套失败分类体系，将检索式核查的失败拆解为可解释类别。该分类揭示了检索证据使用中的典型错误模式。该工作为证据驱动的自动事实核查提供了诊断框架与失败分析视角。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.30934v1",
+      "source": "arxiv",
+      "title": "ManiVid: Unified and Explainable Forensic Analysis of Manipulated Videos",
+      "abstract": "Rapid advances in AI-generated video (AIGV) have increased the risks posed by deceptive video manipulation. Unlike fully synthetic videos, manipulated videos retain most source content and alter only localized regions, making forensic analysis particularly challenging. Existing video forgery research faces two limitations in both data and methodology: (1) High-quality datasets and benchmarks tailored for manipulated videos remain scarce. (2) Multimodal large language models (MLLMs) extend forgery analysis beyond binary classification but struggle to use low-level forensic cues and provide precise pixel-level grounding. Specifically, we introduce ManiVid, a unified forensic analysis task covering forgery detection, artifact grounding, and anomaly explanation for manipulated videos. We construct ManiVid-38K, the first dataset to combine paired, open-vocabulary localized manipulations of general videos with authenticity labels, forgery masks, and anomaly explanations. It comprises about 19K manually verified real-fake video pairs, mostly at 1080P resolution, generated under 2 paradigms with 15 powerful generation models. We sample 1K pairs for ManiVidBench, balanced across six manipulation types and generation models for fair evaluation. We further propose ManiVidLens, a unified framework for explainable video forgery analysis. Its Forensic Evidence Router supplies shared low-level forensic evidence for multimodal reasoning and video segmentation. Its Prompt Distill Module converts grounding states into semantic and geometric prompts and distills spatial priors for mask decoding and full-video propagation. ManiVidLens achieves relative gains over the strongest comparison methods in artifact grounding (+21.1% mIoU; +21.3% J&F) and anomaly explanation (+131.3% ROUGE-L; +9.9% CSS). Its forgery detection remains comparable to dedicated classifiers (0.914 Acc; 0.913 F1).",
+      "authors": [
+        "Hengrui Kang",
+        "Zhonghao Yan",
+        "Yuxuan Yang",
+        "Ruoyan Jing",
+        "Yuncheng Guo",
+        "Hao Chen",
+        "Kongming Liang",
+        "Zhanyu Ma",
+        "Conghui He",
+        "Weijia Li"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-25T07:51:50+00:00",
+      "link": "https://arxiv.org/pdf/2609.30934v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unified explainable forensic analysis of manipulated videos with multimodal LLMs",
+      "llm_evidence_cn": "面向篡改视频的统一可解释取证分析与多模态大模型",
+      "llm_evidence": "面向篡改视频的统一可解释取证分析与多模态大模型",
+      "canonical_evidence": "面向篡改视频的统一可解释取证分析与多模态大模型",
+      "llm_tldr_en": "ManiVid tackles deceptive AI-manipulated video, where existing datasets and methods are limited and multimodal LLMs lack low-level forensic cues. It introduces a unified forensic task covering forgery detection, artifact grounding, and anomaly explanation, improving pixel-level grounding and interpretability relevant to explainable multimodal misinformation detection.",
+      "llm_tldr_cn": "针对AI篡改视频带来欺骗风险、现有数据集与基准稀缺且多模态大模型难以利用低层取证线索与像素级定位的问题，本文提出ManiVid统一取证分析任务，涵盖伪造检测、痕迹定位与异常解释。方法结合低层取证线索与多模态大模型，提升了像素级定位与可解释性。该工作为可解释的多模态虚假信息与篡改内容检测提供了任务定义与基准参考。",
+      "llm_tldr": "针对AI篡改视频带来欺骗风险、现有数据集与基准稀缺且多模态大模型难以利用低层取证线索与像素级定位的问题，本文提出ManiVid统一取证分析任务，涵盖伪造检测、痕迹定位与异常解释。方法结合低层取证线索与多模态大模型，提升了像素级定位与可解释性。该工作为可解释的多模态虚假信息与篡改内容检测提供了任务定义与基准参考。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
