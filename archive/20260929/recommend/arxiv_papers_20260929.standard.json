@@ -1,0 +1,599 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-29T23:13:37.606588+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 3,
+    "deep_cap": 6,
+    "deep_selected": 3,
+    "quick_candidates": 11,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2609.33195v1",
+      "source": "arxiv",
+      "title": "ReVR: Dual-Path Concept Reasoning for Multimodal Fake News Detection",
+      "abstract": "Vision-language models (VLMs) support multimodal fake news detection (FND) by producing explicit analyses. Recent methods further improve interpretability by organizing verification knowledge into explicit concepts. However, two questions remain: how to improve the reliability and applicability of verification concepts, and how to effectively apply reusable concepts to verify unseen news. We propose \\textbf{ReVR}, a dual-path reasoning framework that constructs and applies reusable verification concepts for multimodal fake news detection. An agentic workflow grounds and consolidates candidate concepts, while statistical profiles characterize their historical behavior. During inference, a coverage-oriented path aggregates evidence from the complete concept library using a trainable encoder, while a query-focused path prompts a frozen VLM to reason over selected concepts and their observations. A learned conflict resolver selects between the two predictions when they disagree. Experiments on fake news benchmarks demonstrate the effectiveness of the method regarding detection performance and generalizability.",
+      "authors": [
+        "Zhikai Tan",
+        "Yuzhou Yang",
+        "Qichao Ying",
+        "Pinjie Xu",
+        "Sheng Li",
+        "Zhenxing Qian",
+        "Xinpeng Zhang"
+      ],
+      "primary_category": "cs.MM",
+      "categories": [
+        "cs.MM"
+      ],
+      "published": "2026-09-27T04:24:25+00:00",
+      "link": "https://arxiv.org/pdf/2609.33195v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "reusable verification concepts for multimodal fake news detection",
+      "llm_evidence_cn": "面向多模态虚假新闻的可复用验证概念",
+      "llm_evidence": "面向多模态虚假新闻的可复用验证概念",
+      "canonical_evidence": "面向多模态虚假新闻的可复用验证概念",
+      "llm_tldr_en": "ReVR constructs and applies reusable verification concepts for multimodal fake news detection via a dual-path reasoning framework, grounding concepts with an agentic workflow and aggregating evidence with a coverage-oriented path.",
+      "llm_tldr_cn": "视觉语言模型可为多模态虚假新闻检测给出显式分析，但验证概念的可信度与对未见新闻的适用性仍待解决。该文提出ReVR双路径推理框架，通过智能体工作流对候选概念进行落地与整合，并用统计画像刻画概念的历史行为。推理阶段由覆盖导向路径聚合完整概念集的证据以判定新闻真伪。该框架在提升检测可解释性的同时增强了对未见新闻的泛化验证能力，为多模态虚假新闻检测提供了概念推理方案。",
+      "llm_tldr": "视觉语言模型可为多模态虚假新闻检测给出显式分析，但验证概念的可信度与对未见新闻的适用性仍待解决。该文提出ReVR双路径推理框架，通过智能体工作流对候选概念进行落地与整合，并用统计画像刻画概念的历史行为。推理阶段由覆盖导向路径聚合完整概念集的证据以判定新闻真伪。该框架在提升检测可解释性的同时增强了对未见新闻的泛化验证能力，为多模态虚假新闻检测提供了概念推理方案。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "detecting fake news by jointly analyzing textual content and visual information",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.33441v1",
+      "source": "arxiv",
+      "title": "MIC: Explaining Image-Claim Inconsistencies in AI-Generated Multimodal Misinformation",
+      "abstract": "Claims paired with AI-generated images are a rapidly growing form of misinformation. Existing automated fact-checking (AFC) methods mainly treat this as a provenance problem, detecting low-level synthesis artifacts to decide whether an image is AI-generated. However, such methods do not verify what human fact-checkers often check: whether an image's content is consistent with the context implied by its accompanying claim. To address this gap, we introduce MIC (Multimodal Inconsistency Checking), an AFC framework that assists human fact-checkers by detecting AI-generated multimodal misinformation and explaining inconsistencies using world knowledge. MIC first uses supervised fine-tuning (SFT) for task adaptation and then applies Group Relative Policy Optimization (GRPO) to directly optimize component-level verifiable rewards for verdict prediction, inconsistency type classification, visual evidence description, and world-knowledge explanation. We further introduce MIC-Bench, a benchmark comprising 8,812 image-claim instances derived from 4,406 claims, where each claim is paired with an authentic image and an AI-generated counterpart that introduces a controlled contextual inconsistency. Compared with SFT alone, GRPO further improves Macro-F1 by 4.67 and 4.11 points in the in-distribution and out-of-distribution settings, respectively, while also improving the semantic similarity of visual evidence descriptions and world-knowledge explanations to reference annotations. Our code and data are available at https://github.com/UKPLab/arxiv2026-mic.",
+      "authors": [
+        "Ruihong Zeng",
+        "Jonathan Tonglet",
+        "Preslav Nakov",
+        "Iryna Gurevych"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-09-27T10:46:42+00:00",
+      "link": "https://arxiv.org/pdf/2609.33441v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "detects AI-generated multimodal misinformation by checking image-claim consistency",
+      "llm_evidence_cn": "通过图像-声明一致性检测AI生成多模态错误信息",
+      "llm_evidence": "通过图像-声明一致性检测AI生成多模态错误信息",
+      "canonical_evidence": "通过图像-声明一致性检测AI生成多模态错误信息",
+      "llm_tldr_en": "MIC reframes AI-generated multimodal misinformation fact-checking from provenance detection to image-claim consistency, using SFT and group RL with world knowledge to detect and explain inconsistencies.",
+      "llm_tldr_cn": "针对现有自动事实核查只关注图像是否AI生成、忽视图像内容与声明语境是否一致的局限，本文提出MIC多模态不一致性核查框架，先经监督微调进行任务适配，再结合分组强化学习与世界知识生成不一致解释。实验表明该方法能在检测AI生成多模态错误信息的同时给出可解释依据，为人工核查员提供辅助，推动事实核查从溯源判定转向图文语义一致性验证。",
+      "llm_tldr": "针对现有自动事实核查只关注图像是否AI生成、忽视图像内容与声明语境是否一致的局限，本文提出MIC多模态不一致性核查框架，先经监督微调进行任务适配，再结合分组强化学习与世界知识生成不一致解释。实验表明该方法能在检测AI生成多模态错误信息的同时给出可解释依据，为人工核查员提供辅助，推动事实核查从溯源判定转向图文语义一致性验证。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.31766v1",
+      "source": "arxiv",
+      "title": "UNMATCH: Selective Unbalanced Token-Patch Matching for Forensic Image-Claim Verification",
+      "abstract": "Contextual image misuse pairs an image with a misleading claim. We study image-claim correspondence in fact-checked pairs containing out-of-context reuse, visual manipulation, or both. Existing pair-based detectors often compress the two modalities into a global compatibility score or learn a highly flexible interaction module, which can obscure a decisive local mismatch. We introduce directional multiscale coverage, a compact representation that summarizes local image-claim affinity in both directions and at three spatial scales. At each scale, each direction is summarized by its mean, lower quartile, and two thresholded support ratios; the signed difference between directional means completes a nine-dimensional scale descriptor. Concatenating the three scales yields a compact local representation for a lightweight global-local classifier. Under leakage-aware three-fold, three-seed evaluation on the Snopes subset of the Fauxtography benchmark, UNMATCH achieves 69.82 Macro-F1 and 71.05 balanced accuracy, exceeding the MCOT adaptation by 2.60 and 2.16 points. A matched-reassigned intervention shows that breaking the observed pairing lowers coverage and increases both discrepancy and false-pair probability.",
+      "authors": [
+        "Xinjin Li",
+        "Lian Lian",
+        "Yuanzhe Yang",
+        "Yudi Xia",
+        "Calvin Chang Liu",
+        "Yeyun Xu",
+        "Yu Ma",
+        "Jinghan Cao",
+        "Yuruo Gong"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-24T10:23:23+00:00",
+      "link": "https://arxiv.org/pdf/2609.31766v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "image-claim correspondence and local mismatch in fact-checked pairs",
+      "llm_evidence_cn": "事实核查图文对的局部错配检测",
+      "llm_evidence": "事实核查图文对的局部错配检测",
+      "canonical_evidence": "事实核查图文对的局部错配检测",
+      "llm_tldr_en": "Pair-based image-claim detectors compress modalities into a global score, hiding decisive local mismatches. UNMATCH introduces directional multiscale coverage, a nine-dimensional descriptor summarizing bidirectional local affinity across three scales, improving forensic image-claim verification.",
+      "llm_tldr_cn": "现有图像—声明配对检测器常将两种模态压缩为全局兼容性分数或使用高度灵活的交互模块，容易掩盖决定性的局部错配。该文提出方向性多尺度覆盖表示，在三个空间尺度上双向汇总图像与声明的局部亲和度，并构造九维尺度描述子用于取证式图文对应判定。方法在包含断章取义复用与视觉篡改的事实核查配对上验证了有效性，为多模态虚假信息验证提供了细粒度、可解释的错配证据。",
+      "llm_tldr": "现有图像—声明配对检测器常将两种模态压缩为全局兼容性分数或使用高度灵活的交互模块，容易掩盖决定性的局部错配。该文提出方向性多尺度覆盖表示，在三个空间尺度上双向汇总图像与声明的局部亲和度，并构造九维尺度描述子用于取证式图文对应判定。方法在包含断章取义复用与视觉篡改的事实核查配对上验证了有效性，为多模态虚假信息验证提供了细粒度、可解释的错配证据。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.25189v1",
+      "source": "arxiv",
+      "title": "GroundedGEO: Auditing the Evidence Gap in Generative Search Rankings",
+      "abstract": "Generative search systems rank products and services for consequential decisions, and publishers can cheaply make candidate text look relevant. Yet evidence status is not a text property but a claim-evidence relation: text-only rankers and defenses cannot separate honest detailed content from fabricated detail, creating an identifiability gap. We audit this gap with an evidence-paired benchmark (50 e-commerce queries, 1,950 cases) and a claim-level reranker, GroundedGEO, that penalizes query-relevant claims lacking support in a supplied packet. Matched rich variants control format and volume; packet twins add attestations at fixed text, while thinned packets withdraw them. On the frozen listwise ranker Qwen2.5-7B, unsupported-rich variants show significant normalized rank gain over clean candidates (+0.065 to +0.092 across claim profiles, Holm-corrected), while supported and neutral controls do not; the effect is model-dependent (marginal on MiMo-v2.5, absent on GLM-5.3-Flash). On a frozen pointwise scorer, oracle evidence labels cut the unsupported-rich top-3 rate from 0.65 to 0.43 (laundering from 0.61 to 0.39) at lambda=40 with zero false suppression; packet twins restore the original rates without changing text. Against a 370-claim human gold, all tested automatic judges fail the preregistered reliability gate, although the best local judge retains 79-100% of oracle suppression with zero measured false suppression on protected arms. Separately, stripping attestation coverage increases false suppression by 0.307. These diagnostic effects identify two limits on the evidence channel: label quality and packet coverage. They do not validate an automatic defense, and interpretation of the adverse human-gold arm remains pending adjudication.",
+      "authors": [
+        "Yihan Xia",
+        "Huiling Fan",
+        "Kangrong Zhong",
+        "Taotao Wang"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-09-21T17:07:10+00:00",
+      "link": "https://arxiv.org/pdf/2609.25189v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "claim-level reranker penalizing claims lacking external evidence support",
+      "llm_evidence_cn": "惩罚缺乏外部证据支持论断的论断级重排序",
+      "llm_evidence": "惩罚缺乏外部证据支持论断的论断级重排序",
+      "canonical_evidence": "惩罚缺乏外部证据支持论断的论断级重排序",
+      "llm_tldr_en": "Generative search rankers can be gamed by text that looks relevant, since evidence status is a claim-evidence relation rather than a text property. The authors build an evidence-paired benchmark and GroundedGEO, a claim-level reranker that penalizes query-relevant claims lacking support in a supplied evidence packet.",
+      "llm_tldr_cn": "生成式搜索系统会依据文本表面相关性排序，而发布者可低成本地让内容看似相关；但证据状态本质上是论断与证据之间的关系，纯文本排序器无法区分诚实详述与虚构细节，形成可识别性缺口。本文用含50个查询、1950个案例的证据配对基准审计该缺口，并提出论断级重排序器GroundedGEO，对缺乏所提供证据包支持的查询相关论断进行惩罚。实验显示无支撑的丰富变体受到显著抑制，说明引入外部证据可有效提升论断验证的可靠性。",
+      "llm_tldr": "生成式搜索系统会依据文本表面相关性排序，而发布者可低成本地让内容看似相关；但证据状态本质上是论断与证据之间的关系，纯文本排序器无法区分诚实详述与虚构细节，形成可识别性缺口。本文用含50个查询、1950个案例的证据配对基准审计该缺口，并提出论断级重排序器GroundedGEO，对缺乏所提供证据包支持的查询相关论断进行惩罚。实验显示无支撑的丰富变体受到显著抑制，说明引入外部证据可有效提升论断验证的可靠性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.32739v1",
+      "source": "arxiv",
+      "title": "Chatbot Engagement Does Not Always Beget Metalearning: Evidence from Three Countries",
+      "abstract": "Chatbots deliver real-time fact-checks, but whether a chatbot correction leaves anything behind once the chatbot is gone - metalearning, distinct from correcting misbeliefs - is untested. We report a preregistered, three-country randomized experiment (USA, India, Singapore; N ~ 2,200) on out-of-context image misinformation, manipulating a correction's channel affordances (synchronicity, bandwidth) across four conditions: Control, Links-only, Static explanation, and a Socratic Chatbot built on a validated out-of-context detector, with an unaided retest one week later. The Chatbot produced the largest immediate discernment gain (d = 0.097, p = .023). All three interventions reduced sharing of false claims (d ~ -0.12, p < .01). One week later, no advantage persisted: the Chatbot arm declined relative to Control, most sharply in India and Singapore, and in India on claims it never discussed. Decay tracked affordance level and did not vary by country. Engagement mechanisms, we argue, do not substitute for slow AI literacy.",
+      "authors": [
+        "Kokil Jaidka",
+        "Insyirah Binte Imam Mujtahid",
+        "Peng Qi",
+        "Harshit Aneja",
+        "Subhayan Mukerjee",
+        "Wynne Hsu",
+        "Mong Li Lee",
+        "Tsuhan Chen"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC"
+      ],
+      "published": "2026-09-26T15:57:38+00:00",
+      "link": "https://arxiv.org/pdf/2609.32739v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "out-of-context image misinformation correction built on a validated mismatch detector",
+      "llm_evidence_cn": "基于图文不匹配检测器的断章取义图像错误信息纠正",
+      "llm_evidence": "基于图文不匹配检测器的断章取义图像错误信息纠正",
+      "canonical_evidence": "基于图文不匹配检测器的断章取义图像错误信息纠正",
+      "llm_tldr_en": "Chatbots deliver real-time fact-checks, but whether correction persists as metalearning is untested. A preregistered three-country experiment on out-of-context image misinformation compares links, static explanation and a Socratic chatbot built on a validated out-of-context detector, with retest after one week.",
+      "llm_tldr_cn": "聊天机器人可实时提供事实核查，但其纠正效果能否在机器人消失后留下元学习能力尚不清楚。本文开展美国、印度、新加坡三国预注册随机实验（约2200人），针对断章取义图像错误信息，操纵同步性与带宽等渠道可供性，设置对照组、仅链接、静态解释和基于经验证图文不匹配检测器的苏格拉底式聊天机器人四种条件，并在一周后无辅助复测。结果显示聊天机器人即时辨别力提升最大，三种干预均降低虚假信息分享。研究为多模态错误信息干预设计提供了实证依据。",
+      "llm_tldr": "聊天机器人可实时提供事实核查，但其纠正效果能否在机器人消失后留下元学习能力尚不清楚。本文开展美国、印度、新加坡三国预注册随机实验（约2200人），针对断章取义图像错误信息，操纵同步性与带宽等渠道可供性，设置对照组、仅链接、静态解释和基于经验证图文不匹配检测器的苏格拉底式聊天机器人四种条件，并在一周后无辅助复测。结果显示聊天机器人即时辨别力提升最大，三种干预均降低虚假信息分享。研究为多模态错误信息干预设计提供了实证依据。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.32763v1",
+      "source": "arxiv",
+      "title": "Mandela-Bench: Multimodal Models Remember Canonical Images Instead of Seeing Them",
+      "abstract": "Historical photographs and other canonical images can now be edited seamlessly with a single instruction, often leaving no reliable pixel-level trace. In such cases, the only evidence of manipulation may be a fact about what the image depicts. Existing benchmarks instead rely on generator artefacts, image-caption inconsistencies, visual implausibilities, or external references, and therefore do not test whether a model can use its own world knowledge to verify a recognized image. We introduce Mandela-Bench, containing 1,507 edits of canonical images: 1,359 knowledge-only forgeries, each contradicting one verifiable fact, and 148 anchor-free controls that preserve the editing process without introducing a factual contradiction, together with 474 untouched originals. We score not only whether a model detects a forgery, but whether its explanation identifies the inserted entity or the fact being violated. Across 36 multimodal models, from 0.8B parameters to frontier scale, we find a consistent failure mode. When a public figure is removed from a familiar photograph, models still name that person in up to 72.7% of responses. Some models can distinguish the replacement face from the original when shown in isolation, yet still judge the full edited photograph as authentic. Providing the true event and date does not improve knowledge-grounded detection, whereas providing the same information after cropping away the recognizable composition does. Even under explicit verification prompts, only one of the 36 models meets the KGR criterion on at least half of the forged images. These results suggest that the failures cannot be explained by missing knowledge or inadequate perception alone. Instead, they are consistent with recognition biasing verification toward the remembered canonical image rather than the observed edit.",
+      "authors": [
+        "Yicheng Bao",
+        "Zhenkun Gao",
+        "Xiahui Guo",
+        "Mingqian Yang",
+        "Xueheng Li",
+        "Bangwei Liu",
+        "Mingang Chen",
+        "Lijun Li",
+        "Xuhong Wang",
+        "Xin Tan"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-26T16:32:00+00:00",
+      "link": "https://arxiv.org/pdf/2609.32763v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark testing whether models can verify a recognized image using world knowledge",
+      "llm_evidence_cn": "评测模型能否利用世界知识核验被编辑的经典图像真伪",
+      "llm_evidence": "评测模型能否利用世界知识核验被编辑的经典图像真伪",
+      "canonical_evidence": "评测模型能否利用世界知识核验被编辑的经典图像真伪",
+      "llm_tldr_en": "Mandela-Bench tests whether multimodal models can verify manipulated canonical images by world knowledge rather than generator artifacts, offering 1,507 edits contradicting verifiable facts.",
+      "llm_tldr_cn": "现有图像篡改检测基准多依赖生成器痕迹、图文不一致或外部参考，无法检验模型能否用自身世界知识核验被编辑的经典图像。本文提出Mandela-Bench，包含1507个经典图像编辑样本，其中1359个为与可验证事实相矛盾的知识型伪造，另设无锚点对照。实验揭示模型更多依赖记忆而非真正看图，为图像真实性核验提供了新评测维度。",
+      "llm_tldr": "现有图像篡改检测基准多依赖生成器痕迹、图文不一致或外部参考，无法检验模型能否用自身世界知识核验被编辑的经典图像。本文提出Mandela-Bench，包含1507个经典图像编辑样本，其中1359个为与可验证事实相矛盾的知识型伪造，另设无锚点对照。实验揭示模型更多依赖记忆而非真正看图，为图像真实性核验提供了新评测维度。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.32895v1",
+      "source": "arxiv",
+      "title": "PILAR: A Page-Grounded Unified Evidence Representation via an Entity-Linked Assertion Graph for Open-Domain QA Agents over Multimodal Document Corpora",
+      "abstract": "Open-domain question answering (ODQA) over multimodal document corpora requires linking evidence scattered across text, tables, and figures. Existing systems often store these sources separately or retrieve only coarse pages, which weakens global evidence linking. We present PILAR, a page-grounded unified evidence representation instantiated as an entity-linked assertion graph. PILAR maps sentence-, table-, and figure-derived facts into a common assertion space and uses the graph as a controlled linking layer over robust page retrieval. In a shared-reader evaluation with four agent frameworks, fourteen retrieval backends, and two benchmarks, PILAR achieves the best end-to-end EM/ANLS. Gains are largest on compositional, cross-document, and multimodal questions, with a single-shot improvement of +1.6 EM over flat retrieval, rising to +2.9 on compositional and +5.9 on 3-hop questions. Ablations show that current gains are driven mainly by the text-instantiated slice of the framework, while visual assertions help only after locality-aware filtering. We therefore position PILAR as a unified evidence representation for multimodal ODQA rather than a standalone visual-reasoning module.",
+      "authors": [
+        "Joongmin Shin",
+        "Gyuho Shim",
+        "Jung-hun Lee",
+        "Jaehyung Seo"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-09-26T19:31:43+00:00",
+      "link": "https://arxiv.org/pdf/2609.32895v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unified multimodal evidence representation linking text, table and figure facts for evidence-driven QA",
+      "llm_evidence_cn": "面向证据驱动问答的多模态统一证据表示与断言图链接",
+      "llm_evidence": "面向证据驱动问答的多模态统一证据表示与断言图链接",
+      "canonical_evidence": "面向证据驱动问答的多模态统一证据表示与断言图链接",
+      "llm_tldr_en": "Open-domain QA over multimodal corpora suffers because evidence is scattered across text, tables and figures. PILAR maps these facts into a shared assertion space and builds an entity-linked assertion graph over page retrieval, reaching best end-to-end results across four agents and two benchmarks.",
+      "llm_tldr_cn": "多模态文档开放域问答中，证据分散在文本、表格与图像里，现有系统分开存储或仅检索粗粒度页面，导致全局证据链接能力不足。本文提出PILAR，将句子、表格与图像事实映射到统一断言空间，并构建实体链接断言图作为页面检索之上的受控链接层。在四个智能体框架、十四种检索后端与两个基准上评测，取得最佳端到端表现。该证据表示方法为多模态证据驱动问答与事实核查提供了可复用的证据组织范式。",
+      "llm_tldr": "多模态文档开放域问答中，证据分散在文本、表格与图像里，现有系统分开存储或仅检索粗粒度页面，导致全局证据链接能力不足。本文提出PILAR，将句子、表格与图像事实映射到统一断言空间，并构建实体链接断言图作为页面检索之上的受控链接层。在四个智能体框架、十四种检索后端与两个基准上评测，取得最佳端到端表现。该证据表示方法为多模态证据驱动问答与事实核查提供了可复用的证据组织范式。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.33394v1",
+      "source": "arxiv",
+      "title": "Cross-modal Translation via Conditional Latent Denoising for Video Deepfake Detection",
+      "abstract": "The growing threat of video deepfakes necessitates multimodal detection. Beyond serving as independent indicators of authenticity, audio and visual signals have intrinsic dependencies that also provide an essential criterion for detection. Previous methods often overlook the cross-modal correspondences, hindering information transfer between domains and leaving crucial detection cues unexplored. To address this challenge, we propose a framework called Cross-modal Translation via Conditional Latent Denoising (CTCLD) for video deepfake detection. It connects the distinct distributions of heterogeneous modalities in latent spaces, enabling smooth cross-domain information transfer to improve detection performance. We first establish a Bayesian foundation by decomposing the audio-visual joint distribution. Subsequently, CTCLD translates both modalities via bidirectional latent denoising conditioned on each other, effectively capturing subtle inconsistencies in the manipulated signals. Experimental results demonstrate that the proposed CTCLD enables comprehensive domain alignment, resulting in a robust video deepfake detection approach with competitive performance.",
+      "authors": [
+        "Xinzhe Li",
+        "Youzhi Tu",
+        "Kong Aik Lee"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-27T09:16:15+00:00",
+      "link": "https://arxiv.org/pdf/2609.33394v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "cross-modal correspondence for multimodal detection",
+      "llm_evidence_cn": "跨模态对应关系用于多模态检测",
+      "llm_evidence": "跨模态对应关系用于多模态检测",
+      "canonical_evidence": "跨模态对应关系用于多模态检测",
+      "llm_tldr_en": "CTCLD connects distinct distributions of heterogeneous audio and visual modalities in latent space via conditional latent denoising, exploiting cross-modal correspondences for video deepfake detection.",
+      "llm_tldr_cn": "视频深度伪造检测中，音视频模态间存在内在依赖，但现有方法常忽略跨模态对应关系，导致关键检测线索未被充分利用。本文提出CTCLD框架，通过条件潜空间去噪连接异构模态的分布，实现跨域信息平滑迁移以增强检测。方法先建立贝叶斯式潜空间映射，再据此判别真伪。该跨模态一致性建模思路可迁移到图像文本失配检测等虚假信息核查任务。",
+      "llm_tldr": "视频深度伪造检测中，音视频模态间存在内在依赖，但现有方法常忽略跨模态对应关系，导致关键检测线索未被充分利用。本文提出CTCLD框架，通过条件潜空间去噪连接异构模态的分布，实现跨域信息平滑迁移以增强检测。方法先建立贝叶斯式潜空间映射，再据此判别真伪。该跨模态一致性建模思路可迁移到图像文本失配检测等虚假信息核查任务。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.33585v1",
+      "source": "arxiv",
+      "title": "IVT-Guard: All-in-One Reasoning Model for AI-Generated Content Detection",
+      "abstract": "The rapid proliferation of highly realistic AI-Generated Content (AIGC) necessitates robust and interpretable detection mechanisms. However, existing detectors are predominantly confined to single modalities and provide binary outputs without reasoning. While Multimodal Large Language Models (MLLMs) present a promising solution, their development is constrained by the scarcity of multimodal reasoning data and the reasoning-detection optimization dilemma, where explicit reasoning supervision can compromise detection accuracy. To this end, we introduce IVT-Set, a comprehensive dataset comprising over 152K diverse image, video, and text samples equipped with multi-granularity Chain-of-Thought (CoT) reasoning trajectories. Based on it, we propose IVT-Guard, a pioneering framework for unified and interpretable AIGC detection across image, video, and text modalities. Furthermore, to overcome the aforementioned optimization dilemma, we design a novel three-stage training paradigm: Artifact-Aware Pre-training, Artifact-to-Evidence Supervised Fine-Tuning via artifact-aware injection, and Evidence-Verdict Consistency Group Relative Policy Optimization. Extensive experiments demonstrate that IVT-Guard achieves state-of-the-art detection performance across in-domain, out-of-domain, and cross-dataset settings while delivering faithful reasoning. Code and data will be released.",
+      "authors": [
+        "Hongwei Niu",
+        "Yunpeng Luo",
+        "Hanjun Li",
+        "Ziyin Zhou",
+        "Jianghang Lin",
+        "Ke Yan",
+        "Shouhong Ding",
+        "Shengchuan Zhang",
+        "Liujuan Cao"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-27T14:00:55+00:00",
+      "link": "https://arxiv.org/pdf/2609.33585v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "interpretable multimodal image-video-text detection with reasoning benchmarks",
+      "llm_evidence_cn": "可解释的图像-视频-文本多模态检测与推理基准",
+      "llm_evidence": "可解释的图像-视频-文本多模态检测与推理基准",
+      "canonical_evidence": "可解释的图像-视频-文本多模态检测与推理基准",
+      "llm_tldr_en": "Existing AI-generated content detectors are single-modal and give binary outputs without reasoning, while MLLMs face scarce multimodal reasoning data. The authors release IVT-Set with 152K image, video and text samples with chain-of-thought traces, and propose IVT-Guard for interpretable all-in-one detection.",
+      "llm_tldr_cn": "现有AI生成内容检测器多局限于单一模态且只输出二值结果，缺乏可解释推理，而多模态大模型又受限于推理数据稀缺和推理-检测优化冲突。本文构建IVT-Set数据集，包含超过15.2万条图像、视频与文本样本及多粒度思维链推理轨迹，并提出一体化推理检测模型IVT-Guard。实验表明该模型在保持检测精度的同时提供可解释推理。其为多模态虚假内容检测的可解释性与基准建设提供了参考。",
+      "llm_tldr": "现有AI生成内容检测器多局限于单一模态且只输出二值结果，缺乏可解释推理，而多模态大模型又受限于推理数据稀缺和推理-检测优化冲突。本文构建IVT-Set数据集，包含超过15.2万条图像、视频与文本样本及多粒度思维链推理轨迹，并提出一体化推理检测模型IVT-Guard。实验表明该模型在保持检测精度的同时提供可解释推理。其为多模态虚假内容检测的可解释性与基准建设提供了参考。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.33659v1",
+      "source": "arxiv",
+      "title": "Learning Multimodal Embeddings with Evidence-Aligned Readout",
+      "abstract": "Multimodal large language models can expose task-relevant evidence through generation, but producing useful evidence does not by itself determine how it enters a retrieval embedding. We study whether the semantic organization of that evidence can also specify where representations are read. To address this question, we introduce EviAlign, which couples Semantic Evidence Generation with Boundary Readout in a shared multimodal large language model. It organizes evidence into five semantic units, reads the contextualized state at each unit boundary, and aggregates these states into a single normalized embedding. Generation and contrastive retrieval objectives jointly train this shared structure. With the same trailing readout, semantic evidence and free-form CoT yield nearly identical retrieval performance, suggesting that evidence organization alone does not explain the full gain. A controlled $2\\times3$ study compares consistent and permuted evidence organization across three readout strategies, using training targets with matched evidence spans. With five readout states and the same mean pooling, the advantage of consistent semantic organization grows from 0.65 points at length-based training positions to 2.39 at evidence boundaries, yielding a 1.74-point co-design interaction. Across 12 MMEB retrieval tasks, EviAlign achieves 76.9 average Recall@1 with 500K training pairs while retaining single-vector indexing and scoring.",
+      "authors": [
+        "Zirong Chen",
+        "Fuda Ye",
+        "Enjun Du",
+        "Junfu Pu",
+        "Xinlei Wang",
+        "Xinyu Zuo",
+        "Lisheng Duan",
+        "Haijin Liang",
+        "Jin Ma",
+        "Jiachuan Wang",
+        "Yongqi Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.IR"
+      ],
+      "published": "2026-09-27T15:20:31+00:00",
+      "link": "https://arxiv.org/pdf/2609.33659v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "evidence-aligned multimodal embeddings for retrieval",
+      "llm_evidence_cn": "面向检索的证据对齐多模态嵌入",
+      "llm_evidence": "面向检索的证据对齐多模态嵌入",
+      "canonical_evidence": "面向检索的证据对齐多模态嵌入",
+      "llm_tldr_en": "EviAlign couples semantic evidence generation with boundary readout in a shared multimodal LLM, reading states at five evidence-unit boundaries to build retrieval embeddings trained jointly with contrastive retrieval.",
+      "llm_tldr_cn": "针对多模态大模型虽能生成任务相关证据、但证据如何进入检索嵌入尚不明确的问题，本文提出EviAlign，将语义证据生成与边界读出耦合。它把证据组织为五个语义单元并在边界读取状态聚合为归一化嵌入，生成与对比检索目标联合训练共享结构。实验显示同一读出机制下语义证据优于自由形式思维链，表明证据的语义组织可决定表示读取位置，为多模态检索与证据对齐提供方法。",
+      "llm_tldr": "针对多模态大模型虽能生成任务相关证据、但证据如何进入检索嵌入尚不明确的问题，本文提出EviAlign，将语义证据生成与边界读出耦合。它把证据组织为五个语义单元并在边界读取状态聚合为归一化嵌入，生成与对比检索目标联合训练共享结构。实验显示同一读出机制下语义证据优于自由形式思维链，表明证据的语义组织可决定表示读取位置，为多模态检索与证据对齐提供方法。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.35028v1",
+      "source": "arxiv",
+      "title": "VEX-Bench: Benchmarking Verification Complexity of LLM-Generated Misinformation",
+      "abstract": "Large language models (LLMs) have made misinformation inexpensive to produce but not to verify, creating a growing asymmetry in the information ecosystem. Under tight time, labor, and budget constraints, media organizations, platforms, and fact-checkers rely on screening to prioritize which content to verify. We introduce VEX-Bench, a unified benchmark for evaluating the verification complexity of LLM-generated misinformation, as perceived during screening, across models and generation methods. Verification complexity is assessed along multiple dimensions derived from journalistic and fact-checking practices, capturing checkability, harm potential, source credibility signals, imposter legitimacy, and expected verification effort. We define the VEX score as an integrated measure combining elicitation yield and verification complexity to quantify how generated content consumes limited verification capacity. We construct a benchmark spanning two misinformation categories, 6 high-stakes domains, and 60 real-world topics, and evaluate 7 frontier LLMs and 7 generation methods, yielding 5{,}880 articles. We employ an LLM-as-judge for scalable evaluation and validate it using content-analysis methodology, including ordinal Krippendorff $α$ for inter-annotator reliability, complemented by fact-checking agents for verification. Our findings show that no single method dominates all dimensions, underscoring the need for multi-dimensional evaluation. LLMs can generate high-VEX misinformation at 3$\\times$ to 169$\\times$ lower cost than agent-based verification. Such content is often prioritized during screening, consuming scarce verification resources and introducing a systematic risk of misallocation in resource-constrained verification systems. The code is publicly available in our \\href{https://github.com/HanxunH/VEX-Bench}{GitHub repository}.",
+      "authors": [
+        "Hanxun Huang",
+        "Yutao Wu",
+        "Qizhou Wang",
+        "Silvia Montaña-Niño",
+        "Yige Li",
+        "Xiang Zheng",
+        "Elif Buse Doyuran",
+        "Phoebe Matich",
+        "Xiao Liu",
+        "Xingjun Ma",
+        "Sarah Erfani",
+        "Christopher Leckie"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL",
+        "cs.CY",
+        "cs.IR"
+      ],
+      "published": "2026-09-28T12:26:51+00:00",
+      "link": "https://arxiv.org/pdf/2609.35028v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark for verification complexity of LLM-generated misinformation and fact-checking screening",
+      "llm_evidence_cn": "面向大模型生成错误信息核查复杂度与事实核查筛查的基准",
+      "llm_evidence": "面向大模型生成错误信息核查复杂度与事实核查筛查的基准",
+      "canonical_evidence": "面向大模型生成错误信息核查复杂度与事实核查筛查的基准",
+      "llm_tldr_en": "LLMs make misinformation cheap to produce but costly to verify. VEX-Bench benchmarks the verification complexity of LLM-generated misinformation along dimensions like checkability, harm, source credibility, and expected verification effort, aiding screening and prioritization.",
+      "llm_tldr_cn": "大模型让错误信息的生产成本极低而核查成本高昂，媒体与事实核查机构需在资源受限下优先筛选待核查内容。作者提出统一基准 VEX-Bench，从可核查性、危害潜力、来源可信度、冒充合法性与预期核查工作量等维度评估大模型生成错误信息的核查复杂度。该基准在多种模型与生成方法上给出系统评测，为错误信息筛查与事实核查优先级排序提供了可复用框架。",
+      "llm_tldr": "大模型让错误信息的生产成本极低而核查成本高昂，媒体与事实核查机构需在资源受限下优先筛选待核查内容。作者提出统一基准 VEX-Bench，从可核查性、危害潜力、来源可信度、冒充合法性与预期核查工作量等维度评估大模型生成错误信息的核查复杂度。该基准在多种模型与生成方法上给出系统评测，为错误信息筛查与事实核查优先级排序提供了可复用框架。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.35193v1",
+      "source": "arxiv",
+      "title": "ConRAG: Lightweight inference of multi-hop relations",
+      "abstract": "Understanding how two entities are connected often requires tracing multi-hop relations across documents to identify intermediate entities and supporting evidence that explain a connection. This is a task that appears frequently in scientific research and other knowledge-intensive analyses. We formalise this setting as multi-hop relation inference: given two known endpoint entities, we aim to recover the bridge entities and evidence-grounded reasoning chains that connect them across a document corpus, and to generate an explanation grounded in the retrieved evidence. Existing multi-hop RAG systems typically seek an unknown answer entity rather than explicitly recovering the connection between two known endpoints and graph-based approaches often rely on costly LLM-extracted knowledge graphs that limit scalability to large document collections. We introduce ConRAG, which builds a lightweight entity-document graph from entity co-occurrence and LLM-based entity filtering. Its connective retrieval infers and semantically ranks paths between two endpoints. On MuSiQue and 2WikiMultiHopQA, ConRAG consistently improves bridge entity and reasoning chain recovery over strong RAG baselines, while reducing graph-indexing token cost by up to roughly 1.5 orders of magnitude. Our results show that endpoint-constrained path retrieval provides an effective and index-efficient approach to evidence-grounded relation discovery.",
+      "authors": [
+        "Kilian Bänziger",
+        "Sonia Laguna",
+        "Markus Kreft",
+        "Robert Jakob",
+        "Kevin O'Sullivan",
+        "Lasse B. Strand",
+        "Julia E. Vogt"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-09-28T13:54:42+00:00",
+      "link": "https://arxiv.org/pdf/2609.35193v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multi-hop retrieval with evidence-grounded reasoning chains",
+      "llm_evidence_cn": "带证据支撑推理链的多跳检索",
+      "llm_evidence": "带证据支撑推理链的多跳检索",
+      "canonical_evidence": "带证据支撑推理链的多跳检索",
+      "llm_tldr_en": "ConRAG formalizes multi-hop relation inference, recovering bridge entities and evidence-grounded reasoning chains between two known endpoints across a corpus, offering a lightweight alternative to costly LLM-based graph extraction.",
+      "llm_tldr_cn": "针对多跳检索增强系统通常只寻找未知答案实体、难以显式恢复两个已知实体间连接的问题，本文形式化多跳关系推断任务并提出ConRAG轻量方法，恢复桥接实体与基于证据的推理链。该方法降低对昂贵LLM抽取的依赖，能生成可解释的检索证据推理，为证据驱动的事实核查与知识密集分析提供支持。",
+      "llm_tldr": "针对多跳检索增强系统通常只寻找未知答案实体、难以显式恢复两个已知实体间连接的问题，本文形式化多跳关系推断任务并提出ConRAG轻量方法，恢复桥接实体与基于证据的推理链。该方法降低对昂贵LLM抽取的依赖，能生成可解释的检索证据推理，为证据驱动的事实核查与知识密集分析提供支持。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.35502v1",
+      "source": "arxiv",
+      "title": "Structured Latent Modeling for Supervised Multimodal Information Decomposition",
+      "abstract": "Multimodal prediction relies on diverse forms of evidence: information repeated across modalities, cues specific to a single source, and complex cross-modal dependencies that emerge only when inputs are considered together. While recent methods promote richer interactions, they lack a principled way to isolate these target-relative contributions within learned continuous representations. We introduce a framework that applies contrastive or masked objectives at intermediate layers, coupled with source-wise invertible normalizing flows and a supervised, low-rank latent variable model. This architecture explicitly factorizes the joint distribution into shared task-relevant variation, modality-specific predictive variation, and task-irrelevant dependence. Drawing connections to prior multimodal learning assumptions, our approach evaluates how modalities independently and jointly contribute to the target. Ultimately, this framework unites intermediate representation learning with structured likelihood-based guidance, offering a practical latent-variable lens for characterizing continuous multimodal interactions. Empirically, we demonstrate the effectiveness of our approach across diverse multimodal benchmarks, showing robust improvements in predictive performance.",
+      "authors": [
+        "Wanting Huang",
+        "Sanvesh Srivastava",
+        "Weiran Wang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-09-28T16:04:24+00:00",
+      "link": "https://arxiv.org/pdf/2609.35502v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "factorizes multimodal evidence into shared, modality-specific and irrelevant components",
+      "llm_evidence_cn": "将多模态证据分解为共享、模态特有与无关成分",
+      "llm_evidence": "将多模态证据分解为共享、模态特有与无关成分",
+      "canonical_evidence": "将多模态证据分解为共享、模态特有与无关成分",
+      "llm_tldr_en": "This work proposes a structured latent framework with contrastive or masked objectives and source-wise invertible flows to explicitly factorize multimodal representations into shared task-relevant, modality-specific and task-irrelevant variation.",
+      "llm_tldr_cn": "针对多模态预测中难以在连续表示里分离跨模态共享、模态特有与任务无关贡献的问题，本文提出结构化潜变量建模框架，在中间层施加对比或掩码目标，并结合逐源可逆归一化流与监督低秩潜变量模型。该架构将联合分布显式分解为共享任务相关、模态特有预测和任务无关三部分，为多模态特征解耦提供通用方法，可迁移到多模态虚假新闻检测等任务。",
+      "llm_tldr": "针对多模态预测中难以在连续表示里分离跨模态共享、模态特有与任务无关贡献的问题，本文提出结构化潜变量建模框架，在中间层施加对比或掩码目标，并结合逐源可逆归一化流与监督低秩潜变量模型。该架构将联合分布显式分解为共享任务相关、模态特有预测和任务无关三部分，为多模态特征解耦提供通用方法，可迁移到多模态虚假新闻检测等任务。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "multimodal fake news detection models that combine text, image, and social context features",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.35536v1",
+      "source": "arxiv",
+      "title": "Look Before You Judge: Training-Free Region Mining for Grounded and Explainable Deepfake Detection",
+      "abstract": "Multimodal large language models (MLLMs) can explain deepfake verdicts in natural language, but such explanations are not necessarily visually grounded in the visual evidence underlying the prediction. A model may describe plausible artifacts inferred from language priors rather than from image evidence. Existing grounding methods improve visual reliance through decoding or attention interventions, but they generally strengthen grounding over the entire image, making them ill-suited for forensic artifacts that are subtle, spatially localized, and image-dependent. We propose Look Before You Judge, a training-free framework that formulates explainable deepfake detection as a sequential evidence acquisition process. Instead of directly predicting image authenticity from holistic visual reasoning, our framework first identifies image-specific candidate evidence regions by contrasting the MLLM's decoder-to-visual attention between an original image and its Gaussian-blurred counterpart. The identified regions are then inspected individually, and the resulting local evidence is integrated with the global image context before reaching a final verdict. The framework operates without manipulation masks, external forensic models, or parameter updates, making it directly applicable to off-the-shelf MLLMs. Across five open-source MLLMs on TriDF and MMTD-Set, our framework improves detection accuracy by up to 12.8%, reduces CHAIR by up to 33.4% and hallucination rate by up to 21.3%, and outperforms representative training-free decoding and attention methods.",
+      "authors": [
+        "Chia-Ling Chen",
+        "Yu-Ting Ta",
+        "Jian-Yu Jiang-Lin",
+        "Tai-Ming Huang",
+        "Ling Lo",
+        "Po-Ching Chen",
+        "Yan-Tsung Wang",
+        "Pei-Heng Li",
+        "Ling Zou",
+        "Hong-Han Shuai",
+        "Wen-Huang Cheng"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-28T16:19:22+00:00",
+      "link": "https://arxiv.org/pdf/2609.35536v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "grounded and explainable deepfake detection, multimodal visual misinformation verification",
+      "llm_evidence_cn": "有据可依且可解释的深度伪造检测，属多模态视觉虚假信息核查",
+      "llm_evidence": "有据可依且可解释的深度伪造检测，属多模态视觉虚假信息核查",
+      "canonical_evidence": "有据可依且可解释的深度伪造检测，属多模态视觉虚假信息核查",
+      "llm_tldr_en": "MLLM deepfake explanations are often not visually grounded. The authors propose a training-free framework that treats explainable deepfake detection as sequential evidence acquisition, mining localized forensic regions to make verdicts and explanations faithful and grounded.",
+      "llm_tldr_cn": "现有多模态大模型虽能解释深度伪造判定，但其解释未必真正锚定图像中的伪造证据，易受语言先验误导。为此作者提出无训练框架 Look Before You Judge，将可解释检测建模为顺序证据获取过程，逐步挖掘局部伪造区域。实验表明该方法在保持检测性能的同时提升了视觉证据定位与解释的可信度，为可解释的多模态虚假信息检测提供了新思路。",
+      "llm_tldr": "现有多模态大模型虽能解释深度伪造判定，但其解释未必真正锚定图像中的伪造证据，易受语言先验误导。为此作者提出无训练框架 Look Before You Judge，将可解释检测建模为顺序证据获取过程，逐步挖掘局部伪造区域。实验表明该方法在保持检测性能的同时提升了视觉证据定位与解释的可信度，为可解释的多模态虚假信息检测提供了新思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
