@@ -1,0 +1,57 @@
+{
+  "date": "20260930",
+  "date_label": "",
+  "generated_at": "2026-09-30 22:50:59 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.27371v1",
+      "route": "202609/30/2609.27371v1-asap-visual-analytics-for-identifying-and-analyzing-image-patterns-in-ai-generated-images",
+      "title": "ASAP: Visual Analytics for Identifying and Analyzing Image Patterns in AI-generated Images",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向AI生成图像的欺骗模式可解释检测",
+      "first_seen_at": "2026-09-30 22:50:59 UTC",
+      "updated_at": "2026-09-30 22:50:59 UTC"
+    },
+    {
+      "paper_id": "2609.32327v1",
+      "route": "202609/30/2609.32327v1-hyperreco-retrieving-and-connecting-evidence-with-hypergraph-neural-networks-for-llm-multi-hop-reasoning",
+      "title": "HyperReCo: Retrieving and Connecting Evidence with Hypergraph Neural Networks for LLM Multi-hop Reasoning",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "超图检索连接证据支持推理",
+      "first_seen_at": "2026-09-30 22:50:59 UTC",
+      "updated_at": "2026-09-30 22:50:59 UTC"
+    },
+    {
+      "paper_id": "2609.35304v1",
+      "route": "202609/30/2609.35304v1-signal-or-noise-modality-contribution-and-cooperation-in-multimodal-graphrag",
+      "title": "Signal or Noise? Modality Contribution and Cooperation in Multimodal GraphRAG",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "多模态知识图谱上的模态感知检索与证据问答研究",
+      "first_seen_at": "2026-09-30 22:50:59 UTC",
+      "updated_at": "2026-09-30 22:50:59 UTC"
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-30T22:49:56.419155+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.27371v1",
+      "source": "arxiv",
+      "title": "ASAP: Visual Analytics for Identifying and Analyzing Image Patterns in AI-generated Images",
+      "abstract": "Generative image models can produce highly realistic images, raising concerns about potential misuse in creating deceptive content. Current deepfake approaches face several challenges, including limited generalizability, lack of interpretability, and poor actionability. To help address these, we present ASAP, an interactive visualization system designed to empower users in the analysis and summarization of deceptive patterns in AI-generated images. ASAP introduces a novel CLIP-adapted image encoder that generates interpretable representations, enabling the extraction of influential pixel regions via calculated masks. This approach facilitates the identification of key deceptive features through influence measurement techniques. These backend techniques are integrated into a visual analytics dashboard that allows users to quantify and analyze authenticity-indicative patterns in image collections containing both authentic and AI-generated images. This approach also supports the comparative analysis of various generative models, including GANs and diffusion models. We demonstrate ASAP's efficacy through a user study and two application scenarios using established fake image detection benchmarks, showcasing its ability to effectively extract and quantify deceptive patterns.",
+      "authors": [
+        "Jinbin Huang",
+        "Yuki Ueno",
+        "Chen Chen",
+        "Aditi Mishra",
+        "Bum Chul Kwon",
+        "Zhicheng Liu",
+        "Chris Bryan"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC",
+        "cs.CV"
+      ],
+      "published": "2026-09-23T05:20:13+00:00",
+      "link": "https://arxiv.org/pdf/2609.27371v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "interpretable detection of deceptive patterns in AI-generated images",
+      "llm_evidence_cn": "面向AI生成图像的欺骗模式可解释检测",
+      "llm_evidence": "面向AI生成图像的欺骗模式可解释检测",
+      "canonical_evidence": "面向AI生成图像的欺骗模式可解释检测",
+      "llm_tldr_en": "ASAP builds an interactive visual analytics system with a CLIP-adapted encoder to identify and summarize interpretable deceptive patterns in AI-generated images, supporting explainable detection of manipulated visual content.",
+      "llm_tldr_cn": "该文针对深度伪造与AI生成图像检测方法普遍缺乏泛化性、可解释性与可操作性的问题，提出交互式可视分析系统ASAP。系统采用适配CLIP的图像编码器生成可解释表示，并通过影响力度量提取关键像素区域，从而定位和归纳图像中的欺骗性模式。实验展示该系统能帮助用户识别与总结生成式图像中的可疑特征，为可解释的多模态虚假信息检测提供了可迁移的视觉取证思路。",
+      "llm_tldr": "该文针对深度伪造与AI生成图像检测方法普遍缺乏泛化性、可解释性与可操作性的问题，提出交互式可视分析系统ASAP。系统采用适配CLIP的图像编码器生成可解释表示，并通过影响力度量提取关键像素区域，从而定位和归纳图像中的欺骗性模式。实验展示该系统能帮助用户识别与总结生成式图像中的可疑特征，为可解释的多模态虚假信息检测提供了可迁移的视觉取证思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.32327v1",
+      "source": "arxiv",
+      "title": "HyperReCo: Retrieving and Connecting Evidence with Hypergraph Neural Networks for LLM Multi-hop Reasoning",
+      "abstract": "Large language models (LLMs) have shown strong capabilities, with retrieval-augmented generation (RAG) supporting complex multi-hop reasoning by retrieving evidence distributed across documents. Graph-based approaches exploit connections among evidence, and hypergraph-based retrieval further preserves higher-order entity associations within documents and connects documents through shared entities. However, existing hypergraph retrievers often rely on predefined structural expansion or diffusion, which may miss query-dependent interactions needed to identify relevant evidence. They also leave connections among retrieved evidence implicit, requiring LLMs to reconstruct these connections before reasoning. Therefore, we propose HyperReCo, a framework for retrieving and connecting evidence with a hypergraph neural network (HyperGNN). We represent each document as a hyperedge over its extracted entities, with shared entities connecting the hyperedges. Through hypergraph message passing with joint supervision over documents and entities, the HyperGNN learns query-dependent interactions to retrieve complementary evidence. We further introduce Gradient-Guided Hyper-Path Decoding (GGHD), which uses gradient attribution to interpret the learned interactions and translate them into explicit hyper-paths that help LLMs combine complementary facts for multi-hop reasoning. Experiments on six benchmarks show that HyperReCo achieves the best retrieval performance among the compared methods on all three multi-hop QA datasets, together with strong downstream QA performance. Case studies and further analyses demonstrate the utility of decoded hyper-paths for connecting retrieved evidence.",
+      "authors": [
+        "Zicheng Zhao",
+        "Linhao Luo",
+        "Junnan Dong",
+        "Haoran Luo",
+        "Xiaoli Li",
+        "Shirui Pan",
+        "Chen Gong"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-26T07:43:30+00:00",
+      "link": "https://arxiv.org/pdf/2609.32327v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "hypergraph retrieval connecting evidence for reasoning",
+      "llm_evidence_cn": "超图检索连接证据支持推理",
+      "llm_evidence": "超图检索连接证据支持推理",
+      "canonical_evidence": "超图检索连接证据支持推理",
+      "llm_tldr_en": "HyperReCo uses hypergraph neural networks to explicitly retrieve and connect higher-order evidence links across documents, improving retrieval-augmented multi-hop reasoning for LLMs.",
+      "llm_tldr_cn": "针对检索增强生成中多跳推理需要跨文档证据、而现有超图检索器依赖预定义扩展并遗留隐式连接的问题，本文提出HyperReCo。该方法用超图神经网络在检索阶段显式建模文档内高阶实体关联并连接跨文档证据，使证据间关系对推理模型可见。实验表明其能更精准地检索与连接相关证据，提升大模型多跳推理效果。其贡献在于为需要外部证据支撑的推理与核查任务提供了更强的证据组织方式。",
+      "llm_tldr": "针对检索增强生成中多跳推理需要跨文档证据、而现有超图检索器依赖预定义扩展并遗留隐式连接的问题，本文提出HyperReCo。该方法用超图神经网络在检索阶段显式建模文档内高阶实体关联并连接跨文档证据，使证据间关系对推理模型可见。实验表明其能更精准地检索与连接相关证据，提升大模型多跳推理效果。其贡献在于为需要外部证据支撑的推理与核查任务提供了更强的证据组织方式。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.35304v1",
+      "source": "arxiv",
+      "title": "Signal or Noise? Modality Contribution and Cooperation in Multimodal GraphRAG",
+      "abstract": "Multimodal knowledge graphs (KGs) integrate information from text, figures, tables, and other modalities into a unified structured representation, with the promise that richer evidence enables better inference. In GraphRAG systems built over such graphs, it is commonly assumed that retrieving evidence from more modalities at inference time improves downstream performance. Yet, redundant or overlapping multimodal evidence may distract language models in question answering (QA), and whether each modality contributes equally across questions, models, and tasks remains poorly understood. In this work, we study how modality-aware retrieval affects downstream inference in a multimodal GraphRAG pipeline, using document visual question answering (DocVQA) as a testbed. We extend an existing KG-based QA framework to be modality-aware, leveraging the graph structure to track which modality supports which facts and to selectively filter evidence at the edge level. This enables us to investigate whether providing all available multimodal evidence at inference time benefits QA, and to evaluate the contribution and cooperation of modalities across question, task, and model characteristics. Through a controlled analysis within a state-of-the-art multimodal GraphRAG pipeline, five multimodal LLMs and two DocVQA benchmarks, we find that tables and text provide the strongest contributions, and that combining modalities frequently produces redundancy rather than synergy, particularly for pairs involving textual information. Positive cooperation appears mainly between non-text modalities and depends on question intent and task type. Our findings argue for selective, modality-aware retrieval in the design of more effective GraphRAG systems, where modalities are filtered according to the downstream task rather than retrieved uniformly.",
+      "authors": [
+        "Antonios Georgakopoulos",
+        "Paul Groth",
+        "Lise Stork"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-09-28T14:44:24+00:00",
+      "link": "https://arxiv.org/pdf/2609.35304v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "study of modality-aware retrieval over multimodal knowledge graphs for evidence-based QA",
+      "llm_evidence_cn": "多模态知识图谱上的模态感知检索与证据问答研究",
+      "llm_evidence": "多模态知识图谱上的模态感知检索与证据问答研究",
+      "canonical_evidence": "多模态知识图谱上的模态感知检索与证据问答研究",
+      "llm_tldr_en": "Multimodal GraphRAG assumes retrieving more modalities helps inference, but redundant evidence may distract LLMs. Studying modality-aware retrieval on DocVQA-style tasks, the authors show modality contributions vary across questions, models and tasks, offering guidance for evidence-based reasoning.",
+      "llm_tldr_cn": "多模态知识图谱的GraphRAG系统常假设检索越多模态的证据越能提升推理，但冗余或重叠的多模态证据可能干扰语言模型。本文系统研究模态感知检索如何影响多模态GraphRAG的下游问答推理，在文档视觉问答等任务上分析各模态的贡献与协作。结果发现不同模态在问题、模型与任务间贡献并不均等，冗余证据甚至可能降低性能。该工作为多模态证据的检索与利用提供了实证指导，对证据驱动的多模态事实核查具有借鉴意义。",
+      "llm_tldr": "多模态知识图谱的GraphRAG系统常假设检索越多模态的证据越能提升推理，但冗余或重叠的多模态证据可能干扰语言模型。本文系统研究模态感知检索如何影响多模态GraphRAG的下游问答推理，在文档视觉问答等任务上分析各模态的贡献与协作。结果发现不同模态在问题、模型与任务间贡献并不均等，冗余证据甚至可能降低性能。该工作为多模态证据的检索与利用提供了实证指导，对证据驱动的多模态事实核查具有借鉴意义。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

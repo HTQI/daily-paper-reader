@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-09-29</span>
+      <span class="dpr-home-dashboard-kicker">2026-09-30</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 14 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 3 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>3</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>11</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>3</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-09-29 23:23:04 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-09-30 22:50:59 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,7 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日精读3篇、速读11篇，共处理14篇推荐论文，重点聚焦多模态虚假信息检测与解释。最值得看的是满分论文《ReVR》和《MIC》，分别提出双路径概念推理检测多模态假新闻、解释AI生成图像与声明间的不一致。普通读者可优先了解AI生成内容如何被识别与溯源，遇到可疑图文时多留意图文是否互相印证。</p>
+<p>今日共生成 3 篇推荐（精读 0 篇，速读 3 篇）</p>
+<p>速读：《ASAP: Visual Analytics for Identifying and Analyzing Image Patterns in AI-generated Images》（6.0/10）, 《HyperReCo: Retrieving and Connecting Evidence with Hypergraph Neural Networks for LLM Multi-hop Reasoning》（6.0/10）, 《Signal or Noise? Modality Contribution and Cooperation in Multimodal GraphRAG》（6.0/10）</p>
+<p>这些结果覆盖了当下较热的方向，建议先看精读区论文的关键问题与方法。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -78,12 +80,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">3 篇</strong>
+    <strong class="dpr-home-dashboard-count">0 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="ReVR: Dual-Path Concept Reasoning for Multimodal Fake News Detection">ReVR: Dual-Path Concept Reasoning for Multimodal Fake News Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="MIC: Explaining Image-Claim Inconsistencies in AI-Generated Multimodal Misinformation">MIC: Explaining Image-Claim Inconsistencies in AI-Generated Multimodal Misinformation</span></li><li><span class="dpr-home-dashboard-paper-title" title="UNMATCH: Selective Unbalanced Token-Patch Matching for Forensic Image-Claim Verification">UNMATCH: Selective Unbalanced Token-Patch Matching for Forensic Image-Claim Verification</span></li></ul>
+<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>3</strong></span></div>
+
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -91,12 +93,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">11 篇</strong>
+    <strong class="dpr-home-dashboard-count">3 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="GroundedGEO: Auditing the Evidence Gap in Generative Search Rankings">GroundedGEO: Auditing the Evidence Gap in Generative Search Rankings</span></li><li><span class="dpr-home-dashboard-paper-title" title="Chatbot Engagement Does Not Always Beget Metalearning: Evidence from Three Countries">Chatbot Engagement Does Not Always Beget Metalearning: Evidence from Three Countries</span></li><li><span class="dpr-home-dashboard-paper-title" title="Mandela-Bench: Multimodal Models Remember Canonical Images Instead of Seeing Them">Mandela-Bench: Multimodal Models Remember Canonical Images Instead of Seeing Them</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="ASAP: Visual Analytics for Identifying and Analyzing Image Patterns in AI-generated Images">ASAP: Visual Analytics for Identifying and Analyzing Image Patterns in AI-generated Images</span></li><li><span class="dpr-home-dashboard-paper-title" title="HyperReCo: Retrieving and Connecting Evidence with Hypergraph Neural Networks for LLM Multi-hop Reasoning">HyperReCo: Retrieving and Connecting Evidence with Hypergraph Neural Networks for LLM Multi-hop Reasoning</span></li><li><span class="dpr-home-dashboard-paper-title" title="Signal or Noise? Modality Contribution and Cooperation in Multimodal GraphRAG">Signal or Noise? Modality Contribution and Cooperation in Multimodal GraphRAG</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>11</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>3</strong></span></div>
 </section>
 </div>
 
