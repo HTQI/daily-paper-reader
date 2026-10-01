@@ -1,0 +1,39 @@
+{
+  "label": "2026-10-01",
+  "date": "2026-10-01",
+  "generated_at": "2026-10-01T23:31:38",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202610/01/2609.30250v1-agentic-detection-of-online-conspiracies",
+      "section": "quick",
+      "title_en": "Agentic Detection of Online Conspiracies",
+      "authors": "Lior Biton, Oren Tsur",
+      "date": "2026-09-24",
+      "pdf": "https://arxiv.org/pdf/2609.30250v1",
+      "score": "6.0",
+      "evidence": "利用社会语境的阴谋论话语代理式检测",
+      "tldr": "社交媒体阴谋论常以支持、关切、批评、讽刺或嘲讽等模糊形式出现，核心难点是推断说话者意图而非仅识别显式主张。论文提出带社交查询工具的智能体框架，利用相关社会语境按需检索证据。在覆盖四年希伯来语推文（含选举与新冠疫苗议题）的人工标注对抗集上，语境感知流程优于纯文本分类，智能体框架也显著优于非智能体基线。该工作将阴谋论检测视为社会嵌入的解释任务，强调自适应推理与工具调用。",
+      "tags": "query:mfnd",
+      "abstract_en": "Conspiratorial discourse on social media is not always expressed through explicit claims or stable lexical markers. The same surface content may express endorsement, legitimate concerns, criticism, satire, or mockery. The main challenge is therefore not only recognizing conspiracy-related claims, but inferring the speaker's intent -- the utterance's illocutionary force. We argue that this can be achieved through the use of relevant social contexts and propose an agentic framework, equipped with a set of tools supporting social queries.   We demonstrate the benefits of our approach on a unique dataset of Hebrew tweets, covering 80\\%--90\\% of the public Hebrew tweets published over a four-year span (late 2018-- early 2023), encompassing several election cycles as well as the COVID pandemic years and related vaccination campaigns. This extensive coverage can be used in recovering different social contexts. Evaluating our framework on a manually-annotated adversarial dataset, we find that context-aware workflows consistently outperform text-only classification and that the agentic framework performs significantly better than other frameworks and settings, including a non-agentic model exposed to the same contexts available to the agent. We further provide an analysis of the results, the errors and efficiency (token economy) tradeoffs.   These findings support viewing the task of conspiracy detection as a socially embedded interpretation task, in which effective classification depends not only on access to contexts, but also on adaptive reasoning in which the agent uses tools on a per-case basis, asking only for evidence relevant to its current reasoning step.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202610/01/2609.32466v1-assemble-atomic-skills-for-evidence-grounded-video-reasoning",
+      "section": "quick",
+      "title_en": "ASSEMBLE: Atomic Skills for Evidence-Grounded Video Reasoning",
+      "authors": "Xiyang Wu, Zongxia Li, Shengxin Zhang, Zhichao Liu, Dinesh Manocha",
+      "date": "2026-09-26",
+      "pdf": "https://arxiv.org/pdf/2609.32466v1",
+      "score": "6.0",
+      "evidence": "带显式引用的证据落地视频推理",
+      "tldr": "长视频推理需跨时刻、实体和事件整合分散证据，但答案正确不代表模型真正依赖了正确片段。ASSEMBLE把局部观察与跨片段叙事组织成带时间戳、可追溯的证据目录，让接地感知阅读器组合问题特定原子技能，输出显式证据引用与支持度评估。训练先做教师监督微调，再用GRPO联合优化答案正确性与引用对齐；9B阅读器在三个长视频基准上达59.2%宏平均准确率，超过Gemini-2.5-Pro的58.3%，Grounded准确率提升6.7%。这表明显式证据接地能融入长视频推理且不牺牲答案准确率。",
+      "tags": "query:mfnd",
+      "abstract_en": "Complex video reasoning often depends on evidence scattered across distant moments, entities, and events, yet a correct answer alone does not reveal whether a model relied on the right parts of the video. We introduce ASSEMBLE, a framework that makes supporting evidence explicit throughout long-video reasoning. ASSEMBLE organizes local observations and cross-clip narratives into timestamped evidence catalogs traceable to the source video. A grounding-aware reader then composes question-specific atomic skills whose structured outputs contain explicit evidence references and support assessments. We use correctness-gated citation alignment as a direct grounding signal: after teacher-supervised fine-tuning, Group Relative Policy Optimization (GRPO) jointly optimizes answer correctness and citation alignment. This produces inspectable intermediate traces while keeping final predictions linked to explicit supporting evidence. Using a 9B reader supervised by a 235B teacher and shared precomputed evidence catalogs, ASSEMBLE achieves 59.2% macro-averaged answer accuracy across three long-video reasoning benchmarks, compared with 58.3% for Gemini-2.5-Pro, while improving macro-averaged overlap-based Grounded accuracy by 6.7%, with gains on all three benchmarks. Ablations further show that, with the same post-trained reader and inference budget, structured skill inference improves Grounded accuracy over free-form reasoning. Together, these results show that explicit evidence grounding can be integrated directly into long-video reasoning without sacrificing answer accuracy.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

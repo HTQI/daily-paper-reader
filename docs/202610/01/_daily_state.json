@@ -1,0 +1,41 @@
+{
+  "date": "20261001",
+  "date_label": "",
+  "generated_at": "2026-10-01 23:31:36 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.30250v1",
+      "route": "202610/01/2609.30250v1-agentic-detection-of-online-conspiracies",
+      "title": "Agentic Detection of Online Conspiracies",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "利用社会语境的阴谋论话语代理式检测",
+      "first_seen_at": "2026-10-01 23:31:36 UTC",
+      "updated_at": "2026-10-01 23:31:36 UTC"
+    },
+    {
+      "paper_id": "2609.32466v1",
+      "route": "202610/01/2609.32466v1-assemble-atomic-skills-for-evidence-grounded-video-reasoning",
+      "title": "ASSEMBLE: Atomic Skills for Evidence-Grounded Video Reasoning",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "带显式引用的证据落地视频推理",
+      "first_seen_at": "2026-10-01 23:31:36 UTC",
+      "updated_at": "2026-10-01 23:31:36 UTC"
+    }
+  ]
+}

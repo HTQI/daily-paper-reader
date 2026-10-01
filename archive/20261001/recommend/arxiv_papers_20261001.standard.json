@@ -1,0 +1,93 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-01T23:29:38.073764+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.30250v1",
+      "source": "arxiv",
+      "title": "Agentic Detection of Online Conspiracies",
+      "abstract": "Conspiratorial discourse on social media is not always expressed through explicit claims or stable lexical markers. The same surface content may express endorsement, legitimate concerns, criticism, satire, or mockery. The main challenge is therefore not only recognizing conspiracy-related claims, but inferring the speaker's intent -- the utterance's illocutionary force. We argue that this can be achieved through the use of relevant social contexts and propose an agentic framework, equipped with a set of tools supporting social queries.   We demonstrate the benefits of our approach on a unique dataset of Hebrew tweets, covering 80\\%--90\\% of the public Hebrew tweets published over a four-year span (late 2018-- early 2023), encompassing several election cycles as well as the COVID pandemic years and related vaccination campaigns. This extensive coverage can be used in recovering different social contexts. Evaluating our framework on a manually-annotated adversarial dataset, we find that context-aware workflows consistently outperform text-only classification and that the agentic framework performs significantly better than other frameworks and settings, including a non-agentic model exposed to the same contexts available to the agent. We further provide an analysis of the results, the errors and efficiency (token economy) tradeoffs.   These findings support viewing the task of conspiracy detection as a socially embedded interpretation task, in which effective classification depends not only on access to contexts, but also on adaptive reasoning in which the agent uses tools on a per-case basis, asking only for evidence relevant to its current reasoning step.",
+      "authors": [
+        "Lior Biton",
+        "Oren Tsur"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-09-24T17:58:43+00:00",
+      "link": "https://arxiv.org/pdf/2609.30250v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic detection of conspiracy discourse using social context",
+      "llm_evidence_cn": "利用社会语境的阴谋论话语代理式检测",
+      "llm_evidence": "利用社会语境的阴谋论话语代理式检测",
+      "canonical_evidence": "利用社会语境的阴谋论话语代理式检测",
+      "llm_tldr_en": "Conspiratorial social media discourse rarely uses explicit claims, so intent must be inferred. An agentic framework with social-query tools infers illocutionary force and detects conspiracies in a large Hebrew tweet dataset.",
+      "llm_tldr_cn": "社交媒体上的阴谋论话语常不通过显式主张表达，同一内容可能表示支持、质疑、讽刺或嘲讽，因此关键挑战是推断说话者的意图即言外之力。本文提出配备社交查询工具的代理式框架，利用相关社会语境推断话语意图，以识别阴谋论与错误信息相关内容。研究在覆盖四年、包含多个选举周期与疫情阶段的希伯来语推文数据集上验证了方法有效性，覆盖了80%至90%的公开希伯来语推文。其贡献在于表明引入社会语境可提升社交媒体阴谋论话语的识别能力。",
+      "llm_tldr": "社交媒体上的阴谋论话语常不通过显式主张表达，同一内容可能表示支持、质疑、讽刺或嘲讽，因此关键挑战是推断说话者的意图即言外之力。本文提出配备社交查询工具的代理式框架，利用相关社会语境推断话语意图，以识别阴谋论与错误信息相关内容。研究在覆盖四年、包含多个选举周期与疫情阶段的希伯来语推文数据集上验证了方法有效性，覆盖了80%至90%的公开希伯来语推文。其贡献在于表明引入社会语境可提升社交媒体阴谋论话语的识别能力。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "detecting rumors based on multimodal posts that integrate text, image, video, and social context",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.32466v1",
+      "source": "arxiv",
+      "title": "ASSEMBLE: Atomic Skills for Evidence-Grounded Video Reasoning",
+      "abstract": "Complex video reasoning often depends on evidence scattered across distant moments, entities, and events, yet a correct answer alone does not reveal whether a model relied on the right parts of the video. We introduce ASSEMBLE, a framework that makes supporting evidence explicit throughout long-video reasoning. ASSEMBLE organizes local observations and cross-clip narratives into timestamped evidence catalogs traceable to the source video. A grounding-aware reader then composes question-specific atomic skills whose structured outputs contain explicit evidence references and support assessments. We use correctness-gated citation alignment as a direct grounding signal: after teacher-supervised fine-tuning, Group Relative Policy Optimization (GRPO) jointly optimizes answer correctness and citation alignment. This produces inspectable intermediate traces while keeping final predictions linked to explicit supporting evidence. Using a 9B reader supervised by a 235B teacher and shared precomputed evidence catalogs, ASSEMBLE achieves 59.2% macro-averaged answer accuracy across three long-video reasoning benchmarks, compared with 58.3% for Gemini-2.5-Pro, while improving macro-averaged overlap-based Grounded accuracy by 6.7%, with gains on all three benchmarks. Ablations further show that, with the same post-trained reader and inference budget, structured skill inference improves Grounded accuracy over free-form reasoning. Together, these results show that explicit evidence grounding can be integrated directly into long-video reasoning without sacrificing answer accuracy.",
+      "authors": [
+        "Xiyang Wu",
+        "Zongxia Li",
+        "Shengxin Zhang",
+        "Zhichao Liu",
+        "Dinesh Manocha"
+      ],
+      "primary_category": "cs.MM",
+      "categories": [
+        "cs.MM"
+      ],
+      "published": "2026-09-26T10:57:05+00:00",
+      "link": "https://arxiv.org/pdf/2609.32466v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "evidence-grounded video reasoning with explicit citations",
+      "llm_evidence_cn": "带显式引用的证据落地视频推理",
+      "llm_evidence": "带显式引用的证据落地视频推理",
+      "canonical_evidence": "带显式引用的证据落地视频推理",
+      "llm_tldr_en": "ASSEMBLE organizes long-video observations into timestamped evidence catalogs and composes atomic skills to produce explicit evidence references for grounded reasoning.",
+      "llm_tldr_cn": "针对复杂视频推理依赖分散证据、而正确答案无法说明模型是否使用正确片段的问题，本文提出 ASSEMBLE 框架，将局部观察与跨片段叙事整理为带时间戳、可溯源的证据目录，并由落地感知阅读器组合问题相关的原子技能，输出显式证据引用与支持判断。方法以正确性门控的引用对齐作为直接落地信号，结合教师监督微调与GRPO优化。该工作使长视频推理的支持证据显式可查，提升推理可验证性。",
+      "llm_tldr": "针对复杂视频推理依赖分散证据、而正确答案无法说明模型是否使用正确片段的问题，本文提出 ASSEMBLE 框架，将局部观察与跨片段叙事整理为带时间戳、可溯源的证据目录，并由落地感知阅读器组合问题相关的原子技能，输出显式证据引用与支持判断。方法以正确性门控的引用对齐作为直接落地信号，结合教师监督微调与GRPO优化。该工作使长视频推理的支持证据显式可查，提升推理可验证性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
