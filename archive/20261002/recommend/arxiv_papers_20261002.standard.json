@@ -1,0 +1,297 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-02T22:34:54.090614+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 3,
+    "deep_cap": 6,
+    "deep_selected": 3,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2609.36850v1",
+      "source": "arxiv",
+      "title": "Rethinking Multimodal Fake News Detection in the Generative AI Era",
+      "abstract": "Generative content is increasingly entering the production and dissemination of news, transforming fake news from manually fabricated or simply manipulated material into complex forms in which native and generated content jointly participate. Existing multimodal fake news detection research primarily focuses on veracity assessment and rarely characterizes how generativity differences affect the reliability of evidence. In contrast, AIGC detection primarily determines whether content is generated or modified by generative models, but it does not by itself establish whether the underlying news event is true. To bridge the separation between these tasks in data and evaluation, we construct Weibo26, a multimodal fake news detection dataset for generative-content scenarios. On this basis, we propose the Generativity-Aware Hierarchical Reasoning (GAHR) framework, which combines global judgment with local correction so that generativity information participates in news-veracity reasoning. Experiments on multiple existing fake news detection benchmarks and Weibo26 show that GAHR achieves competitive veracity-detection performance while effectively identifying generative content.",
+      "authors": [
+        "Wenbin Shen",
+        "Guoxuan Qin",
+        "Guangxu Yao",
+        "Baodong Wang",
+        "Yuanbo Rui",
+        "Zhichao Lian"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CV",
+        "cs.MM"
+      ],
+      "published": "2026-09-29T06:59:46+00:00",
+      "link": "https://arxiv.org/pdf/2609.36850v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "multimodal fake news detection dataset for generative content",
+      "llm_evidence_cn": "面向生成内容的多模态虚假新闻检测数据集",
+      "llm_evidence": "面向生成内容的多模态虚假新闻检测数据集",
+      "canonical_evidence": "面向生成内容的多模态虚假新闻检测数据集",
+      "llm_tldr_en": "Generative content turns fake news into hybrid forms, yet multimodal detection mainly assesses veracity and ignores generativity's effect on evidence reliability. This paper builds Weibo26, a dataset bridging fake news and AIGC detection.",
+      "llm_tldr_cn": "生成式内容使虚假新闻从人工捏造转向原生与生成内容混合的复杂形态，而现有多模态虚假新闻检测侧重真实性评估，很少刻画生成性差异对证据可靠性的影响。本文为弥合虚假新闻检测与AIGC检测在数据与评估上的割裂，构建了面向生成内容的多模态虚假新闻检测数据集Weibo26。该数据集为生成式时代的多模态虚假新闻检测提供了新的评测基准，推动相关方法研究。",
+      "llm_tldr": "生成式内容使虚假新闻从人工捏造转向原生与生成内容混合的复杂形态，而现有多模态虚假新闻检测侧重真实性评估，很少刻画生成性差异对证据可靠性的影响。本文为弥合虚假新闻检测与AIGC检测在数据与评估上的割裂，构建了面向生成内容的多模态虚假新闻检测数据集Weibo26。该数据集为生成式时代的多模态虚假新闻检测提供了新的评测基准，推动相关方法研究。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "detecting fake news by jointly analyzing textual content and visual information",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.36902v1",
+      "source": "arxiv",
+      "title": "RAEGNet: Relation-Aware Evidence Graph Network for Harm-Aware Multimodal Fake News Detection",
+      "abstract": "Existing multimodal fake news detection methods often introduce external information to assist detection. However, most of them rely on entity-level retrieval and are therefore prone to introducing event-irrelevant noise. Meanwhile, existing methods mainly focus on improving overall performance and do not account for differences in the degree of harm posed by different instances of fake news. To address these limitations, we design an Event-Level Evidence Retrieval Framework (ELERF) and propose a Relation-Aware Evidence Graph Network (RAEGNet). ELERF retrieves external evidence based on the complete event semantics of a news item. RAEGNet constructs a directed graph that incorporates news-evidence stance relations and evidence-evidence interaction relations, and introduces a conditional-harm branch to jointly model authenticity and potential harm. Experimental results demonstrate that RAEGNet outperforms multiple baseline methods across all evaluated metrics on Weibo-21, Fakeddit, and our self-constructed SSS dataset.",
+      "authors": [
+        "Wenbin Shen",
+        "Guoxuan Qin",
+        "Guangxu Yao",
+        "Baodong Wang",
+        "Yuanbo Rui",
+        "Zhongjie Ba",
+        "Zhichao Lian"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CV",
+        "cs.MM"
+      ],
+      "published": "2026-09-29T07:25:20+00:00",
+      "link": "https://arxiv.org/pdf/2609.36902v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "event-level evidence retrieval and relation-aware graph for multimodal fake news detection",
+      "llm_evidence_cn": "事件级证据检索与关系感知图用于多模态假新闻检测",
+      "llm_evidence": "事件级证据检索与关系感知图用于多模态假新闻检测",
+      "canonical_evidence": "事件级证据检索与关系感知图用于多模态假新闻检测",
+      "llm_tldr_en": "RAEGNet uses event-level evidence retrieval and a relation-aware evidence graph to detect multimodal fake news while accounting for varying harm across instances.",
+      "llm_tldr_cn": "现有多模态假新闻检测多依赖实体级检索引入外部信息，易带入与事件无关的噪声，且只关注整体性能而忽略不同假新闻的危害差异。作者设计事件级证据检索框架ELERF，按新闻完整事件语义检索外部证据，并提出关系感知证据图网络RAEGNet，构建含新闻-证据立场与证据间关系的有向图。该工作在检测假新闻的同时考虑危害感知，提升了证据利用的准确性与鲁棒性。",
+      "llm_tldr": "现有多模态假新闻检测多依赖实体级检索引入外部信息，易带入与事件无关的噪声，且只关注整体性能而忽略不同假新闻的危害差异。作者设计事件级证据检索框架ELERF，按新闻完整事件语义检索外部证据，并提出关系感知证据图网络RAEGNet，构建含新闻-证据立场与证据间关系的有向图。该工作在检测假新闻的同时考虑危害感知，提升了证据利用的准确性与鲁棒性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.36611v1",
+      "source": "arxiv",
+      "title": "Multi-Channel Mitigation of Source-Trust Shortcuts in Fact-Checking RL Agents",
+      "abstract": "Retrieval-augmented fact-checkers often receive a reliability label, such as HIGH or LOW trust, for each evidence source. These labels should adjust the model's confidence and its decision to search for more evidence, while the verdict should follow the evidence content. We introduce TrustSwap, a counterfactual test that swaps, lowers, or removes source labels while keeping every evidence text fixed, and measures its three output channels (the verdict, the confidence, and the search decision) separately. Across untrained and RL-trained models at two scales, three datasets, and two prompts, confidence and search respond to the labels as intended in 49 of 50 comparisons, yet a label change alone alters 4-23% of confident verdicts for Qwen3 models and up to 50% for an existing RL-trained fact-checker. Standard GRPO fine-tuning amplifies this shortcut at 8B in all six settings. To reduce it, we propose trust-swap augmentation (TSA), which trains GRPO on each claim with both its original and its label-swapped evidence under the same gold verdict. At 4B, TSA lowers the verdict flip rate by 7-35% (relative) in four of six settings, keeps accuracy and the intended confidence and search responses, outperforms reward-based alternatives in the main setting, and carries over to an unseen label-removal perturbation. An added consistency reward helps on the trained-on swap but not on unseen perturbations. At 8B, TSA's effect is not detectable, which makes scale the main open question.",
+      "authors": [
+        "Jianchang Su",
+        "Yiwei Yang",
+        "Wei Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-29T03:26:39+00:00",
+      "link": "https://arxiv.org/pdf/2609.36611v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "source-trust shortcuts in retrieval-augmented fact-checking agents",
+      "llm_evidence_cn": "检索增强事实核查代理中的来源信任捷径",
+      "llm_evidence": "检索增强事实核查代理中的来源信任捷径",
+      "canonical_evidence": "检索增强事实核查代理中的来源信任捷径",
+      "llm_tldr_en": "TrustSwap counterfactually swaps source reliability labels in retrieval-augmented fact-checkers, revealing that label changes alone alter 4-23% of confident verdicts.",
+      "llm_tldr_cn": "该文针对检索增强事实核查模型可能被来源可靠性标签误导、裁决未真正依据证据内容的问题，提出 TrustSwap 反事实测试，在固定证据文本的前提下交换、降低或移除来源标签，分别测量裁决、置信度与检索决策。实验在两种规模与三个数据集上发现置信度和检索多按预期响应，但仅改变标签即可使 Qwen3 模型 4 至 23% 的自信裁决翻转，揭示来源信任捷径。",
+      "llm_tldr": "该文针对检索增强事实核查模型可能被来源可靠性标签误导、裁决未真正依据证据内容的问题，提出 TrustSwap 反事实测试，在固定证据文本的前提下交换、降低或移除来源标签，分别测量裁决、置信度与检索决策。实验在两种规模与三个数据集上发现置信度和检索多按预期响应，但仅改变标签即可使 Qwen3 模型 4 至 23% 的自信裁决翻转，揭示来源信任捷径。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.34157v1",
+      "source": "arxiv",
+      "title": "TableSeek: Structure-Preserving Agentic Evidence Seeking over Heterogeneous Table Corpora",
+      "abstract": "Open-domain table retrieval seeks tables that contain sufficient evidence for answering a question or verifying a claim. Yet semantic relevance is often misleading: topically similar tables may lack the required facts, while answer-bearing evidence is often confined to a few cells whose meaning depends on surrounding schema and table context. Heterogeneous schemas, value formats, and serializations further weaken one-shot matching.   We present TableSeek, a structure-preserving agentic search framework for heterogeneous table corpora. Instead of ranking tables once, an LLM agent iteratively follows sparse clues, inspects schema-preserving previews, identifies schema- and value-level mismatches, and refines its investigation. TableSeek uses cells and schemas as evidence anchors while retaining complete tables as evidence units, enabling fine-grained localization without losing the context required for interpretation and answerability checking.   Without relying on retriever training or a precomputed semantic index, TableSeek produces transparent evidence-seeking trajectories and achieves competitive end-to-end performance against strong retrieval-and-reranking pipelines on heterogeneous table benchmarks. These results suggest that active, structure-preserving evidence seeking is a promising paradigm for open-domain table retrieval.",
+      "authors": [
+        "Jiaming Tian",
+        "Liyao Li",
+        "Wentao Ye",
+        "Haobo Wang",
+        "Lihua Yu",
+        "Zujie Ren",
+        "Gang Chen",
+        "Junbo Zhao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-28T02:36:25+00:00",
+      "link": "https://arxiv.org/pdf/2609.34157v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic evidence seeking over table corpora for claim verification",
+      "llm_evidence_cn": "面向异构表格语料的智能体证据检索以验证声明",
+      "llm_evidence": "面向异构表格语料的智能体证据检索以验证声明",
+      "canonical_evidence": "面向异构表格语料的智能体证据检索以验证声明",
+      "llm_tldr_en": "TableSeek is a structure-preserving agentic search framework that iteratively seeks evidence in heterogeneous table corpora for question answering and claim verification.",
+      "llm_tldr_cn": "开放域表格检索需找到足以回答问题或验证声明的证据，但语义相关性常具误导性，答案证据往往局限于依赖模式上下文的少数单元格。本文提出TableSeek，采用结构保持的智能体搜索框架，由大模型迭代跟随稀疏线索、检视保留模式的预览并识别模式与值层面的不匹配。该工作提升了异构表格证据检索能力，可支撑检索增强的事实核查。",
+      "llm_tldr": "开放域表格检索需找到足以回答问题或验证声明的证据，但语义相关性常具误导性，答案证据往往局限于依赖模式上下文的少数单元格。本文提出TableSeek，采用结构保持的智能体搜索框架，由大模型迭代跟随稀疏线索、检视保留模式的预览并识别模式与值层面的不匹配。该工作提升了异构表格证据检索能力，可支撑检索增强的事实核查。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.37349v1",
+      "source": "arxiv",
+      "title": "TAEC: Trajectory-Aware Evidence Coordination for Multi-Step Visual RAG",
+      "abstract": "Multi-step visual retrieval-augmented generation (RAG) answers complex questions by repeatedly retrieving visual evidence, updating an intermediate state, and deciding whether to continue searching or answer. Yet retrieving relevant evidence does not ensure its effective use throughout the reasoning trajectory. As multi-step reasoning progresses, redundant sources occupy context capacity needed for missing evidence, observations tied to resolved requirements or unproductive searches linger in context, and visual sources are revisited with insufficient detail for fine-grained reading. We term this loss of usable evidence over a reasoning trajectory trajectory-level evidence utilization degradation. To address it, we propose Trajectory-Aware Evidence Coordination (TAEC), a training-free framework that coordinates evidence use around unresolved answer requirements. TAEC tracks these requirements in a shared trajectory state to guide which evidence enters the context, how accumulated memory is retained, and at what level of detail visual evidence is examined. Under a unified evaluation protocol on ViDoSeek, SlideVQA, and MMLongBench-Doc, TAEC achieves the best overall performance against leading training-free visual RAG baselines, with the highest average accuracy across multiple proprietary vision-language models. These results demonstrate that aligning evidence with evolving reasoning needs improves evidence use throughout multi-step visual RAG.",
+      "authors": [
+        "Yalun Wu",
+        "Bingzhou Wang",
+        "Boyang Wang",
+        "Peiying Wang",
+        "Shaojie He",
+        "Yunhan Wang",
+        "Shaozu Yuan",
+        "Jiawei Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-09-29T12:15:51+00:00",
+      "link": "https://arxiv.org/pdf/2609.37349v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multi-step visual RAG evidence coordination for reasoning",
+      "llm_evidence_cn": "多步视觉检索增强生成中的证据协调",
+      "llm_evidence": "多步视觉检索增强生成中的证据协调",
+      "canonical_evidence": "多步视觉检索增强生成中的证据协调",
+      "llm_tldr_en": "TAEC addresses trajectory-level evidence utilization degradation in multi-step visual RAG by coordinating retrieved visual evidence, reducing redundancy, and improving answer quality.",
+      "llm_tldr_cn": "该文指出多步视觉检索增强生成中检索到证据并不等于能有效利用，冗余来源会挤占上下文并导致轨迹级证据利用退化。为此提出轨迹感知证据协调方法 TAEC，在推理轨迹中管理证据、剔除冗余并加强细粒度视觉阅读。实验表明该方法缓解了证据利用退化，提升了多步视觉问答的证据使用效率，为检索增强的多模态证据验证提供支持。",
+      "llm_tldr": "该文指出多步视觉检索增强生成中检索到证据并不等于能有效利用，冗余来源会挤占上下文并导致轨迹级证据利用退化。为此提出轨迹感知证据协调方法 TAEC，在推理轨迹中管理证据、剔除冗余并加强细粒度视觉阅读。实验表明该方法缓解了证据利用退化，提升了多步视觉问答的证据使用效率，为检索增强的多模态证据验证提供支持。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.38391v1",
+      "source": "arxiv",
+      "title": "Team MSU GenText-Forensics Challenge 2026 Technical Report",
+      "abstract": "Document text forgery has evolved beyond simple pixel-level manipulation: modern attacks alter not only the appearance of a document but also its meaning, and increasingly target the OCR & LLM pipelines that consume such documents. The ACM MM 2026 GenText-Forensics challenge therefore requires systems that not only decide whether a multilingual text image is forged, but also localize the point of manipulation, identify the attack type, and produce a human-readable forensic report with supporting evidence. We present our solution, a decomposed chain-of-thought (CoT) pipeline that combines a document tampering detector (DTD) with two Qwen3-VL-32B vision-language models, each LoRA-adapted to a distinct sub-task. DTD produces tampering probability maps that are converted into numbered candidate regions; a first model (the Filterer) validates these regions and assigns a preliminary forgery type, while a second model (the Semantic Detective) merges and re-grounds the surviving regions, searches for purely semantic anomalies that are invisible to pixel-level detectors, and writes the final report. Both models are trained by distilling chain-of-thought traces from a privileged Qwen3-VL-235B teacher that has access to ground-truth masks and reports. Our approach secured third place in the ACM MM 2026 GenText-Forensics challenge. We describe the data preparation, test-time augmentation, region rendering, distillation protocol, and training configuration in detail, and report ablations over detector thresholds, prompt designs, and pipeline decompositions.",
+      "authors": [
+        "Kirill Koltsov",
+        "Aleksandr Gushchin",
+        "Dmitriy Vatolin",
+        "Anastasia Antsiferova"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-29T18:49:01+00:00",
+      "link": "https://arxiv.org/pdf/2609.38391v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multilingual document forgery detection with VLM and forensic evidence report",
+      "llm_evidence_cn": "多语言文档伪造检测与证据报告",
+      "llm_evidence": "多语言文档伪造检测与证据报告",
+      "canonical_evidence": "多语言文档伪造检测与证据报告",
+      "llm_tldr_en": "A decomposed chain-of-thought pipeline combines a document tampering detector with LoRA-adapted VLMs to detect, localize, classify and report multilingual text-image forgeries.",
+      "llm_tldr_cn": "文档文本伪造已从像素级篡改演变为同时改变外观与含义，并针对OCR与LLM流程，因此需要能判定伪造、定位篡改点、识别攻击类型并生成可读取证报告的系统。作者提出分解式思维链流水线，将文档篡改检测器与两个LoRA适配的Qwen3-VL模型结合，分别处理不同子任务。该系统为多语言文本图像取证提供了可解释的证据支撑，推动了可解释多模态伪造检测。",
+      "llm_tldr": "文档文本伪造已从像素级篡改演变为同时改变外观与含义，并针对OCR与LLM流程，因此需要能判定伪造、定位篡改点、识别攻击类型并生成可读取证报告的系统。作者提出分解式思维链流水线，将文档篡改检测器与两个LoRA适配的Qwen3-VL模型结合，分别处理不同子任务。该系统为多语言文本图像取证提供了可解释的证据支撑，推动了可解释多模态伪造检测。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.00923v1",
+      "source": "arxiv",
+      "title": "CANOPY: Adaptive-Granularity Evidence Compression for Multimodal RAG",
+      "abstract": "Multimodal RAG retrieves text, tables, images, and videos, but choosing a retrieval granularity does not determine how much context to retain within each item. Coarse units include irrelevant content, while uniformly fine selection can remove context needed to interpret the evidence. Existing compressors address this trade-off with modality-specific mechanisms, leaving open a shared procedure for adapting the retained extent region by region across heterogeneous items. We introduce CANOPY (Canonical Projection over Hierarchy), a framework for adaptive-granularity post-retrieval evidence compression. CANOPY represents retrieved items as hierarchies and uses a node encoder fine-tuned on gold evidence to score regions against the query. Parent-relative refinement compares these scores to select multiple regions at different granularities without LLM calls for node-level pruning. Because compression cannot recover evidence that was never retrieved, a critic requests targeted follow-up retrieval when it judges the accumulated evidence insufficient; newly retrieved items are compressed before being added. Across five QA benchmarks over a 33M-item heterogeneous corpus, CANOPY achieves higher average answer accuracy than the evaluated retrieval baselines. Ablations indicate that additional retrieval drives the main accuracy gains on multi-hop QA. In the unrouted Qwen3-VL-8B-Instruct setting, compression reduces reader-input evidence tokens by 14.2-27.7% relative to the same iterative pipeline without compression, with comparable answer accuracy.",
+      "authors": [
+        "Hyojeong Yun",
+        "Jueun Kim",
+        "Wook-Shin Han"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-10-01T01:57:55+00:00",
+      "link": "https://arxiv.org/pdf/2610.00923v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "adaptive-granularity post-retrieval evidence compression for multimodal RAG",
+      "llm_evidence_cn": "面向多模态RAG的自适应粒度检索后证据压缩",
+      "llm_evidence": "面向多模态RAG的自适应粒度检索后证据压缩",
+      "canonical_evidence": "面向多模态RAG的自适应粒度检索后证据压缩",
+      "llm_tldr_en": "CANOPY is a framework for adaptive-granularity post-retrieval evidence compression, representing retrieved multimodal items as hierarchies and scoring regions against the query.",
+      "llm_tldr_cn": "多模态RAG检索文本、表格、图像与视频时，粗粒度单元含无关内容而细粒度选择会丢失解释性上下文。本文提出CANOPY框架，将检索项表示为层级结构，并用基于金标证据微调的节点编码器对区域打分，实现区域级自适应粒度压缩。该工作为多模态证据筛选与检索增强提供了通用方法，可服务于事实核查中的证据利用。",
+      "llm_tldr": "多模态RAG检索文本、表格、图像与视频时，粗粒度单元含无关内容而细粒度选择会丢失解释性上下文。本文提出CANOPY框架，将检索项表示为层级结构，并用基于金标证据微调的节点编码器对区域打分，实现区域级自适应粒度压缩。该工作为多模态证据筛选与检索增强提供了通用方法，可服务于事实核查中的证据利用。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,1321 @@
+Title: RAEGNet: Relation-Aware Evidence Graph Network for Harm-Aware Multimodal Fake News Detection
+
+URL Source: https://arxiv.org/pdf/2609.36902v1
+
+Published Time: Wed, 30 Sep 2026 01:10:25 GMT
+
+Number of Pages: 27
+
+Markdown Content:
+## RAEGNet: Relation-Aware Evidence Graph Network for Harm-Aware Multimodal Fake News Detection 
+
+Wenbin Shen ∗1 Guoxuan Qin 1 Guangxu Yao 1 Baodong Wang 1 Yuanbo Rui 1
+
+Zhongjie Ba 2 Zhichao Lian ∗1,31Nanjing University of Science and Technology 
+
+2Zhejiang University 
+
+3University of Chinese Academy of Sciences 
+
+shenwenbin@njust.edu.cn; lzcts@163.com 
+
+Abstract 
+
+Existing multimodal fake news detection meth-ods often introduce external information to as-sist detection. However, most of them rely on entity-level retrieval and are therefore prone to introducing event-irrelevant noise. Meanwhile, existing methods mainly focus on improving overall performance and do not account for differences in the degree of harm posed by different instances of fake news. To address these limitations, we design an Event-Level 
+
+Evidence Retrieval Framework ( ELERF ) and propose a Relation-Aware Evidence Graph 
+
+Net work ( RAEGNet ). ELERF retrieves ex-ternal evidence based on the complete event se-mantics of a news item. RAEGNet constructs a directed graph that incorporates news-evidence stance relations and evidence-evidence inter-action relations, and introduces a conditional-harm branch to jointly model authenticity and potential harm. Experimental results demon-strate that RAEGNet outperforms multiple baseline methods across all evaluated met-rics on Weibo-21, Fakeddit, and our self-constructed SSS dataset. 
+
+1 Introduction 
+
+The rapid development of social media has greatly accelerated the dissemination of multimodal infor-mation, while also providing fertile ground for fake news, posing severe threats to public security (Shu et al., 2017; Zhou and Zafarani, 2020). In the real-world cyber ecosystem, different instances of fake news vary substantially in their potential destruc-tive impact. For example, political deepfakes and public-health rumors can cause far greater social harm than poorly fabricated entertainment gossip (Shu et al., 2020; Nan et al., 2021). Therefore, mul-timodal fake news detection not only requires the foundational capability to accurately discern the au-thenticity of information but more urgently needs to prioritize the perception of highly harmful news so as to minimize the substantive adverse effects of misinformation on society (Liu and Wu, 2018). insurrectionist zip cuffs     
+
+> 11.6K 1.6K 21.6K
+> …Alex
+> @faked
+> Members of the insurrectionist mob that broke into the Capitol were photographed holding zip cuffs.
+> Knowledge Bases
+> Tactical restraint Mass detainment Treasonous intent Mutineer Radicalized individual Model Semantic Noise
+> Low Detection Accuracy
+> Entity-level retrieval
+> Official Report: The Capitol Riot ...
+> Event-level retrieval
+> Overall Understanding of the Incident External Evidence Retrieval
+> Special database Related news articles Strongly Corroborating Evidence
+> National Assembly events ...
+> Model
+> High Detection Accuracy
+> 11.6K 1.6K 21.6K
+> …Alex
+> @faked
+> Members of the insurrectionist mob that broke into the Capitol were photographed holding zip cuffs.
+
+Figure 1: Comparison between entity-level retrieval and our event-level retrieval. 
+
+Although existing multimodal fake news detec-tion techniques have made substantial progress (Qi et al., 2019; Zhou et al., 2020; Silva et al., 2021; Singhal et al., 2019; Wang et al., 2024), two core issues remain. First, regarding the incorporation of external knowledge, existing methods mostly rely on entity-level retrieval (Popat et al., 2018; Au-genstein et al., 2019) and knowledge-graph linking (Pan et al., 2018; Dun et al., 2021; Kim et al., 2023). Such methods easily deviate from the holistic se-mantics of the news event and introduce substantial semantic noise unrelated to the central event (Fu et al., 2023). Second, most existing studies formu-late the objective as a simple binary classification task and focus only on improving aggregate per-formance, ignoring the significant variance in the degree of harmfulness among samples. In real-world settings, the social cost of failing to detect high-harm fake news is much higher than that of misclassifying an ordinary rumor. Although some studies have attempted to grade the severity of fake news (Reddy et al., 2023; Pillai et al., 2024), they are mostly limited to text-only settings or separate, simple assessments. How harm judgments can be intrinsically integrated into a multimodal detection framework remains insufficiently explored. arXiv:2609.36902v1 [cs.CL] 29 Sep 2026 To address these challenges, we design the Event-Level Evidence Retrieval Framework (EL-ERF) and propose the Relation-Aware Evidence Graph Network (RAEGNet). ELERF uses the com-plete news text as the query and obtains strongly relevant external evidence from a predefined source pool through retrieval, filtering, and stance quan-tification. Based on the stance of each piece of evidence toward the news and the semantic rela-tions among evidence items, RAEGNet constructs an evidence graph containing nine types of directed edges. In addition, by screening and integrating ex-isting public data, we construct the SSS multimodal fake news dataset. SSS combines six public data sources and, after validity checks, sample dedu-plication, semantic filtering, and manual review, contains 7,997 Chinese and English multimodal news samples. Each sample is provided with a harm label, external evidence, and the correspond-ing evidence stance scores, thereby supporting au-thenticity detection, harm analysis, and relational evidence reasoning. The main contributions of this paper are as fol-lows: • We propose an event-level evidence retrieval framework that reduces semantic noise and provides external evidence strongly related to the complete news event. • We propose a relation-aware evidence graph that jointly models the relation types and rela-tion strengths of news-evidence and evidence-evidence interactions. • We propose a harm-aware joint optimization objective that jointly learns authenticity clas-sification, conditional-harm estimation, and ordinal harm consistency. • We construct the SSS multimodal fake news dataset, which provides high-quality Chinese and English news samples together with exter-nal evidence. 
+
+2 Related Work 
+
+2.1 Multimodal Fake News Detection 
+
+The development of multimodal fake news detec-tion methods closely follows the iteration of feature extraction technologies. Early studies primarily utilized CNNs and RNNs to extract visual and tex-tual features, fusing them through simple concate-nation or attention mechanisms (Jin et al., 2017; Yang et al., 2018). With breakthroughs in pre-training technologies, the field has entered an era of fine-grained cross-modal interaction. For instance, CAFE (Chen et al., 2022) utilizes fuzzy reason-ing to quantify cross-modal ambiguity, InfoSur-geon (Fung et al., 2021) constructs a consistency-checking graph by aligning text entities with visual regions, and CCGN (Cui et al., 2025) directly cap-tures the inconsistency between multimodal con-tents within a contrastive learning space. These methods significantly enhance the capability to cap-ture image-text contradictions. However, restricted by the information inherent in the news itself, they struggle to handle deeply disguised fake news. 
+
+2.2 Knowledge-Enhanced Detection Methods 
+
+Introducing external knowledge becomes the key path to breaking through the limitations of inter-nal information, and it can be mainly categorized into three types. The first category relies on static knowledge graphs. For instance, CompareNet (Hu et al., 2021) aligns news texts with KGs for entity alignment to determine authenticity, while AKA-Fake (Zhang et al., 2024a) utilizes reinforcement learning to adaptively retrieve relevant knowledge subgraphs. The second category is based on open-domain retrieval. For instance, MUSER (Liao et al., 2023) mimics the logical process of human fact-checking and automatically collects key evidence through a multi-step retrieval mechanism. The third category is the paradigm based on LLMs and multi-agent systems, which treats LLMs as pow-erful implicit knowledge bases, reasoning engines, and orchestration centers. Typically, FKA-Owl (Liu et al., 2024) leverages LLMs to mine implicit commonsense, while RAMA (Yang et al., 2025) proposes a retrieval-augmented multi-agent frame-work. However, the majority of existing knowledge enhancement strategies still heavily rely on entity-level or shallow semantic matching, which makes them prone to introducing irrelevant noise and con-sequently degrading the overall performance. 
+
+3 Methodology 
+
+3.1 Overview 
+
+As shown in Figure 2, RAEGNet first jointly en-codes the news text, image, and evidence. It then constructs a relation-aware evidence graph for au-thenticity reasoning. At the same time, it uses the harm-risk branch to estimate conditional harm. Adaptive  
+
+> Multimodal
+> Fusion
+> Dual -Branch
+> Prediction
+> [Real / Fake]
+> News Text
+> News Image
+> Image
+> Encoder
+> (CLIP )
+> [Harm Risk]
+> 01
+> Evidence
+> ···
+> ···
+
+𝒛 𝒊𝒋 𝒆 
+
+𝒛 𝒊 𝒑 
+
+𝒛 𝒊 𝒕 
+
+> ···
+> ···
+
+𝒛 𝒊 
+
+> 𝒗
+> Text
+> Encoder
+> (CLIP )
+> Text
+> Encoder
+> (CLIP )
+> Retrieval
+> Stance Quantification
+
+Relation -Aware Evidence Graph 
+
+> Evidence -
+> Evidence
+> Relation Type
+> News -Evidence &
+> Evidence -News
+> Relation Type
+> Support
+> Refute
+> Neutral
+> Corroborate
+> Conflict
+> Similar
+
+······ 𝒗 𝒊𝟏 𝒆 
+
+𝒗 𝒊𝟐 𝒆 
+
+𝒗 𝒊𝟑 
+
+> 𝒆
+
+𝒗 𝒊𝒌 𝒆  𝒗 𝒊(𝒌+𝟏) 
+
+> 𝒆
+
+𝒗 𝒊 𝒑 
+
+𝒗 𝒊𝒎 𝒆 
+
+𝒗 𝒊(𝒎−𝟏) 𝒆 
+
+𝒗 𝒊(𝒎−𝟐) 𝒆 
+
+> Filtering
+> Relation -Aware
+> GATv2
+
+Adaptive Multimodal Fusion 
+
+> ···
+> ···
+> MLP
+> Softmax
+> ෍
+> ···
+
+Relation -Aware GATv2 
+
+> Relation Type
+> Edge Weight
+
+(𝜏 𝑣𝑢 )
+
+(𝑤 𝑣𝑢 )
+
+> ···
+> ···
+
+𝐑 
+
+𝜼 𝒗𝒖  
+
+> Source Node
+> Feature
+
+(𝒉 𝒗 ) 
+
+> Target Node
+> Feature
+
+(𝒉 𝒖 )
+
+> GATv2
+> Attention
+> Projection
+> Transformed
+> Neighbor
+> Messages
+> ···
+
+𝑾 𝒗 𝒉 𝒗 𝟏 
+
+> ···
+
+𝑾 𝒗 𝒉 𝒗 𝟐 
+
+𝑾 𝒗 𝒉 𝒗 𝑲 
+
+> ···
+> Aggregate
+> &
+> Activation
+> LeakyReLU
+> Attention Scoring
+> Softmax
+> ···
+> ···
+> ···
+> ···
+> ···
+
+Dual -Branch Prediction 
+
+> Authenticity
+> Classifier
+
+𝑝 𝑖 
+
+> Harm Risk
+> Predictor
+
+𝑟 𝑖 
+
+𝐿 𝑐𝑙𝑠 
+
+𝐿 𝑟𝑎𝑛𝑘 
+
+> ෍
+> ···
+
+𝒉 𝒊 𝒑 
+
+𝒉 𝒊 𝒈 
+
+𝛼 𝑖 𝑣 
+
+𝛼 𝑖 𝑡 
+
+𝒛 𝒊 𝒗 
+
+𝒛 𝒊 𝒕 
+
+𝒛 𝒊 𝒑 
+
+> Concatenation
+> Aggregation
+> Scalar –Vector
+> Multiplication
+
+[𝑎 𝑣 1𝑢 , 𝑎 𝑣 2𝑢 , … , 𝑎 𝑣 𝐾 𝑢 ]
+
+> ···
+> Graph Pooling
+> ···
+
+𝒉′ 𝒖 
+
+> ···
+
+𝒉 𝒊 𝒈 
+
+> ···
+> Projection
+
+𝒉 𝒊 
+
+> 𝒑
+> MLP MLP
+
+𝒛 𝒊 𝒑 
+
+> Feature Addition
+
+𝒓 𝒗𝒖 
+
+> Relation
+> Embedding
+> Lookup
+
+𝐑 
+
+> Projection
+
+𝐿 ℎ𝑎𝑟𝑚 Figure 2: The overall architecture of RAEGNet. 
+
+3.2 Event-Level Evidence Retrieval 
+
+To reduce irrelevant noise introduced by entity-level retrieval, we design an event-level evidence retrieval framework comprising the following three steps. • Retrieval. For the i-th news, we use the com-plete news text as an event-level query and retrieve the top N webpage snippets together with their metadata as candidate evidence. • Filtering. Candidate webpages with explicit verdict-style information are automatically re-moved. The remaining candidates are further screened by an LLM to discard evidence con-taining implicit label leakage. • Stance quantification . For each leakage-free candidate evidence item, the LLM evalu-ates a continuous stance score eqij ∈ [0 , 1] ,which is then mapped to a discrete stance score qij ∈ { 0.1, 0.3, 0.5, 0.7, 0.9}. The final evidence set is Ei = {(Eij , q ij )}mi
+
+j=1 , where 
+
+mi ≤ N .
+
+3.3 Feature Encoding and Fusion 
+
+Let Ti and Ii denote the text and image of the i-th news item, respectively, and let ft(·) and fv(·)
+
+denote the text and image encoders. The normal-ized representations of the news text, news image, and j-th evidence are zti = Norm( ft(Ti)) , zvi =Norm( fv(Ii)) and zeij = Norm( ft(Eij )) , respec-tively. Here, Norm( x) = x/∥x∥2.After obtaining the modality representations in the unified space, the fused news feature is com-puted as 
+
+zpi = αtizti + αvi zvi , (1) where αti and αvi are the weights of the news text feature zti and image feature zvi , respectively. They are computed as 
+
+αi = softmax  W2ϕ W1[zti; zvi ] + b1
+
+ + b2
+
+ ,
+
+(2) where W1, W2, b1, and b2 are learnable parame-ters of the gating network; ϕ(·) is the ReLU activa-tion function; and αi = [ αti, α vi ], with αti, α vi ≥ 0
+
+and αti + αvi = 1 .
+
+3.4 Relation-Aware Evidence Graph Network 
+
+For the i-th news item, we construct a graph 
+
+Gi = (Vi, Ai). Its node set is Vi = {vpi } ∪ {vei1, v ei2, . . . , v eim }. Here, vpi denotes the central news node, whose original feature is zpi , and veij de-notes the evidence node corresponding to evidence 
+
+Eij , whose original feature is zeij . For any node 
+
+u ∈ V i, let zu denote its original feature. Its initial node state is obtained through a shared projection: 
+
+x(0) 
+
+u = ϕ(LN( Wezu + be)) , (3) where We and be are the shared projection param-eters. After node initialization, news–evidence rela-tions are constructed according to the semantic relevance and stance direction between the news text and the external evidence. First, the nonneg-ative cosine relevance between the news text and the evidence text is computed as 
+
+cij = max  0, cos( zti, zeij ) . (4) Then, based on the stance score qij , a support edge 
+
+P → E+, a refutation edge P → E−, or a neu-tral edge P → E0 is constructed. Let the sup-port threshold, refutation threshold, and neutral-neighborhood width be δ+, δ−, and δ0, respectively, satisfying 0 < δ − < 12 < δ + < 1, 0 < δ 0 ≤
+
+min  12 − δ−, δ + − 12 .
+
+The relation type τij and edge weight wij are defined as 
+
+(τij , w ij ) = 
+
+
+
+(P → E+, q ij cij ), qij ≥ δ+,
+
+(P → E−, (1 − qij )cij ), qij < δ −,
+
+(P → E0, q ij cij ), μ0 < δ 0,
+
+(5) where μ0 = |qij − 1/2|.A reverse edge with the same weight is added for every valid edge, denoted by E → P +, E → P −,and E → P 0, respectively. We next model relations among evidence items. For any two evidence nodes veij and veik , the rele-vance between their textual representations is com-puted as 
+
+cijk = max  0, cos( zeij , zeik ) , (6) and is used as the weight of the evidence–evidence edge. The news–evidence relations are then mapped to stance groups gij ∈ { support , refute , neutral }.Let κcor , κcon , and κsim denote the relevance thresholds for corroboration, conflict, and similar-ity, respectively. Evidence relations are determined in the following order of priority: 1. If gij = gik ∈ { support , refute } and cijk ≥
+
+κcor , bidirectional corroboration edges E ↔
+
+Ecor are added. 2. If {gij , g ik } = {support , refute } and cijk ≥
+
+κcon , bidirectional conflict edges E ↔ Econ 
+
+are added. 3. If neither of the first two conditions is satis-fied and cijk ≥ κsim , bidirectional similarity edges E ↔ Esim are added. The complete relation set T therefore consists of three types of news–evidence edges, three types of evidence–news edges, and three types of evidence– evidence edges. For any directed edge (v, u ) ∈ A i, let τvu de-note its relation type and wvu its edge weight. We embed the nine relation types with a learnable ma-trix R ∈ R|T |× dr and obtain rvu = R[τvu ] ∈ Rdr .The edge feature is then ηvu = [ wvu ; rvu ], which keeps both relation strength and relation category. We use GATv2 (Brody et al., 2022) as the message-passing operator. Let N (u) = {v :(v, u ) ∈ A i} denote the in-neighbors of node u.At layer ℓ, the attention score for edge (v, u ) is computed from the target-node state, source-node state, and edge feature: 
+
+e(ℓ) 
+
+> vu
+
+= a⊤ 
+
+> ℓ
+
+ψ
+
+
+
+W(ℓ) 
+
+> t
+
+x(ℓ) 
+
+> u
+
++ W(ℓ) 
+
+> s
+
+x(ℓ) 
+
+> v
+
++ W(ℓ) 
+
+> η
+
+ηvu 
+
+
+
+.
+
+(7) where W(ℓ) 
+
+> t
+
+, W(ℓ) 
+
+> s
+
+, W(ℓ) 
+
+> η
+
+, and aℓ are layer-specific parameters, and ψ(·) is the LeakyReLU activation function. The scores of all incoming edges to node 
+
+u are normalized by softmax: 
+
+a(ℓ) 
+
+> vu
+
+= exp( e(ℓ) 
+
+> vu
+
+)
+
+P  
+
+> k∈N (u)
+
+exp( e(ℓ) 
+
+> ku
+
+) . (8) The next-layer state of node u is obtained by weighted aggregation: 
+
+x(ℓ+1)  
+
+> u
+
+= ϕ
+
+ X 
+
+> v∈N (u)
+
+a(ℓ) 
+
+> vu
+
+W(ℓ) 
+
+> m
+
+x(ℓ)
+
+> v
+
+ , (9) where W(ℓ) 
+
+> m
+
+is the message transformation matrix. After L propagation layers, mean pooling and layer normalization produce the evidence-enhanced news representation 
+
+hgi = LN 
+
+ 1
+
+|V i|
+
+X
+
+> u∈V i
+
+x(L)
+
+> u
+
+ . (10) Finally, based on hgi , the classifier outputs the prob-ability that the news item is fake: 
+
+pi = σ
+
+
+
+w⊤ 
+
+> o
+
+D(ϕ(BN( Wchgi + bc))) + bo
+
+
+
+,
+
+(11) where Wc, bc, wo, and bo are classifier parame-ters; BN denotes batch normalization; D(·) denotes dropout; and σ is the sigmoid function. Given a classification threshold θy, the predicted label is 
+
+ˆyi = I(pi ≥ θy).3.5 Joint Optimization with Harm Risk 
+
+For the i-th news item, let yi ∈ { 0, 1} denote its authenticity label, where yi = 1 indicates fake news. The conditional harm label hi ∈
+
+(0 , 1) represents the potential impact of the con-tent if it were false and disseminated. In anno-tation, harm is collected as five ordered levels and represented by H = {a1, a 2, a 3, a 4, a 5} =
+
+{0.1, 0.3, 0.5, 0.7, 0.9}. The authenticity branch outputs the fake-news probability pi through the relation-aware evidence graph. The harm-risk branch takes the news content representation as input and first obtains a hidden representation 
+
+hpi = LN( Wpzpi + bp), (12) after which it predicts the conditional harm score 
+
+ri = σ
+
+
+
+w⊤ 
+
+> r
+
+ϕ(Wrhpi + br) + βr
+
+
+
+, (13) where Wp, bp, Wr, br, wr, and βr are parameters of the harm branch. We jointly optimize authenticity classification and conditional-harm modeling through three com-plementary objectives. First, binary cross-entropy is used for authenticity classification: 
+
+Lcls = − 1
+
+B
+
+> B
+
+X
+
+> i=1
+
+[yi log pi + (1 − yi) log(1 − pi)] ,
+
+(14) where B is the mini-batch size. Second, mean squared error is used to constrain the harm-risk branch to fit the conditional harm labels: 
+
+Lharm = 1
+
+B
+
+> B
+
+X
+
+> i=1
+
+(ri − hi)2. (15) This objective provides pointwise supervision for conditional-harm estimation. Finally, a harm-aware ranking constraint is in-troduced to preserve the ordinal structure of condi-tional harm. We define the ordered sample pairs in a mini-batch as 
+
+PB = {(i, j ) : hi > h j }. (16) For each ordered pair, the relative harm difference is normalized as ∆ij = ( hi − hj )/(max( H) −
+
+min( H)) , and the ranking objective is defined as 
+
+Lrank = 1
+
+|P B |
+
+X
+
+> (i,j )∈P B
+
+[γ∆ij − (ri − rj )] 2+ ,
+
+(17) where [·]+ = max(0 , ·) and γ ≥ 0 controls the ranking margin. When PB is empty, Lrank is set to 0. This objective encourages consistency between the relative ordering of predicted harm scores and the annotated harm levels. Combining the three objectives, the final opti-mization objective is 
+
+L = Lcls + λharm Lharm + λrank Lrank , (18) where λharm and λrank are nonnegative weights. The joint objective enables the model to learn au-thenticity discrimination while simultaneously cap-turing both the absolute magnitude and ordinal structure of conditional harm. In this way, authen-ticity prediction and harm modeling are optimized within a unified framework. 
+
+4 Experiments 
+
+4.1 Experimental Setup 
+
+This subsection describes the datasets, baseline models, evaluation metrics, and implementation details used in the experiments. 
+
+4.1.1 Datasets 
+
+We conduct experiments on Weibo-21, Fakeddit, and SSS. Weibo-21 (Nan et al., 2021) and Fakeddit (Nakamura et al., 2020) are Chinese and English multimodal fake news datasets, respectively. Be-cause some samples were published long ago and contain invalid links or damaged content, we apply a unified cleaning procedure to these datasets. SSS is a Chinese–English multimodal fake news detec-tion dataset constructed from six sources, includ-ing Weibo-17 (Jin et al., 2017), Weibo-21, CFND (Zhang et al., 2024b), MR2 (Hu et al., 2023), Faked-dit, and FineFake (Zhou et al., 2026), through sam-ple deduplication, quality screening, and manual review. Details of its construction are provided in Appendix A. Harm labels for all three datasets were systematically annotated by human annota-tors; details are provided in Appendix B. Table 1 reports the numbers of news and evidence items used in the experiments.          
+
+> Table 1: Numbers of news and automatically retained evidence on the three datasets.
+> Components Weibo-21 Fakeddit SSS News 4,493 5,919 7,997 Evidence 8,341 11,375 15,157
+
+Table 2: Overall performance comparison of RAEGNet and baselines on the three datasets. “w/o EK” denotes methods that do not use external knowledge, “w/ EK” denotes methods that incorporate external knowledge, and “w/ LLM” denotes LLM-based methods. RAEGNet-E, RAEGNet-B, and RAEGNet-A use entity-level evidence, pre-news event-level evidence, and full event-level evidence, respectively.                                                                                                                                   
+
+> Category Method Weibo-21 Fakeddit SSS Accuracy F1-score Accuracy F1-score Accuracy F1-score Fake Real Fake Real Fake Real w/o EK CAFE 0.815 0.810 0.820 0.786 0.816 0.745 0.726 0.753 0.693 MRML 0.903 0.908 0.898 0.860 0.876 0.839 0.758 0.779 0.732 Event-Radar 0.881 0.884 0.877 0.840 0.859 0.815 0.754 0.767 0.739 MSACA 0.894 0.900 0.886 0.846 0.864 0.823 0.762 0.778 0.744 w/ EK KEHGNN-FD 0.764 0.776 0.751 0.763 0.796 0.716 0.674 0.698 0.644 NSLM 0.878 0.885 0.870 0.850 0.867 0.828 0.781 0.804 0.750 ERIC-FND 0.844 0.857 0.828 0.794 0.828 0.744 0.655 0.724 0.539 w/ LLM Qwen2.5-VL 0.742 0.754 0.729 0.738 0.771 0.694 0.629 0.664 0.587 InternVL2.5 0.714 0.726 0.701 0.726 0.763 0.676 0.613 0.650 0.568 GLPN-LLM 0.882 0.888 0.874 0.875 0.888 0.858 0.707 0.743 0.660 Ours RAEGNet-E 0.911 0.911 0.911 0.898 0.908 0.886 0.808 0.817 0.798 RAEGNet-B 0.928 0.930 0.926 0.911 0.922 0.898 0.837 0.851 0.819 RAEGNet-A 0.931 0.934 0.929 0.919 0.926 0.910 0.843 0.860 0.822
+
+4.1.2 Baselines 
+
+We select several task-specific methods as com-parison baselines. Methods that do not use exter-nal knowledge include CAFE (Chen et al., 2022), MRML (Peng et al., 2023), Event-Radar (Ma et al., 2024), and MSACA (Wang et al., 2024). Methods that use external knowledge include KEHGNN-FD (Xie et al., 2023), NSLM (Dong et al., 2024), and ERIC-FND (Cao et al., 2025). In addition, we include three LLM-based base-lines: Qwen2.5-VL-7B-Instruct (Bai et al., 2025), InternVL2.5-8B (Chen et al., 2024), and GLPN-LLM (Hu et al., 2025). Qwen2.5-VL-7B-Instruct and InternVL2.5-8B are locally deployable open-source multimodal LLMs that directly judge news authenticity from the news text, news image, and re-trieved evidence, without task-specific fine-tuning. GLPN-LLM is included in the same category as an LLM-based external-reasoning baseline. Each method is evaluated separately on each dataset using the same five-fold cross-validation partitions, and its parameters follow either the set-tings in the corresponding paper or those in the pub-lic implementation. External-knowledge methods use their original external-information acquisition mechanisms as specified in their papers, whereas RAEGNet uses the event-level evidence retrieval method proposed in this work. Direct LLM base-lines are not fine-tuned; they use the same retrieved evidence cache and a fixed judgment prompt for the held-out samples in each fold. 
+
+4.1.3 Evaluation metrics 
+
+We use the conventional metrics of accuracy, preci-sion, recall, and F1 score. For harm-level evalua-tion, we define the high-harm subset as all held-out samples with hi ≥ 0.7 in each fold. Within this subset, HHF Precision, HHF Recall, and HHF F1 are computed by treating fake news as the positive class and high-harm real news as the negative class. 
+
+4.1.4 Implementation details 
+
+We use CLIP-ViT-L/14 (Radford et al., 2021) and Chinese-CLIP-ViT-L/14 (Yang et al., 2022) to en-code English and Chinese samples, respectively. All task-specific baselines, RAEGNet variants, and ablation models are evaluated using the same five-fold cross-validation partitions, and the results are reported as the mean and standard deviation over the five held-out folds. Direct open-source MLLM baselines are evaluated in an evidence-augmented zero-shot setting on the same held-out folds. RAEGNet-E uses entity-level evidence, RAEGNet-B uses pre-news event-level evidence and serves as the main early-detection setting, while RAEGNet-A uses both pre-news and post-news event-level evidence only for post-hoc fact-checking. The two event-level variants correspond to different information-availability scenarios. Detailed model hyperparameters, evidence construction procedures, and MLLM prompts are provided in Appendices C and E. Table 3: Ablation study on the Weibo-21, Fakeddit, and SSS datasets. Indented rows prefixed by “–” indicate that only the specified subcomponent of the corresponding higher-level module is ablated. 
+
+Ablation Settings Weibo-21 Fakeddit SSS Accuracy HHF Accuracy HHF Accuracy HHF F1 Rec. F1 Rec. F1 Rec. w/o Evidence Graph 0.913 0.956 0.961 0.909 0.939 0.952 0.822 0.892 0.956 – w/o Edge Weights 0.920 0.959 0.956 0.915 0.936 0.935 0.837 0.886 0.923 – w/o Edge Types 0.914 0.960 0.967 0.911 0.930 0.935 0.826 0.877 0.928 w/o Harm-aware Branch 0.915 0.946 0.919 0.912 0.925 0.907 0.839 0.878 0.905 – w/o Lharm 0.923 0.954 0.936 0.909 0.926 0.919 0.839 0.888 0.923 – w/o Lrank 0.924 0.947 0.932 0.906 0.922 0.900 0.833 0.892 0.917 w/o News Text 0.886 0.919 0.891 0.870 0.894 0.935 0.815 0.891 0.910 w/o News Image 0.859 0.925 0.919 0.860 0.894 0.943 0.803 0.883 0.927 w/o Evidence 0.907 0.954 0.933 0.886 0.929 0.942 0.816 0.888 0.904 Full Model 0.931 0.972 0.974 0.919 0.947 0.955 0.843 0.896 0.952 0.1 0.3 0.5 0.7 0.9            
+
+> Harm Level 0.80 0.85 0.90 0.95 1.00
+> Performance (a) Weibo-21
+> 0.1 0.3 0.5 0.7 0.9
+> Harm Level 0.80 0.85 0.90 0.95 1.00
+> (b) Fakeddit
+> 0.1 0.3 0.5 0.7 0.9
+> Harm Level 0.80 0.85 0.90 0.95 1.00
+> (c) SSS
+> Accuracy Macro F1 Fake F1 Fake Recall
+
+Figure 3: Detection performance of RAEGNet at different harm levels. 
+
+4.2 Overall Performance 
+
+Table 2 presents the overall detection results of RAEGNet and the baseline methods on the three datasets. RAEGNet-B consistently outperforms the baselines in the early-detection setting, show-ing that event-level evidence remains useful when only evidence published before the correspond-ing news item is available. RAEGNet-A achieves the strongest performance in the post-hoc fact-checking setting, where a broader set of filtered evidence can be used for evidence-supported verifi-cation. Compared with RAEGNet-E, which uses entity-level evidence under the same model archi-tecture, both event-level variants achieve higher accuracy and F1 scores on all three datasets. 
+
+4.3 Ablation Study 
+
+We construct nine ablation variants. The results show that the news text, image, and external ev-idence all make substantial contributions to final performance. Removing the evidence graph, edge types, or edge weights generally reduces accu-racy and HHF F1. This finding indicates that the relation-aware evidence graph and its edge-feature design improve authenticity detection. By con-trast, removing the harm-aware branch, the harm-calibration loss, or the ordinal ranking loss re-duces HHF F1 and HHF Recall, indicating that conditional-harm modeling provides useful super-vision for high-harm fake-news recognition. 
+
+4.4 Harm-Level Analysis 
+
+Figure 3 presents the detailed performance of RAEGNet at different harm levels. A higher level indicates greater potential harm if the content is false and disseminated. The results show that RAEGNet achieves higher detection accuracy and better overall recognition performance for fake news with greater potential harm. In addition to au-thenticity classification, the harm-risk branch and ordinal ranking loss explicitly model the magni-tude and ordinal structure of conditional harm, pro-viding complementary supervision for high-harm fake-news recognition. Table 4: Comparison between entity-level and event-level evidence retrieval under the same RAEGNet archi-tecture. 
+
+Dataset Retrieval Acc. Fake F1 Real F1 Weibo-21 Entity-level 0.911 0.911 0.911 Event-level 0.931 0.934 0.929 Fakeddit Entity-level 0.898 0.908 0.886 Event-level 0.919 0.926 0.910 SSS Entity-level 0.808 0.817 0.798 Event-level 0.843 0.860 0.822 0 0.25 0.5 0.75 1
+
+> harm
+
+0.900 0.920 0.940 0.960 0.980 
+
+0 0.25 0.5 0.75 1
+
+> rank
+
+0.900 0.920 0.940 0.960 0.980 
+
+0 0.25 0.5 0.75 1
+
+> harm
+
+0.890 0.910 0.930 0.950 0.970 
+
+0 0.25 0.5 0.75 1
+
+> rank
+
+0.890 0.910 0.930 0.950 0.970 
+
+0 0.25 0.5 0.75 1
+
+> harm
+
+0.820 0.840 0.860 0.880 0.900 
+
+0 0.25 0.5 0.75 1
+
+> rank
+
+0.820 0.840 0.860 0.880 0.900 
+
+(a) Weibo-21 (b) Fakeddit (c) SSS 
+
+Accuracy Fake F1 HHF F1 
+
+Figure 4: Sensitivity analysis of λharm and λrank .
+
+4.5 Effectiveness of Event-Level Retrieval 
+
+To evaluate the effectiveness of event-level re-trieval, we compare entity-level and event-level evidence under the same RAEGNet architecture, keeping the model architecture and training con-figuration unchanged. The entity-level setting uses evidence retrieved by ERIC-FND, whereas the event-level setting uses leakage-filtered evidence retrieved by ELERF. As shown in Table 4, event-level retrieval consistently improves accuracy and fake/real F1 scores across all three datasets, indicat-ing that complete-event queries retrieve more rele-vant evidence and reduce entity-related but event-irrelevant noise. 
+
+4.6 Sensitivity Analysis 
+
+We further analyze the effects of the harm-calibration loss weight λharm and the ordinal-ranking loss weight λrank . As shown in Figure 4, 
+
+λharm = 0 .25 and λrank = 0 .25 yield relatively balanced results across all three datasets. Weights A photograph accurately showed passengers aboard Aloha Airlines 243 flight after its roof ripped off mid-flight on April 28, 1988. 
+
+> Aloha Airlines Flight 243 (IATA: AQ243, ICAO: AAH243) was a scheduled domestic passenger flight flown by Aloha Airlines between Hilo and Honolulu in Hawaii. On April 28, 1988, a Boeing 737-297 serving the flight suffered extensive damage after an explosive decompression in flight.
+> April 28, 1988: The roof of an Aloha Airlines jet ripped off in mid-air at 24,000 feet, but the plane still managed to land safely | A photo of Aloha flight 243 which in was able to land safety after having its roof ripped off in midair | In 1988, the roof of a plane travelling over Hawaii blew off mid-flight at ...
+> 0.9 (support)
+> 0.9 (support)
+
+…… 
+
+> Wikipedia
+> Reddit
+
+Probability Fake Real MSACA   
+
+> 0.9954 Fake RAEGNet
+> 0.9732 Real
+> The number of mail-in votes recorded in Pennsylvania during the 2020 election was much greater than the number of mail-in ballots requested.
+> Pa. counties waiting for 1.2 million mail ballots to arrive | But by Tuesday afternoon, the U.S. Election Project’s state data-based ballot-application tracker listed Pennsylvanians had requested 3,058,418 mail ballots and returned about 61%.
+> Pennsylvania mail-in ballot claim mixes primary, general election data | A claim made by President Donald Trump and his supporters on social media is that Pennsylvania election officials reported more mail-in votes for the 2020 election than the number of ballots ...
+> 0.1 (refute)
+
+Probability 
+
+> 0.1 (refute)
+> Whyy
+> AP News
+
+……   
+
+> MSACA
+> 0.8613 Fake Real RAEGNet
+> 0.9981 Fake Real
+
+Figure 5: Case study. 
+
+that are too small weaken conditional-harm supervi-sion, whereas excessively large weights may impair the model’s basic authenticity classification. The consistent trends across the three datasets indicate that the selected weights provide a stable balance between authenticity classification and conditional-harm modeling. 
+
+4.7 Case Study 
+
+As shown in Figure 5, the upper example is a real news report concerning Aloha Airlines Flight 243, for which the news item and the retrieved evidence are highly consistent in stance. With the assistance of external evidence, RAEGNet correctly classi-fies the news as real, whereas MSACA produces an incorrect prediction. The lower example is a false claim concerning mail-in ballots in the 2020 U.S. election. RAEGNet makes the correct judg-ment using information from the retrieved evidence, whereas MSACA makes an incorrect prediction. 
+
+5 Conclusion 
+
+We propose RAEGNet, which unifies a relation-aware evidence graph with conditional-harm learn-ing for fake news detection. The model enhances information interaction between news and evidence through multiple relation types and edge weights, while jointly modeling harm-risk assessment and authenticity classification. Experiments on three datasets demonstrate that RAEGNet outperforms the baselines overall and exhibits strong capability in identifying high-harm fake news. Limitations 
+
+The model relies on the quality of external retrieval and LLMs. Our event-level evidence acquisition depends on the initial recall of search engines, and the quantification of stance scores requires the as-sistance of LLMs. Additionally, the introduction of LLMs inevitably increases the inference latency of the system, which poses computational efficiency challenges for real-time streaming data detection scenarios with high concurrency. 
+
+Ethical Considerations 
+
+This study uses publicly available research datasets and web-accessible evidence solely for academic research on misinformation detection. Data col-lection and use followed the access conditions, licenses, and privacy requirements of the origi-nal datasets and platforms, and no private user at-tributes were inferred. The proposed framework is intended exclusively for defensive misinformation analysis and should not be used for surveillance, censorship, or automated decision-making without appropriate human oversight. 
+
+References 
+
+Isabelle Augenstein, Christina Lioma, Dongsheng Wang, Lucas Chaves Lima, Casper Hansen, Chris-tian Hansen, and Jakob Grue Simonsen. 2019. Mul-tiFC: A real-world multi-domain dataset for evidence-based fact checking of claims. In Proceedings of the 2019 Conference on Empirical Methods in Natu-ral Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP) , pages 4685–4697. Shuai Bai, Keqin Chen, Xuejing Liu, Jialin Wang, Wen-bin Ge, Sibo Song, Kai Dang, Peng Wang, Shi-jie Wang, Jun Tang, Humen Zhong, Yuanzhi Zhu, Mingkun Yang, Zhaohai Li, Jianqiang Wan, Pengfei Wang, Wei Ding, Zheren Fu, Yiheng Xu, Jiabo Ye, Xi Zhang, Tianbao Xie, Zesen Cheng, Hang Zhang, Zhibo Yang, Haiyang Xu, and Junyang Lin. 2025. Qwen2.5-VL technical report. arXiv preprint arXiv:2502.13923 .Shaked Brody, Uri Alon, and Eran Yahav. 2022. How attentive are graph attention networks? In Interna-tional Conference on Learning Representations .Biwei Cao, Qihang Wu, Jiuxin Cao, Bo Liu, and Jie Gui. 2025. External reliable information-enhanced mul-timodal contrastive learning for fake news detection. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 39, pages 31–39. Yixuan Chen, Dongsheng Li, Peng Zhang, Jie Sui, Qin Lv, Lu Tun, and Li Shang. 2022. Cross-modal am-biguity learning for multimodal fake news detection. In Proceedings of the ACM Web Conference 2022 ,pages 2897–2905. Zhe Chen, Weiyun Wang, Yue Cao, Yangzhou Liu, Zhangwei Gao, Erfei Cui, Jinguo Zhu, Shenglong Ye, Hao Tian, Zhaoyang Liu, et al. 2024. Expanding performance boundaries of open-source multimodal models with model, data, and test-time scaling. arXiv preprint arXiv:2412.05271 .Shaodong Cui, Kaibo Duan, Wen Ma, and Hiroyuki Shinnou. 2025. CCGN: consistency contrastive-learning graph network for multi-modal fake news detection. Multimedia Systems , 31(2):119. Yiqi Dong, Dongxiao He, Xiaobao Wang, Youzhu Jin, Meng Ge, Carl Yang, and Di Jin. 2024. Unveiling implicit deceptive patterns in multi-modal fake news via neuro-symbolic reasoning. In Proceedings of the AAAI Conference on Artificial Intelligence , vol-ume 38, pages 8354–8362. Yaqian Dun, Kefei Tu, Chen Chen, Chunyan Hou, and Xiaojie Yuan. 2021. KAN: Knowledge-aware atten-tion network for fake news detection. In Proceedings of the AAAI Conference on Artificial Intelligence ,volume 35, pages 81–89. Lifang Fu, Huanxin Peng, and Shuai Liu. 2023. KG-MFEND: an efficient knowledge graph-based model for multi-domain fake news detection. The Journal of Supercomputing , 79(16):18417–18444. Yi Fung, Christopher Thomas, Revanth Gangi Reddy, Sandeep Polisetty, Heng Ji, Shih-Fu Chang, Kath-leen McKeown, Mohit Bansal, and Avirup Sil. 2021. InfoSurgeon: Cross-media fine-grained information consistency checking for fake news detection. In 
+
+Proceedings of the 59th Annual Meeting of the Asso-ciation for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers) , pages 1683– 1698. Linmei Hu, Tianchi Yang, Luhao Zhang, Wanjun Zhong, Duyu Tang, Chuan Shi, Nan Duan, and Ming Zhou. 2021. Compare to the knowledge: Graph neural fake news detection with external knowledge. In Proceed-ings of the 59th annual meeting of the association for computational linguistics and the 11th international joint conference on natural language processing (vol-ume 1: long papers) , pages 754–763. Shuguo Hu, Jun Hu, and Huaiwen Zhang. 2025. Syner-gizing LLMs with global label propagation for mul-timodal fake news detection. In Proceedings of the 63rd Annual Meeting of the Association for Compu-tational Linguistics (Volume 1: Long Papers) , pages 1426–1440. Xuming Hu, Zhijiang Guo, Junzhe Chen, Lijie Wen, and Philip S Yu. 2023. MR2: A benchmark for multi-modal retrieval-augmented rumor detection in social media. In Proceedings of the 46th International ACM SIGIR Conference on Research and Development in Information Retrieval , pages 2901–2912. Zhiwei Jin, Juan Cao, Han Guo, Yongdong Zhang, and Jiebo Luo. 2017. Multimodal fusion with recurrent neural networks for rumor detection on microblogs. In Proceedings of the 25th ACM International Con-ference on Multimedia , pages 795–816. Jiho Kim, Sungjin Park, Yeonsu Kwon, Yohan Jo, James Thorne, and Edward Choi. 2023. FactKG: Fact veri-fication via reasoning on knowledge graphs. In Pro-ceedings of the 61st Annual Meeting of the Associa-tion for Computational Linguistics (Volume 1: Long Papers) , pages 16190–16206. Hao Liao, Jiahao Peng, Zhanyi Huang, Wei Zhang, Guanghua Li, Kai Shu, and Xing Xie. 2023. MUSER: A multi-step evidence retrieval enhancement frame-work for fake news detection. In Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining , pages 4461–4472. Xuannan Liu, Peipei Li, Huaibo Huang, Zekun Li, Xing Cui, Jiahao Liang, Lixiong Qin, Weihong Deng, and Zhaofeng He. 2024. FKA-Owl: Advancing multimodal fake news detection through knowledge-augmented LVLMs. In Proceedings of the 32nd ACM International Conference on Multimedia , pages 10154–10163. Yang Liu and Yi-Fang Wu. 2018. Early detection of fake news on social media through propagation path classification with recurrent and convolutional net-works. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 32. Zihan Ma, Minnan Luo, Hao Guo, Zhi Zeng, Yiran Hao, and Xiang Zhao. 2024. Event-Radar: Event-driven multi-view learning for multimodal fake news detection. In Proceedings of the 62nd Annual Meet-ing of the Association for Computational Linguistics (Volume 1: Long Papers) , pages 5809–5821. Kai Nakamura, Sharon Levy, and William Yang Wang. 2020. Fakeddit: A new multimodal benchmark dataset for fine-grained fake news detection. In Pro-ceedings of the Twelfth Language Resources and Evaluation Conference , pages 6149–6157. Qiong Nan, Juan Cao, Yongchun Zhu, Yanyan Wang, and Jintao Li. 2021. MDFEND: Multi-domain fake news detection. In Proceedings of the 30th ACM In-ternational Conference on Information & Knowledge Management , pages 3343–3347. Jeff Z Pan, Siyana Pavlova, Chenxi Li, Ningxi Li, Yang-mei Li, and Jinshuo Liu. 2018. Content based fake news detection using knowledge graphs. In Inter-national Semantic Web Conference , pages 669–683. Springer. Liwen Peng, Songlei Jian, Dongsheng Li, and Siqi Shen. 2023. MRML: Multimodal rumor detection by deep metric learning. In ICASSP 2023-2023 IEEE Inter-national Conference on Acoustics, Speech and Signal Processing (ICASSP) , pages 1–5. IEEE. Sanjaikanth E Vadakkethil Somanathan Pillai et al. 2024. A hierarchical framework for fake news detection using semantic analysis and source reliability. In 
+
+2024 2nd International Conference on Disruptive Technologies (ICDT) , pages 910–915. IEEE. Kashyap Popat, Subhabrata Mukherjee, Andrew Yates, and Gerhard Weikum. 2018. DeClarE: Debunking fake news and false claims using evidence-aware deep learning. In Proceedings of the 2018 Confer-ence on Empirical Methods in Natural Language Processing , pages 22–32. Peng Qi, Juan Cao, Tianyun Yang, Junbo Guo, and Jintao Li. 2019. Exploiting multi-domain visual in-formation for fake news detection. In 2019 IEEE International Conference on Data Mining (ICDM) ,pages 518–527. IEEE. Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sas-try, Amanda Askell, Pamela Mishkin, Jack Clark, et al. 2021. Learning transferable visual models from natural language supervision. In International Conference on Machine Learning , pages 8748–8763. PmLR. Edula Sri Ranga Srihith Reddy, SKVS Praveen Kumar, Chinta Srujan, and Pranesh Das. 2023. FNDSD-a machine learning based approach for fake news detec-tion and severity determination. In IET Conference Proceedings CP870 , volume 2023, pages 23–39. IET. Kai Shu, Deepak Mahudeswaran, Suhang Wang, Dong-won Lee, and Huan Liu. 2020. FakeNewsNet: A data repository with news content, social context, and spa-tiotemporal information for studying fake news on social media. Big Data , 8(3):171–188. Kai Shu, Amy Sliva, Suhang Wang, Jiliang Tang, and Huan Liu. 2017. Fake news detection on social me-dia: A data mining perspective. ACM SIGKDD Ex-plorations Newsletter , 19(1):22–36. Amila Silva, Ling Luo, Shanika Karunasekera, and Christopher Leckie. 2021. Embracing domain dif-ferences in fake news: Cross-domain fake news de-tection using multi-modal data. In Proceedings of the AAAI Conference on Artificial Intelligence , vol-ume 35, pages 557–565. Shivangi Singhal, Rajiv Ratn Shah, Tanmoy Chakraborty, Ponnurangam Kumaraguru, and Shin’ichi Satoh. 2019. SpotFake: A multi-modal framework for fake news detection. In 2019 IEEE fifth international conference on multimedia big data (BigMM) , pages 39–47. IEEE. Jiandong Wang, Hongguang Zhang, Chun Liu, and Xiongjun Yang. 2024. Fake news detection via multi-scale semantic alignment and cross-modal attention. In Proceedings of the 47th international ACM SIGIR conference on research and development in informa-tion retrieval , pages 2406–2410. Bingbing Xie, Xiaoxiao Ma, Jia Wu, Jian Yang, and Hao Fan. 2023. Knowledge graph enhanced hetero-geneous graph neural network for fake news detec-tion. IEEE Transactions on Consumer Electronics ,70(1):2826–2837. An Yang, Junshu Pan, Junyang Lin, Rui Men, Yichang Zhang, Jingren Zhou, and Chang Zhou. 2022. Chinese-CLIP: Contrastive vision-language pretrain-ing in chinese. arXiv preprint arXiv:2211.01335 .Shuo Yang, Zijian Yu, Zhenzhe Ying, Yuqin Dai, Guo-qing Wang, Jun Lan, Jinfeng Xu, Jinze Li, and Edith CH Ngai. 2025. RAMA: Retrieval-augmented multi-agent framework for misinformation detec-tion in multimodal fact-checking. arXiv preprint arXiv:2507.09174 .Yang Yang, Lei Zheng, Jiawei Zhang, Qingcai Cui, Zhoujun Li, and Philip S Yu. 2018. TI-CNN: Con-volutional neural networks for fake news detection. 
+
+arXiv preprint arXiv:1806.00749 .Litian Zhang, Xiaoming Zhang, Ziyi Zhou, Feiran Huang, and Chaozhuo Li. 2024a. Reinforced adap-tive knowledge learning for multimodal fake news detection. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 38, pages 16777– 16785. Qiang Zhang, Jiawei Liu, Fanrui Zhang, Jingyi Xie, and Zheng-Jun Zha. 2024b. Natural language-centered inference network for multi-modal fake news detec-tion. In Proceedings of the Thirty-Third International Joint Conference on Artificial Intelligence, IJCAI-24 ,pages 2542–2550. Xinyi Zhou, Jindi Wu, and Reza Zafarani. 2020. Similarity-aware multi-modal fake news detection. In Pacific-Asia Conference on Knowledge Discovery and Data Mining , pages 354–367. Springer. Xinyi Zhou and Reza Zafarani. 2020. A survey of fake news: Fundamental theories, detection methods, and opportunities. ACM Computing Surveys (CSUR) ,53(5):1–40. Ziyi Zhou, Xiaoming Zhang, Litian Zhang, Jiacheng Liu, Erik Cambria, and Chaozhuo Li. 2026. Fine-Fake: A knowledge-enriched dataset for fine-grained multi-domain fake news detection. Information Fu-sion , 132:104253. A Construction of the SSS Dataset 
+
+During this study, we found that existing multi-modal fake news detection datasets contain a large amount of low-quality data, including personal emotional expressions, fragmented statements lack-ing a verifiable factual subject, and damaged sam-ples with missing key modalities. Such low-quality data cannot faithfully and effectively reflect model capability. To better evaluate practical performance, we screened and assembled a high-quality SSS (Strictly Selected Subset) dataset from several ex-isting public datasets. The construction procedure is described below. 
+
+A.1 Basic Data Cleaning 
+
+In the initial phase, we collected six open-source datasets, including Fakeddit, FineFake, MR2, Weibo-17, Weibo-21, and CFND, with an initial total scale of over 1.14 million items. To remove obvious noise at an early stage, we designed the following basic cleaning rules: Textual Part: • Regular expressions were used to precisely remove residual HTML tags, special invisible characters, and garbled text. • Texts shorter than 15 words or Chinese charac-ters were removed to ensure that each sample contained a basic semantic context. Visual Part: • Samples whose original image links were in-valid, whose image files were corrupted, or whose images could not be decoded normally were automatically detected and removed. Multimodal Deduplication: • To reduce near-duplicate leakage while avoid-ing the removal of meaningful variations, we encoded each textual claim and its associ-ated image into a shared multimodal repre-sentation and computed cosine similarity be-tween candidate sample pairs. Pairs with mul-timodal similarity higher than 0.85 were se-lected as potential near-duplicates and manu-ally reviewed. A pair was removed as a dupli-cate only when the two samples expressed the same factual claim and contained the same or nearly identical visual context. 
+
+Table 5: The structured system prompt and examples for LLM-based semantic filtering.              
+
+> Role Content System You are an expert in fake news research data screening, dedicated to filtering high-quality multimodal news data. Each input contains a news text and its associ-ated news image. Evaluate the two modalities jointly. I. Judgment Criteria: 1. Applicable conditions (must be fully met to return “Usable”): (1) The text must possess a clear news for-mat and complete structure. The selected con-tent cannot be fragmented isolated words, but must have a clear description of the news event, and contain the basic elements constituting the news. (2) The content needs to present a complete chain of factual statements. Qualified data can-not be merely isolated subjective assertions or emotional venting. 2. Exclusion conditions (if any is met, imme-diately return “Unusable”): (1) The text is incomplete, missing, or trun-cated. (2) There are obvious grammatical errors or logical confusion. (3) Lacks basic news elements. (4) Lacks specific details, making truth verifi-cation impossible. (5) Contains a large amount of garbled text or special characters. II. Return Requirements: 1. Only return “Usable” or “Unusable”, no need to explain the reason. 2. If it cannot be judged, return “-1”. User News text: “A strong 7.8 magnitude earth-quake occurred in southern Turkey and north-ern Syria early Monday morning. Multiple buildings collapsed, and rescue teams are be-ing deployed.” News image: [NEWS IMAGE]
+> LLM Usable User News text: “It rained today, and I feel very sad. I hate this weather, it makes me want to stay in bed all day.” News image: [NEWS IMAGE]
+> LLM Unusable User News text: “A new policy was released yester-day.” News image: [NEWS IMAGE]
+> LLM Unusable
+
+A.2 LLM-Based Semantic Filtering 
+
+To ensure that the samples possessed a complete news structure and fact-checking value, we intro-duced a multimodal large language model as a data-screening expert for in-depth semantic filter-Table 6: Specific distribution and volume changes of each data source before and after screening.                         
+
+> Dataset Language Original Quantity Filtered Quantity Fakeddit (Nakamura et al., 2020) English 1,063,106 2,922 FineFake (Zhou et al., 2026) English 16,909 2,461 MR2 (Hu et al., 2023) Chinese & English 14,700 442 Weibo-17 (Jin et al., 2017) Chinese 9,528 942 Weibo-21 (Nan et al., 2021) Chinese 9,128 850 CFND (Zhang et al., 2024b) Chinese 26,665 380 Total Chinese & English 1,140,036 7,997
+
+Table 7: Statistics of similarity-assisted event grouping used for fold construction. Candidate pairs are retrieved automatically, whereas event identity is determined by human reviewers.                 
+
+> Dataset Samples Candidate Pairs Verified Event Groups Grouped Samples Weibo-21 4,493 286 74 198 Fakeddit 5,919 413 96 271 SSS 7,997 672 143 406
+
+ing. The model jointly evaluates the news text and its associated image. The screening criteria were converted into a structured system prompt. The de-tailed criteria and examples are shown in Table 5. 
+
+A.3 Manual Review 
+
+After semantic filtering by the large language model, we organized five reviewers with research backgrounds in misinformation detection to inde-pendently assess the samples further, thereby ensur-ing the reliability of the final retained data. Manual review focused on re-examining the model’s deci-sions and reaching final judgments on uncertain samples. At the decision stage, a sample was re-tained only if it received explicit approval from at least four reviewers. Samples with disagreement were discussed collectively by the group, which then made the final decision. Ultimately, 7,893 us-able samples were selected from the 8,597 samples judged usable by the LLM, and 104 usable samples were selected from the 312 uncertain samples. 
+
+A.4 Event Grouping and Fold Construction 
+
+After manual review, we performed a semantic-similarity-assisted event grouping procedure be-fore constructing the five cross-validation folds. For each news item, we retrieve its nearest neigh-bors according to multimodal cosine similarity and retain pairs with similarity higher than 0.85 as can-didate event-related pairs. This threshold is used only to improve the recall of potentially related samples, rather than to automatically merge them. Human reviewers then determine whether each can-didate pair describes the same real-world event by considering the core entities, main event action, time, location, and factual content. Reports that are rewritings, shortened versions, or multimodal variants of the same event are assigned to the same event group, whereas samples that only share a broad topic or similar wording are kept as distinct events. During fold construction, all samples assigned to the same event group are placed in the same fold. The allocation across the five folds preserves the overall distributions of authenticity labels, lan-guages, source datasets, and harm levels. Table 7 reports the number of candidate pairs inspected during this procedure. The grouping procedure substantially reduces direct event overlap between training and held-out folds. 
+
+A.5 Analysis of Dataset Composition 
+
+After the three stages described above, the final SSS (Strictly Selected Subset) dataset contained 7,997 high-quality multimodal news samples, including 3,836 real and 4,161 fake samples. In terms of language, 2,614 samples are in Chinese and 5,383 are in English, and the average harm coefficient of the entire dataset is 0.489. The relatively balanced authenticity distribution mitigates severe class im-balance, while the bilingual composition supports evaluation across different linguistic contexts. Ta-ble 6 reports the original and retained numbers of samples from each data source. Table 8: Annotation criteria for harm levels.             
+
+> Harm label Level Typical content 0.1 Very low harm Entertainment gossip, minor misleading content, and everyday misinformation with a limited scope of influence. 0.3 Low harm Content that may cause localized misunderstanding, but the impact is limited and the harm is controllable. 0.5 Moderate harm Content involving public events, social controversies, or collective perceptions that may provoke disputes or cause a certain degree of adverse impact. 0.7 High harm Content involving public safety, health, politics, disasters, or intergroup conflict that may produce a clear social impact. 0.9 Very high harm Content that may induce panic, real-world harm, risks to public order, or large-scale collective impact.
+
+Table 9: Agreement and adjudication rates for harm labels.              
+
+> Evaluation Weibo-21 Fakeddit SSS Human annotator agreement (Krippendorff’s α)0.9598 0.9303 0.9413 LLM–human agreement (mean agreement) 92.02% 89.37% 90.13% Adjudication Trigger Rate 0.78% (35/4,493) 1.32% (78/5,919) 1.25% (100/7,997)
+
+B Quantification of Harm Coefficients 
+
+B.1 Definition of Harm Labels 
+
+In real-world online ecosystems, different instances of fake news vary substantially in their potential de-structive impact. For example, political rumors and public-health misinformation are far more harm-ful than entertainment gossip. To characterize this difference, we define conditional harm as the poten-tial degree of social impact that the content could cause if it were false and disseminated through so-cial networks, without presupposing the current authenticity of the news item. 
+
+B.2 Manual Annotation 
+
+Harm labels were independently assigned by five annotators with research backgrounds in misin-formation detection. Under a unified standard, the annotators assigned every news item to one of five ordered levels, which were mapped to 
+
+h ∈ { 0.1, 0.3, 0.5, 0.7, 0.9}. Under normal cir-cumstances, the mean of the five annotators’ level assignments was first computed and then mapped to the nearest discrete harm level as the final label of the sample. If the difference between the highest and lowest levels assigned by the five annotators was two levels or more, the sample was considered to exhibit substantial disagreement. The five an-notators then discussed the sample as a group and jointly determined its final label. 
+
+B.3 Automated LLM-Based Annotation 
+
+In addition to manual labels, we design an auto-mated news-harm annotation procedure based on a large language model. Its purpose is to reduce the cost of manual annotation when transferring the method to other datasets and to improve adapt-ability to newly added data. The automated proce-dure uses the same definition of conditional harm and asks the model to output a continuous harm score in [0 , 100] under the assumption that the news is entirely false and is widely disseminated. The continuous score is then normalized and mapped to eh ∈ { 0.1, 0.3, 0.5, 0.7, 0.9} to obtain the auto-mated harm label. It should be emphasized that the final supervision labels used in our experiments are the labels produced by the five human annotators. The LLM-based procedure is used mainly to vali-date the feasibility of automated scaling and serves as an auxiliary tool for rapidly obtaining initial harm labels on larger datasets in future work. 
+
+B.4 Annotation Agreement and Validation of the Automated Procedure 
+
+To evaluate the reliability of the harm labels, we measure inter-annotator agreement, agreement be-tween the automated LLM labels and human labels, and the proportion of samples requiring adjudica-tion. Inter-annotator agreement is measured using Krippendorff’s alpha. LLM-human agreement de-notes the agreement between the automated LLM labels and the mean labels of the five human an-notators. The Adjudication Trigger Rate denotes the number and percentage of samples for which group adjudication was triggered because the differ-ence between the maximum and minimum levels assigned by the five annotators was two levels or more. The results show that inter-annotator agreement satisfies α > 0.90 on all three datasets, indicating that the definitions of the harm levels are highly operational. The proportion of samples that trig-ger group adjudication is below 1.5% on every dataset, showing that samples with substantial dis-agreement are rare. Mean agreement between the automated LLM labels and human labels is close to or above 90%, suggesting that the automated procedure can approximate human risk judgments well. 
+
+B.5 Distribution of Harm Coefficients 
+
+To visualize the distribution of news harmfulness in the SSS dataset, we count the numbers of real-and fake-news samples at each discrete harm coeffi-cient. The results are shown in Figure 6. Real-news samples are concentrated mainly in the range from 0.3 to 0.7, whereas the number of fake-news sam-ples increases markedly at the high-harm levels of 0.7 and 0.9. 0.1 0.3 0.5 0.7 0.9 
+
+> Harm Coefficient
+> 0200 400 600 800 1000 1200 1400
+> Number of News Samples
+> Real News Fake News
+
+Figure 6: Distribution of harm coefficients in the SSS dataset. 
+
+This distribution reflects the empirical risk struc-ture observed in the datasets used in this study. In realistic information environments, false claims may naturally concentrate in high-impact topics such as public health, disasters, politics, and social conflicts. Conditional harm is therefore treated as an intrinsic risk attribute of the news content under the assumption that the content is false and widely disseminated, rather than as a variable that must be artificially decorrelated from authenticity. At the same time, we examine whether the model benefits only from the marginal association be-tween harm levels and authenticity labels. For this purpose, we conduct harm-matched evalua-tion, where real and fake samples are balanced within each harm level in the held-out set. The full model remains stronger than the variant with-out Harm-aware Branch under this matched setting, suggesting that conditional-harm supervision con-tributes beyond the marginal association between harm and authenticity labels. 
+
+C Event-Level Evidence Retrieval Framework 
+
+C.1 Retrieval 
+
+We use Brave Search as the underlying search en-gine and restrict retrieval to a predefined source pool fixed before evaluation. The source pool cov-ers encyclopedic resources, news media, official in-stitutions, academic sources, specialized domains, and public communication platforms, as illustrated in Table 10. This design avoids post-hoc source se-lection for individual held-out samples and makes the retrieval scope auditable. For each news item, we use the complete news text as the query and retain the top 10 relevant web-page snippets together with their source and tempo-ral metadata. We first remove the target news URL when available, same-domain reposts or syndicated copies, and near-duplicate candidates whose text or visual content is highly similar to the target news item. The remaining candidates are then partitioned according to their temporal relation to the corre-sponding news item. Evidence published before the news item is assigned to the pre-news evidence set, whereas evidence published after the news item is assigned to the post-news evidence set. This temporal partition is performed before leakage fil-tering, and both subsets subsequently undergo the same automatic explicit filtering, LLM-based im-plicit leakage screening, and stance quantification procedures. Evidence whose publication time cannot be reli-ably determined is excluded from the pre-news evi-dence set and is therefore not used by RAEGNet-B. Such evidence may be considered for RAEGNet-A only after passing the complete leakage-control procedure. Table 10: Retrieval domains organized by primary and secondary categories. 
+
+Primary Category Secondary Category Retrieval Domains 
+
+Encyclopedias and Knowledge Bases wikipedia, britannica, baidu Communities and Content Platforms zhihu, douban, reddit, quora, youtube, weibo, sina, tencent, 163, sohu News Media News Agencies reuters, apnews, xinhuanet, chinanews, tass Transnational Media bbc, cnn, aljazeera, dw, euronews, france24, rt, sputniknews, chinadaily, sky, ifeng National Media cctv, people, thepaper, huanqiu, guancha, gmw, nytimes, washingtonpost, theguardian, foxnews, cbsnews, nbcnews, npr, pbs, time, newsweek, independent, dailymail, usatoday, telegraph, express, mirror, huffpost, cbc, theglobeandmail, ndtv, thehindu, hindustantimes, indianexpress, indiatoday, straitstimes, japantimes, haaretz, timesofisrael, jpost, elpais, nzherald, buzzfeednews, vice, vox, slate, theatlantic, buzzfeed Local and Regional Media bjnews, oeeee, scmp, chicagotribune, boston, bostonglobe, miamiherald, syracuse, denverpost, seattletimes, dallasnews, houstonchronicle, tampabay, kansascity, cleveland, oregonlive, sltrib, latimes, bangordailynews, nola, jacksonville, mercurynews, thestar, torontosun, vancouversun, smh, abc7, abc7ny, ktla, cbslocal, abc13, 9news, whyy Specialized Domains Government and Military whitehouse, fbi, justice, state, senate, house, army, navy, congress, thehill, politico Business and Finance jiemian, ce, nbd, yicai, eastmoney, businessinsider, cnbc, forbes, fortune, bloomberg, qz, wsj Entertainment rollingstone, variety, hollywoodreporter Technology theverge, wired, techcrunch, mashable, gizmodo, arstechnica, cnet Academic Sources nature, science, pewresearch, brookings, hoover, harvard, yale, stanford, cornell, mit, ucsb, umich Others nationalgeographic, smithsonianmag, history, allthatsinteresting, motherjones, loc, archives, amnesty, hrw, aclu, nationalww2museum, ushmm, nih, cdc, nasa, cma, guokr, kepuchina, livescience, iflscience, scientificamerican 
+
+Table 11: Full prompt used for LLM-based implicit leakage screening. 
+
+Role Content System You are a rigorous benchmark-label-leakage annotator for news–evidence pairs. Your task is to determine whether the candidate evidence directly reveals the benchmark authenticity label of the target news claim. Judgment criteria: Return Leakage if the evidence satisfies any of the following conditions: (1) It directly or indirectly states a final verdict that the target news claim is true, false, fabricated, misleading, or a rumor. (2) It reproduces a fact-checking conclusion, dataset annotation, benchmark label, or other annotation-specific information about the target claim. (3) It contains an official denial, clarification, confirmation, judicial decision, or retrospective conclusion that itself functions as a complete verdict on the authenticity of the target claim, without requiring evidence comparison or reasoning. Return NoLeakage if the evidence provides independent event facts, background information, source statements, timelines, subsequent investigations, event developments, judicial outcomes, or official materials without directly stating the benchmark label or a complete final verdict. Do not classify evidence as Leakage solely because it was published after the target news item. Post-publication factual evidence is admissible in the post-hoc fact-checking setting. Judge only the supplied news claim and evidence. Do not use external knowledge or infer missing facts. Output requirement: Return exactly one label: Leakage or NoLeakage . Do not provide explanations. User News claim: [NEWS CLAIM] 
+
+Candidate evidence: [CANDIDATE EVIDENCE] 
+
+LLM Leakage or NoLeakage 
+
+C.2 Filtering 
+
+We apply the same leakage-control procedure to both the pre-news and post-news evidence sets. In this work, benchmark-label leakage refers specif-ically to evidence that directly reveals the bench-mark authenticity label, reproduces dataset anno-tations, or provides an explicit final verdict on the target claim without requiring evidence compari-son or reasoning. The publication time of a piece of evidence alone is not used to determine whether it contains label leakage. The first stage is automatic explicit filtering. We exclude target pages, same-domain reposts, near-duplicate copies, professional fact-checking pages, dataset annotation pages, and candidate webpages or snippets that directly state a verdict on the target claim. The explicit filtering rules cover expres-sions such as “true,” “false,” “fake news,” “rumor,” “misinformation,” “misrepresentation,” “unverified,” “fact check,” and “debunked,” together with their Chinese equivalents and semantically equivalent verdict-style expressions. The second stage is LLM-based implicit leakage screening. This stage removes evidence that does not contain explicit verdict keywords but neverthe-less directly discloses the benchmark label through a retrospective fact-checking conclusion, a dataset-like annotation, or an authoritative statement that itself constitutes a complete verdict on the target claim. Evidence identified as containing implicit label leakage is removed immediately. By contrast, independent event facts are not re-garded as label leakage merely because they were published after the news item. Subsequent investi-gations, official materials, source statements, and factual timelines may be retained when they pro-vide evidence relevant to the claim without directly reproducing the benchmark label or an explicit fi-nal verdict. These post-publication facts constitute legitimate evidence in the post-hoc fact-checking setting represented by RAEGNet-A. Table 12 reports the temporal composition of the retrieved candidates and the number of evidence items retained after each automatic leakage-control stage. The pre-news and post-news subsets are filtered independently using the same criteria. The union of the two automatically retained subsets forms the evidence cache used by RAEGNet-A, whereas only the automatically retained pre-news subset is available to RAEGNet-B. 
+
+C.3 Stance Quantification 
+
+Only candidates judged to be leakage-free are used for stance quantification. According to the seman-tic direction between the evidence and the original news item, the LLM outputs an initial continuous stance score eqij ∈ [0 , 1] . Scores near the lower end of the interval indicate that the candidate evidence tends to refute the original news, scores near the up-per end indicate support, and scores in the middle indicate an unclear stance, insufficient relevance, or inadequate information. We then map eqij into the discrete stance set qij ∈ { 0.1, 0.3, 0.5, 0.7, 0.9} us-ing equal-width intervals. The mapping rules and interpretations are provided in Table 14. 
+
+C.4 Post-hoc Validation of Evidence Filtering 
+
+The evidence used for model training and evalua-tion is produced by the automatic ELERF pipeline, including explicit filtering, LLM-based implicit leakage screening, and stance quantification. After the evidence cache is constructed, we conduct a post-hoc validation to examine the quality of the automatic filtering process. In this validation, annotators inspect retained news–evidence pairs and check whether the evi-dence is semantically relevant, whether it contains explicit or implicit benchmark-label leakage, and whether the assigned stance score is consistent with the evidence content. Annotators do not have ac-cess to the ground-truth authenticity label or the cross-validation fold assignment. Under the leak-age definition used in this work, the validation does not identify retained evidence that directly discloses benchmark labels or final verdicts. During validation, reviewers were instructed not to flag a candidate as leakage merely because it was published after the corresponding news item. For post-news candidates, the reviewers distin-guished independent factual developments from direct benchmark-label disclosure. Subsequent in-vestigations, official documents, judicial outcomes, and event developments were considered admissi-ble when they supplied factual evidence that still re-quired comparison with the target claim. Evidence was considered leakage when it directly reproduced the benchmark label, stated a complete final ver-dict on the target claim, or exposed dataset-specific annotation information. This filtering protocol is introduced to keep the experimental evidence independent from bench-mark answers. It should not be interpreted as imply-ing that authoritative post-publication information is undesirable in real-world fact-checking. In oper-ational post-hoc verification, official statements, in-vestigation results, and judicial outcomes are often necessary and valuable evidence. Our experiments adopt a conservative protocol that removes direct verdict disclosure so that performance reflects evi-dence retrieval, comparison, and relational reason-ing rather than access to benchmark answers. Table 12: Temporal composition and leakage-control statistics of the retrieved evidence. The final automatic evidence set corresponds to the evidence retained after LLM screening. 
+
+Dataset Temporal Subset Candidates After Explicit Filtering After LLM Screening Weibo-21 Pre-news 8,193 6,448 4,094 Post-news 9,894 7,322 4,247 Fakeddit Pre-news 11,727 8,456 6,757 Post-news 13,791 7,333 4,618 SSS Pre-news 18,526 12,324 8,606 Post-news 21,718 9,167 6,551 
+
+Table 13: Full prompt used for LLM-based stance quantification. 
+
+System Prompt You are a rigorous semantic stance annotator for news-evidence pairs. You need to judge the semantic relation between the evidence and the core event, subject, and claim expressed by the news. Please assign a continuous stance score in the interval [0 , 1] to each evidence item. Interpret the score using the following ranges: • [0 .0, 0.2] Strong refutation: the evidence directly conflicts with the core claim of the news, or explicitly provides facts opposite to the core content of the news. • (0 .2, 0.4] Weak refutation: the evidence is partially inconsistent with the news, or weakly negates or weakens a key detail of the news. • (0 .4, 0.6] Neutral: the evidence is only background-related or topic-related, provides insufficient information, cannot determine support or refutation, or is basically irrelevant to the news. • (0 .6, 0.8] Weak support: the evidence is partially consistent with the news, or provides weak support for a key detail of the news. • (0 .8, 1.0] Strong support: the evidence explicitly supports the core claim of the news, or provides facts highly consistent with the core content of the news. Important constraints: • Support or refutation only indicates the semantic relation between the evidence text and the news text, and is independent of the actual truthfulness of the news. • Do not complete missing facts using commonsense or external knowledge. Make the judgment only based on the input text. Output requirement: Return only one decimal number in [0 , 1] , without explanations or additional text. 
+
+C.5 Distribution of Evidence Stances 
+
+To further validate the effectiveness of the evidence retrieval and stance quantification mechanisms, we analyze the stance distribution of external evidence associated with real and fake news in the SSS dataset. As shown in Figure 7, real news is as-sociated with substantially more retrieved evidence than fake news, and the number of evidence items corresponding to real news is markedly greater in the high-support interval. This result indicates that real-world events generally receive more extensive corroboration from external information. 
+
+C.6 Evidence Settings and Intended Scenarios 
+
+After automatic leakage-aware filtering, we con-struct two evidence settings corresponding to dif-ferent information-availability scenarios. 0.1 0.3 0.5 0.7 0.9 
+
+> Evidence Stance Score
+> 01000 2000 3000 4000 5000 6000
+> Number of Evidence Samples
+> Real News Fake News
+
+Figure 7: Distribution of external-evidence stance scores in the SSS dataset. 
+
+RAEGNet-B: Early-detection Setting. 
+
+RAEGNet-B uses only leakage-controlled evidence whose publication time precedes the corresponding news item. It therefore excludes Table 14: Mapping rules for the continuous stance scores output by the LLM. 
+
+Score Range Mapped Value Meaning 
+
+[0 .0, 0.2] 0.1 Severe conflict in core facts or direct denial. 
+
+(0 .2, 0.4] 0.3 Certain contradictions or inconsistencies exist, with weak refutation strength. 
+
+(0 .4, 0.6] 0.5 Content is irrelevant or lacks sufficient information to support a judgment. 
+
+(0 .6, 0.8] 0.7 Possesses partial factual consistency, providing limited support. 
+
+(0 .8, 1.0] 0.9 Highly consistent at the key factual level, explicitly supporting the original claim. The night before last, Ms. Lin was dining with her family at a hot pot restaurant. During the meal, she got into an argument with a waiter surnamed Zhu after her request to have more broth added was refused. Ms. Lin then posted on Weibo to complain about the incident. Later, Zhu suddenly brought over a container of boiling water and poured it over her head. He then dragged her to the ground and assaulted her. Ms. Lin suffered severe burns over 42% of her body. Zhu has been taken into criminal custody. 
+
+News Entity-level Retrieval Event-level Retrieval 
+
+[1] A dispute over adding water to a hot pot at “Mr. Hot Pot” near First Bridge in downtown Wenzhou ended with a 17-year-old waiter surnamed Zhu pouring boiling water over the head of a female customer, Ms. Lin, causing severe burns. After the incident was reported, it attracted widespread public attention and speculation. Some people argued that Zhu’s attack on the female customer was extremely serious and reprehensible, while others suggested that there may have been fault on both sides... 
+
+[2] A waiter and a female customer at a hot pot restaurant got into a dispute over adding water to the hot pot. The waiter then poured a basin of boiling water over the customer’s head, leaving her seriously burned. Yesterday, the waiter involved, surnamed Zhu, was detained by police in Lucheng on suspicion of intentional injury. 
+
+[3] While eating at a hot pot restaurant, a woman asked a waiter to add water to the pot. The waiter replied that there was still enough water in the pot and that no more was needed. The customer later complained that the waiter had a bad attitude. The waiter suddenly brought over a basin of hot liquid and poured it over her head. The waiter involved has since been taken into criminal custody. 
+
+[4] Yesterday, a video went viral online showing a waiter at a hot pot restaurant in Wenzhou, Zhejiang Province, pouring a large basin of boiling water over a female customer’s head. He then pushed her to the ground and punched and kicked her.It is understood that Zhu, the suspect involved in the “Mr. Hot Pot” customer scalding case, was taken into criminal custody yesterday. A shareholder of the hot pot restaurant stated... 
+
+[1] Hot pot is a style of cooking and dining in which soup or broth is kept simmering in a pot at the table, while ingredients such as meat, vegetables, and seafood are cooked in the broth and eaten immediately. 
+
+[2] Weibo is a Chinese microblogging and social media platform that allows users to publish and share text, images, videos, and other content and interact with other users. 
+
+[3] A scald is a type of thermal burn caused by hot liquids or gases, such as boiling water or steam, and is usually a first- or second-degree burn, although prolonged exposure may result in a third-degree burn. 
+
+A negative COVID-19 test will “clear” people to go to holiday gatherings with their family and friends across the United States. 
+
+[1] Assuming a negative coronavirus test means it's OK to attend gatherings "is a very dangerous strategy," L.A. County's health services director says. 
+
+[2] I'm going to visit family for Thanksgiving. Should I get a COVID test before I go? | A COVID-19 diagnostic test can show if you have an active coronavirus infection, according to the CDC, but a negative result only means that you did not have COVID-19 at the time of test. 
+
+[3] Covid test alone doesn't mean safe holiday gathering - The Washington Post | A positive test result is usually pretty reliable, but <strong>a negative result is a lot trickier to interpret. 
+
+[4] Before gathering with others, Dr. Mina said, people could combine a negative test with a two-week quarantine if they’re able, and have a frank conversation with older family members about the risk. 
+
+[1] A COVID-19 test is a medical test used to determine whether a person is infected with SARS-CoV-2, the virus that causes COVID-19. 
+
+[2] The United States of America (USA), also known as the United States (U.S.) or America, is a country primarily located in North America. It is a federal republic of 50 states and a federal capital district, Washington, D.C. 
+
+Figure 8: Qualitative cases comparing entity-level and event-level evidence retrieval. Event-level retrieval returns evidence that is more closely aligned with the complete news event, whereas entity-level retrieval tends to retrieve background information about salient entities mentioned in the news. 
+
+all post-publication information and applies the complete benchmark-label-leakage-control pro-cedure to the remaining pre-news evidence. This setting represents early fake-news detection under publication-date-based information-availability constraints. 
+
+RAEGNet-A: Post-hoc Fact-checking Setting. 
+
+RAEGNet-A uses the union of the leakage-controlled pre-news and post-news evidence sets. It represents a post-hoc fact-checking scenario in which subsequent investigations, event develop-ments, judicial outcomes, and official materials are legitimate sources of factual evidence. RAEGNet-A does not impose a temporal restriction, but it applies the same explicit filtering and LLM-based implicit screening to prevent direct disclosure of benchmark labels and final verdicts. It is therefore interpreted as evidence-supported verification after additional information becomes available. The distinction between the two settings con-cerns information availability rather than filtering quality. RAEGNet-B evaluates whether event-level evidence is useful when only information avail-able before news publication can be used, whereas RAEGNet-A evaluates evidence-supported verifi-cation when information emerging after publication is also available. C.7 Retrieval Case Analysis 
+
+Figure 8 provides qualitative cases illustrating how event-level retrieval differs from entity-level re-trieval. These cases are not intended as a sepa-rate large-scale relevance audit, but they help re-veal typical retrieval behaviors observed in our evidence collection process. In particular, entity-level queries often retrieve pages about salient per-sons, organizations, or locations, while event-level queries are more likely to retrieve documents de-scribing the specific action, claim, or factual cir-cumstance expressed by the news item. 
+
+D Statement on the Use of LLMs 
+
+To ensure the transparency and reproducibility of this study, this section describes the large language models used in the experiments, their application scenarios, and their hyperparameter configurations. 
+
+D.1 Model Selection for Core Modules 
+
+• Construction of the SSS dataset: We use the multimodal large language model Qwen2.5-VL-7B-Instruct. During data cleaning, the model jointly evaluates images and text to ac-curately remove low-quality samples. • Evidence retrieval, implicit leakage screening, and stance quantification: We use Qwen2.5-VL-7B-Instruct to identify whether candidate evidence contains implicit label leakage and, only for leakage-free candidates, to assess the semantic relevance between candidate evidence and news items as well as the strength of sup-port or refutation. • LLM-based baselines: We use Qwen2.5-VL-7B-Instruct and InternVL2.5-8B. Qwen2.5-VL-7B-Instruct and InternVL2.5-8B receive the news text, image, and retrieved evidence snip-pets in a locally deployable zero-shot setting. 
+
+D.2 Global Generation Parameters 
+
+To ensure stable outputs, all model calls use a uni-fied low-randomness configuration. The tempera-ture is set to 0.3, nucleus sampling (top-p) is set to 0.85, and the maximum generation length is lim-ited to 64 tokens. This configuration stabilizes the output format while also reducing API inference latency. 
+
+E Experimental Settings 
+
+E.1 Experimental Parameter Settings 
+
+Table 15 lists the main hyperparameters used in RAEGNet.                            
+
+> Table 15: Detailed experimental settings.
+> Type Parameter Value Feature Text dim. 768 Image dim. 768 Evidence dim. 768 Projection dim. 768 Relation dim. dr32 Graph
+> δ+0.6
+> δ−0.4
+> δ00.1
+> κcor 0.5
+> κcon 0.5
+> κsim 0.5 GATv2 layers 2GATv2 heads 1Loss
+> λharm 0.25
+> λrank 0.25
+> γ1.00 Training Optimizer AdamW Learning rate 1e −4
+> Weight decay 0.01 Batch size 32 Max epochs 50 Patience 5Dropout 0.20 Random seed 2026
+
+E.2 Baseline Models 
+
+To evaluate the performance of RAEGNet, we com-pare it with several advanced methods. These base-lines can be divided into three categories. 
+
+(1) Methods without external knowledge. 
+
+These methods focus on extracting features from the internal multimodal content of a news item and do not rely on external information. • CAFE (Chen et al., 2022): CAFE evaluates cross-modal consistency through cross-modal ambiguity learning and adaptively aggregates unimodal and cross-modal features for detec-tion. • MRML (Peng et al., 2023): MRML uses triplet learning to discover inter-class relations within each modality and performs contrastive pair-wise learning to model cross-modal relations. • Event-Radar (Ma et al., 2024): Event-Radar proposes an event-driven multi-view learning framework that identifies event-irrelevant fea-tures to improve model generalization. • MSACA (Wang et al., 2024): MSACA uses a multi-scale semantic alignment mechanism to align and fuse text and image features at dif-ferent semantic levels, thereby capturing fine-grained inconsistencies. 
+
+(2) Methods with external knowledge. These methods enhance reasoning by incorporating exter-nal knowledge graphs or background information. • KEHGNN-FD (Xie et al., 2023): KEHGNN-FD uses a heterogeneous graph neural network to deeply integrate external structured knowl-edge with multimodal content features and cap-ture rich semantic relations. • NSLM (Dong et al., 2024): NSLM pro-poses a neural-symbolic latent-variable model that combines news content with external evi-dence obtained through reverse-image retrieval. While determining news authenticity, it uncov-ers latent deceptive patterns to provide inter-pretability. • ERIC-FND (Cao et al., 2025): ERIC-FND proposes an external-reliable-information-enhanced multimodal contrastive learning framework. It enriches news representations with entity-rich external information and uses multimodal contrastive learning to promote se-mantic interaction across modalities. 
+
+(3) Methods with LLMs. These methods use multimodal or large language models to incorpo-rate news content and external evidence for authen-ticity judgment. • Qwen2.5-VL-7B-Instruct: an open-source mul-timodal instruction model used as a general visual-language reasoning baseline. • InternVL2.5-8B: an open-source multimodal model used to test direct evidence-conditioned visual-language judgment. • GLPN-LLM (Hu et al., 2025): GLPN-LLM combines large language models with global label propagation and uses LLM-generated pseudo-labels to alleviate the scarcity of su-pervised data. 
+
+E.3 Prompt for w/ MLLM Baselines 
+
+For the direct w/ MLLM baselines, we use a fixed zero-shot prompt for the held-out samples in all five folds. The prompt asks the model to jointly consider the news text, news image, and retrieved evidence snippets, and to output only a binary au-thenticity label. GLPN-LLM follows its original LLM-based label-propagation setting. 
+
+F Complete Experimental Results 
+
+This section provides the complete experimental results and additional analyses. To keep the pre-sentation compact and readable, all textual discus-sions are placed before the tables, and the complete numerical results are collected at the end of this section. We report three variants of RAEGNet to dis-tinguish retrieval granularity and evidence avail-ability. RAEGNet-E uses the entity-level evi-dence retrieved by ERIC-FND, serving as a con-trolled comparison with entity-level retrieval un-der the same model architecture. RAEGNet-B uses only leakage-controlled event-level evi-dence published before the corresponding news item and represents the early-detection setting un-der publication-date-based evidence availability. RAEGNet-A uses the union of leakage-controlled pre-news and post-news event-level evidence and represents the post-hoc fact-checking setting. Post-publication independent factual evidence is ad-missible in RAEGNet-A, whereas evidence that directly reveals the benchmark label, reproduces dataset annotations, or states a complete final ver-dict is excluded from both settings. 
+
+F.1 Overall Performance 
+
+Tables 17–19 report the overall performance on the three datasets. Across datasets, RAEGNet consis-tently achieves stronger results than task-specific baselines, external-knowledge-enhanced baselines, and direct LLM-based baselines. The comparison among RAEGNet-E, RAEGNet-B, and RAEGNet-A further shows that event-level evidence is more effective than entity-level evidence under the same architecture, while broader leakage-controlled ev-idence provides additional gains in the post-hoc setting. 
+
+F.2 Ablation Study 
+
+Tables 20–22 present the complete ablation results. Removing the evidence graph, edge weights, or Table 16: Full prompt used for direct w/ MLLM authenticity judgment.             
+
+> Role Content System You are a rigorous multimodal news authenticity evaluator. Your task is to determine whether a news item is fake or real by jointly considering the news text, the associated image, and the retrieved external evidence. Decision criteria: (1) Judge whether the core claim expressed by the news is supported or contradicted by the visual content and the retrieved evidence. (2) Use the retrieved evidence only as contextual evidence. Do not assume that an evidence source is always correct, and do not use prior knowledge beyond the supplied inputs. (3) If the image-text pair or the evidence reveals clear factual contradiction, temporal inconsistency, entity mismatch, or unsupported fabrication, classify the news as fake. (4) If the news text, image, and evidence are mutually consistent and the evidence supports the core claim, classify the news as real. (5) If the evidence is insufficient, make the most likely binary judgment based on the supplied news text, image, and evidence. Output requirement: Return exactly one label: Fake or Real . Do not provide explanations. User News text: [NEWS TEXT]
+> News image: [NEWS IMAGE]
+> Retrieved evidence snippets: [EVIDENCE SNIPPETS]
+> MLLM Fake or Real
+
+edge types weakens the model, confirming the im-portance of relation-aware evidence modeling. Re-moving the harm-aware branch or its associated ob-jectives mainly affects high-harm fake-news recog-nition, showing that the harm-aware design con-tributes beyond ordinary authenticity classification. Removing text, image, or evidence also reduces performance, indicating that the final model bene-fits from all three information sources. 
+
+F.3 Performance Across Harm Levels 
+
+Tables 23–25 report accuracy across different harm levels. The results show that RAEGNet maintains stable performance across harm groups and is par-ticularly effective on high-harm samples. This sup-ports the central motivation of the model: fake-news detection should not only optimize aggregate performance, but should also strengthen recogni-tion of more socially consequential misinforma-tion. 
+
+F.4 Conditional-Harm Prediction 
+
+Table 26 directly evaluates the conditional-harm prediction branch. Compared with a text-only pre-dictor, the RAEGNet harm branch better matches human harm annotations, indicating that the mul-timodal representation and the learned harm-risk branch capture useful signals for estimating poten-tial social impact. 
+
+F.5 Harm-Matched Evaluation 
+
+Table 27 reports the harm-matched evaluation, where real and fake samples are balanced within each harm level. This setting reduces the possibil-ity that the model benefits merely from marginal correlations between harm labels and authenticity labels. The full model remains consistently better than the ablated variant, suggesting that the harm-aware objective improves detection through useful supervision rather than simply exploiting label dis-tribution patterns. 
+
+F.6 Analysis of Retrieval and Model Contributions 
+
+Table 28 separates the effects of retrieval granular-ity and downstream model architecture under the same source pool, filtering process, and evidence budget. Event-level retrieval improves over entity-level retrieval under the same backbone, showing that complete-event queries reduce irrelevant evi-dence. Under the same retrieval setting, RAEGNet improves over simple evidence fusion, demonstrat-ing that relation-aware graph modeling contributes additional gains beyond retrieval quality alone. 
+
+F.7 Event-Level Evidence for Other w/ EK Models 
+
+Table 29 evaluates whether ELERF evidence bene-fits other external-knowledge baselines. Replacing the original evidence sources with leakage-filtered ELERF evidence consistently improves these base-lines, especially entity-oriented methods. This indi-cates that the advantage of ELERF comes not only from its compatibility with RAEGNet, but also from the general usefulness of event-level evidence for evidence-enhanced fake-news detection. Table 17: Overall performance on Weibo-21. 
+
+Category Method Accuracy Fake News Real News Precision Recall F1 Precision Recall F1 w/o EK CAFE 0.815 ±0.005 0.850 ±0.005 0.774 ±0.005 0.810 ±0.005 0.785 ±0.005 0.858 ±0.005 0.820 ±0.005 
+
+MRML 0.903 ±0.011 0.881 ±0.010 0.935 ±0.010 0.908 ±0.010 0.928 ±0.012 0.869 ±0.011 0.898 ±0.011 
+
+Event-Radar 0.881 ±0.010 0.873 ±0.009 0.896 ±0.010 0.884 ±0.009 0.889 ±0.010 0.865 ±0.010 0.877 ±0.010 
+
+MSACA 0.894 ±0.006 0.861 ±0.006 0.944 ±0.005 0.900 ±0.005 0.935 ±0.005 0.841 ±0.007 0.886 ±0.006 
+
+w/ EK KEHGNN-FD 0.764 ±0.005 0.752 ±0.004 0.801 ±0.005 0.776 ±0.004 0.779 ±0.005 0.726 ±0.005 0.751 ±0.005 
+
+NSLM 0.878 ±0.009 0.851 ±0.008 0.921 ±0.009 0.885 ±0.008 0.911 ±0.010 0.833 ±0.009 0.870 ±0.010 
+
+ERIC-FND 0.844 ±0.011 0.804 ±0.009 0.916 ±0.011 0.857 ±0.010 0.898 ±0.013 0.769 ±0.011 0.828 ±0.012 
+
+w/ LLM Qwen2.5-VL 0.742 ±0.010 0.734 ±0.009 0.776 ±0.008 0.754 ±0.009 0.753 ±0.010 0.707 ±0.011 0.729 ±0.010 
+
+InternVL2.5 0.714 ±0.007 0.709 ±0.007 0.744 ±0.007 0.726 ±0.007 0.720 ±0.008 0.683 ±0.007 0.701 ±0.007 
+
+GLPN-LLM 0.882 ±0.010 0.856 ±0.010 0.923 ±0.010 0.888 ±0.010 0.913 ±0.011 0.839 ±0.011 0.874 ±0.011 
+
+Ours RAEGNet-E 0.911 ±0.004 0.928 ±0.004 0.896 ±0.004 0.911 ±0.004 0.895 ±0.004 0.928 ±0.004 0.911 ±0.004 
+
+RAEGNet-B 0.928 ±0.007 0.923 ±0.007 0.937 ±0.007 0.930 ±0.007 0.933 ±0.007 0.918 ±0.007 0.926 ±0.007 
+
+RAEGNet-A 0.931 ±0.009 0.919 ±0.008 0.948 ±0.009 0.934 ±0.009 0.945 ±0.010 0.913 ±0.009 0.929 ±0.009 
+
+Table 18: Overall performance on Fakeddit. 
+
+Category Method Accuracy Fake News Real News Precision Recall F1 Precision Recall F1 w/o EK CAFE 0.786 ±0.011 0.773 ±0.009 0.864 ±0.011 0.816 ±0.010 0.807 ±0.015 0.691 ±0.012 0.745 ±0.013 
+
+MRML 0.860 ±0.006 0.852 ±0.005 0.900 ±0.006 0.876 ±0.005 0.870 ±0.007 0.811 ±0.007 0.839 ±0.007 
+
+Event-Radar 0.840 ±0.010 0.831 ±0.008 0.888 ±0.010 0.859 ±0.009 0.852 ±0.012 0.780 ±0.010 0.815 ±0.011 
+
+MSACA 0.846 ±0.009 0.839 ±0.008 0.889 ±0.008 0.864 ±0.008 0.855 ±0.010 0.794 ±0.010 0.823 ±0.010 
+
+w/ EK KEHGNN-FD 0.763 ±0.010 0.752 ±0.008 0.846 ±0.009 0.796 ±0.008 0.780 ±0.013 0.662 ±0.011 0.716 ±0.012 
+
+NSLM 0.850 ±0.006 0.844 ±0.005 0.892 ±0.006 0.867 ±0.005 0.859 ±0.008 0.800 ±0.006 0.828 ±0.007 
+
+ERIC-FND 0.794 ±0.010 0.764 ±0.008 0.904 ±0.010 0.828 ±0.009 0.851 ±0.015 0.661 ±0.011 0.744 ±0.013 
+
+w/ LLM Qwen2.5-VL 0.738 ±0.001 0.740 ±0.002 0.805 ±0.001 0.771 ±0.000 0.736 ±0.001 0.657 ±0.003 0.694 ±0.002 
+
+InternVL2.5 0.726 ±0.000 0.726 ±0.000 0.804 ±0.000 0.763 ±0.000 0.727 ±0.000 0.632 ±0.000 0.676 ±0.000 
+
+GLPN-LLM 0.875 ±0.005 0.871 ±0.004 0.906 ±0.004 0.888 ±0.004 0.880 ±0.006 0.837 ±0.005 0.858 ±0.005 
+
+Ours RAEGNet-E 0.898 ±0.007 0.898 ±0.007 0.919 ±0.006 0.908 ±0.007 0.898 ±0.008 0.873 ±0.009 0.886 ±0.008 
+
+RAEGNet-B 0.911 ±0.004 0.893 ±0.004 0.953 ±0.004 0.922 ±0.004 0.937 ±0.005 0.861 ±0.005 0.898 ±0.005 
+
+RAEGNet-A 0.919 ±0.007 0.921 ±0.006 0.932 ±0.006 0.926 ±0.006 0.916 ±0.008 0.903 ±0.007 0.910 ±0.007 
+
+Table 19: Overall performance on SSS. 
+
+Category Method Accuracy Fake News Real News Precision Recall F1 Precision Recall F1 w/o EK CAFE 0.726 ±0.009 0.709 ±0.008 0.802 ±0.009 0.753 ±0.009 0.750 ±0.012 0.644 ±0.010 0.693 ±0.010 
+
+MRML 0.758 ±0.006 0.742 ±0.005 0.821 ±0.006 0.779 ±0.005 0.780 ±0.007 0.690 ±0.006 0.732 ±0.006 
+
+Event-Radar 0.754 ±0.005 0.755 ±0.005 0.779 ±0.005 0.767 ±0.005 0.752 ±0.006 0.726 ±0.005 0.739 ±0.006 
+
+MSACA 0.762 ±0.011 0.757 ±0.010 0.801 ±0.010 0.778 ±0.010 0.769 ±0.012 0.721 ±0.012 0.744 ±0.012 
+
+w/ EK KEHGNN-FD 0.674 ±0.010 0.672 ±0.009 0.726 ±0.010 0.698 ±0.009 0.675 ±0.011 0.616 ±0.010 0.644 ±0.011 
+
+NSLM 0.781 ±0.010 0.751 ±0.009 0.866 ±0.010 0.804 ±0.009 0.825 ±0.013 0.688 ±0.011 0.750 ±0.012 
+
+ERIC-FND 0.655 ±0.009 0.620 ±0.006 0.870 ±0.007 0.724 ±0.007 0.749 ±0.015 0.421 ±0.010 0.539 ±0.013 
+
+w/ LLM Qwen2.5-VL 0.629 ±0.005 0.628 ±0.005 0.703 ±0.005 0.664 ±0.005 0.630 ±0.006 0.549 ±0.006 0.587 ±0.006 
+
+InternVL2.5 0.613 ±0.005 0.614 ±0.005 0.690 ±0.004 0.650 ±0.004 0.612 ±0.006 0.530 ±0.007 0.568 ±0.007 
+
+GLPN-LLM 0.707 ±0.007 0.684 ±0.006 0.814 ±0.006 0.743 ±0.006 0.746 ±0.009 0.592 ±0.007 0.660 ±0.008 
+
+Ours RAEGNet-E 0.808 ±0.010 0.810 ±0.009 0.824 ±0.010 0.817 ±0.010 0.805 ±0.011 0.790 ±0.010 0.798 ±0.010 
+
+RAEGNet-B 0.837 ±0.011 0.810 ±0.010 0.897 ±0.011 0.851 ±0.010 0.873 ±0.013 0.772 ±0.012 0.819 ±0.013 
+
+RAEGNet-A 0.843 ±0.012 0.803 ±0.010 0.926 ±0.011 0.860 ±0.011 0.903 ±0.015 0.754 ±0.012 0.822 ±0.013 Table 20: Ablation results on Weibo-21. 
+
+Variation Accuracy Macro F1 Fake F1 HHF F1 HHF Recall w/o Evidence Graph 0.913 ±0.007 0.913 ±0.007 0.915 ±0.007 0.956 ±0.007 0.961 ±0.007 
+
+– w/o Edge Weights 0.920 ±0.009 0.920 ±0.009 0.921 ±0.009 0.959 ±0.009 0.956 ±0.009 
+
+– w/o Edge Types 0.914 ±0.006 0.914 ±0.006 0.916 ±0.006 0.960 ±0.006 0.967 ±0.006 
+
+w/o Harm-aware Branch 0.915 ±0.006 0.915 ±0.006 0.914 ±0.005 0.946 ±0.007 0.919 ±0.006 
+
+– w/o Lharm 0.923 ±0.010 0.923 ±0.010 0.923 ±0.011 0.954 ±0.010 0.936 ±0.011 
+
+– w/o Lrank 0.924 ±0.007 0.924 ±0.007 0.924 ±0.008 0.947 ±0.008 0.932 ±0.009 
+
+w/o News Text 0.886 ±0.004 0.886 ±0.004 0.888 ±0.004 0.919 ±0.005 0.891 ±0.004 
+
+w/o News Image 0.859 ±0.012 0.859 ±0.012 0.865 ±0.012 0.925 ±0.011 0.919 ±0.013 
+
+w/o Evidence 0.907 ±0.006 0.907 ±0.006 0.909 ±0.006 0.954 ±0.007 0.933 ±0.007 
+
+Full Model 0.931 ±0.009 0.931 ±0.009 0.934 ±0.009 0.972 ±0.006 0.974 ±0.007 
+
+Table 21: Ablation results on Fakeddit. 
+
+Variation Accuracy Macro F1 Fake F1 HHF F1 HHF Recall w/o Evidence Graph 0.909 ±0.012 0.907 ±0.012 0.921 ±0.012 0.939 ±0.012 0.952 ±0.014 
+
+– w/o Edge Weights 0.915 ±0.004 0.914 ±0.004 0.924 ±0.004 0.936 ±0.005 0.935 ±0.005 
+
+– w/o Edge Types 0.911 ±0.011 0.910 ±0.011 0.921 ±0.011 0.930 ±0.011 0.935 ±0.011 
+
+w/o Harm-aware Branch 0.912 ±0.010 0.911 ±0.010 0.920 ±0.010 0.925 ±0.011 0.907 ±0.009 
+
+– w/o Lharm 0.909 ±0.010 0.908 ±0.010 0.917 ±0.010 0.926 ±0.010 0.919 ±0.009 
+
+– w/o Lrank 0.906 ±0.007 0.905 ±0.007 0.913 ±0.007 0.922 ±0.007 0.900 ±0.007 
+
+w/o News Text 0.870 ±0.011 0.867 ±0.011 0.888 ±0.011 0.894 ±0.011 0.935 ±0.011 
+
+w/o News Image 0.860 ±0.005 0.857 ±0.005 0.878 ±0.005 0.894 ±0.005 0.943 ±0.005 
+
+w/o Evidence 0.886 ±0.011 0.885 ±0.011 0.898 ±0.011 0.929 ±0.012 0.942 ±0.009 
+
+Full Model 0.919 ±0.007 0.918 ±0.007 0.926 ±0.006 0.947 ±0.006 0.955 ±0.005 
+
+Table 22: Ablation results on SSS. 
+
+Variation Accuracy Macro F1 Fake F1 HHF F1 HHF Recall w/o Evidence Graph 0.822 ±0.004 0.818 ±0.004 0.844 ±0.005 0.892 ±0.004 0.956 ±0.005 
+
+– w/o Edge Weights 0.837 ±0.011 0.835 ±0.010 0.851 ±0.011 0.886 ±0.010 0.923 ±0.012 
+
+– w/o Edge Types 0.826 ±0.011 0.824 ±0.011 0.843 ±0.010 0.877 ±0.011 0.928 ±0.011 
+
+w/o Harm-aware Branch 0.839 ±0.010 0.838 ±0.010 0.850 ±0.010 0.878 ±0.010 0.905 ±0.010 
+
+– w/o Lharm 0.839 ±0.006 0.838 ±0.006 0.852 ±0.007 0.888 ±0.007 0.923 ±0.007 
+
+– w/o Lrank 0.833 ±0.004 0.832 ±0.004 0.844 ±0.004 0.892 ±0.005 0.917 ±0.004 
+
+w/o News Text 0.815 ±0.005 0.814 ±0.005 0.830 ±0.005 0.891 ±0.005 0.910 ±0.005 
+
+w/o News Image 0.803 ±0.006 0.801 ±0.006 0.822 ±0.006 0.883 ±0.006 0.927 ±0.007 
+
+w/o Evidence 0.816 ±0.008 0.815 ±0.008 0.831 ±0.008 0.888 ±0.008 0.904 ±0.009 
+
+Full Model 0.843 ±0.012 0.841 ±0.012 0.860 ±0.011 0.896 ±0.011 0.952 ±0.011 Table 23: Accuracy across harm levels on Weibo-21. 
+
+Category Method 0.1 0.3 0.5 0.7 0.9 Overall w/o EK CAFE 0.825 ±0.011 0.806 ±0.004 0.816 ±0.008 0.805 ±0.006 0.818 ±0.008 0.815 ±0.005 
+
+MRML 0.898 ±0.011 0.909 ±0.009 0.902 ±0.012 0.908 ±0.011 0.900 ±0.008 0.903 ±0.011 
+
+Event-Radar 0.886 ±0.012 0.871 ±0.005 0.882 ±0.010 0.879 ±0.012 0.884 ±0.008 0.881 ±0.010 
+
+MSACA 0.889 ±0.009 0.898 ±0.007 0.892 ±0.005 0.900 ±0.006 0.890 ±0.001 0.894 ±0.006 
+
+w/ EK KEHGNN-FD 0.771 ±0.009 0.756 ±0.005 0.769 ±0.008 0.755 ±0.007 0.765 ±0.002 0.764 ±0.005 
+
+NSLM 0.882 ±0.009 0.871 ±0.010 0.879 ±0.010 0.876 ±0.009 0.881 ±0.009 0.878 ±0.009 
+
+ERIC-FND 0.838 ±0.012 0.850 ±0.012 0.843 ±0.011 0.847 ±0.009 0.843 ±0.011 0.844 ±0.011 
+
+w/ LLM Qwen2.5-VL 0.746 ±0.011 0.739 ±0.009 0.744 ±0.008 0.739 ±0.010 0.743 ±0.008 0.742 ±0.009 
+
+InternVL2.5 0.722 ±0.002 0.715 ±0.001 0.719 ±0.003 0.715 ±0.003 0.724 ±0.008 0.714 ±0.007 
+
+GLPN-LLM 0.884 ±0.010 0.878 ±0.012 0.884 ±0.010 0.879 ±0.012 0.884 ±0.008 0.882 ±0.010 
+
+Ours RAEGNet-E 0.910 ±0.010 0.883 ±0.005 0.914 ±0.003 0.919 ±0.005 0.969 ±0.000 0.911 ±0.004 
+
+RAEGNet-B 0.928 ±0.007 0.901 ±0.006 0.928 ±0.009 0.931 ±0.007 0.991 ±0.009 0.928 ±0.007 
+
+RAEGNet-A 0.931 ±0.011 0.905 ±0.012 0.928 ±0.009 0.938 ±0.009 0.997 ±0.007 0.931 ±0.009 
+
+Table 24: Accuracy across harm levels on Fakeddit. 
+
+Category Method 0.1 0.3 0.5 0.7 0.9 Overall w/o EK CAFE 0.792 ±0.011 0.782 ±0.012 0.789 ±0.011 0.783 ±0.012 0.786 ±0.010 0.786 ±0.011 
+
+MRML 0.852 ±0.008 0.865 ±0.009 0.858 ±0.009 0.863 ±0.002 0.860 ±0.001 0.860 ±0.006 
+
+Event-Radar 0.844 ±0.008 0.836 ±0.011 0.842 ±0.011 0.837 ±0.011 0.839 ±0.006 0.840 ±0.010 
+
+MSACA 0.840 ±0.010 0.849 ±0.008 0.844 ±0.011 0.850 ±0.011 0.847 ±0.001 0.846 ±0.009 
+
+w/ EK KEHGNN-FD 0.765 ±0.007 0.758 ±0.011 0.766 ±0.012 0.761 ±0.012 0.763 ±0.006 0.763 ±0.010 
+
+NSLM 0.844 ±0.011 0.855 ±0.010 0.847 ±0.006 0.854 ±0.011 0.849 ±0.005 0.850 ±0.006 
+
+ERIC-FND 0.801 ±0.010 0.789 ±0.011 0.798 ±0.010 0.790 ±0.011 0.796 ±0.009 0.794 ±0.010 
+
+w/ LLM Qwen2.5-VL 0.733 ±0.003 0.743 ±0.001 0.737 ±0.002 0.741 ±0.001 0.732 ±0.002 0.738 ±0.001 
+
+InternVL2.5 0.721 ±0.000 0.730 ±0.002 0.725 ±0.000 0.730 ±0.002 0.719 ±0.002 0.726 ±0.001 
+
+GLPN-LLM 0.869 ±0.004 0.879 ±0.006 0.873 ±0.006 0.878 ±0.005 0.872 ±0.001 0.875 ±0.005 
+
+Ours RAEGNet-E 0.889 ±0.007 0.901 ±0.010 0.879 ±0.009 0.906 ±0.010 0.969 ±0.007 0.898 ±0.008 
+
+RAEGNet-B 0.905 ±0.004 0.912 ±0.007 0.893 ±0.009 0.919 ±0.009 0.980 ±0.007 0.911 ±0.005 
+
+RAEGNet-A 0.913 ±0.007 0.923 ±0.013 0.899 ±0.012 0.924 ±0.008 0.985 ±0.006 0.919 ±0.007 
+
+Table 25: Accuracy across harm levels on SSS. 
+
+Category Method 0.1 0.3 0.5 0.7 0.9 Overall w/o EK CAFE 0.731 ±0.009 0.722 ±0.010 0.729 ±0.011 0.724 ±0.010 0.722 ±0.007 0.726 ±0.009 
+
+MRML 0.752 ±0.005 0.762 ±0.006 0.756 ±0.006 0.761 ±0.006 0.756 ±0.005 0.758 ±0.006 
+
+Event-Radar 0.755 ±0.010 0.748 ±0.011 0.760 ±0.002 0.751 ±0.012 0.752 ±0.006 0.754 ±0.005 
+
+MSACA 0.757 ±0.012 0.768 ±0.011 0.760 ±0.012 0.765 ±0.011 0.759 ±0.009 0.762 ±0.011 
+
+w/ EK KEHGNN-FD 0.680 ±0.010 0.668 ±0.011 0.677 ±0.010 0.671 ±0.011 0.674 ±0.008 0.674 ±0.010 
+
+NSLM 0.775 ±0.010 0.785 ±0.010 0.778 ±0.011 0.784 ±0.011 0.780 ±0.012 0.781 ±0.011 
+
+ERIC-FND 0.662 ±0.009 0.649 ±0.009 0.658 ±0.010 0.652 ±0.009 0.656 ±0.007 0.655 ±0.009 
+
+w/ LLM Qwen2.5-VL 0.630 ±0.001 0.619 ±0.001 0.629 ±0.001 0.621 ±0.001 0.625 ±0.002 0.629 ±0.005 
+
+InternVL2.5 0.620 ±0.005 0.607 ±0.004 0.616 ±0.004 0.610 ±0.006 0.617 ±0.005 0.613 ±0.005 
+
+GLPN-LLM 0.713 ±0.008 0.703 ±0.006 0.710 ±0.008 0.704 ±0.007 0.711 ±0.006 0.707 ±0.007 
+
+Ours RAEGNet-E 0.811 ±0.010 0.808 ±0.010 0.779 ±0.010 0.818 ±0.011 0.853 ±0.009 0.808 ±0.010 
+
+RAEGNet-B 0.842 ±0.010 0.840 ±0.011 0.809 ±0.012 0.844 ±0.012 0.878 ±0.011 0.837 ±0.011 
+
+RAEGNet-A 0.847 ±0.012 0.845 ±0.012 0.815 ±0.012 0.851 ±0.012 0.888 ±0.012 0.843 ±0.012 Table 26: Direct evaluation of conditional-harm prediction. 
+
+Dataset Predictor MAE RMSE Weibo-21 Text-only MLP 0.103 ±0.005 0.137 ±0.005 
+
+RAEGNet harm branch 0.076 ±0.005 0.103 ±0.005 
+
+Fakeddit Text-only MLP 0.112 ±0.005 0.145 ±0.004 
+
+RAEGNet harm branch 0.084 ±0.006 0.112 ±0.006 
+
+SSS Text-only MLP 0.119 ±0.008 0.153 ±0.008 
+
+RAEGNet harm branch 0.091 ±0.007 0.119 ±0.006 
+
+Table 27: Harm-matched evaluation. Held-out samples are balanced between real and fake news within each harm level in every fold. 
+
+Dataset Evaluation Set Model Accuracy Macro F1 Fake F1 HHF F1 Weibo-21 Original w/o Harm-aware Risk 0.915 ±0.006 0.915 ±0.006 0.914 ±0.005 0.946 ±0.007 
+
+Full Model 0.931 ±0.009 0.931 ±0.009 0.934 ±0.009 0.972 ±0.006 
+
+Harm-matched w/o Harm-aware Risk 0.902 ±0.010 0.902 ±0.009 0.903 ±0.010 0.928 ±0.010 
+
+Full Model 0.914 ±0.010 0.914 ±0.010 0.916 ±0.010 0.946 ±0.010 
+
+Fakeddit Original w/o Harm-aware Risk 0.912 ±0.010 0.911 ±0.010 0.920 ±0.010 0.925 ±0.011 
+
+Full Model 0.919 ±0.007 0.918 ±0.007 0.926 ±0.006 0.947 ±0.006 
+
+Harm-matched w/o Harm-aware Risk 0.895 ±0.010 0.894 ±0.010 0.903 ±0.010 0.907 ±0.010 
+
+Full Model 0.904 ±0.007 0.903 ±0.007 0.912 ±0.006 0.927 ±0.006 
+
+SSS Original w/o Harm-aware Risk 0.839 ±0.010 0.838 ±0.010 0.850 ±0.010 0.878 ±0.010 
+
+Full Model 0.843 ±0.012 0.841 ±0.012 0.860 ±0.011 0.896 ±0.011 
+
+Harm-matched w/o Harm-aware Risk 0.815 ±0.006 0.814 ±0.007 0.829 ±0.006 0.861 ±0.006 
+
+Full Model 0.825 ±0.005 0.823 ±0.005 0.839 ±0.005 0.879 ±0.006 
+
+Table 28: Controlled comparison of retrieval granularity and model architecture under the same source pool, filtering process, and evidence budget. 
+
+Dataset Retrieval Query Backbone Accuracy Macro F1 Fake F1 HHF F1 Weibo-21 Entity-level Evidence Fusion 0.889 ±0.004 0.889 ±0.004 0.891 ±0.004 0.932 ±0.005 
+
+RAEGNet 0.914 ±0.005 0.914 ±0.005 0.916 ±0.005 0.955 ±0.006 
+
+Event-level Evidence Fusion 0.907 ±0.010 0.907 ±0.010 0.910 ±0.010 0.946 ±0.010 
+
+RAEGNet 0.928 ±0.005 0.928 ±0.005 0.930 ±0.004 0.968 ±0.003 
+
+Fakeddit Entity-level Evidence Fusion 0.872 ±0.008 0.870 ±0.008 0.884 ±0.009 0.912 ±0.009 
+
+RAEGNet 0.899 ±0.012 0.898 ±0.011 0.908 ±0.012 0.934 ±0.011 
+
+Event-level Evidence Fusion 0.892 ±0.008 0.890 ±0.008 0.903 ±0.008 0.925 ±0.009 
+
+RAEGNet 0.913 ±0.005 0.912 ±0.005 0.923 ±0.005 0.948 ±0.005 
+
+SSS Entity-level Evidence Fusion 0.781 ±0.004 0.780 ±0.004 0.798 ±0.004 0.861 ±0.004 
+
+RAEGNet 0.809 ±0.009 0.808 ±0.009 0.823 ±0.009 0.879 ±0.008 
+
+Event-level Evidence Fusion 0.805 ±0.009 0.804 ±0.009 0.821 ±0.010 0.873 ±0.009 
+
+RAEGNet 0.836 ±0.009 0.835 ±0.009 0.852 ±0.009 0.896 ±0.008 Table 29: Effect of replacing the original external evidence of w/ EK baselines with ELERF. 
+
+Dataset Method Evidence Source Accuracy Fake F1 Real F1 Weibo-21 KEHGNN-FD Original 0.764 ±0.005 0.776 ±0.004 0.751 ±0.005 
+
+ELERF 0.801 ±0.008 0.812 ±0.008 0.789 ±0.008 
+
+NSLM Original 0.878 ±0.009 0.885 ±0.008 0.870 ±0.010 
+
+ELERF 0.896 ±0.005 0.901 ±0.005 0.890 ±0.004 
+
+ERIC-FND Original 0.844 ±0.011 0.857 ±0.010 0.828 ±0.012 
+
+ELERF 0.879 ±0.011 0.886 ±0.011 0.871 ±0.010 
+
+Fakeddit KEHGNN-FD Original 0.763 ±0.010 0.796 ±0.008 0.716 ±0.012 
+
+ELERF 0.792 ±0.008 0.823 ±0.008 0.748 ±0.008 
+
+NSLM Original 0.850 ±0.006 0.867 ±0.005 0.828 ±0.007 
+
+ELERF 0.873 ±0.008 0.887 ±0.008 0.855 ±0.008 
+
+ERIC-FND Original 0.794 ±0.010 0.828 ±0.009 0.744 ±0.013 
+
+ELERF 0.841 ±0.004 0.861 ±0.004 0.812 ±0.004 
+
+SSS KEHGNN-FD Original 0.674 ±0.010 0.698 ±0.009 0.644 ±0.011 
+
+ELERF 0.710 ±0.009 0.735 ±0.009 0.681 ±0.010 
+
+NSLM Original 0.781 ±0.010 0.804 ±0.009 0.750 ±0.012 
+
+ELERF 0.806 ±0.011 0.826 ±0.011 0.782 ±0.011 
+
+ERIC-FND Original 0.655 ±0.009 0.724 ±0.007 0.539 ±0.013 
+
+ELERF 0.717 ±0.009 0.758 ±0.009 0.660 ±0.010

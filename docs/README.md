@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-10-01</span>
+      <span class="dpr-home-dashboard-kicker">2026-10-02</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 2 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 7 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>2</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>3</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>4</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-10-01 23:31:36 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-10-02 22:39:16 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日速读2篇、精读0篇，聚焦在线阴谋论检测与证据锚定的视频推理两个方向。</p>
-<p>两篇均为6.0分，《Agentic Detection of Online Conspiracies》和《ASSEMBLE: Atomic Skills for Evidence-Grounded Video Reasoning》值得快速浏览。</p>
-<p>普通读者可先看摘要和结论，判断是否与自身关注场景相关，再决定是否深挖全文。</p>
+<p>今日扫读7篇、精读3篇，主线锁定生成式AI时代的多模态假新闻检测。</p>
+<p>最值得看两篇9分精读：重思生成式AI时代的多模态假新闻检测，以及关系感知证据图网络用于危害感知检测。</p>
+<p>普通读者可优先关注“证据图+危害感知”思路，遇到多模态爆料时多追问证据链是否完整。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -80,12 +80,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">0 篇</strong>
+    <strong class="dpr-home-dashboard-count">3 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Rethinking Multimodal Fake News Detection in the Generative AI Era">Rethinking Multimodal Fake News Detection in the Generative AI Era</span></li><li><span class="dpr-home-dashboard-paper-title" title="RAEGNet: Relation-Aware Evidence Graph Network for Harm-Aware Multimodal Fake News Detection">RAEGNet: Relation-Aware Evidence Graph Network for Harm-Aware Multimodal Fake News Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="Multi-Channel Mitigation of Source-Trust Shortcuts in Fact-Checking RL Agents">Multi-Channel Mitigation of Source-Trust Shortcuts in Fact-Checking RL Agents</span></li></ul>
   </div>
-
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>3</strong></span></div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -93,12 +93,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">2 篇</strong>
+    <strong class="dpr-home-dashboard-count">4 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Agentic Detection of Online Conspiracies">Agentic Detection of Online Conspiracies</span></li><li><span class="dpr-home-dashboard-paper-title" title="ASSEMBLE: Atomic Skills for Evidence-Grounded Video Reasoning">ASSEMBLE: Atomic Skills for Evidence-Grounded Video Reasoning</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="TableSeek: Structure-Preserving Agentic Evidence Seeking over Heterogeneous Table Corpora">TableSeek: Structure-Preserving Agentic Evidence Seeking over Heterogeneous Table Corpora</span></li><li><span class="dpr-home-dashboard-paper-title" title="TAEC: Trajectory-Aware Evidence Coordination for Multi-Step Visual RAG">TAEC: Trajectory-Aware Evidence Coordination for Multi-Step Visual RAG</span></li><li><span class="dpr-home-dashboard-paper-title" title="Team MSU GenText-Forensics Challenge 2026 Technical Report">Team MSU GenText-Forensics Challenge 2026 Technical Report</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>2</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>4</strong></span></div>
 </section>
 </div>
 

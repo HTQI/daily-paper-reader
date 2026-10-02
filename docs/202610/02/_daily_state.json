@@ -1,0 +1,121 @@
+{
+  "date": "20261002",
+  "date_label": "",
+  "generated_at": "2026-10-02 22:39:16 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.36850v1",
+      "route": "202610/02/2609.36850v1-rethinking-multimodal-fake-news-detection-in-the-generative-ai-era",
+      "title": "Rethinking Multimodal Fake News Detection in the Generative AI Era",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "面向生成内容的多模态虚假新闻检测数据集",
+      "first_seen_at": "2026-10-02 22:39:16 UTC",
+      "updated_at": "2026-10-02 22:39:16 UTC"
+    },
+    {
+      "paper_id": "2609.36902v1",
+      "route": "202610/02/2609.36902v1-raegnet-relation-aware-evidence-graph-network-for-harm-aware-multimodal-fake-news-detection",
+      "title": "RAEGNet: Relation-Aware Evidence Graph Network for Harm-Aware Multimodal Fake News Detection",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "事件级证据检索与关系感知图用于多模态假新闻检测",
+      "first_seen_at": "2026-10-02 22:39:16 UTC",
+      "updated_at": "2026-10-02 22:39:16 UTC"
+    },
+    {
+      "paper_id": "2609.36611v1",
+      "route": "202610/02/2609.36611v1-multi-channel-mitigation-of-source-trust-shortcuts-in-fact-checking-rl-agents",
+      "title": "Multi-Channel Mitigation of Source-Trust Shortcuts in Fact-Checking RL Agents",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 8.0,
+      "evidence": "检索增强事实核查代理中的来源信任捷径",
+      "first_seen_at": "2026-10-02 22:39:16 UTC",
+      "updated_at": "2026-10-02 22:39:16 UTC"
+    },
+    {
+      "paper_id": "2609.34157v1",
+      "route": "202610/02/2609.34157v1-tableseek-structure-preserving-agentic-evidence-seeking-over-heterogeneous-table-corpora",
+      "title": "TableSeek: Structure-Preserving Agentic Evidence Seeking over Heterogeneous Table Corpora",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向异构表格语料的智能体证据检索以验证声明",
+      "first_seen_at": "2026-10-02 22:39:16 UTC",
+      "updated_at": "2026-10-02 22:39:16 UTC"
+    },
+    {
+      "paper_id": "2609.37349v1",
+      "route": "202610/02/2609.37349v1-taec-trajectory-aware-evidence-coordination-for-multi-step-visual-rag",
+      "title": "TAEC: Trajectory-Aware Evidence Coordination for Multi-Step Visual RAG",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "多步视觉检索增强生成中的证据协调",
+      "first_seen_at": "2026-10-02 22:39:16 UTC",
+      "updated_at": "2026-10-02 22:39:16 UTC"
+    },
+    {
+      "paper_id": "2609.38391v1",
+      "route": "202610/02/2609.38391v1-team-msu-gentext-forensics-challenge-2026-technical-report",
+      "title": "Team MSU GenText-Forensics Challenge 2026 Technical Report",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "多语言文档伪造检测与证据报告",
+      "first_seen_at": "2026-10-02 22:39:16 UTC",
+      "updated_at": "2026-10-02 22:39:16 UTC"
+    },
+    {
+      "paper_id": "2610.00923v1",
+      "route": "202610/02/2610.00923v1-canopy-adaptive-granularity-evidence-compression-for-multimodal-rag",
+      "title": "CANOPY: Adaptive-Granularity Evidence Compression for Multimodal RAG",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向多模态RAG的自适应粒度检索后证据压缩",
+      "first_seen_at": "2026-10-02 22:39:16 UTC",
+      "updated_at": "2026-10-02 22:39:16 UTC"
+    }
+  ]
+}
