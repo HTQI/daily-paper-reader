@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-10-03 <!--dpr-date:20261003-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202610/03/2609.39066v1-agentic-tool-augmented-reasoning-for-explainable-image-forgery-detection" data-sidebar-item="{&quot;title&quot;: &quot;Agentic Tool-Augmented Reasoning for Explainable Image Forgery Detection&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2609.39066v1-agentic-tool-augmented-reasoning-for-explainable-image-forgery-detection&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;mfnd&quot;}], &quot;evidence&quot;: &quot;面向可解释图像伪造检测的智能体工具增强证据推理&quot;}">Agentic Tool-Augmented Reasoning for Explainable Image Forgery Detection</a>
   * 2026-10-02 <!--dpr-date:20261002-->
     * 精读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202610/02/2609.36850v1-rethinking-multimodal-fake-news-detection-in-the-generative-ai-era" data-sidebar-item="{&quot;title&quot;: &quot;Rethinking Multimodal Fake News Detection in the Generative AI Era&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2609.36850v1-rethinking-multimodal-fake-news-detection-in-the-generative-ai-era&quot;, &quot;score&quot;: &quot;9.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;mfnd&quot;}], &quot;evidence&quot;: &quot;面向生成内容的多模态虚假新闻检测数据集&quot;}">Rethinking Multimodal Fake News Detection in the Generative AI Era</a>

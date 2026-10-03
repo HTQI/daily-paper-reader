@@ -1,0 +1,25 @@
+{
+  "date": "20261003",
+  "date_label": "",
+  "generated_at": "2026-10-03 21:55:43 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.39066v1",
+      "route": "202610/03/2609.39066v1-agentic-tool-augmented-reasoning-for-explainable-image-forgery-detection",
+      "title": "Agentic Tool-Augmented Reasoning for Explainable Image Forgery Detection",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向可解释图像伪造检测的智能体工具增强证据推理",
+      "first_seen_at": "2026-10-03 21:55:43 UTC",
+      "updated_at": "2026-10-03 21:55:43 UTC"
+    }
+  ]
+}

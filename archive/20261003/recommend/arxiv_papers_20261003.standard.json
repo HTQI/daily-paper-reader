@@ -1,0 +1,59 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-03T21:54:59.351411+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.39066v1",
+      "source": "arxiv",
+      "title": "Agentic Tool-Augmented Reasoning for Explainable Image Forgery Detection",
+      "abstract": "Conventional image forgery detection methods produce binary scores or pixel-level masks without interpretable evidence, while recent multimodal large language model (MLLM)-based approaches generate post-hoc explanations of predetermined classification results rather than reasoning from evidence. Inspired by the forensic workflow of human judicial experts, we propose Agentic Tool-Augmented Reasoning (ATAR), a framework integrating 22 specialized forensic tools across seven complementary domains to autonomously detect, localize, and explain image forgeries through multi-turn reasoning. A Dual-Stream Forensic Reasoning paradigm combines a high-level semantic anomaly path, which magnifies suspicious regions for fine-grained inspection, with a low-level forgery artifact path, which invokes forensic tools to extract objective evidence. We further introduce Forensics Curriculum Learning: during General Experience SFT, an automated teacher-student mentoring pipeline synthesizes multi-turn tool-usage reasoning trajectories; during Forensic Scene RL, a Tool Prior Curriculum guides early tool exploration and progressively transfers control to the agent, while a Structured Evidence Reward provides fine-grained process-level supervision. Experiments across IMDL, Deepfake detection, DMDL, and AIGC detection show that ATAR achieves 78.5% average image-level F1 on six zero-shot IMDL benchmarks, surpassing the strongest MLLM baseline by 11.8 percentage points, and remains competitive with specialized detectors on other tasks while producing substantially more faithful and grounded explanations.",
+      "authors": [
+        "Zhiya Tan",
+        "Jing Huang",
+        "Changtao Miao",
+        "Lin Tan",
+        "Xin Zhang",
+        "Weiwei Feng",
+        "Jianshu Li",
+        "Joey Tianyi Zhou"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-30T06:05:16+00:00",
+      "link": "https://arxiv.org/pdf/2609.39066v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic tool-augmented reasoning for explainable image forgery detection with evidence-based explanations",
+      "llm_evidence_cn": "面向可解释图像伪造检测的智能体工具增强证据推理",
+      "llm_evidence": "面向可解释图像伪造检测的智能体工具增强证据推理",
+      "canonical_evidence": "面向可解释图像伪造检测的智能体工具增强证据推理",
+      "llm_tldr_en": "ATAR integrates 22 forensic tools across seven domains into a multi-turn agentic framework with dual-stream reasoning, autonomously detecting, localizing and explaining image forgeries from evidence rather than post-hoc rationales.",
+      "llm_tldr_cn": "针对传统图像伪造检测只输出二值分数或像素掩码、缺乏可解释证据，而现有多模态大模型方法多为事后解释的问题，论文提出智能体工具增强推理框架ATAR。它整合七个互补领域的22个专用取证工具，采用双流取证推理，结合高层语义异常放大与低层伪影分析，通过多轮推理自主检测、定位并解释图像伪造。该方法使结论由证据驱动而非事后合理化，为可解释图像伪造检测提供了新范式。",
+      "llm_tldr": "针对传统图像伪造检测只输出二值分数或像素掩码、缺乏可解释证据，而现有多模态大模型方法多为事后解释的问题，论文提出智能体工具增强推理框架ATAR。它整合七个互补领域的22个专用取证工具，采用双流取证推理，结合高层语义异常放大与低层伪影分析，通过多轮推理自主检测、定位并解释图像伪造。该方法使结论由证据驱动而非事后合理化，为可解释图像伪造检测提供了新范式。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
