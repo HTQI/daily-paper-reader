@@ -1,0 +1,170 @@
+Title: PathAnchor: Path-Structured Evidence for Scientific Agents
+
+URL Source: https://arxiv.org/pdf/2609.38766v1
+
+Published Time: Thu, 01 Oct 2026 00:40:08 GMT
+
+Number of Pages: 5
+
+Markdown Content:
+# PATHANCHOR: PATH-STRUCTURED EVIDENCE FOR SCIENTIFIC AGENTS 
+
+# Qiuhui Chen 1, Jiafan Lu 1, Shuaimin Tang 2, Tao Dai 1,Suyuan Wang 1, Chenrui Ji 1, Zhenglei Zhou 3, and Weimin Zhong 1∗
+
+1School of Information Science and Engineering, East China University of Science and Technology 
+
+2College of Intelligent Robotics and Advanced Manufacturing, Fudan University 3Tencent 
+
+ABSTRACT 
+
+Scientific agents can retrieve relevant passages yet still lose func-tional order, mix evidence across sources, or state conclusions that exceed the retrieved record. We introduce PathAnchor, a bounded scientific reasoning system built on path-structured evi-dence workspaces. Instead of treating passages or extracted concepts as independent units, the system retrieves source-linked Material– Sensor–Signal–System trajectories that preserve role, direction, and the evidence supporting each transition. A controller uses three read-only tools to search paper-specific trajectories, trace paths across candidate sources, and open exact evidence before produc-ing a claim-cited answer and an explicit evidence boundary. On 120 single- and cross-paper flexible-sensor questions, PathAnchor scores 82.6% and leads six evaluated systems. Under a matched controller, corpus, and six-call budget, replacing unordered concept graphs with path-structured records raises source recall from 61.3% to 82.9%, increases answers whose claims all cite opened evidence from 69.2% to 90.0%, and reduces tool calls. These results show that evidence organization affects retrieval and citation completeness under fixed agent resources. 
+
+Index Terms — scientific agents, retrieval-augmented genera-tion, evidence grounding, scientific question answering, large lan-guage models 
+
+1. INTRODUCTION 
+
+Retrieval-augmented generation gives language models access to ex-ternal knowledge, but access does not guarantee faithful scientific synthesis [1, 2]. A scientific answer often depends on a sequence of linked facts: a material realizes a sensing element, the element produces a measurable signal, and that signal enables a system-level function. When these facts are retrieved as isolated passages, an agent must reconstruct their roles and order during generation. It may combine incompatible sources, overlook a missing transition, or present a plausible completion as reported evidence. Scientific question-answering systems combine evidence se-lection, iterative search, and citation-aware synthesis. PaperQA, LitQA2, and SciRAG use agentic document retrieval [3, 4, 5]; OpenScholar adds self-feedback and citation-aware synthesis [6]; and AstaBench and SciCUEval broaden evaluation [7, 8]. Paper-grounded QA and claim-verification benchmarks measure answer– evidence alignment [9, 10, 11]. Structured extraction recovers entities and relations [12, 13, 14, 15, 16], while scientific knowledge graphs connect materials, properties, and applications [17, 18]. Yet a practical question remains: under matched evidence access, does organization change reasoning faithfulness and efficiency? 
+
+> ∗
+
+Corresponding author: Weimin Zhong. How does a concentric-ring electrode improve atrial P-wave detection over standard ECG leads? Flat retrieval P3 Signal P1 Material P4 System P2 Sensor unsupported cross-paper link !Unsupported claim PathAnchor Source-linked MS³ path Material Sensor Signal System Supported claim + citations !Evidence boundary Additional clinical validation not found in opened evidence 
+
+Fig. 1 . Illustrative comparison. P1–P4 denote distinct source pa-pers. Flat retrieval can create an unsupported cross-paper link; PathAnchor preserves source-linked functional order, returns a cited supported claim, and explicitly marks evidence not found in the opened record. We study this question using Material–Sensor–Signal–System (MS 3) functional trajectories. Each record is ordered, explicitly typed, and linked to source evidence. PathAnchor conditions re-trieval on a scientific question, collects selected trajectories and opened passages in an inspectable workspace, and separates sup-ported conclusions from an explicit evidence boundary. The agent uses three read-only tools and at most six calls. We isolate evidence organization with a matched ablation that fixes the controller, corpus, evidence access, prompts, and call bud-get. On 120 FS EvidenceQA questions, path records improve source recall and citation-provenance completeness by 21.6 and 20.8 points while reducing tool use. 
+
+2. PATH-STRUCTURED SCIENTIFIC AGENT 2.1. Evidence-linked functional trajectories 
+
+Let D be a frozen scientific corpus. Conventional passage retrieval represents a result as text and provenance. An MS 3 record addition-ally represents its functional organization as 
+
+p = ( Vp, Rp, Ap), (1) where Vp contains typed Material, Sensor, Signal, and System nodes, Rp contains supported directed transitions, and Ap maps nodes and transitions to source evidence identifiers. The PathAnchor experiments retrieve complete four-role paths. The domain evaluation uses a frozen corpus of 13,689 full-text conductive-fibre flexible-sensor papers, containing 26,648 trajectory arXiv:2609.38766v1 [cs.AI] 30 Sep 2026 Researcher ask round i (budget B = 6) Decide next step Which MS³ path? Which evidence ID? Enough support? PathAnchor answer reply How does this fibre sense body motion? 
+
+> Explore paths Open evidence
+
+Frozen MS³ path index Source evidence records P1 (target path)   
+
+> M
+> fibre
+> Se
+> strain sensor
+> Si
+> R/R0
+> Sy
+> motion monitor
+> E1 E2 P2 (other path)
+> M
+> material
+> Se
+> sensor
+> Si
+> signal
+> Sy
+> system
+
+P1:E1 opened  
+
+> page · section · figure/table
+> P1:E2 collapsed
+> Strain-response excerpt Body-motion evidence
+
+Fig. 2 . PathAnchor architecture for FS EvidenceQA. A single controller navigates paper-specific MS 3 paths, opens linked article records, and returns claim-cited output with an explicit evidence boundary. E1/E2 are schematic; only opened article records count as final citations. 
+
+Table 1 . Abridged PathAnchor prompt and two logged cases. The single-paper case uses P 081737 [19]; the cross-paper case uses P 095797 
+
+and P 026428 [20, 21]. Each paper id:E# denotes an opened article record. 
+
+System prompt — PathAnchor Tools and budget. Begin without candidate papers. Use search ms3 , trace paths , and inspect evidence with at most six calls. 
+
+Evidence rule. MS 3 path and mechanism IDs route retrieval but are not final proof. Every paper-specific claim cites an opened paper id:E# 
+
+article record; mark requests lacking support as insufficient. 
+
+Single-paper case — nv3 single 01 01 
+
+Question. For a SWCNT–RGO/PU fibre, how do TPU sheathing and 50 wt% RGO affect sensing, and what was not validated? 
+
+Actions. Search → trace (P 081737) → inspect (E1–E6) .
+
+Answer. After 60 min of ultrasonication, ∆R/R 0 rose by 10 with TPU versus 690 without [E4]. For 50 wt% RGO, gauge factors were 8.76, 43.8, and 114.7 over 1–150%, 150–300%, and 300–465% strain [E3], with more than 1000 cycles [E6]. Opened records do not establish performance beyond 465% strain or for other RGO compositions. PARTIALLY SUPPORTED .
+
+Cross-paper case — nv3 cross 01 08 
+
+Question. Can a protective mouthguard also report deformation using a ZnO/GNP strain film? 
+
+Actions. Search twice → trace four candidate papers → inspect eight article records. 
+
+Answer. A mouthguard reduced transmitted incisor strain by over 55% [ P 095797:E5 ]; a separate ZnO/GNP film measured strain over a 44% range [ P 026428:E5 ]. Their paper-specific paths keep these results distinct: integration is a proposed design, not a tested device. 
+
+PARTIALLY SUPPORTED .records linked to 131,083 evidence items. A source-grounded con-struction pipeline first extracts compact evidence records, then as-signs paper-specific MS 3 terms, and finally assembles only schema-valid relations supported by accepted evidence. Each evidence item retains its paper identifier, article excerpt, page, section, and avail-able figure or table location. The resulting corpus and precomputed trajectory and passage indexes form the frozen MS 3 evidence base in Fig. 2. It is built once before evaluation; during a run, the controller can read but cannot modify it. Trajectories and evidence passages are indexed separately with SQLite FTS5. Given query q, candidate-paper retrieval combines BM25 scores [22] from the two views, 
+
+s(d | q) = 12 spath (d | q) + 12 sev (d | q), (2) and ranks paths within a paper by overlap between normalized query terms and the trajectory statement and fields. Each returned path exposes its roles, mechanism statement, and linked evidence iden-tifiers. Thus path retrieval proposes a functional explanation, while opened article evidence remains the authority for final claims. 
+
+2.2. Bounded evidence workspace 
+
+The agent begins each question with an empty workspace W0 and may issue three read-only actions: • search ms3 : retrieve candidate trajectories and evidence identifiers; • trace paths : return stored complete paths and short evi-dence previews from papers already visible in the workspace; • inspect evidence : open exact source records, including article excerpt, page, section, and figure or table location. The search action returns at most eight candidate trajectories, path tracing returns at most six paths, and evidence inspection opens at most 12 identifiers per call. After action at, the workspace is up-dated as Wt = Wt−1 ∪ O(at), where O(at) is the returned observa-tion. Search terminates when the workspace supports the requested answer or reaches budget B = 6 . The controller never receives the reference answer, hidden label, or evaluation rubric. The draft answer links each substantive paper-specific claim cjTable 2 . Overall scores (%); FS Unsup. is the judge-rated count per answer. Ours denotes task-adapted MS 3 workflows on the three public tasks and PathAnchor on FS EvidenceQA. DSeek, PQA2, and OSch. are DeepSeek V4 Pro + Search, PaperQA2, and OpenScholar. Metric DSeek Kimi GLM PQA2 OSch. Ours 
+
+FS All 66.4 77.2 72.0 67.9 55.2 82.6 
+
+FS Single 78.8 87.6 84.4 76.0 60.0 91.9 
+
+FS Cross 54.1 66.9 59.7 59.8 50.4 73.3 
+
+FS Unsup. ↓ 1.917 1.525 1.683 2.217 2.908 1.267 
+
+LQA 32.0 33.3 16.0 4.0 17.3 44.0 
+
+SQA 31.9 49.5 43.5 31.1 54.0 66.0 
+
+SciCU 91.0 84.0 91.5 40.5 48.5 98.0 
+
+to opened evidence Aj and returns a separate boundary statement b,
+
+y = {(cj , Aj )}Jj=1 ∪ { b}, Aj ⊆ E(WT ). (3) The controller prompt asks it to distinguish demonstrated evidence from proposals and to mark unsupported requests in b. When find-ings from different papers enter one workspace, each path and ev-idence record retains its paper identifier. The controller can align their functional roles in an answer while citing each measured prop-erty to its own source; a proposed cross-paper connection belongs in the boundary statement, not in either stored path. A deterministic provenance audit checks each citation against opened records, while the answer evaluation assesses grounding. This claim-level design follows work on citation support, verified quotations, and atomic factual precision [23, 24, 25, 26]. The prompt limits outputs to 300 words, seven claims, ten unique citations, and ten quantitative facts. Tool calls, workspace states, and final answers are retained for audit. These access rules make each final citation traceable to an article record opened during the run. 
+
+2.3. Matched representation control 
+
+To isolate information organization, we construct Role Graph-Agent with the same controller, source corpus, prompts, evidence passages, and six-call budget. Its tools return extracted concepts, paper prove-nance, evidence identifiers, and source excerpts, but withhold the MS 3 role labels, directed relation types, path order, and mecha-nism statements. The experiment therefore changes the structure presented to the agent without changing the underlying evidence it can access. 
+
+3. EXPERIMENTAL PROTOCOL 3.1. Benchmarks 
+
+We evaluate complementary public and domain-controlled tasks. 
+
+LitQA2-FullText contains all 75 test questions and is scored by exact option-label accuracy [4]. ScholarQA-CS2 contains all 100 cases and uses the official global average of answer coverage, relevance, citation recall, and citation precision [7]. SciCUEval Materials contains 200 questions, with 25 from each combination of two input modalities and four scientific competencies; we report the eight-stratum macro-average [8]. Our fourth benchmark, FS EvidenceQA , comprises 120 frozen, evidence-derived questions grounded in conductive-fibre flexible-sensor papers: 60 single-paper and 60 cross-paper questions bal-anced over six categories. A generator saw anonymized article excerpts but no paper identifiers, MS 3 role fields, retrieval outputs, or method ranks, and produced questions, answer outlines, and unsupported-content boundaries. Answers receive 0–4 ratings for correctness, grounding, evidence completeness, and boundary con-trol; their mean is normalized to percentage. Method identities are blinded to the Qwen3-30B-A3B evaluator. The source sampling excluded papers from an earlier 20-question retrieval audit, and source papers are disjoint across ques-tions. The model-generated questions make FS EvidenceQA a controlled diagnostic of source-grounded answering. 
+
+3.2. Systems and evaluation 
+
+We compare six configurations under controlled source access: direct Evidence/Search with DeepSeek V4 Pro, Kimi K3, or GLM-5.2; PaperQA2 [3]; OpenScholar with external retrieval disabled [6]; and our DeepSeek V4 Pro-based systems. FS EvidenceQA and the matched representation test use PathAnchor with the frozen four-role path index in Sec. 2. The three public tasks use task-adapted MS 3 workflows and native answer formats: LitQA2 and Schol-arQA draw on their benchmark evidence packets, while SciCUEval supplies item-level text and tables. Failed or truncated outputs are scored incorrect rather than discarded. FS EvidenceQA uses paired 10,000-replicate question-level bootstrap intervals. The represen-tation ablation additionally measures hidden-gold source recall in the final workspace, answers whose claims all cite opened evidence, claims without opened-evidence citations, and tool calls. The public evaluations use their native endpoints rather than a shared judge. LitQA2 is exact option-label accuracy; ScholarQA uses the official section, inline-citation, and supporting-snippet for-mat and averages coverage, relevance, citation recall, and citation precision; SciCUEval uses exact-answer or absence-rejection ac-curacy and a macro-average over its eight modality–competency strata. Bootstrap contrasts resample the six answers to each FS EvidenceQA question together, preserving paired comparisons; SciCUEval resampling preserves its eight strata. A separate retrieval diagnostic compares full-text evidence FTS against MS 3 mechanism-field FTS on the same frozen corpus. It uses all 180 frozen questions (including the 120 FS EvidenceQA cases). Candidate relevance is graded 0–3 by a DeepSeek V4 Pro proxy judge blinded to retrieval method and rank; nDCG@10 uses paired question-level bootstrap intervals. 
+
+4. RESULTS AND ANALYSIS 4.1. Multi-benchmark performance 
+
+On FS EvidenceQA, PathAnchor reaches 82.6% (3.304/4) and leads both question types. Its 0.215-point margin over Kimi K3 has a paired 95% bootstrap interval of [−0.033 , 0.469] ; advantages over the other four systems exclude zero. Cross-paper scores fall for every system, but PathAnchor re-mains highest (2.933 versus 3.675 on single-paper cases; Kimi K3: 2.675 versus 3.504). Unsupported claims increase from 0.583 to 1.950 per PathAnchor answer (Kimi K3: 0.817 to 2.233), underscor-ing the difficulty of cross-source synthesis. The task-adapted MS 3 workflows rank first on the three public evaluations (Table 2), exceeding the strongest comparator by 10.7, 12.0, and 6.5 points on LitQA2-FullText, ScholarQA-CS2, and Sci-CUEval Materials, respectively. (a) Paired question outcomes PA lower tie PA higher mean Δ DeepSeek V4 Pro 26 23 71 +0.648 Kimi K3 32 35 53 +0.215† GLM-5.2 28 35 57 +0.423 PaperQA2 25 32 63 +0.590 OpenScholar 16 995 +1.096 060 questions 120 † Paired 95% bootstrap interval includes zero. (b) Evidence efficiency 60 70 80 90 Source recall (%) ↑ 11 12 13 14 Workspace papers ↓ PathAnchor 11.81 papers · 82.9% Role Graph 13.70 papers · 61.3% 69.2% → 90.0% All claims cite opened evidence (c) Controller workload search trace inspect Role Graph 4.79 B=6: 37.5% PathAnchor 3.88 B=6: 6.7% 0246 calls Fig. 3 . Paired outcomes and matched representation control. (a) FS EvidenceQA: PathAnchor (PA) versus each baseline; † marks a paired 95% interval crossing zero. (b) Source recall versus workspace size, with the proportion of answers whose claims all cite opened evidence. (c) Mean calls by action; B=6 is the budget-hit rate. 
+
+Table 3 . Retrieval nDCG@10 (method-blind model relevance). ∆
+
+is MS 3 minus text FTS with paired 95% CI. Question stratum n Text MS 3 ∆ [95% CI] Covered, all 120 .688 .754 +.066 [.021, .112] Single-paper 60 .772 .814 +.042 [-.022, .108] Cross-paper 60 .604 .693 +.089 [.027, .152] Partially covered 30 .765 .740 -.024 [-.093, .039] Out-of-domain 30 .559 .587 +.028 [-.035, .092] 
+
+4.2. Claim-level quality and uncertainty 
+
+PathAnchor’s correctness, grounding, evidence-completeness, and boundary-control scores are 3.325, 3.300, 3.308, and 3.283, respec-tively; it also produces the fewest unsupported claims (1.267 per question). Fig. 3a shows paired advantages over all comparators, with Kimi K3 the only interval crossing zero. The cross-paper case in Table 1 illustrates the distinction be-tween combining evidence and claiming an integrated device. One source measures the mouthguard’s impact attenuation; another mea-sures the ZnO/GNP film’s strain response. PathAnchor cites those observations under separate paper IDs and describes the sensing mouthguard as a proposed combination. The answer therefore addresses the cross-paper question without transferring the film’s measurement to the mouthguard. 
+
+4.3. What path structure changes 
+
+The retrieval-only test in Table 3 provides a complementary view: MS 3 improves ranking on the 120 covered cases, especially cross-paper questions, while the partially covered and out-of-domain con-trasts have intervals spanning zero. The cross-paper gain (+.089 nDCG@10) exceeds the single-paper gain (+.042), matching the set-ting in which the agent must locate distinct sources and align their functional contributions. In the central matched test (Fig. 3b–c), path structure raises source recall by 21.6 points and the rate of answers whose claims all cite opened evidence from 69.2% to 90.0%, although both agents can open the same passages. Claims without opened-evidence ci-tations fall from 0.450 to 0.133 per answer, and calls fall by 0.91. The ordered representation therefore concentrates answer-relevant evidence: the controller finds more gold sources with fewer actions and produces more complete citation provenance. All 120 matched PathAnchor runs completed successfully. PathAnchor exposed fewer papers than Role Graph (11.81 ver-sus 13.70) and achieved higher citation validity (99.90% versus 96.39%). It reached the six-call limit in 6.7% of runs versus 37.5% for Role Graph, consistent with earlier stopping once source-specific support was found. Together, higher recall with fewer exposed papers and tool calls shows that ordered paths focus the controller on answer-relevant ev-idence. The representation ablation changes role labels, relation di-rection, path order, and mechanism statements as a bundle. 
+
+4.4. Discussion 
+
+The retrieval and agent tests locate the benefit at two stages. The path index improves ranking on covered questions, and the matched controller retrieves more gold sources despite a smaller workspace. In Table 1, those sources remain separately attributable when the question asks about a combined design. Source-local functional or-der thus supports both evidence selection and cross-paper synthesis under a limited call budget. Future work will test partial paths and individual representation components across additional controllers and expert-authored questions. 
+
+5. CONCLUSION 
+
+PathAnchor organizes scientific evidence as ordered, source-linked MS 3 trajectories under a six-call budget. On FS EvidenceQA it achieves the highest observed score among six tested systems. The matched ablation shows that path structure improves source recall and opened-evidence citation provenance while reducing tool calls. An explicit evidence boundary makes unsupported requests visible, while final citations remain tied to opened article records. Acknowledgment. This work was supported in part by the Funda-mental and Interdisciplinary Disciplines Breakthrough Plan of the Ministry of Education of China (JYB2025XDXM402) and the Na-tional Natural Science Foundation of China (Nos. 62603270 and 62633009). 
+
+Compliance with Ethical Standards. This study involved neither human participants nor animals; ethical approval was not required. The authors declare no relevant financial or nonfinancial conflicts of interest. 
+
+6. REFERENCES 
+
+[1] Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich K¨ uttler, Mike Lewis, Wen-tau Yih, Tim Rockt¨ aschel, Sebastian Riedel, and Douwe Kiela, “Retrieval-augmented generation for knowledge-intensive NLP tasks,” in Advances in Neural In-formation Processing Systems , 2020, vol. 33, pp. 9459–9474. [2] Gautier Izacard et al., “Atlas: Few-shot learning with retrieval augmented language models,” Journal of Machine Learning Research , vol. 24, no. 251, pp. 1–43, 2023. [3] Jakub L´ ala, Odhran O’Donoghue, Aleksandar Shtedritski, Sam Cox, Samuel G. Rodriques, and Andrew D. White, “Pa-perQA: Retrieval-augmented generative agent for scientific re-search,” in International Conference on Learning Representa-tions , 2024. [4] Michael D. Skarlinski, Sam Cox, Jon M. Laurent, James D. Braza, Michaela Hinks, Michael J. Hammerling, Manvitha Ponnapati, Samuel G. Rodriques, and Andrew D. White, “Language agents achieve superhuman synthesis of scientific knowledge,” arXiv preprint arXiv:2409.13740 , 2024. [5] Hang Ding, Yilun Zhao, Tiansheng Hu, Zihang Wang, Manasi Patwardhan, and Arman Cohan, “SciRAG: Adaptive, citation-aware, and outline-guided retrieval and synthesis for scientific literature,” in Proceedings of the 19th Conference of the Eu-ropean Chapter of the Association for Computational Linguis-tics , 2026, pp. 6440–6460. [6] Akari Asai, Jacqueline He, Rulin Shao, et al., “Synthesizing scientific literature with retrieval-augmented language mod-els,” Nature , vol. 650, pp. 857–863, 2026. [7] Jonathan Bragg et al., “AstaBench: Rigorous benchmarking of AI agents with a scientific research suite,” in International Conference on Learning Representations , 2026. [8] Jing Yu, Yuqi Tang, Kehua Feng, Lei Liang, Qiang Zhang, Keyan Ding, and Huajun Chen, “SciCUEval: A comprehen-sive dataset for evaluating scientific context understanding in large language models,” Scientific Data , vol. 13, pp. 530, 2026. [9] Pradeep Dasigi, Kyle Lo, Iz Beltagy, Arman Cohan, Noah A. Smith, and Matt Gardner, “A dataset of information-seeking questions and answers anchored in research papers,” in Pro-ceedings of NAACL-HLT , 2021, pp. 4599–4610. [10] David Wadden, Shanchuan Lin, Kyle Lo, Lucy Lu Wang, Madeleine van Zuylen, Arman Cohan, and Hannaneh Ha-jishirzi, “Fact or fiction: Verifying scientific claims,” in Pro-ceedings of EMNLP , 2020, pp. 7534–7550. [11] David Wadden, Kyle Lo, Bailey Kuehl, Arman Cohan, Iz Belt-agy, Lucy Lu Wang, and Hannaneh Hajishirzi, “SciFact-open: Towards open-domain scientific claim verification,” in Find-ings of EMNLP , 2022, pp. 4719–4734. [12] Yi Luan, Luheng He, Mari Ostendorf, and Hannaneh Ha-jishirzi, “Multi-task identification of entities, relations, and coreference for scientific knowledge graph construction,” in 
+
+Proceedings of EMNLP , 2018, pp. 3219–3232. [13] Sarthak Jain, Madeleine van Zuylen, Hannaneh Hajishirzi, and Iz Beltagy, “SciREX: A challenge dataset for document-level information extraction,” in Proceedings of ACL , 2020, pp. 7506–7516. [14] John Dagdelen, Alexander Dunn, Sanghoon Lee, Nicholas Walker, Andrew S. Rosen, Gerbrand Ceder, Kristin A. Persson, and Anubhav Jain, “Structured information extraction from scientific text with large language models,” Nature Communi-cations , vol. 15, pp. 1418, 2024. [15] J. Harry Caufield, Harshad Hegde, Vincent Emonet, et al., “Structured prompt interrogation and recursive extraction of semantics (SPIRES): A method for populating knowledge bases using zero-shot learning,” Bioinformatics , vol. 40, no. 3, pp. btae104, 2024. [16] Shuyuan Li, Shihao Wei, Chenyu Huang, Yunjiang Zhang, Guizhen Zhang, and Shaorui Sun, “Extracting and reconstruct-ing knowledge in materials science literature using large lan-guage models,” Communications Materials , vol. 7, pp. 31, 2026. [17] Vineeth Venugopal and Elsa Olivetti, “MatKG: An au-tonomously generated knowledge graph in material science,” 
+
+Scientific Data , vol. 11, pp. 217, 2024. [18] Junmin Ke, Furong Liu, Guofeng Xu, and Ming Liu, “Data-driven strain sensor design based on a knowledge graph frame-work,” Sensors , vol. 24, no. 17, pp. 5484, 2024. [19] Yiman Xu, Xiaoxu Xie, Hong Huang, Yan Wang, Junrong Yu, and Zuming Hu, “Encapsulated core–sheath carbon nanotube–graphene/polyurethane composite fiber for highly stable, stretchable, and sensitive strain sensor,” Journal of Ma-terials Science , vol. 56, no. 3, pp. 2296–2310, 2021. [20] Naser Nasrollahzadeh, Dominique P. Pioletti, and Martin Broome, “Design of customized mouthguards with superior protection using digital-based technologies and impact tests,” 
+
+Sports Medicine - Open , vol. 10, pp. 64, 2024. [21] Shibin Sun, Lin Guo, Xueting Chang, Yiqian Liu, Shicong Niu, Yanhua Lei, Tao Liu, and Hu Xiong, “A wearable strain sensor based on the ZnO/graphene nanoplatelets nanocomposite with large linear working range,” Journal of Materials Science , vol. 54, pp. 7048–7061, 2019. [22] Stephen Robertson and Hugo Zaragoza, “The probabilistic relevance framework: BM25 and beyond,” Foundations and Trends in Information Retrieval , vol. 3, pp. 333–389, 2009. [23] Tianyu Gao, Howard Yen, Jiatong Yu, and Danqi Chen, “En-abling large language models to generate text with citations,” in Proceedings of EMNLP , 2023, pp. 6465–6488. [24] Jacob Menick et al., “Teaching language models to support an-swers with verified quotes,” arXiv preprint arXiv:2203.11147 ,2022. [25] Jiajie Zhang et al., “LongCite: Enabling LLMs to generate fine-grained citations in long-context QA,” in Findings of ACL ,2025, pp. 5098–5122. [26] Sewon Min et al., “FActScore: Fine-grained atomic evaluation of factual precision in long-form text generation,” in Proceed-ings of EMNLP , 2023.

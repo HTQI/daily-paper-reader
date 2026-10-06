@@ -1,0 +1,414 @@
+Title: No Hindsight for LLM Fact-Checkers: Measuring Leakage Channels in Misinformation Detection
+
+URL Source: https://arxiv.org/pdf/2610.04888v1
+
+Published Time: Tue, 06 Oct 2026 01:18:11 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# No Hindsight for LLM Fact-Checkers: Measuring Leakage Channels in Misinformation Detection 
+
+## Kuan-Hua Wu Lu 1, Yohanes Andre Setiawan 1
+
+> 1
+
+Georgia Institute of Technology Atlanta, Georgia, USA klu305@gatech.edu, ysetiawan3@gatech.edu 
+
+Abstract 
+
+As automated fact-checking scales on social media, large lan-guage model (LLM) verdict scores can look stronger than warranted. One reason is that evaluations mix in informa-tion that was not knowable at claim time. Two channels are easy to conflate: outcomes memorized in pre-training and re-trieved evidence published after the claim. Yet standard bench-marks rarely separate the two. In this study we measure both channels on AVeriTeC and QuanTemp++ by reconstructing point-in-time evidence conditions and probing for outcome information encoded in model representations. We find sub-stantial evidence of parametric leakage, that can be hidden by the aggregate accuracy, while a simple representation bot-tleneck reduces this future leakage more efficiently than a mutual-information-based training penalty. We also find that allowing post-claim evidence inflates zero-shot accuracy by 6.3 points in AVeriTeC while the effect is negligible in Quan-Temp++, where retrieval provides little post-claim evidence. These results show that misinformation benchmarks can over-state fact-checking performance when they do not account for what information was actually available at claim time. 
+
+## 1 Introduction 
+
+As automated fact-checking scales on social media to match the volume of viral claims (Guo, Schlichtkrull, and Vlachos 2022), recent systems put a large language model (LLM) at the center of the pipeline, using it to read retrieved evidence, write a rationale, or issue the verdict itself (Chern et al. 2023; Braun et al. 2025). Those systems are then scored on bench-marks of claims that already have labels. It is a convenient design, and it quietly hands the model something no deployed fact-checker ever has: the future. Consider the claim that COVID-19 was manufactured in a laboratory. In April 2020, Facebook treated the claim as false and removed posts that repeated it; on 27 May 2021 it reversed course and allowed the posts back, because the lab-leak hypothesis had begun to attract serious attention (The Guardian 2021). The claim never changed. Only what was knowable about it did. A model scored on this claim to-day can reach the right verdict two ways: by reasoning over what a fact-checker could have read in April 2020, or by recalling how the story ended. A benchmark that reports a single accuracy number cannot tell the two apart, yet standard scores treat both paths as success. That claim-time versus later-knowledge gap is what we measure. Hindsight reaches a fact-checker through two channels that are easy to conflate. The parametric channel is outcome knowledge absorbed during pre-training: the model has al-ready read how the event resolved. The temporal channel is retrieved evidence published after the claim, handed to the model by its own retrieval step. Existing practice addresses neither directly. One line of work evaluates only on text that postdates the training period (Lazaridou et al. 2021), which is clean but discards in-window capability on every widely used benchmark. Another improves retrieval or evidence quality, including under post-cutoff claims (Ou et al. 2026), but still does not date retrieved pages against the claim. In this study we measure both channels on AVeriTeC and QuanTemp++ (Schlichtkrull, Guo, and Vlachos 2023; Venk-tesh, Prabhu, and Anand 2025), with a masking probe on a frozen LLM, a trained width/penalty head, and a point-in-time evidence split. Neither release records a clean pub-lication date for every evidence page: QuanTemp++ ships claim dates and noisy search-snippet dates, and AVeriTeC ships archive snapshot times, so we recover dates ourselves. We try the live source URL first and fall back to Wayback when needed, parse on-page signals after stripping the archive prefix, and use the archive timestamp only as a last-resort upper bound. That split yields a point-in-time view with only pre-claim documents and the post-claim view a benchmark supplies by default. On a frozen backbone we then compare a width bottleneck against a mutual-information penalty on the realized outcome (Cheng et al. 2020). Three findings follow. First, the parametric channel is real and hides inside aggregate accuracy. Masking named en-tities (identity cues that can anchor memorized outcomes) collapses supported-claim recall from 0.42 to 0.13 while overall accuracy moves only 0.03 points, and a pre-cutoff control moves the opposite way. Second, narrowing repre-sentation width reduces leakage more per point of macro-F1 than the mutual-information penalty. Third, post-claim evi-dence raises zero-shot accuracy by 6.3 points on AVeriTeC (0.782 point-in-time vs. 0.844 post-claim), of which 3.1 is strict hindsight, while the gap is flat on QuanTemp++. Point-in-time retrieval and width control reduce leakage but do not remove it; fact-checkers should be judged on what they could have known at claim time. We next turn to related work, then the measurement setup and results. Both leakage channels, and both controls, are evaluated under that standard. arXiv:2610.04888v1 [cs.CL] 4 Oct 2026 2 Related Work 
+
+Evidence leakage in fact-checking. Several studies ex-amine leakage inside a fact-checking pipeline, where the evidence given to the model already contains an answer. Glockner et al. (2022) show that in datasets such as Mul-tiFC (Augenstein et al. 2019), the evidence often comes from the same fact-checking article that states the ruling, so the model can copy it instead of verifying the claim. Chry-sidis et al. (2024) filter leaked or low-quality evidence text, but their filter targets content overlap rather than whether a page was published after the claim. Particularly relevant to our evaluation are AVeriTeC (Schlichtkrull, Guo, and Vla-chos 2023) and QuanTemp++ (Venktesh, Prabhu, and Anand 2025), which construct cleaner web-evidence benchmarks to avoid that shortcut from the start; Thibault et al. (2024) still find that leakage rates vary widely across datasets. Neither release, however, records a publication date for every page in its evidence pool, so the release alone does not tell us which documents existed when the claim was made. El Lahib et al. (2026) show that live search-engine date filters still re-turn post-cutoff pages; we instead date the evidence already provided with each benchmark claim. Prior work describes, filters, or designs around leaked evidence; to the best of our knowledge, none splits a standard benchmark into what was knowable at claim time and what arrived later. 
+
+Temporal bias and lookahead in LLM evaluation. Lan-guage models can also exploit information unavailable at the moment of prediction. Lazaridou et al. (2021) find quality decays on text written after the training cutoff, and Xu et al. (2024) trace how evaluation data seeps into pre-training and inflates reported scores. He et al. (2025) train only on text available up to a given date; Karger et al. (2025) evaluate on genuinely future events that no model could have memorized. Karnam et al. (2026) similarly highlight the importance of temporal realism in misinformation detection, using time-ordered evaluation to avoid assuming access to future social context that would be unavailable at deployment time. Partic-ularly relevant to our probe design is Zhu et al. (2022), who trace detector errors to entity–label correlations that hold in the past but break for future events. While they diagnose tem-poral shifts in those correlations, we use entity masking to measure how much a detector’s representation still encodes the realized outcome, and we contrast the same probe on a pre-cutoff control model that cannot have memorized the later outcomes. To the best of our knowledge, prior work detects or avoids the problem by changing the data or the model rather than measuring residual outcome encoding in the representation. 
+
+LLM-based fact-checking. Hu et al. (2024) find that LLMs make weak stand-alone judges but useful advisors. FacTool (Chern et al. 2023) augments them with external tools, and DEFAME (Braun et al. 2025) couples an LLM with retrieved textual and visual evidence. These pipelines treat recalled knowledge as extra context and retrieve without a claim-date cutoff. They do not separate outcomes memo-rized in pre-training from retrieved evidence published after the claim. 
+
+Representation-level controls. A second family of tools tries to stop a representation from encoding information it should not use. Width bottlenecks do this by capacity: a nar-rower R simply cannot carry as much. Information penalties do it by objective, subtracting an estimate of dependence from the training loss. Estimating mutual information in high dimensions is hard, and the usual neural estimators are built to maximize dependence rather than remove it. Nearest-neighbor methods (Kraskov, St¨ ogbauer, and Grass-berger 2004) and lower bounds such as MINE (Belghazi et al. 2018) cannot certify that a dependence has shrunk; CLUB (Cheng et al. 2020) is a contrastive upper bound, so it points in the direction a penalty needs. We compare both knobs on the same frozen-backbone fact-checking head: a plain width bottleneck and a conditional MI penalty on the realized outcome. Prior work does not ask which of them actually removes outcome information from that representa-tion; when we compare them, width shrinks leakage more than the penalty. Closest to our setting are Glockner, Hou, and Gurevych (2022) and Zhu et al. (2022): both diagnose a shortcut in the data. To the best of our knowledge, no prior study jointly measures parametric and temporal leakage on the same claims. In this work we separate the channels with an entity-masking probe and pre-cutoff control (parametric), a width-versus-MI comparison (control), and a dated point-in-time versus post-claim split (temporal) on AVeriTeC and QuanTemp++. 
+
+## 3 Data 
+
+We measure both leakage channels on two public fact-checking benchmarks. AVeriTeC (Schlichtkrull, Guo, and Vlachos 2023) provides real claims with human labels, ver-dict text, claim dates, and web-evidence answers (NeurIPS 2023 Datasets and Benchmarks; CC BY-NC 4.0). Each answer stores a source URL and a web.archive.org 
+
+snapshot URL. QuanTemp++ (Venktesh, Prabhu, and Anand 2025) extends QuanTemp (Venktesh et al. 2024) with claim dates and evidence sources; we apply the same cleaning, deduplication, and split logic on both; date recovery differs by source (below). Neither release records a publication date for every evidence page, so we recover dates ourselves and build two evidence views per claim. 
+
+3.1 Recovering evidence publication dates 
+
+The point-in-time setting needs a publication date for every piece of evidence; AVeriTeC provides only an archive times-tamp inside each answer’s web.archive.org snapshot URL. That timestamp marks when the page was archived, not when it was published, so we recover publication dates from the page itself. We try the live source URL first and fall back to its Wayback capture when needed, strip the archive prefix before parsing URL slugs, and read a date using the signals in Table 1, from most to least reliable. 1 When a page has no on-page date, we keep the archive timestamp only as an explicit upper bound. 
+
+> 1Some Wayback captures are served gzip-compressed; we detect and decode them, since a garbled page is indistinguishable from one with no date.
+
+Table 1: Publication-date signals on AVeriTeC binary claims, from most to least reliable. “Archive” is an upper bound only, not a publication date.                       
+
+> Trust Signal Answers Share slug date in the URL path (/2020/10/30/ )533 9.6% published JSON-LD
+> datePublished ,1,603 28.8%
+> article:published time metadata meta generic date metadata,
+> <time> tags 96 1.7% archive snapshot timestamp (upper bound only) 2,252 40.5% —no signal recovered 1,081 19.4%
+
+Across the 5,565 evidence answers on binary claims, 419 of the 2,232 with a trusted on-page signal (slug, published, or meta) postdate the claim (18.8%). We did not hand-audit a stratified sample of recovered dates (Limitations). When a page carries several candidates, we keep the earliest date in the most trusted tier (JSON-LD datePublished before generic metadata). 
+
+3.2 Point-in-time and leaked evidence views 
+
+From the dated evidence we build the two views used in Sec-tions 5.2 and 5.3. The leaked view is the cleaned evidence pool with no date filter. The point-in-time view E(X) keeps an answer only if its recovered date is non-empty and on or before the claim date. Archive bounds cut both ways: a pre-claim snapshot proves the page existed then, but a post-claim snapshot proves nothing about publication, so late bounds are dropped (Table 13). Of 1,337 binary claims with any point-in-time evidence, 1,310 have a trusted on-page date and only 27 rely on an archive bound alone; exclusion depends more on undated or late-bound answers than on inclusion. The view is a lower bound on pre-claim evidence; the temporal head-line gap mixes that sparsity with strict hindsight (Table 8). Claims with no qualifying answers keep an empty point-in-time set rather than being dropped. Under either view we rank the remaining answers by similarity to the claim and keep the top-k. Under this rule, 1,078 of 2,385 binary train claims (45%) and 259 of 410 dev claims (63%) retain at least one point-in-time answer; dev coverage is higher because later claims carry more recoverable dates. On the chrono-logical train+validation split used in Section 5.3, 1,361 of 2,513 binary claims (54%) have an empty point-in-time set; Section 5.3 reports that group separately. 
+
+3.3 Processing and splits 
+
+One shared pipeline produces the final records on both bench-marks. Labels map to Supported, Refuted, and Mixed, with classes such as Not Enough Evidence discarded; the experi-ments here use only the binary subset (2,795 official claims on AVeriTeC). The pipeline removes evidence pointing back to fact-checking sites, drops duplicates by URL and by near-identical text (Jaccard ≥ 0.8), drops claims with a bad date, a missing verdict, or no evidence left, and collapses dupli-cate claim IDs to the earliest date. AVeriTeC yields 3,010 processed records across all three label classes on the official split; chronological splitting removes 11 records whose ver-dict text duplicates train, leaving 2,999 claims in that pool (2,513 binary train+validation for temporal analysis). Next to the official splits we built a chronological 80/10/10 split by claim date so training always precedes validation and test, checking that no record appears in both train and test and removing validation or test records whose verdict text also appears in train. Data are public archived web pages with no private user information (AVeriTeC CC BY-NC 4.0; QuanTemp++ under its release terms). At camera-ready we will release the date cache (URL, recovered date, trust tier, and signal), split indices, generated K text, and code; we do not redistribute recovered HTML, which includes third-party, social-media, and paywalled pages outside those licenses. 
+
+3.4 QuanTemp++ 
+
+QuanTemp++ shares our label mapping, fact-check-site filter, deduplication, and chronological split, but dates come mainly from URL slugs and search snippets in the release; undated URLs use the same page-date recovery as above (archive bounds almost never appear). Repeated scraper placeholder dates in search snippets are dropped. Its point-in-time view therefore uses a different dating instrument than AVeriTeC’s, not a matched corpus. The chronological split has 4,827 train and 710 validation binary claims; only 4.1% of all evidence answers postdate the claim (5.8% of the leaked top-5 in Table 13), yet 70.4% of claims still retrieve the same top-5 under both views, so the flat temporal gap reflects low post-claim volume and limited rank change, not a controlled match. The validation split is 5.5% Supported, so Supported-side estimates are noisy. 
+
+3.5 Outcome statements K
+
+The leakage penalty needs K, an embedding of the claim’s realized outcome. On AVeriTeC we prompt a local LLM (Qwen3-4B) with the claim as a focus hint and the fetched fact-check article, but never the verdict label, asking for a short neutral statement of how events unfolded and ban-ning verdict and negation words. Unreadable pages yield no article-based K; we later tried to regenerate 43 such cases from the dataset justification field (37 recov-ered; 6 remain without K), which we otherwise never feed as claim or evidence input. QuanTemp++ has no article URLs, so its K statements are generated from the fact-checker 
+
+justification text under the same prompt—a limita-tion for the representation-level analysis on that corpus (Lim-itations). Violations are flagged rather than filtered, because negation is often inherent to the outcome. In our genera-tion run on the 3,010 processed AVeriTeC records across all three label classes, 66 had unreadable articles; of the 2,944 statements we could generate, 1,216 (41%) carry a flag, con-centrated on Refuted claims (52% vs. 17% on Supported), so part of what the representation-level probe measures is label information rather than outcome knowledge. Generated K
+
+text will be released at camera-ready. 4 Methodology 
+
+4.1 Problem setup and notation 
+
+For a claim X we retrieve point-in-time evidence E(X) and form a representation R = f X, E (X) ∈ Rd, from which a classifier predicts the binary label Y (true/false). We also de-fine K, an embedding of the realised outcome (Section 3.5). Since K is derived from post-claim adjudication material excluded from retrieval, it carries future outcome informa-tion we do not want R to encode beyond what the selected evidence already supports. Figure 1 shows the full pipeline. 
+
+4.2 Evidence retrieval 
+
+The evidence E(X) in R = f (X, E (X)) comes from the evidence each benchmark already provides for each claim, given as question–answer pairs with source links. We do not retrieve from the open web. We score and select within this provided set. We first apply the point-in-time rule of Section 3.2. We then embed the claim and each remaining answer with a pretrained sentence en-coder ( all-mpnet-base-v2 ) (Reimers and Gurevych 2019), rank the answers by their similarity to the claim, and keep the top-k (or all of them when a claim has fewer than k) as the point-in-time evidence set E(X).This encoder is used only for ranking; a separate encoder (all-MiniLM-L6-v2 ) (Reimers and Gurevych 2019) embeds the selected evidence text as E, which serves as the conditioning variable in I(R; K | E). Conditioning on E
+
+keeps the penalty aimed only at the outcome information beyond what the selected evidence already supports. 
+
+4.3 Learning objective 
+
+We train R to keep the veracity signal while avoiding using future-outcome information by solving the function ( I(·; ·)
+
+denotes mutual information): 
+
+max  
+
+> f
+
+L = I(R; Y | X)
+
+| {z }
+
+> utility
+
+− λ I (R; K | E)
+
+| {z }
+
+> leakage
+
+, λ > 0.
+
+(1) The utility term is maximized by minimizing the cross en-tropy loss in the training classifier. The leakage term is mini-mized through the conditional-CLUB upper bound (Cheng et al. 2020), 
+
+I(R; K | E) ≤ Ep(r,k,e )
+
+ log qϕ(k | r, e )
+
+− Ep(e) Ep(r|e) p(k|e)
+
+ log qϕ(k | r, e ).
+
+(2) where qϕ(k | r, e ) approximates p(k | r, e ).
+
+4.4 Representation of feature R
+
+We use a moderately sized Qwen3-14B model, instruct the model to run in non-thinking mode and keep weight frozen. For each claim we feed the claim text together with its evi-dence and mean-pool the final-layer hidden states into a fixed feature vector. Because the backbone weights never change, these features are identical on every pass, so we compute them once and cache them. A small trainable ”representation” head then translates the cached features to R ∈ Rd.Table 2: Entity-masking probe on Qwen3-14B, 2,554 entity-bearing binary AVeriTeC claims, no evidence shown. Major-ity is always-Refuted (1,735/2,554).                     
+
+> Metric Original Masked ∆Majority Accuracy 0.710 0.678 −0.032 0.679 Macro-F1 0.640 0.502 −0.138 0.405 Supported recall 0.421 0.131 −0.291 0.000 Refuted recall 0.846 0.937 +0 .091 1.000
+
+4.5 Outcome K and evidence E encoders 
+
+K and E are encoded by a separate, fixed sentence en-coder ( all-MiniLM-L6-v2 ), not the Qwen3-14B back-bone model. Using a different encoder helps the penalty measures real outcome leakage rather than encoder similar-ity. We reduce both K and E to lower ( 8) dimensions with PCA (a separate projection for each, fit on the training split and applied to all splits), to help training stability given the moderate data size we have 
+
+4.6 Training 
+
+We optimize the model through alternating optimization of two objectives: 1. Estimate the leakage. With the head and classifier frozen, update qϕ(k | r, e ) to maximize P 
+
+> i
+
+log qϕ(ki | ri, e i) —make the helper predict each outcome ki from (ri, e i)
+
+as well as possible, so the CLUB value is an accurate estimate of I(R; K | E).2. Learn the representation R. With qϕ frozen, update the head and classifier to minimize CE  Y, q ψ (R) +
+
+λ bICLUB (R; K | E). The cross-entropy term drives R to predict the label, while the CLUB term penalizes R for encoding realized-outcome information. 
+
+## 5 Analysis and Results 
+
+5.1 Parametric leakage 
+
+We first test whether a modern LLM’s judgment is based on memorized outcomes from pre-training or on its ability to verify a claim from its content. We evaluate this with a two-pass test on the 2,795 binary AVeriTeC claims without retrieval. In the first pass, the model classifies the original claim and in the second pass, we mask the named entities, so that the wording and structure remain intact, but the name entities a model could use to recall a specific outcome are removed. The masking uses spaCy NER. Claims where NER finds no entity (241 of 2,795) are dropped from this probe, leaving 2,554 claims (819 supported). The model is prompted to answer True or False from its own knowledge, and P (true )
+
+is the next-token probability mass the model predicts “True” against “False”. We expect the model judgment to be roughly unchanged if the model were verifying the claim from its content alone. A collapse concentrated on the claims whose outcomes are memorable is likely hint of parametric leakage. 
+
+Results Table 2 shows the headline pattern. The Supported-recall drop is 0.291 (0.421 → 0.131). Two things stand out in Frozen encoding Trainable head + CLUB penalty Evaluation   
+
+> “Dr VK Srinivas, Vice President of Bharat Biotech photographed having the first COVID-19 vaccine…”
+> claim X
+> passage 1
+> passage 2
+> ...passage 5
+> retrieved evidence (point-in-time) “On July 3, 2020, Bharat Biotech clarified that a viral image was not related to its COVID-19 vaccine” outcome text K
+> (generated)
+
+Qwen3-14B   
+
+> frozen ·4-bit
+
+MiniLM          
+
+> frozen ·fp32 mean-pool ...
+> h
+> 5120-d
+> PCA  5120  → 16
+> ...
+> h′
+> 16-d
+> ...
+> e
+> 384-d
+> PCA  384  → 8
+> ...
+> e′
+> 8-d
+> ...
+> k
+> 384-d
+> PCA  384  → 8
+> ...
+> k′
+> 8-d
+> head:  linear  16  → dR
+> ...binary classifier linear
+> ˆY
+> ⊕
+> critic:  2-layer MLP
+> qϕ(k|R, e )ˆICLUB (R;K|E)
+
+L = CE( ˆY , Y ) + λ ˆICLUB   
+
+> penalty weight λ— knob 2
+
+Utility             
+
+> validation macro-F1 RidgeCV probe
+> leakage
+> held-out ∆R2(R, E )→Kover E→K
+> optional evidence into prompt
+> R∈RdR
+> bottleneck — knob 1
+> frozen transform trainable frozen encoder leakage path
+
+Figure 1: Trained representation pipeline. Two knobs—bottleneck width dR and penalty weight λ—are studied against future-information leakage. Table 3: Supported claims where masking flips full confi-dence into rejection ( P (true ), original → masked). 
+
+Claim (original / masked) P (true )
+
+Russia has developed a new vaccine to fight COVID-19. 
+
+1.00 → 0.00 
+
+[GPE 1] has developed a new vaccine to fight [PERSON 1]. American rapper Kanye West is run-ning for President of the United States in the 2020 elections. 
+
+1.00 → 0.00 
+
+[NORP 1] rapper [PERSON 1] is run-ning for President of [GPE 1] in the [DATE 1] elections. 
+
+Table 2. First, raw accuracy hides the leakage: the gap is only 0.032, because the two recall movements nearly cancel on a set that is 68% Refuted. Masked accuracy (0.678) matches the always-Refuted majority (0.679). An accuracy report alone would conclude the model is robust to masking. However, the per-class recalls show the opposite. Second, the movement is asymmetric in the direction memorization predicts. The model recognizes true 2020 outcomes only while their entity anchors are present. When the anchors are gone it does not reason, it falls back to its “False” prior. Table 3 provides examples. Claims whose outcomes were widely reported in 2020 go from full confidence to rejection once the entities are hidden. 
+
+Pre-cutoff control model Masking removes information, not only memorization anchors. A masked claim is naturally harder to verify, so part of the drop could be information loss rather than leakage. To isolate the memorization compo-nent we run the identical probe (same claims, same masking, same instruction text as a plain prompt, same scoring) on a control model whose pre-training predates the claim out-comes: GPT-2-XL, trained on WebText, which was collected through December 2017 and so predates 97.5% of the claims. A model that never saw an outcome has nothing to recall through the entity anchors, so its masking drop estimates the pure information-loss component, and the excess drop of the in-window model over the control is the memorization component. A control that shows no drop only because of un-derperformance would prove nothing, so Table 4 also reports the control’s unmasked performance. The control does not show the collapse. GPT-2-XL ac-curacy is weak (unmasked 0.606, below the 0.679 majority in Table 2) but still splits both classes away from the ex-tremes, and masking changes its verdicts substantially, in-terestingly in the opposite direction of Qwen3-14B. Its Sup-ported recall rises and its confidence on gold-True claims goes up. For a model with nothing to recall, replacing enti-ties with placeholders produces a drift toward “True” that has nothing to do with the claim content. The difference-in-differences on the paired entity-bearing claims is +0 .582 
+
+(95% CI [+0 .533 , +0 .630] ). Since the GPT control’s drop is below zero, the information loss alone does not produce a collapse toward “False”. The in-window drop of 0.291 is mostly attributable to recall of memorized outcomes rather than to the claims becoming harder to verify, and Table 5 separates the two parts. 
+
+Robustness checks The collapse is not specific to one model family. The identical probe on phi-4 (14B), a second in-window model with a different training pipeline, shows the same pattern (Table 4). Its supported recall falls from 0.277 to 0.039 while its refuted recall rises, and raw accuracy again hides the movement. Masking could also simply push each model toward its own prior, Qwen toward “False” and GPT-2 toward “True”, Table 4: The identical probe on a pre-cutoff control and a second in-window model. Recall figures and CIs on the entity-bearing subset; ∆P (true ) is the confidence change on gold-Supported claims (positive = masking lowers confidence). Both in-window models collapse toward “False” but the control moves in the opposite direction.                                
+
+> Model Training data Acc. Supp. recall (o →m) Recall drop [95% CI] ∆P(true) [95% CI] Qwen3-14B in-window (2020) 0.710 0.421 →0.131 +0 .291 [ .258 , . 322] +0 .279 [ .250 , . 309]
+> phi-4 in-window (2020) 0.717 0.277 →0.039 +0 .238 [ .210 , . 268] +0 .250 [ .227 , . 274]
+> GPT-2-XL WebText ≤2017 0.606 0.394 →0.686 −0.292 [ −.322 ,−.260] −0.087 [ −.092 ,−.082]
+
+Table 5: The confidence change under masking, split by gold label, with ∆∆ P the gold-True minus the gold-False change (positive = masking lowers confidence). A label-blind drift moves both classes equally and cancels in ∆∆ P .             
+
+> Model gold-True gold-False ∆∆ P[95% CI] Qwen3-14B +0 .279 +0 .089 +0 .190 [ .156 , . 225]
+> phi-4 +0 .250 +0 .075 +0 .175 [ .150 , . 202]
+> GPT-2-XL −0.087 −0.096 +0 .009 [ .002 , . 015]
+
+and the gap in Table 4 would widen without any memoriza-tion. We check the distribution shift across labels to confirm future leakage. For models simply falling back to their prior, we expect the shift between the two labels cancels out. How-ever, memorized outcomes do not cancel. Table 5 reports the difference. For both in-window models the confidence loss is about three times larger on gold-True claims than on gold-False claims. For the pre-cutoff control the shift is label-blind to within 0.01. The label conditioned signature of the collapse is the memorization behavior. 
+
+5.2 Representation-level controls 
+
+The training objective (Section 4) adds a penalty λ I (R; K |
+
+E) on the representation R, the vector constructed using claim and evidence (details below). The penalty’s job is to keep R from relying on the realized outcome K beyond what the evidence already supports. We next ask whether this design is effective: as λ grows, does the leakage actually fall, and does it come at a trade-off against accuracy? The measurement of leakage needs to be outside of the training process to ensure the penalty term is not grading its own work. In our experiment, we use a helper model to predict K from R and E, another predicts K from E alone, both after training, and the gain in held-out R2 is the leakage number. It is trying to measure how much R reveals about the outcome beyond what the evidence supports. Both helpers are linear ridge regressions, fit on the training split and scored on the validation split. We pick the regularization strength by cross-validation. 
+
+Setup We run the experiment on both datasets of Section 3. For AVeriTeC we start from the same 2,795 binary claims as the parametric probe. The chronological split removes near-duplicates while holding out a test split, leaving 2,248 train and 265 validation claims (2,513 binary train+validation). The penalty additionally requires a generated outcome state-ment K, so the leakage grid uses the 2,209 train and 261 validation claims that have K (2,470 of those 2,513). Accu-racy at λ = 0 in Section 5.3 is on all 265 validation claims, which do not need K at inference. QuanTemp++ gives 4,827 train and 710 validation claims. We remind the readers that the validation split for QuanTemp++ is 5.5% Supported (39 claims). Therefore the supported-side estimate can be noisy. The representation R is built from the claim in four steps. First, a claim X, alone or with its top-5 point-in-time evi-dence, is formatted as a single prompt and passed through the frozen Qwen3-14B backbone. Second, the final-layer hidden states are mean-pooled into a 5,120-dimensional vec-tor. Third, a PCA fit on the training split reduces it to 16 dimensions, keeping 59–61% of the feature variance on both datasets. Fourth, a small trainable head, a linear map or a shal-low MLP chosen per dataset (Appendix A), projects those 16 dimensions to R ∈ RdR . A linear classifier predicts the label from R. Only the fourth step is trainable. The outcome statement K and the evidence text E are em-bedded by a separate frozen sentence encoder (all-MiniLM-L6-v2) and reduced to 8 PCA dimensions each, so the leakage term measures outcome dependence rather than similarity between two views of the same encoder. These embeddings keep 52% and 24% of their variance on AVeriTeC and 27% and 22% on QuanTemp++, to avoid overfitting given our data size. The head is selected for the smallest train–validation gap that holds validation F1, using the config most prone to over-fitting ( λ=0 , dR=32 , Appendix A), so the model is scored on a representation that generalizes. Training alternates be-tween two updates. First the CLUB critic qϕ(k | R, e ) is fit to predict the outcome embedding from the current rep-resentation and evidence. Its fit yields the estimate ˆICLUB 
+
+of I(R; K | E). Then, with the critic held fixed, the head and classifier take a step on the combined loss: the cross-entropy classification loss plus λ ˆICLUB . Alternating keeps the leakage estimate current as the representation changes. The width dR is the objective’s second knob: it is the num-ber of dimensions the classifier and the critic see, and at 
+
+λ=0 it is a plain bottleneck with no penalty. Every cell is trained with five seeds varying only the initialization, sweeping λ ∈ {0, 0.01 , 0.02 , 0.04 , 0.06 , 0.1, 0.5} against 
+
+dR ∈ { 8, 2, 1}. Cells where the penalty appears to help are re-run with 20 paired seeds (Appendix B). 
+
+Results We find increasing λ does not effectively shrink leakage in both datasets. Figure 2 shows the sweep: at every width, F1 falls as λ grows for at most a marginal leakage return (Appendix B). What does shrink the leakage is the representation width 
+
+dR. Narrowing the head removes far more leakage per unit of F1 than any λ (Tables 6 and 7), and no penalized cell beats the λ=0 bottleneck at equal utility. We read this as a statement about where the leakage lives. Figure 2: Validation macro-F1 (left) and leakage (right) as the penalty λ grows, on AVeriTeC (top) and QuanTemp++ (bottom) with top-5 point-in-time evidence, one line per width dR. F1 falls as λ grows for at most a marginal leakage return. The width, not the penalty, is what moves leakage. Means over 5 seeds. Table 6: AVeriTeC: the λ=0 grid with and without retrieved point-in-time evidence. Leakage is the held-out R2 gain of predicting K from (R, E ) over E alone. Means over 5 seeds. In the claim-only setting the conditioner E is a constant, so its leakage column reads unconditional outcome decodability.                  
+
+> top-5 point-in-time claim-only
+> dRF1 leakage F1 leakage 80.607 0.168 0.626 0.268 20.577 0.046 0.582 0.086 10.512 0.029 0.492 0.057
+
+Most of it is carried in directions of R that the classifier does not use, so shrinking the width discards it at almost no cost. A penalty that must fight the utility term for the same directions cannot do better. The remainder, about 0.03 of R2
+
+on AVeriTeC and less on QuanTemp++, survives every width and every penalty. It lies inside the directions the prediction itself uses, where a claim’s verdict and its realized outcome overlap, so no representation-level tool removes it without removing the prediction. Both datasets are evaluated at the same two evidence set-tings, claim-only and top-5 point-in-time. Claim-only is the higher-utility setting on AVeriTeC at dR ∈ { 8, 2}, while evi-dence adds about 0.06 F1 on QuanTemp++ (Tables 6 and 7). The penalty helps only in QuanTemp++’s claim-only setting Table 7: QuanTemp++: the λ=0 grid with and without re-trieved point-in-time evidence, as Table 6. The claim-only leakage is further inflated by outcome statements that restate the claim.                  
+
+> top-5 point-in-time claim-only
+> dRF1 leakage F1 leakage 80.783 0.015 0.730 0.392 20.789 0.010 0.731 0.307 10.783 0.008 0.730 0.288
+
+within the same width, where there is no evidence to con-dition on (Appendix B). In the settings with evidence, the bottleneck remains the better tool. 
+
+5.3 Temporal evidence leakage 
+
+The model keeps outcome knowledge in its weights (Sec-tion 5.1). Here we study the temporal channel on our trained detector alongside the parametric one. Section 5.2 found that only the width bottleneck dR lowers the leakage probe, while the penalty λ mostly costs accuracy; both knobs still change how much the head relies on evidence rather than on memory, which we reuse here. The temporal channel is evidence dated after the claim that retrieval brings in, and only point-in-time retrieval can remove it. We ask how this channel affects the trained detector, and how pushing off the parametric shortcut Table 8: The zero-shot accuracy gap on AVeriTeC, split by whether any pre-claim evidence exists for the claim. Where none exists, the point-in-time view gives the model an empty evidence set. Both gaps are significant.                 
+
+> Claims nPIT Leaked ∆
+> No pre-claim evidence 1,361 0.746 0.835 +0 .090
+> Has pre-claim evidence 1,152 0.824 0.855 +0 .031
+> All claims 2,513 0.782 0.844 +0 .063
+
+changes that sensitivity. 
+
+The temporal leakage is present in the retrieved data. We first check that the leakage is really there, using the same backbone and top-k retrieval as our detector. We give Qwen3-14B a claim and its top-5 evidence and ask it for a Supported or Refuted answer, with no training. Because this probe is zero-shot, we can test it on every binary claim in the chrono-logical train and validation splits ( n = 2 ,513 of the 2,795 binary claims on AVeriTeC; the test split stays held out) instead of only the validation split, which gives it more statis-tical power. In the point-in-time view, claims with no dated pre-claim evidence keep an empty evidence set, so no claim is dropped. When we move from point-in-time to leaked ev-idence, accuracy goes up by 6.3 points (95% CI [4 .9, 7.8] ), macro-F1 by 7.9 ([6 .1, 9.9] ), and Supported-recall by 10 .4
+
+([7 .0, 14 .1] ), and all three gaps are significant (accuracy by McNemar p < 0.001 , and every bootstrap interval excludes zero, Figure 3). Two checks show that the gain comes from the leaked evidence and not from the model’s own prior knowledge. First, when we tell the model to use only the given evidence, the gap gets even bigger (macro-F1 inflation 
+
+7.9 to 9.0). Second, the same model with no evidence at all reaches only 75 .3% accuracy, well below both evidence con-ditions, so prior knowledge alone does not account for its verdicts. The temporal leakage is therefore a property of the retrieved data, and any model that reads the evidence can use it. 
+
+Part of this gap is missing evidence, not hindsight. The 
+
+6.3 point gap covers two different situations. For 54% of the claims our date recovery finds no pre-claim evidence at all (Section 3.2), so the point-in-time view gives the model an empty evidence set, and the comparison measures what a fact-checker loses when nothing was available yet. For the other 
+
+46% both views have evidence and only the publication dates differ, which is hindsight in the strict sense. Table 8 splits the two. The gap is 9.0 accuracy points for the first group and 
+
+3.1 points for the second, and both are significant (McNemar 
+
+p < 10 −4). We therefore read the 6.3 points as how much a leaked benchmark overstates performance overall, and the 
+
+3.1 points as an upper bound on the part that comes from hindsight, since the point-in-time view also drops evidence we simply could not date. On QuanTemp++ nearly every claim has pre-claim evidence, so its flat result is not caused by availability. 
+
+The detector hides this leakage until the parametric short-cut is removed. At λ = 0 on chronological validation (n = 265 AVeriTeC, the full validation set; n = 710 Quan-Temp++) the trained pipeline shows almost none of the prompted model’s inflation: a head trained on leaked features and one trained on point-in-time features differ by −1.0 accu-racy points on AVeriTeC and near zero on QuanTemp++, with Supported-recall gaps of +3 .5 and +2 .1. That is a property of the pipeline, not an absence of leakage. The head leans on the parametric channel and barely reacts to which evidence view it is given, which is also why claim-only beats the evi-dence setting for it on AVeriTeC (Table 6) while the prompted model gains from that same evidence (Figure 3). Pushed off the shortcut it has to read the evidence, and the temporal leakage already sitting there starts to show (Figure 4): on AVeriTeC the leaked minus point-in-time Supported-recall gap rises from 1.5% to 9.7% as λ grows and to 5.4% as dR
+
+narrows to 2, while on QuanTemp++ both knobs push it from 
+
+2.3% toward zero. (The 1.5% start is below the +3 .5 above because that comparison trains a separate head per evidence view, while this sweep swaps the view only at test time.) The peaks sit inside the seed spread, so we read the direction and not a best value; that two unrelated knobs move the gap the same way makes it a property of the evidence rather than of one intervention. This squares with Section 5.2: the penalty barely changes what R encodes about the outcome, but it does change what the head reads, so its effect surfaces here as evidence sensitivity rather than as a lower leakage number. 
+
+The effect only appears in datasets where hindsight is actually retrieved. On QuanTemp++ the zero-shot inflation is not significant for accuracy or macro-F1 (accuracy gap 
+
+0.05% , McNemar p = 0 .87 ). Table 13 explains why. On AVeriTeC the point-in-time filter removes 68% of the leaked top-5 evidence, and only 19% of claims get the same evidence in both views, so there is real room for hindsight to act. On QuanTemp++ 91% of the leaked evidence would also pass the point-in-time filter, and 70% of claims get the same top-5 either way, so the two settings are almost the same experiment and very little can leak. The size of the inflation follows how much post-claim evidence the retrieval brings in, which depends on how the dataset was built and not on the model. Taken together, these experiments show that temporal evi-dence leakage is present in the retrieved data and that a model can use it if it reads the evidence, that our trained detector is safe from it at λ = 0 only because it does not use the evidence much, and that reducing the parametric channel brings the temporal leakage back. Representation debiasing and point-in-time retrieval are complementary: pushing the head off its parametric shortcut exposes the temporal leakage that only point-in-time retrieval removes. 
+
+## 6 Limitations 
+
+First, we cannot show that the outcome information is fully removed. Most of our claims predate the backbone’s training cutoff, and because the backbone stays frozen and only a small head is trained on its features, those frozen weights set a floor on what any representation-level tool can remove. Both the training penalty and the held-out probe also rely on estimating mutual information in high dimensions, and Section 5.2 finds a residual of about 0.03 held-out R2 that survives every width and every penalty we tried, sitting in the directions the classifier itself uses. Second, our point-in-time setting depends on recovering a Figure 3: Zero-shot Qwen3-14B verdicts. (a) macro-F1 by evidence view: on AVeriTeC quality rises from no-evidence to point-in-time to leaked; on QuanTemp++ it is flat, because its retrieval surfaces almost no post-claim evidence (Table 13). (b) leaked − point-in-time inflation under the default prompt and an evidence-only prompt; the gap grows when the memory fallback is removed. Bars are on the full binary claim sets ( n = 2 ,513 / 5,537 ). 
+
+Figure 4: Leaked − point-in-time Supported-recall of the trained head vs. (a) λ at dR=32 and (b) width dR at λ=0 (Section 5.2). On AVeriTeC the gap is near zero while the parametric shortcut remains, then re-emerges; on QuanTemp++ it falls toward zero (Table 13). Means over 10 seeds, ±1 SD. publication date for each piece of evidence, and this coverage is incomplete. We did not hand-audit a stratified sample of recovered dates. Many answers stay undated—social-media and paywalled pages are common cases—and late archive bounds are dropped conservatively, so all are excluded from the point-in-time view, not only pages we can prove were published after the claim. This is why 54% of the binary AVeriTeC claims end up with no pre-claim evidence at all, so part of what we measure as inflation is missing evidence rather than hindsight. Section 5.3 reports the two cases sepa-rately for this reason (Table 8), but our findings may not trans-fer to claims whose evidence we could not date. AVeriTeC and QuanTemp++ also use different dating instruments, so cross-dataset temporal comparisons are indicative, not con-trolled. On QuanTemp++ the outcome target K is generated from fact-checker justification text rather than a neutral ar-ticle summary (most AVeriTeC article failures use the same fallback), so the MI penalty on that corpus partly regularizes against verdict wording. Third, our detector uses a single backbone (Qwen3-14B) and two datasets that differ a lot in how much post-claim evidence their retrieval surfaces, so the size of the temporal effect may not transfer to other corpora. Fourth, the trained-detector results in Sections 5.2 and 5.3 operate on compressed features: the backbone states are mean-pooled and reduced with PCA, which keeps only part of the variance. There is a chance that our observation of the head not using the evidence may come from this compression rather than from the model. 
+
+## 7 Future Work 
+
+Two questions follow directly from these limitations. The first is whether a debiased detector holds up on claims made after the model’s training cutoff, where memorization cannot help and an ordinary model should fall hard; no dataset with dated evidence exists for this yet, so it has to be collected. The second, and the more consequential one, is whether high-quality evidence exists before the claim at all, across many corpora: if misinformation usually spreads before good counter-evidence is published, every point-in-time system has a built-in ceiling, and measuring that ceiling matters more than any single detector. 
+
+## 8 Conclusion 
+
+Future-information leakage makes LLM-based misinfor-mation detection look better than it really is, and it enters through two channels: memorized pre-training outcomes and retrieved documents written after the claim. We measure both on the same claims and find that width bottlenecks beat a mutual-information penalty on parametric leakage, while post-claim evidence measurably inflates a model that reads it on AVeriTeC. The two channels need different tools; neither alone is enough. 
+
+## References 
+
+Augenstein, I.; Lioma, C.; Wang, D.; Chaves Lima, L.; Hansen, C.; Hansen, C.; and Simonsen, J. G. 2019. MultiFC: A Real-World Multi-Domain Dataset for Evidence-Based Fact Checking of Claims. In Proceedings of EMNLP-IJCNLP , 4684–4696. ArXiv:1909.03242. Belghazi, M. I.; Baratin, A.; Rajeswar, S.; Ozair, S.; Bengio, Y.; Courville, A.; and Hjelm, R. D. 2018. Mutual Information Neural Estimation. In Proceedings of the 35th International Conference on Machine Learning , volume 80 of Proceedings of Machine Learning Research , 531–540. PMLR. Braun, T.; Rothermel, M.; Rohrbach, M.; and Rohrbach, A. 2025. DEFAME: Dynamic Evidence-based FAct-checking with Multimodal Experts. In Proceedings of the 42nd International Conference on Machine Learning , 5383–5417. Cheng, P.; Hao, W.; Dai, S.; Liu, J.; Gan, Z.; and Carin, L. 2020. CLUB: A Contrastive Log-ratio Upper Bound of Mutual Information. In Proceedings of the 37th International Conference on Machine Learning , volume 119 of Proceedings of Machine Learning Research , 1779–1788. PMLR. Chern, I.-C.; Chern, S.; Chen, S.; Yuan, W.; Feng, K.; Zhou, C.; He, J.; Neubig, G.; and Liu, P. 2023. FacTool: Factuality Detection in Generative AI – A Tool Augmented Framework for Multi-Task and Multi-Domain Scenarios. arXiv:2307.13528. Chrysidis, Z.; Papadopoulos, S.-I.; Papadopoulos, S.; and Petrantonakis, P. C. 2024. Credible, Unreliable or Leaked? Evidence Verification for Enhanced Automated Fact-Checking. In 
+
+Proceedings of the 3rd ACM International Workshop on Multimedia AI against Disinformation (MAD ’24) . ArXiv:2404.18971. El Lahib, A.; Xia, Y.-J.; Li, Z.; Wang, Y.; and Pi, X. 2026. Temporal Leakage in Search-Engine Date-Filtered Web Retrieval: A Retrospective Forecasting Case Study. In Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (ACL), Volume 2: Short Papers , 787–795. Glockner, M.; Hou, Y.; and Gurevych, I. 2022. Missing Counter-Evidence Renders NLP Fact-Checking Unrealistic for Misinformation. In Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing (EMNLP) ,5916–5936. ArXiv:2210.13865. Guo, Z.; Schlichtkrull, M.; and Vlachos, A. 2022. A Survey on Automated Fact-Checking. Transactions of the Association for Computational Linguistics (TACL) , 10: 178–206. ArXiv:2108.11896. He, S.; Lv, L.; Manela, A.; and Wu, J. 2025. Chronologically Consistent Large Language Models. arXiv:2502.21206. Hu, B.; Sheng, Q.; Cao, J.; Shi, Y.; Li, Y.; Wang, D.; and Qi, P. 2024. Bad Actor, Good Advisor: Exploring the Role of Large Language Models in Fake News Detection. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 38, 22105–22113. Karger, E.; Bastani, H.; Chen, Y.-H.; Jacobs, Z.; Halawi, D.; Zhang, F.; and Tetlock, P. E. 2025. ForecastBench: A Dynamic Benchmark of AI Forecasting Capabilities. In The Thirteenth International Conference on Learning Representations .Karnam, S. K.; Kundu, A.; Arora, J.; Jain, M.; and Mukherjee, A. 2026. Real-World Challenges in Fake News Detection: Dealing with Posts by Cold Users. In Proceedings of the Twentieth International AAAI Conference on Web and Social Media ,1190–1201. Kraskov, A.; St¨ ogbauer, H.; and Grassberger, P. 2004. Estimating Mutual Information. Physical Review E , 69(6): 066138. Lazaridou, A.; Kuncoro, A.; Gribovskaya, E.; Agrawal, D.; Liˇ ska, A.; Terzi, T.; Gimenez, M.; de Masson d’Autume, C.; Kocisky, T.; Ruder, S.; Yogatama, D.; Cao, K.; Young, S.; and Blunsom, P. 2021. Mind the Gap: Assessing Temporal Generalization in Neural Language Models. In Advances in Neural Information Processing Systems , volume 34, 29348–29363. Ou, H.; Deng, G.; Han, X.; Zhang, J.; Qiu, H.; Guo, S.; Zhang, T.; and Lam, K.-Y. 2026. Beyond Retrieval: Improving Evidence Quality for LLM-based Multimodal Fact-Checking. arXiv:2505.03135. Reimers, N.; and Gurevych, I. 2019. Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP) , 3980–3990. ArXiv:1908.10084. Schlichtkrull, M.; Guo, Z.; and Vlachos, A. 2023. AVeriTeC: A Dataset for Real-world Claim Verification with Evidence from the Web. In Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track . ArXiv:2305.13117. The Guardian. 2021. Facebook Lifts Ban on Posts Claiming Covid-19 Was Man-Made. The Guardian, 27 May 2021. Thibault, C.; Tian, J.-J.; Peloquin-Skulski, G.; Curtis, T. L.; Zhou, J.; Laflamme, F.; Guan, Y.; Rabbany, R.; Godbout, J.-F.; and Pelrine, K. 2024. A Guide to Misinformation Detection Data and Evaluation. ArXiv:2411.05060. Venktesh, V.; Anand, A.; Anand, A.; and Setty, V. 2024. QuanTemp: A Real-World Open-Domain Benchmark for Fact-Checking Numerical Claims. In Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR ’24) . ArXiv:2403.17169. Venktesh, V.; Prabhu, D.; and Anand, A. 2025. A Benchmark for Open-Domain Numerical Fact-Checking Enhanced by Claim Decomposition. ArXiv:2510.22055. Introduces the QuanTemp++ dataset. Xu, C.; Guan, S.; Greene, D.; and Kechadi, M.-T. 2024. Benchmark Data Contamination of Large Language Models: A Survey. arXiv:2406.04244. Zhu, Y.; Sheng, Q.; Cao, J.; Li, S.; Wang, D.; and Zhuang, F. 2022. Generalizing to the Future: Mitigating Entity Bias in Fake News Detection. In Proceedings of the 45th International ACM SIGIR Conference on Research and Development in Information Retrieval ,SIGIR ’22, 2120–2125. Association for Computing Machinery. Appendix 
+
+## A Head configuration selection 
+
+For each dataset we sweep head configurations at λ=0 , dR=32 ,with five seeds, and select the smallest train–validation gap that holds validation F1. On AVeriTeC (Table 9) linear heads generalize best and E is selected. On QuanTemp++ (Table 10) no configuration overfits and D2 is selected. 
+
+Table 9: Configuration sweep on AVeriTeC, chronological boundary. Configs vary the feature PCA dimension dh, the head hidden width (h), dropout (drop), and weight decay (wd). 
+
+Config train F1 val F1 gap leakage D dh=16 , h32, drop 0.3, wd 10 −2
+
+0.692 0.554 +0 .137 0.238 D2 as D, wd 3×10 −2 0.683 0.551 +0 .131 0.232 D3 as D, wd 10 −1 0.668 0.532 +0 .137 0.222 D4 as D, drop 0.5 0.674 0.555 +0 .118 0.238 D5 as D4, wd 3×10 −2 0.673 0.545 +0 .129 0.234 H dh=8 , h16, drop 0.3, wd 10 −2
+
+0.626 0.522 +0 .105 0.164 E linear, dh=16 , wd 
+
+10 −1
+
+0.689 0.611 +0 .078 0.301 F linear, dh=16 , wd 
+
+10 −2
+
+0.672 0.594 +0 .078 0.301 
+
+Table 10: Configuration sweep on QuanTemp++, chronologi-cal boundary. 
+
+Config train F1 val F1 gap leakage D dh=16 , h32, drop 0.3, wd 10 −2
+
+0.752 0.784 −0.032 0.033 D2 as D, wd 3×10 −2 0.749 0.789 −0.039 0.032 D3 as D, wd 10 −1 0.742 0.776 −0.035 0.031 D4 as D, drop 0.5 0.747 0.787 −0.040 0.034 D5 as D4, wd 3×10 −2 0.745 0.777 −0.032 0.032 H dh=8 , h16, drop 0.3, wd 10 −2
+
+0.720 0.751 −0.032 0.024 E linear, dh=16 , wd 
+
+10 −1
+
+0.736 0.751 −0.015 0.050 F linear, dh=16 , wd 
+
+10 −2
+
+0.727 0.759 −0.033 0.050 
+
+## B Adjudication and evidence-amount details 
+
+Cells flagged at 5 seeds are re-run with 20 paired seeds (Table 11). Figure 5 repeats the λ sweep in the claim-only setting where Quan-Temp++ is the only pass. Table 12 supports the AVeriTeC claim-only saturation at dR=8 , λ=0 .
+
+Figure 5: The λ sweep of Figure 2 in the claim-only setting. With no evidence to condition on, the leakage term is un-conditional. QuanTemp++ is the one setting where a small 
+
+λ removes leakage at negligible F1 cost (Table 11). Means over 5 seeds. Table 11: 20-seed paired adjudication of the candidate cells under each dataset’s selected configuration, all at λ=0 .01 
+
+against the λ=0 baseline. 
+
+Arm ∆leakage [95% CI] ∆F1 AVeriTeC top-5, dR=8 −0.039 [ −0.047 , −0.031] −0.019 
+
+AVeriTeC top-5, dR=2 −0.008 [ −0.013 , −0.004] −0.013 
+
+AVeriTeC claim-only, 
+
+dR=2 
+
+−0.010 [ −0.015 , −0.005] −0.011 
+
+QuanTemp++ top-5, 
+
+dR=8 
+
+−0.002 [ −0.003 , −0.001] −0.024 
+
+QuanTemp++ claim-only, 
+
+dR=8 
+
+−0.088 [ −0.101 , −0.075] −0.007 
+
+QuanTemp++ claim-only, 
+
+dR=2 
+
+−0.019 [ −0.025 , −0.014] −0.001 
+
+Table 12: Evidence amount on AVeriTeC ( dR=8 , λ=0 ): re-trieval saturates at one answer and claim-only is the highest-utility setting. 
+
+top-k evidence F1 leakage 0 (claim-only) 0.626 0.268 1 0.611 0.172 2 0.609 0.169 3 0.607 0.168 5 0.607 0.168 
+
+## C Evidence composition 
+
+Table 13: Leaked top-5 composition and overlap with the point-in-time view. 
+
+AVeriTeC QuanTemp++ Binary claims 2,513 5,537 post-claim, trusted date 7.7% 5.8% post-claim, archive bound 40.1% 0.0% pit-eligible (redundant) 31.9% 90.8% undated 20.2% 3.4% Claims with leaked = pit top-5 19.4% 70.4%

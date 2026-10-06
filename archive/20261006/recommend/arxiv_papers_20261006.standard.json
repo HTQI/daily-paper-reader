@@ -1,18 +1,167 @@
 {
   "mode": "standard",
-  "generated_at": "2026-10-06T00:34:17.427535+00:00",
+  "generated_at": "2026-10-06T23:49:00.526728+00:00",
   "stats": {
     "mode": "standard",
     "tag_count": 1,
-    "deep_divecandidates": 0,
+    "deep_divecandidates": 3,
     "deep_cap": 6,
-    "deep_selected": 0,
-    "quick_candidates": 2,
+    "deep_selected": 3,
+    "quick_candidates": 3,
     "quick_skim_target": 11,
-    "quick_selected": 2
+    "quick_selected": 3
   },
-  "deep_dive": [],
+  "deep_dive": [
+    {
+      "id": "2610.06708v1",
+      "source": "arxiv",
+      "title": "SAFE-MR: Evidence Sufficiency Learning for Selective Multimodal Rumor Detection",
+      "abstract": "Multimodal rumor detectors increasingly rely on retrieved evidence, yet relevant evidence is not necessarily sufficient for verification. Missing provenance, duplicated reports, and unresolved contradictions can produce confident predictions without adequate support. We introduce SAFE-MR, a framework that separates claim veracity from evidence sufficiency. The method decomposes image-text posts into verifiable claims, constructs a relation-aware claim-evidence graph, and aggregates evidence using provenance and contextual compatibility. Separate veracity and sufficiency heads support selective prediction, while evidence interventions encourage stability under irrelevant additions and sensitivity to evidence removal. On NewsCLIPpings, VERITE, and XFacta, SAFE-MR achieves macro-F1 scores of 91.2%, 75.8%, and 85.2%, respectively. Against the matched backbone with evidence, its macro-F1 gains are 2.2, 4.9, and 4.8 percentage points. On the diagnostic selection set, SAFE-MR reduces AURC from 0.105 for maximum-probability rejection to 0.075 and lowers error at 80% coverage from 13.8% to 8.5%. Evidence-perturbation and ablation results support the role of sufficiency learning and intervention training in improving selective verification.",
+      "authors": [
+        "Shiwen Ni"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-10-05T17:02:35+00:00",
+      "link": "https://arxiv.org/pdf/2610.06708v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "evidence sufficiency learning for selective multimodal rumor detection",
+      "llm_evidence_cn": "面向选择性多模态谣言检测的证据充分性学习",
+      "llm_evidence": "面向选择性多模态谣言检测的证据充分性学习",
+      "canonical_evidence": "面向选择性多模态谣言检测的证据充分性学习",
+      "llm_tldr_en": "SAFE-MR separates claim veracity from evidence sufficiency for multimodal rumor detection, building a relation-aware claim-evidence graph with provenance-aware aggregation and evidence interventions for selective prediction.",
+      "llm_tldr_cn": "针对多模态谣言检测过度依赖检索证据、却忽视证据是否充分的问题，本文提出SAFE-MR框架。方法将图文帖分解为可验证主张，构建关系感知的主张-证据图，并依据出处与语境兼容性聚合证据，同时用真实性与充分性双头实现选择性预测。在NewsCLIPpings、VERITE等数据集上，证据干预实验提升了预测稳定性。该工作推动证据驱动的选择性多模态事实核查。",
+      "llm_tldr": "针对多模态谣言检测过度依赖检索证据、却忽视证据是否充分的问题，本文提出SAFE-MR框架。方法将图文帖分解为可验证主张，构建关系感知的主张-证据图，并依据出处与语境兼容性聚合证据，同时用真实性与充分性双头实现选择性预测。在NewsCLIPpings、VERITE等数据集上，证据干预实验提升了预测稳定性。该工作推动证据驱动的选择性多模态事实核查。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "detecting rumors based on multimodal posts that integrate text, image, video, and social context",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2610.04888v1",
+      "source": "arxiv",
+      "title": "No Hindsight for LLM Fact-Checkers: Measuring Leakage Channels in Misinformation Detection",
+      "abstract": "As automated fact-checking scales on social media, large language model (LLM) verdict scores can look stronger than warranted. One reason is that evaluations mix in information that was not knowable at claim time. Two channels are easy to conflate: outcomes memorized in pre-training and retrieved evidence published after the claim. Yet standard benchmarks rarely separate the two. In this study we measure both channels on AVeriTeC and QuanTemp++ by reconstructing point-in-time evidence conditions and probing for outcome information encoded in model representations. We find substantial evidence of parametric leakage, that can be hidden by the aggregate accuracy, while a simple representation bottleneck reduces this future leakage more efficiently than a mutual-information-based training penalty. We also find that allowing post-claim evidence inflates zero-shot accuracy by 6.3 points in AVeriTeC while the effect is negligible in QuanTemp++, where retrieval provides little post-claim evidence. These results show that misinformation benchmarks can overstate fact-checking performance when they do not account for what information was actually available at claim time.",
+      "authors": [
+        "Kuan-Hua Wu Lu",
+        "Yohanes Andre Setiawan"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-10-04T02:53:23+00:00",
+      "link": "https://arxiv.org/pdf/2610.04888v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "LLM fact-checking misinformation detection and evidence leakage on AVeriTeC",
+      "llm_evidence_cn": "大模型事实核查与错误信息检测中的证据泄漏度量",
+      "llm_evidence": "大模型事实核查与错误信息检测中的证据泄漏度量",
+      "canonical_evidence": "大模型事实核查与错误信息检测中的证据泄漏度量",
+      "llm_tldr_en": "Automated fact-checking scores can be inflated because evaluations leak information unknowable at claim time; the paper separates memorized outcomes from post-claim retrieved evidence on AVeriTeC and QuanTemp++, finds substantial parametric leakage, and shows a representation bottleneck reduces it.",
+      "llm_tldr_cn": "自动事实核查在社交媒体上大规模应用，但大模型判定分数常因评测混入声明时不可知的信息而虚高。本文在AVeriTeC与QuanTemp++上重建声明时点的证据条件，区分预训练记忆与事后检索证据两类泄漏通道，并探测模型表示中编码的结果信息。结果显示存在明显的参数化泄漏，可被聚合准确率掩盖，而简单表示瓶颈能减少这种未来信息泄漏。该工作揭示了事实核查评测的可靠性隐患，为更严格的错误信息检测基准提供方法。",
+      "llm_tldr": "自动事实核查在社交媒体上大规模应用，但大模型判定分数常因评测混入声明时不可知的信息而虚高。本文在AVeriTeC与QuanTemp++上重建声明时点的证据条件，区分预训练记忆与事后检索证据两类泄漏通道，并探测模型表示中编码的结果信息。结果显示存在明显的参数化泄漏，可被聚合准确率掩盖，而简单表示瓶颈能减少这种未来信息泄漏。该工作揭示了事实核查评测的可靠性隐患，为更严格的错误信息检测基准提供方法。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2610.05630v1",
+      "source": "arxiv",
+      "title": "Atomic Visual Entailment: Enhancing Zero-Shot Vision-Language Reasoning through Atomic Fact Decomposition and Learned Selection",
+      "abstract": "Visual entailment (VE) asks whether an image supports, contradicts, or leaves undecided a textual hypothesis. Strong results come from fine-tuning large vision-language models on labelled data, while zero-shot and hybrid approaches remain far behind. A VE hypothesis often bundles several visual claims, yet existing zero-shot methods reason over it as a single unit. We propose Atomic Visual Entailment (AVE), which decomposes the hypothesis into atomic facts, produces candidate predictions from both the full hypothesis and its facts using frozen vision-language models, and predicts the final label with a lightweight classifier trained only on how those candidates behave. We find that decomposition helps only when the hypothesis context is preserved: judging facts in isolation is worse than not decomposing at all. Full-hypothesis and atomic prediction make complementary errors, and learning which to trust recovers far more of that complementarity than majority voting, reaching 0.803 test accuracy on SNLI-VE without fine-tuning any vision-language model. AVE also localises the visual evidence behind its prediction without region-level supervision. These results suggest that learning which candidate prediction to trust can close much of the gap to fine-tuned systems, offering a practical alternative where fine-tuning a vision-language model directly would need more labelled data or compute than is available.",
+      "authors": [
+        "Nallathambi Vethiappan",
+        "Derya Soydaner",
+        "Gijs Wijnholds"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CV"
+      ],
+      "published": "2026-10-04T23:46:35+00:00",
+      "link": "https://arxiv.org/pdf/2610.05630v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "visual entailment judging image support or contradiction of text",
+      "llm_evidence_cn": "判断图像支持或反驳文本的视觉蕴涵",
+      "llm_evidence": "判断图像支持或反驳文本的视觉蕴涵",
+      "canonical_evidence": "判断图像支持或反驳文本的视觉蕴涵",
+      "llm_tldr_en": "Proposes Atomic Visual Entailment to decompose a hypothesis into atomic facts and select predictions from frozen vision-language models, improving zero-shot visual entailment.",
+      "llm_tldr_cn": "视觉蕴涵任务判断图像支持、反驳还是无法判定文本假设，但现有零样本方法把包含多个视觉主张的假设作为整体推理，效果远落后于微调。本文提出原子视觉蕴涵，将假设分解为原子事实，由冻结的视觉语言模型分别产生候选预测，再用轻量分类器学习如何选择最终标签。实验显示分解能显著提升零样本视觉蕴涵性能，为多模态事实验证提供可扩展方案。",
+      "llm_tldr": "视觉蕴涵任务判断图像支持、反驳还是无法判定文本假设，但现有零样本方法把包含多个视觉主张的假设作为整体推理，效果远落后于微调。本文提出原子视觉蕴涵，将假设分解为原子事实，由冻结的视觉语言模型分别产生候选预测，再用轻量分类器学习如何选择最终标签。实验显示分解能显著提升零样本视觉蕴涵性能，为多模态事实验证提供可扩展方案。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    }
+  ],
   "quick_skim": [
+    {
+      "id": "2609.38766v1",
+      "source": "arxiv",
+      "title": "PathAnchor: Path-Structured Evidence for Scientific Agents",
+      "abstract": "Scientific agents can retrieve relevant passages yet still lose functional order, mix evidence across sources, or state conclusions that exceed the retrieved record. We introduce PathAnchor, a bounded scientific reasoning system built on path-structured evidence workspaces. Instead of treating passages or extracted concepts as independent units, the system retrieves source-linked Material-Sensor-Signal-System trajectories that preserve role, direction, and the evidence supporting each transition. A controller uses three read-only tools to search paper-specific trajectories, trace paths across candidate sources, and open exact evidence before producing a claim-cited answer and an explicit evidence boundary. On 120 single- and cross-paper flexible-sensor questions, PathAnchor scores 82.6% and leads six evaluated systems. Under a matched controller, corpus, and six-call budget, replacing unordered concept graphs with path-structured records raises source recall from 61.3% to 82.9%, increases answers whose claims all cite opened evidence from 69.2% to 90.0%, and reduces tool calls. These results show that evidence organization affects retrieval and citation completeness under fixed agent resources.",
+      "authors": [
+        "Qiuhui Chen",
+        "Jiafan Lu",
+        "Shuaimin Tang",
+        "Tao Dai",
+        "Suyuan Wang",
+        "Chenrui Ji",
+        "Zhenglei Zhou",
+        "Weimin Zhong"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-30T01:49:02+00:00",
+      "link": "https://arxiv.org/pdf/2609.38766v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "evidence-bounded retrieval and claim-cited verification of conclusions",
+      "llm_evidence_cn": "证据边界约束与带引用的论断核查",
+      "llm_evidence": "证据边界约束与带引用的论断核查",
+      "canonical_evidence": "证据边界约束与带引用的论断核查",
+      "llm_tldr_en": "Scientific agents retrieve passages yet lose evidence order and overstate conclusions. PathAnchor builds path-structured evidence workspaces and a controller traces paths to produce claim-cited answers with explicit evidence boundaries.",
+      "llm_tldr_cn": "针对科学智能体检索到相关段落却丢失证据功能顺序、跨来源混淆证据或给出超出记录范围结论的问题，本文提出PathAnchor，一种基于路径结构化证据工作区的有界科学推理系统。系统检索源链接的Material-Sensor-Signal-System轨迹，保留角色、方向及支撑证据，并通过控制器用三个只读工具搜索轨迹、跨源追踪路径、打开精确证据，最终生成带引用答案与显式证据边界。在120个单篇和跨篇柔性传感器问题上验证了有效性。该工作为证据驱动验证提供了可迁移的检索与核查框架。",
+      "llm_tldr": "针对科学智能体检索到相关段落却丢失证据功能顺序、跨来源混淆证据或给出超出记录范围结论的问题，本文提出PathAnchor，一种基于路径结构化证据工作区的有界科学推理系统。系统检索源链接的Material-Sensor-Signal-System轨迹，保留角色、方向及支撑证据，并通过控制器用三个只读工具搜索轨迹、跨源追踪路径、打开精确证据，最终生成带引用答案与显式证据边界。在120个单篇和跨篇柔性传感器问题上验证了有效性。该工作为证据驱动验证提供了可迁移的检索与核查框架。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
     {
       "id": "2610.03380v1",
       "source": "arxiv",
@@ -34,13 +183,13 @@
         "query:MFND"
       ],
       "llm_score": 6.0,
-      "llm_evidence_en": "interpretable video deepfake detection with explicit forensic features",
-      "llm_evidence_cn": "基于显式取证特征的可解释视频深度伪造检测",
-      "llm_evidence": "基于显式取证特征的可解释视频深度伪造检测",
-      "canonical_evidence": "基于显式取证特征的可解释视频深度伪造检测",
-      "llm_tldr_en": "Video deepfakes can look frame-consistent yet show subtle temporal inconsistencies. This framework encodes explicit physically grounded forensic cues into facial trajectories and temporal windows, yielding interpretable and better-generalizing detection.",
-      "llm_tldr_cn": "视频深度伪造在单帧上往往看起来一致，却在时序上存在细微不一致，端到端深度模型依赖隐式表征，缺乏可解释性且跨数据集泛化差。论文提出可解释检测框架，将视频转化为身份一致的人脸轨迹并切分为固定长度时序窗口，用68维结构化取证描述子显式编码物理依据的线索。该方法实现了透明分析和更强的多数据集泛化能力，为可解释、可迁移的伪造与虚假信息检测提供了新路径。",
-      "llm_tldr": "视频深度伪造在单帧上往往看起来一致，却在时序上存在细微不一致，端到端深度模型依赖隐式表征，缺乏可解释性且跨数据集泛化差。论文提出可解释检测框架，将视频转化为身份一致的人脸轨迹并切分为固定长度时序窗口，用68维结构化取证描述子显式编码物理依据的线索。该方法实现了透明分析和更强的多数据集泛化能力，为可解释、可迁移的伪造与虚假信息检测提供了新路径。",
+      "llm_evidence_en": "interpretable and generalizable video deepfake detection",
+      "llm_evidence_cn": "可解释且可泛化的视频深度伪造检测",
+      "llm_evidence": "可解释且可泛化的视频深度伪造检测",
+      "canonical_evidence": "可解释且可泛化的视频深度伪造检测",
+      "llm_tldr_en": "This paper introduces an interpretable video deepfake detection framework encoding explicit forensic facial descriptors with temporal modeling to enable transparent analysis and better multi-dataset generalization.",
+      "llm_tldr_cn": "针对视频深度伪造帧级视觉一致却存在细微时序不一致、端到端模型缺乏可解释性与跨数据集泛化能力的问题，本文提出可解释检测框架，将视频转为身份一致的人脸轨迹并按时间窗分段，用68维结构化取证描述子显式编码物理线索。实验表明该框架实现透明分析并改善多数据集泛化性能，说明显式取证特征结合时序建模可提升检测的可解释性与鲁棒性。",
+      "llm_tldr": "针对视频深度伪造帧级视觉一致却存在细微时序不一致、端到端模型缺乏可解释性与跨数据集泛化能力的问题，本文提出可解释检测框架，将视频转为身份一致的人脸轨迹并按时间窗分段，用68维结构化取证描述子显式编码物理线索。实验表明该框架实现透明分析并改善多数据集泛化性能，说明显式取证特征结合时序建模可提升检测的可解释性与鲁棒性。",
       "llm_tags": [
         "query:mfnd"
       ],
@@ -74,13 +223,13 @@
         "query:MFND"
       ],
       "llm_score": 6.0,
-      "llm_evidence_en": "multimodal RAG with complementary evidence pool and confidence control",
-      "llm_evidence_cn": "多模态检索增强生成中的互补证据池与置信度控制",
-      "llm_evidence": "多模态检索增强生成中的互补证据池与置信度控制",
-      "canonical_evidence": "多模态检索增强生成中的互补证据池与置信度控制",
-      "llm_tldr_en": "To address redundant Top-K retrieval in multimodal RAG, CLIMB builds a compact complementary evidence pool via an MMR-style objective and applies confidence-controlled answer updates, yielding more reliable evidence-supported visual QA.",
-      "llm_tldr_cn": "针对多模态大模型在知识密集型视觉问答中依赖外部文本证据、而现有Top-K检索易返回冗余段落且难以控制证据支持度的问题，本文提出免训练的推理期框架CLIMB。它先用MMR式目标构建紧凑的互补证据池，再通过置信度控制决定是否更新答案。实验显示该方法能减少冗余检索并提供更可控的证据支持。其贡献在于为多模态检索增强生成提供了可控制证据充分性的推理范式。",
-      "llm_tldr": "针对多模态大模型在知识密集型视觉问答中依赖外部文本证据、而现有Top-K检索易返回冗余段落且难以控制证据支持度的问题，本文提出免训练的推理期框架CLIMB。它先用MMR式目标构建紧凑的互补证据池，再通过置信度控制决定是否更新答案。实验显示该方法能减少冗余检索并提供更可控的证据支持。其贡献在于为多模态检索增强生成提供了可控制证据充分性的推理范式。",
+      "llm_evidence_en": "confidence-guided complementary evidence for multimodal RAG",
+      "llm_evidence_cn": "多模态RAG的置信度引导互补证据选择",
+      "llm_evidence": "多模态RAG的置信度引导互补证据选择",
+      "canonical_evidence": "多模态RAG的置信度引导互补证据选择",
+      "llm_tldr_en": "Multimodal RAG often returns redundant passages with little control over evidence support; CLIMB is a training-free framework that builds a compact complementary evidence pool via an MMR-style objective and performs confidence-controlled answer updates.",
+      "llm_tldr_cn": "多模态大模型具备强视觉推理能力，但知识密集型视觉问答常需图像与参数知识之外的文本证据。现有多模态RAG依赖Top-K检索或重排，易返回冗余段落且难以控制答案更新是否被证据充分支持。本文提出免训练的推理期框架CLIMB，先用MMR式目标构建兼顾相关性与冗余度的紧凑互补证据池，再进行置信度控制的答案更新。该方法提升了多模态检索增强的证据支撑可控性，可迁移至证据驱动的事实核查。",
+      "llm_tldr": "多模态大模型具备强视觉推理能力，但知识密集型视觉问答常需图像与参数知识之外的文本证据。现有多模态RAG依赖Top-K检索或重排，易返回冗余段落且难以控制答案更新是否被证据充分支持。本文提出免训练的推理期框架CLIMB，先用MMR式目标构建兼顾相关性与冗余度的紧凑互补证据池，再进行置信度控制的答案更新。该方法提升了多模态检索增强的证据支撑可控性，可迁移至证据驱动的事实核查。",
       "llm_tags": [
         "query:mfnd"
       ],

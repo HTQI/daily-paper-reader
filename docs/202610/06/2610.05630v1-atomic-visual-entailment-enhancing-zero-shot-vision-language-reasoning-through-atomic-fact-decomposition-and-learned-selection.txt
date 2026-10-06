@@ -1,0 +1,521 @@
+Title: Atomic Visual Entailment: Enhancing Zero-Shot Vision-Language Reasoning through Atomic Fact Decomposition and Learned Selection
+
+URL Source: https://arxiv.org/pdf/2610.05630v1
+
+Published Time: Tue, 06 Oct 2026 02:06:19 GMT
+
+Number of Pages: 15
+
+Markdown Content:
+## Atomic Visual Entailment: Enhancing Zero-Shot Vision–Language Reasoning through Atomic Fact Decomposition and Learned Selection 
+
+Nallathambi Vethiappan 1, Derya Soydaner 1, Gijs Wijnholds 1
+
+> 1
+
+Leiden Institute of Advanced Computer Science (LIACS), Leiden University, The Netherlands 
+
+Correspondence: nvethiappan@gmail.com , {d.soydaner, g.j.wijnholds}@liacs.leidenuniv.nl 
+
+Abstract 
+
+Visual entailment (VE) asks whether an im-age supports, contradicts, or leaves undecided a textual hypothesis. Strong results come from fine-tuning large vision–language models on labelled data, while zero-shot and hybrid ap-proaches remain far behind. A VE hypothesis often bundles several visual claims, yet exist-ing zero-shot methods reason over it as a single unit. We propose Atomic Visual Entailment 
+
+(AVE), which decomposes the hypothesis into atomic facts, produces candidate predictions from both the full hypothesis and its facts us-ing frozen vision–language models, and pre-dicts the final label with a lightweight classifier trained only on how those candidates behave. We find that decomposition helps only when the hypothesis context is preserved: judging facts in isolation is worse than not decompos-ing at all. Full-hypothesis and atomic predic-tion make complementary errors, and learning which to trust recovers far more of that comple-mentarity than majority voting, reaching 0.803 test accuracy on SNLI-VE without fine-tuning any vision–language model. AVE also localises the visual evidence behind its prediction with-out region-level supervision. These results sug-gest that learning which candidate prediction to trust can close much of the gap to fine-tuned systems, offering a practical alternative where fine-tuning a vision-language model directly would need more labelled data or compute than is available. 
+
+1 Introduction 
+
+Vision–language models (VLMs) now perform well across many multimodal tasks, including judg-ing whether an image supports a written claim. Visual entailment (VE) poses this as a three-way judgement over an image premise and a textual hypothesis: entailment, neutral, or contradiction (Xie et al., 2019). It underpins multimodal fact-checking and misinformation detection, where an image may carry a wrong caption, be used out of Gold label: Majority voting 
+
+✗ Contradiction 
+
+> 12 candidates tie 4-4-4; tiebreak picks the wrong high-margin candidate.
+> Learned selection
+
+✓ Entailment 
+
+> Identifies the one high-confidence candidate (0.997) that is correct.
+> "Two girls are handing out literature and balloons."
+> Hypothesis:
+
+Entailment 
+
+Figure 1: AVE resolves prediction-pool disagreement that majority voting cannot. When candidates split evenly across labels, majority voting’s tiebreak selects a confidently wrong candidate, while learned selection identifies the correct one. 
+
+context, or support only part of what is claimed (Akhtar et al., 2023). However, strong results on VE come from fine-tuning large VLMs on labelled data, and zero-shot and hybrid approaches remain comparatively unexplored. Recent zero-shot and hybrid work on VE adds intermediate reasoning steps between the image and the label. IdealGPT (You et al., 2023) gener-ates sub-questions for a VLM to answer in a zero-shot setting, and Inner Monologue Multi-Modal Optimization (IMMO) (Yang et al., 2024) trains a reasoner and an observer to alternate over several turns. In both, the intermediate steps interrogate the 1arXiv:2610.05630v1 [cs.CL] 4 Oct 2026 image rather than the claim. Yet a VE hypothesis often contains several visual claims, and reasoning over it as a single unit checks them all at once. A natural response is to decompose the hypoth-esis into atomic facts, so that each claim can be checked against the image separately. Hypothesis decomposition has been used in Natural Language Inference (NLI), the textual counterpart of VE, to inspect model decisions at the level of individual claims, and that work finds the global context still matters: claims are often only interpretable when read together (Stacey et al., 2024; Srikanth and Rudinger, 2025). Whether the same holds in VE, where each fact must be checked against an image rather than a textual premise, has not been studied. A second challenge is deciding among compet-ing predictions. A hypothesis can be judged as a whole or through its atomic facts, and instead of choosing one over the other, you can combine them to improve the prediction. Majority voting combines them without any training, but treats ev-ery candidate as equally reliable, so a tied or near-tied pool can be resolved in favour of a confidently wrong candidate (Figure 1). Related work on black-box ensembling instead learns which candidate to trust rather than counting votes, and does so with-out access to the models that produced the candi-dates (Xia et al., 2025). To address these two challenges, we propose 
+
+Atomic Visual Entailment (AVE), a framework that decomposes the hypothesis into atomic facts and combines predictions from both views of the claim. AVE produces a pool of candidate predic-tions from two frozen VLMs under several predic-tion strategies and prompt styles. A lightweight classifier then predicts the final label from features describing how those candidates behaved. Because each candidate carries the reasoning that produced it, AVE also localises the visual evidence behind its prediction, without region-level supervision. On SNLI-VE (Xie et al., 2019), AVE outperforms ev-ery previously published zero-shot and hybrid re-sult, while every VLM remains frozen. In summary, our contributions are: (1) AVE, a framework that decomposes VE hypotheses into atomic facts and combines full-hypothesis and atomic predictions through a lightweight learned selector, without fine-tuning any VLM; (2) 0.803 test accuracy on SNLI-VE, 14.2 points above the strongest hybrid baseline and within the range of su-pervised systems; (3) Evidence that atomic reason-ing helps only with hypothesis context preserved, and that learned selection exploits the resulting complementary errors far better than majority vot-ing; (4) Zero-shot grounding of predicted evidence, reaching Recall@1 of 0.837 against human annota-tions without region-level supervision. 
+
+2 Related Work 
+
+Supervised visual entailment. VE was introduced together with SNLI-VE and the EVE model, which fuses image and hypothesis features to predict the three-way relation (Xie et al., 2019). Later work adapts large pretrained VLMs to the task, including UNITER (Chen et al., 2020) and OFA (Wang et al., 2022), which reports the strongest published accu-racy on SNLI-VE. These models require labelled SNLI-VE data and task-specific fine-tuning, which limits their use where such data is unavailable. 
+
+Zero-shot and hybrid VE. Zero-shot ap-proaches avoid labelled VE data entirely. CLIP-based methods treat VE as image–text matching (Song et al., 2022), UniFine uses fine-grained vi-sual and textual cues (Sun et al., 2023), and Ide-alGPT decomposes the input into sub-questions answered by a VLM (You et al., 2023). Hybrid approaches combine zero-shot components with a small component trained on VE data: IMMO trains a reasoner and an observer to exchange questions and answers over several turns (Yang et al., 2024). 
+
+Atomic decomposition. Decomposing a sen-tence into atomic claims has been studied for tex-tual NLI as a way to inspect model decisions at the level of individual claims. One direction de-composes the premise and derives an instance label from fact-level predictions (Stacey et al., 2024), while another decomposes the hypothesis to study whether models predict consistently across a claim and its parts (Srikanth and Rudinger, 2025). Atomic inference is harder than sentence-level in-ference, and requiring every atomic fact to be en-tailed does not hold reliably in practice (Huang, 2026). All of this work concerns textual premises. 
+
+Black-box prediction selection. LLMs and VLMs are treated as black-box systems when their weights or confidence scores are unavailable, mak-ing fine-tuning difficult or costly (Xia et al., 2025). InfoSel addresses this by training a small selector to choose among candidate answers from several black-box models, using the question text, the can-didate answers, and image region features (Xia et al., 2025). Its selector therefore encodes the original inputs alongside the candidates, and its 2output is always one of them. AVE uses the same idea for VE, but its selector is trained only on how the candidate pool behaves and predicts the label directly. 
+
+Evidence grounding. Fine-grained VE localises the visual evidence behind a prediction, but relies on region-level annotation collected for that pur-pose (Thomas et al., 2022). Open-vocabulary de-tectors localise arbitrary text queries without task-specific training (Liu et al., 2024), which removes the need for such annotation. 
+
+3 Method 
+
+In this section, we introduce the proposed AVE .Our focus is the task of VE, where a hypothesis H
+
+is judged against an image I with a label from 
+
+Y = {entailment , neutral , contradiction }. AVE consists of four components: a Decomposer , a 
+
+Prediction Pool , a Selector , and a Grounder .Given H, the Decomposer splits the hypothesis into self-contained atomic facts A = {a1, . . . , a n},so that a claim bundling several assertions can be checked at a finer granularity (Sec. 3.1). The 
+
+Prediction Pool applies several prediction strate-gies over H, A, and I using frozen VLMs, pro-ducing candidate predictions P = {c1, . . . , c K }
+
+(Sec. 3.2). The objective is not to identify the sin-gle best strategy, but to obtain candidates that dis-agree in informative ways: at least one candidate is correct far more often than any individual strategy, which motivates treating the final decision as a se-lection problem. The Selector therefore predicts the final label ˆy by casting this decision as classi-fication over lightweight meta-features describing the candidates, their label likelihoods, and their agreement (Sec. 3.3). Finally, the Grounder lo-calises phrases from the VLM’s reasoning behind the selected candidate, tying the decision to visible evidence (Sec. 3.4). No VLM is fine-tuned at any stage. The overall pipeline is shown in Figure 2. 
+
+3.1 Hypothesis Decomposition 
+
+The Decomposer converts a hypothesis H into an atomic fact set A = {a1, . . . , a n}, where n varies with the number of distinct claims in H. If H
+
+already expresses a single claim it is kept as one atomic fact; otherwise it is split into the fewest facts needed to cover its meaning. Each fact is self-contained, with unclear pronouns replaced by explicit noun phrases, and uses only information stated in H (Figure 11). We use Qwen2.5-32B-Instruct 1 as the 
+
+Decomposer , selected from a comparison of text-only LLMs validated manually by an author on 100 sampled hypotheses (Appendix A). For each hypothesis, BM25 (Trotman et al., 2014) ranks a manually constructed pool of 50 hypothesis–atomic fact pairs by lexical similarity to H, and the four highest-ranked pairs are supplied as demonstrations. Decomposition is text-only and independent of the image, so A is computed once per hypothesis and reused by every strategy in the prediction pool. 
+
+3.2 Candidate Prediction Pool 
+
+Judging H directly preserves the relations between its claims, while judging the atomic facts A ex-poses each claim separately. The Prediction Pool retains both views rather than committing to one, producing a set of K candidate predictions 
+
+P = {c1, . . . , c K }.We use two frozen VLMs, Qwen3-VL-8B 2 and InternVL3-8B 3, selected from a comparison of seven models on the accuracy–size trade-off (Ap-pendix B). Each VLM sees the image I in every case and applies three zero-shot prediction strate-gies, differing in how the hypothesis is presented alongside it. Full-hypothesis prediction presents H
+
+as a single statement and asks for one label (Fig-ure 12). Atomic prediction replaces H with the facts in A, presented together as parts of one hy-pothesis rather than as independent claims, so the model reasons over the individual claims without losing the claim they compose (Figure 13). Self-decomposed atomic prediction presents H alone. The model decomposes the hypothesis itself and labels the resulting facts within a single genera-tion, so unlike atomic prediction, it does not use 
+
+A (Figure 14). A fourth strategy, independent atomic, judges each fact in isolation (Figure 15) and combines the per-fact labels by rule. H is 
+
+entailment when every a ∈ A is entailment ,
+
+contradiction when at least one a ∈ A is 
+
+contradiction , and neutral otherwise. We ex-clude it from the pool and return to why in Sec-tion 4.6. Each strategy is run under two prompt styles, motivated by the sensitivity of zero-shot models to 
+
+> 1https://huggingface.co/Qwen/Qwen2. 5-32B-Instruct
+> 2https://huggingface.co/Qwen/ Qwen3-VL-8B-Instruct-hf
+> 3https://huggingface.co/OpenGVLab/ InternVL3-8B
+
+3Image Premise [Iᵢ] Hypothesis [H ᵢ]
+
+> "A man plays a guitar for a sick child"
+> Ground Truth [y ᵢ]Entailment Decomposition [I ᵢ,H ᵢ]
+> [H ᵢ]
+> [A ᵢ]
+> Hypothesis decomposition
+> Decomposer
+
+❄       
+
+> Prediction Pool Construction VLM ₁
+> Zero-shot · Two prompts
+> VLM ₂
+> Zero-shot · Two prompts
+> candidate outputs
+> labels · scores · explanations
+> Prediction Pool [P ᵢ]
+> Model Input Label Score vectors [I ᵢ,A ᵢ]VLM ₂.55 NEEE
+> .60
+> .78
+> .90 [I ᵢ,A ᵢ][I ᵢ,H ᵢ][I ᵢ,H ᵢ]
+> VLM ₂
+> VLM ₁
+> VLM ₁
+> store store
+> Inputs Learned Selector
+> · Predicts label · Selects one candidate output for representation
+> Meta-feature extraction
+> Final Predicted Label [ ŷᵢ *]
+> Neutral Contradiction Entailment
+> Atomic Facts Aᵢ= {a ₁,a ₂,...,a ₙ}a₂
+> "A man plays a guitar." "The man plays for a sick child."
+> a₁
+> ... a ₙ
+
+❄ ❄
+
+1 2 3Learned Selection 
+
+> labels · score vector · entropy · disagreement signals store selection
+
+Figure 2: The AVE framework. Components marked with a snowflake are frozen; the learned selector is the only trained component. Given an image premise and a hypothesis, the Decomposer generates atomic facts, frozen VLMs produce candidate label–score pairs from the full hypothesis and from the atomic facts, the Selector predicts the final label and selects a representative candidate for grounding. 
+
+prompting (Pitta et al., 2025). The simple prompt asks for a label and a short justification for that label. The structured prompt asks the model to identify the relevant visual evidence and reason about whether it supports, contradicts, or is insuf-ficient for the statement before returning a label. For the atomic strategies, it also asks for a per-fact judgement along with a single final label. The prompt states how to combine those judgements: contradiction if any fact conflicts with the image, entailment if all are supported, and neutral other-wise. Two VLMs, three strategies, and two prompt styles give K = 12 candidates per instance. From each candidate, we extract two labels, a label distribution, and a justification. The VLM’s response contains the generated label ˆygk, the label the model states directly, together with a justifi-cation ek. Separately, and from the same prompt 
+
+xk, we score each label y as a forced continuation (Brown et al., 2020), masking the prompt tokens so that only the label contributes: 
+
+sk(y) = 
+
+|y|
+
+X
+
+t=1 
+
+log pθ(yt | I, x k, y <t ) (1) where y ∈ Y and yt are its tokens. A soft-max over {sk(y)} gives a distribution ˜sk, whose argmax is the score-based label ˆysk. This reflects the model’s relative preference across the label set rather than the label it verbalised, and the two need not agree. 
+
+3.3 Combining Candidate Predictions Majority voting. A training-free way to derive the final label from the prediction pool is majority voting (AVE-MV), which takes the most frequent generated label across its candidates, breaking ties by the largest score margin, the gap between a candidate’s top two label-likelihood scores from Equation 1. Each candidate’s vote counts the same regardless of how accurate that candidate is overall. 
+
+Learned selection. At least one candidate in the prediction pool already matches the gold la-bel for over 94% of instances (Table 2), so the remaining problem is identifying which candidate to trust rather than re-examining the image or hy-pothesis. AVE-LS therefore casts the final decision as classification over meta-features describing how the pool behaved on a given input, rather than a model that also processes the image or text. For instance i, we form a feature vector xi whose fea-tures fall into four groups. Per-candidate features record each ck’s generated and score-based labels and its score vector ˜sk. From ˜sk we also derive the highest score, its margin over the second, and its entropy. Pool-level features summarise the label distribution across candidates, such as how often each label is predicted and whether more than half the candidates agree on one. Pairwise agreement 
+
+features record whether each pair of candidates agrees, separately for generated and score-based la-bels. Decomposition metadata records the number 4of atomic facts and the lengths of H and A. The feature vector contains no image, no hypothesis or atom text, and none of the candidates’ justifications, making AVE-LS a meta-classifier over prediction-pool behaviour rather than over the original inputs. Tree-based classifiers handle this kind of mixed-scale tabular input directly, without the feature scal-ing or larger training sets that a neural classifier would need. We compare two tree-based classi-fiers, HistGradientBoosting and XGBoost, and se-lect XGBoost for its higher validation macro-F1; its hyperparameter configuration is given in Ap-pendix C. We train this lightweight classifier fϕ
+
+(Chen and Guestrin, 2016) on the training split to predict the gold label from xi, giving ˆy = fϕ(xi)
+
+with ˆy ∈ Y . Because the target is the label rather than the identity of a candidate, ˆy is not restricted to the labels present in P . We compare the two objectives in Section 4.6. 
+
+Representative candidate. Predicting a label directly does not identify which candidate in P sup-ports it. When at least one candidate has generated label ˆygk = ˆ y, we select the one whose score for ˆy is highest and take its justification ek as the represen-tative output for that instance. Otherwise, the label is returned without a representative justification. 
+
+3.4 Evidence Grounding 
+
+AVE’s prediction includes a textual justification that describes the visual evidence but does not indi-cate where it appears in the image. The Grounder 
+
+localises that evidence in two steps: it extracts a phrase from the justification ek of the representa-tive candidate, then locates that phrase in the image. Only entailment and contradiction predictions are grounded, since their justifications point to visible content that settles the claim. A neutral justification explains why the image leaves the claim undecided, so no region can be localised. Phrase extraction takes H, ˆy, and ek, and returns a short phrase naming visible content. For entail-ment, the phrase names content that supports the claim. For contradiction, it names what the image shows instead, since the contradicting evidence is what is visible rather than what H asserts. We use Qwen3-8B as the extractor (Figure 16). Grounding DINO (Liu et al., 2024), using the grounding-dino-base checkpoint, then takes the im-age I and the phrase as a text query and returns bounding boxes for the matching regions. The boxes accompany the predicted label as its visual evidence, and ˆy itself is unchanged. 
+
+4 Experiments 
+
+We evaluate AVE on SNLI-VE. We first describe the setup, then report what the decomposition pro-duces and how the individual prediction strategies perform. We then compare majority voting with learned selection, both against the prediction pool itself and against prior work. Finally, we evaluate the grounded evidence against human annotations. 
+
+4.1 Experimental Setup Datasets. We evaluate on SNLI-VE (Xie et al., 2019), which pairs Flickr30k images with SNLI hypotheses labelled entailment, neutral, or contra-diction, and follows the official splits of 17,858 development and 17,901 test instances. Candi-date predictions are also generated for a 47,203-instance subset of the training split, which is used to train the Selector . Grounding is evaluated against Flickr30k Entities (Plummer et al., 2017), which provides human-annotated bounding boxes linking image regions to noun phrases in the correspond-ing captions. We sample 2,500 test instances per groundable label for grounding evaluation. 
+
+Models. All models are used with greedy decod-ing, so repeated runs give identical output. Genera-tion is capped at 700 tokens, which accommodates the longest structured responses. Grounding DINO uses a box threshold of 0.35 and a text threshold of 0.25, and we retain the three highest-scoring boxes after suppressing near-duplicates. 
+
+Selector training. AVE-LS is trained on the can-didate predictions for the training subset, holding out 20% for model selection. The classifier and its hyperparameters are chosen by validation macro-F1 (Appendix C). The development and test splits are used once, after this configuration is fixed. 
+
+Metrics. We report accuracy and macro-F1 for label prediction. We additionally report an ora-cle upper bound: the proportion of instances for which at least one candidate in the pool matches the gold label, which is the accuracy an ideal selec-tor over that pool would reach. For grounding, we report Recall@1 and Recall@3 at an intersection-over-union (IoU) threshold of 0.5, together with the mean best IoU among the three retained boxes. Since Flickr30k Entities annotates caption phrases, not hypothesis evidence, these scores measure lo-calisation quality but only approximate correctness. 
+
+Compute. All experiments run on a university HPC cluster. The 32B Decomposer runs on an NVIDIA A100 GPU with 80GB memory. All 8B 5VLMs run on an NVIDIA A100 MIG instance with 40GB memory. The Selector trains on CPU, com-pleting in under two minutes per configuration. 
+
+4.2 Decomposition 
+
+Table 1 reports the atom-count distribution on the test split, which is stable across splits. Most hy-potheses decompose into one or two atomic facts. The label composition shifts as the atom count grows. Neutral rises from 27.4% of single-atom hypotheses to over 49% with three or more, while entailment falls from 39.2% to 20.4%. Hypotheses labelled neutral therefore tend to contain several separate claims, which decomposition breaks apart. 
+
+Atoms Share E N C
+
+1 63.6 39.2 27.4 33.4 2 31.8 23.6 42.6 33.9 3 3.9 20.4 51.1 28.5 4+ 0.7 25.0 49.2 25.8 
+
+Table 1: Atomic fact distribution on the test split. Share 
+
+is the percentage of instances in each bucket; E, N and C are gold-label percentages within it. 
+
+4.3 Prediction Pool and Combination 
+
+Table 2 reports the best individual candidate for each prediction strategy, together with the two com-bination methods and the oracle upper bound. 
+
+Individual strategies. The three strategies span 1.3 points of development accuracy, from 0.749 for full-hypothesis prediction to 0.762 for self-decomposed atomic prediction. Both atomic strate-gies exceed full-hypothesis prediction, and self-decomposition is strongest on both splits, but the margins are too small for any strategy to be clearly preferable on accuracy alone. 
+
+Complementary errors. Atomic prediction dif-fers from full-hypothesis prediction by 0.3 accu-racy points on test, yet the two disagree on 2,367 instances (Figure 3a). Self-decomposed prediction disagrees on a comparable number but recovers substantially more than it loses. The strategies therefore fail on largely different instances. At least one candidate matches the gold label for 94.1% of test instances, bounding what any selector over this pool can achieve. High coverage is not by itself informative: twelve random labels would cover the gold label 99.2% of the time, yet selecting among them would be no better than chance. The pool                                            
+
+> Development Test Method Acc. F1 Acc. F1 Best full-hypothesis 0.749 0.732 0.754 0.737 Best atomic 0.750 0.739 0.757 0.746 Best self-decomposed 0.762 0.757 0.765 0.760 AVE-MV intra (Qwen3) 0.752 0.744 0.756 0.748 AVE-MV intra (InternVL3) 0.761 0.751 0.768 0.757 AVE-MV inter 0.765 0.756 0.769 0.760
+> AVE-LS 0.799 0.798 0.803 0.801
+> Oracle ( K= 12 )0.941 0.941 0.941 0.940 Oracle (chance pool) 0.992 0.992 0.992 0.992
+
+Table 2: Best individual candidate per prediction strat-egy, majority voting, and learned selection. AVE-MV intra votes among the six candidates from one VLM; AVE-MV inter votes across all twelve candidates from both VLMs. Oracle reports the proportion of instances for which at least one of the K = 12 candidates matches the gold label; the chance pool replaces those candidates with twelve independent random labels. 
+
+is useful because its candidates also carry signal about which of them to trust. 
+
+Majority voting. AVE-MV inter reaches 0.765 on development and 0.769 on test, improving over the best individual candidate by 0.3 and 0.4 points. Voting within a single VLM is weaker still, with AVE-MV intra (Qwen3) falling below the best in-dividual candidate on both splits. Treating every candidate as equally reliable therefore recovers al-most none of the gap to the oracle. 
+
+Learned selection. AVE-LS reaches 0.799 on development and 0.803 on test, improving over AVE-MV inter by 3.4 points on both splits. On test, voting gains 0.4 points over the best individ-ual candidate, while learned selection gains 3.8. A lightweight classifier over prediction-pool be-haviour is therefore enough to exploit the signal that voting discards. The gain is concentrated on neutral, whose test recall rises from 0.551 to 0.682 at a 5.2-point cost to contradiction (Figure 3b), the label that improves the most yet remains the hardest under every method. The full confusion matrices behind this trade-off are given in Appendix E. 
+
+4.4 Comparison with Prior Work 
+
+Table 3 reports accuracy on SNLI-VE against pre-viously published results. Among zero-shot meth-ods, AVE-MV inter is the strongest on SNLI-VE, improving over IdealGPT by 21.2 points on devel-opment (76.5% vs 55.3%) without the proprietary reasoning backbone IdealGPT relies on. AVE-LS is the strongest result among zero-shot and hybrid 61000 0 1000        
+
+> Instance count
+> Self-decomposed atomic Atomic prediction Independent atomic
+> 1082 1278 net +196
+> 1161 1206 net +45 644 468 net -176 Full-hypothesis correct Atomic method correct
+
+(a) Entailment Neutral Contradiction    
+
+> 0.0 0.2 0.4 0.6 0.8 1.0
+> Recall  0.805 0.595 0.895 0.832 0.551 0.923 0.857 0.682 0.871
+> Best individual AVE-MV inter AVE-LS
+
+(b) 
+
+Figure 3: (a) Instance-level disagreement with full-hypothesis prediction on test. Independent atomic prediction is excluded from the prediction pool. (b) Per-class recall on test. 
+
+Method Dev Test 
+
+> Sup.
+
+EVE-Image (Xie et al., 2019) 0.716 0.711 UNITER (Chen et al., 2020) – 0.794 OFA (Wang et al., 2022) 0.910 0.912 
+
+> ZS
+
+CLIP (Song et al., 2022) 0.676 0.682 IdealGPT (You et al., 2023) 0.553 –AVE-MV inter (ours) 0.765 0.769 
+
+> Hyb.
+
+IMMO (Yang et al., 2024) 0.657 –
+
+AVE-LS (ours) 0.799 0.803 
+
+Table 3: Accuracy on SNLI-VE (Sup: Supervised, ZS: Zero-Shot, Hyb: Hybrid). 
+
+methods, improving over IMMO by 14.2 points (79.9% vs 65.7%). Both use labelled VE data, but IMMO fine-tunes a 7B model, updating roughly five million parameters through LoRA. In contrast, AVE-LS leaves both 8B VLMs frozen and trains a gradient-boosted classifier over their outputs. Supervised results are reported as a refer-ence. AVE-LS exceeds EVE-Image and matches UNITER, though a substantial gap to OFA remains. Fine-tuning a large end-to-end VLM on the full SNLI-VE training set is clearly effective when la-belled data and compute are available. AVE-LS reaches comparable accuracy to mid-range super-vised systems without updating any VLM weights, which matters when fine-tuning is impractical or when the reasoning behind a prediction needs to remain inspectable. 
+
+4.5 Evidence Grounding 
+
+Table 4 reports grounding results on the sampled test instances. An extracted phrase matches a Flickr30k Entities annotation for 82.1% of them; the remainder describe evidence that the caption-based annotations do not name. Coverage is lower 
+
+Entail. Contra. Overall 
+
+Matched 2,173 1,933 4,106 Coverage 0.869 0.773 0.821 Recall@1 0.823 0.852 0.837 Recall@3 0.896 0.904 0.900 Mean IoU@3 0.843 0.847 0.845 
+
+Table 4: Grounding against Flickr30k Entities. Recall uses IoU ≥ 0.5.
+
+for contradiction than for entailment, at 77.3% against 86.9%, since contradiction evidence often concerns an absent object or a mismatched attribute rather than a named entity. Among matched instances, Recall@1 reaches 0.837, and Recall@3 reaches 0.900, with a mean best IoU of 0.845 among the three retained boxes. Fine-grained VE has previously relied on region-level annotations to produce visual evidence (Thomas et al., 2022). AVE reaches comparable localisation quality from reasoning the VLM has al-ready produced, with no component trained for the task, as the entailment and contradiction examples in Figure 4 illustrate. 
+
+4.6 Ablation Studies Independent atomic prediction. Judging each atomic fact in isolation and combining the per-fact labels by rule is the only strategy that performs worse than full-hypothesis prediction. It recovers 468 test instances where full-hypothesis prediction fails, but loses 644 where it succeeds (Figure 3a). Isolating a fact removes its context, and an error on any fact propagates to the final label with no recovery. The same pattern holds in textual NLI, where entailment of every atomic fact does not re-liably yield the sentence-level label (Huang, 2026). Atomic reasoning needs shared context among the facts, so AVE presents them together. 7Hypothesis : A person is walking their dog while skating.            
+
+> Gold : EPredicted : E
+> Grounding phrase : person skating with dog
+> VLM reasoning : The person is wearing ice skates and holding a leash attached to a dog, indicating they are walking the dog while skating.
+> Hypothesis : A skater is being photographed.
+> Gold : CPredicted : C
+> Grounding phrase : person on bicycle
+> VLM reasoning : The person in mid-air is on a bicycle, not a skateboard, so it is not a skater being photographed.
+
+Figure 4: Grounding examples. For entailment, the phrase names visible evidence supporting the hypothesis; for contradiction, it names what the image shows instead. E and C denote entailment and contradiction. 
+
+Prediction pool composition. We compare the full K = 12 pool against three single-family vari-ants, each with four candidates from one strategy or prompt style. The full pool is best at every train-ing size (Appendix D). Trained on 5,000 examples, it reaches 0.787 validation macro-F1, above the full-hypothesis-only variant trained on all 37,762 (0.783), and gains the most from additional data, while single-family variants plateau earlier and lower. The advantage therefore comes from com-bining strategies rather than from any single one. 
+
+Label-level versus candidate-level selection. 
+
+We compare predicting the label directly against selecting a candidate and inheriting its label. Using the same features, split and classifier, the label-level objective reaches 0.801 validation accuracy against 0.778 for the candidate-level objective. Choos-ing among twelve candidates that differ in model, prompt, and score is harder than choosing among three labels, so AVE-LS predicts the label directly. 
+
+Prompt style sensitivity. Neither prompt style dominates, and the effect depends on both the model and the prediction strategy. For Qwen3-VL, the structured prompt helps atomic prediction (0.716 to 0.745) and self-decomposed prediction (0.709 to 0.748). For InternVL3, it hurts full-hypothesis prediction (0.752 to 0.723), and self-decomposed prediction with score-based labels col-lapses to 0.365 under the structured prompt while reaching 0.613 under the simple one. Since no style is reliably better, AVE keeps both in the pool and leaves the selector to weigh them. 
+
+Hypothesis complexity. Accuracy declines for every strategy as the number of atomic facts grows, from 0.774 at one fact to 0.637 at four or more for full-hypothesis prediction (Figure 10). Part of this reflects label distribution rather than the strategies, since neutral grows more frequent at higher atom counts (Table 1) and remains hardest throughout. Independent atomic prediction falls behind from two facts onward, as isolated evalua-tion grows less reliable with more facts. Atomic and self-decomposed stay ahead of full-hypothesis up to three facts, after which atomic falls behind while self-decomposed remains strongest, though the four-or-more bucket holds under 1% of in-stances. 
+
+5 Conclusion 
+
+We study whether atomic hypothesis decompo-sition improves zero-shot visual entailment, and whether predictions from different reasoning routes can be combined. We propose AVE, which decom-poses the hypothesis into atomic facts, produces candidate predictions from both the full hypothe-sis and its facts using frozen VLMs, and predicts the final label with a lightweight classifier trained only on how those candidates behave. We find that decomposition helps only when the hypothe-sis context is preserved: judging facts in isolation performs worse than not decomposing at all. Full-hypothesis and atomic reasoning make complemen-tary errors, and learning which to trust recovers substantially more of that complementarity than majority voting, reaching 0.803 test accuracy on SNLI-VE without fine-tuning any VLM. Because the selected prediction carries the reasoning that produced it, AVE also localises the visual evidence behind that prediction, without region-level super-vision. 8Limitations 
+
+Inference cost. AVE evaluates twelve candidates per instance, so VLM calls scale linearly with pool size, and adding models, prompt styles, or strate-gies increases this further. The selector itself adds negligible overhead. Reducing the pool while re-taining most of the benefit could reduce the infer-ence cost. 
+
+Single dataset and language. All experiments use SNLI-VE, an English-language VE benchmark built on Flickr30k captions. Our conclusions there-fore apply to this evaluation setting. Validation across other entailment benchmarks, image do-mains, and languages is an important direction for future work. 
+
+Approximate grounding evaluation. SNLI-VE has no annotations linking hypothesis-level evi-dence to image regions, so we evaluate against Flickr30k Entities, whose annotations describe cap-tion phrases rather than entailment evidence. Re-ported scores therefore approximate rather than directly measure grounding accuracy. A purpose-built annotation set is left to future work. 
+
+Decomposition quality. Decomposition qual-ity was assessed manually by an author on 100 hypotheses, giving an initial estimate rather than a validated measure of faithfulness and complete-ness. A multi-annotator study could provide further validation. 
+
+Selector transparency. AVE-LS’s per-instance decisions are not directly interpretable; its accuracy was still rising at the largest training size tested, and it is trained on the specific behaviour of the two VLMs and prompts used to build the pool, so it may not transfer if either changes. These aspects need further investigation. 
+
+Ethics Statement 
+
+SNLI-VE and Flickr30k Entities are publicly avail-able research benchmarks and involve no new data collection from human subjects. Qwen3-VL-8B and InternVL3-8B are pretrained on large web cor-pora and may carry biases from that data into their predictions. Visual entailment is relevant to fact-checking and misinformation detection, where mis-placed trust in model outputs could have real-world consequences, so predictions should be used as a decision aid reviewed by a person rather than as an automated final judgement of whether a claim is true. 
+
+References 
+
+Mubashara Akhtar, Michael Schlichtkrull, Zhijiang Guo, Oana Cocarascu, Elena Simperl, and Andreas Vla-chos. 2023. Multimodal Automated Fact-Checking: A Survey. In Findings of the Association for Com-putational Linguistics: EMNLP 2023 , pages 5430– 5448, Singapore. Association for Computational Lin-guistics. Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, Sandhini Agarwal, Ariel Herbert-Voss, Gretchen Krueger, Tom Henighan, Rewon Child, Aditya Ramesh, Daniel Ziegler, Jeffrey Wu, Clemens Winter, and 12 others. 2020. Language models are few-shot learners. In Advances in Neural Information Processing Systems , volume 33, pages 1877–1901. Curran Associates, Inc. Tianqi Chen and Carlos Guestrin. 2016. Xgboost: A scalable tree boosting system. In Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining , KDD ’16, page 785–794, New York, NY, USA. Association for Computing Machinery. Yen-Chun Chen, Linjie Li, Licheng Yu, Ahmed El Kholy, Faisal Ahmed, Zhe Gan, Yu Cheng, and Jingjing Liu. 2020. Uniter: Universal image-text rep-resentation learning. In Computer Vision – ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part XXX , page 104–120, Berlin, Heidelberg. Springer-Verlag. Minghui Huang. 2026. Atomic-SNLI: Fine-Grained Natural Language Inference through Atomic Fact Decomposition. arXiv preprint arXiv:2601.06528 .Shilong Liu, Zhaoyang Zeng, Tianhe Ren, Feng Li, Hao Zhang, Jie Yang, Qing Jiang, Chunyuan Li, Jian-wei Yang, Hang Su, Jun Zhu, and Lei Zhang. 2024. Grounding dino: Marrying dino with grounded pre-training for open-set object detection. In Computer Vision – ECCV 2024: 18th European Conference, Mi-lan, Italy, September 29–October 4, 2024, Proceed-ings, Part XLVII , page 38–55, Berlin, Heidelberg. Springer-Verlag. Elena Pitta, Tom Kouwenhoven, and Tessa Verhoef. 2025. Probing vision-language understanding through the visual entailment task: promises and pitfalls. In Proceedings of the 2nd LUHME Work-shop , pages 74–83, Bologna, Italy. UP - Universidade do Porto (https://doi.org/10.21747/978-989-9193-73-4/lan2), LIACC - Laboratório de Inteligência Artifi-cial e Ciência de Computadores da Universidade do Porto, CLUP - Centro de Linguística da Universidade do Porto, UEF - The University of Eastern Finland and UAH - Universidad de Alcalá. Bryan A. Plummer, Liwei Wang, Christopher M. Cer-vantes, Juan C. Caicedo, Julia Hockenmaier, and Svetlana Lazebnik. 2017. Flickr30K Entities: Col-lecting Region-to-Phrase Correspondences for Richer 
+
+9Image-to-Sentence Models. International Journal of Computer Vision , 123(1):74–93. Haoyu Song, Li Dong, Weinan Zhang, Ting Liu, and Furu Wei. 2022. CLIP Models are Few-Shot Learn-ers: Empirical Studies on VQA and Visual Entail-ment. In Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Vol-ume 1: Long Papers) , pages 6088–6100, Dublin, Ireland. Association for Computational Linguistics. Neha Srikanth and Rachel Rudinger. 2025. NLI under the Microscope: What Atomic Hypothesis Decompo-sition Reveals. In Proceedings of the 2025 Confer-ence of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers) ,pages 2574–2589, Albuquerque, New Mexico. Asso-ciation for Computational Linguistics. Joe Stacey, Pasquale Minervini, Haim Dubossarsky, Oana-Maria Camburu, and Marek Rei. 2024. Atomic Inference for NLI with Generated Facts as Atoms. In Proceedings of the 2024 Conference on Empiri-cal Methods in Natural Language Processing , pages 10188–10204, Miami, Florida, USA. Association for Computational Linguistics. Rui Sun, Zhecan Wang, Haoxuan You, Noel Codella, Kai-Wei Chang, and Shih-Fu Chang. 2023. UniFine: A Unified and Fine-grained Approach for Zero-shot Vision-Language Understanding. In Findings of the Association for Computational Linguistics: ACL 2023 , pages 778–793, Toronto, Canada. Association for Computational Linguistics. Christopher Thomas, Yipeng Zhang, and Shih-Fu Chang. 2022. Fine-Grained Visual Entailment. In 
+
+Computer Vision – ECCV 2022: 17th European Con-ference, Tel Aviv, Israel, October 23–27, 2022, Pro-ceedings, Part XXXVI , pages 398–416. Springer. Andrew Trotman, Antti Puurula, and Blake Burgess. 2014. Improvements to BM25 and Language Models Examined. In Proceedings of the 19th Australasian Document Computing Symposium , pages 58–65. As-sociation for Computing Machinery. Peng Wang, An Yang, Rui Men, Junyang Lin, Shuai Bai, Zhikang Li, Jianxin Ma, Chang Zhou, Jingren Zhou, and Hongxia Yang. 2022. OFA: Unifying ar-chitectures, tasks, and modalities through a simple sequence-to-sequence learning framework. In Pro-ceedings of the 39th International Conference on Machine Learning , volume 162 of Proceedings of Machine Learning Research , pages 23318–23340. PMLR. Yuxi Xia, Klim Zaporojets, and Benjamin Roth. 2025. Learn to pick the winner: Black-box ensembling for textual and visual question answering. In Proceed-ings of the 21st Conference on Natural Language Processing (KONVENS 2025): Long and Short Pa-pers , pages 12–26, Hannover, Germany. HsH Ap-plied Academics. Ning Xie, Farley Lai, Derek Doran, and Asim Ka-dav. 2019. Visual Entailment: A novel task for fine-grained image understanding. Preprint ,arXiv:1901.06706. Diji Yang, Kezhen Chen, Jinmeng Rao, Xiaoyuan Guo, Yawen Zhang, Jie Yang, and Yi Zhang. 2024. Tackling vision language tasks through learning in-ner monologues. In Proceedings of the Thirty-Eighth AAAI Conference on Artificial Intelligence and Thirty-Sixth Conference on Innovative Applica-tions of Artificial Intelligence and Fourteenth Sym-posium on Educational Advances in Artificial Intelli-gence , AAAI’24/IAAI’24/EAAI’24. AAAI Press. Haoxuan You, Rui Sun, Zhecan Wang, Long Chen, Gengyu Wang, Hammad Ayyubi, Kai-Wei Chang, and Shih-Fu Chang. 2023. IdealGPT: Iteratively Decomposing Vision and Language Reasoning via Large Language Models. In Findings of the As-sociation for Computational Linguistics: EMNLP 2023 , pages 11289–11303, Singapore. Association for Computational Linguistics. 
+
+10 A Decomposer Comparison 
+
+Table 5 compares three text-only LLMs as the De-composer. All three are faithful, and the difference lies in completeness. Qwen2.5-32B-Instruct scores highest on completeness and is used throughout. 
+
+Decomposer Faith. Compl. Both Meta-Llama-3.1-8B 95 88 88 Qwen3-8B 96 90 90 Qwen2.5-32B 98 96 96 
+
+Table 5: Decomposition quality on 100 hypotheses sam-pled from the training split, annotated manually by an author. Faithfulness checks that no fact adds informa-tion absent from the hypothesis; completeness checks that all claims are covered. Counts out of 100. 
+
+B Vision–Language Model Comparison 
+
+Figure 5 compares seven VLMs on full-hypothesis prediction. Qwen3-VL-32B reaches the highest accuracy at 0.765, ahead of InternVL3-8B (0.749) and Qwen3-VL-8B (0.745). The gain over the two 8B models is only 1.6 to 2.0 points despite roughly four times the parameters. Idefics2-8B performs worst overall, below even the 1B and 2B models. AVE retains InternVL3-8B and Qwen3-VL-8B for their accuracy-size balance. InternVL3-1B Qwen2-VL-2B LLaVA-OneVision-7B Idefics2-8B InternVL3-8B Qwen3-VL-8B Qwen3-VL-32B  
+
+> 0.55 0.60 0.65 0.70 0.75
+> Accuracy
+> 0.581 0.624 0.694 0.556 0.749 0.745 0.765
+
+Figure 5: Full-hypothesis accuracy on the development split for seven VLMs, using each model’s best prompt style and label derivation. 
+
+C Selector Configuration 
+
+Table 6 lists the four feature variants compared during selector training. Feature count grows with 
+
+K, since per-candidate and pairwise agreement features scale with the number of candidates. 
+
+Feature variant K Features Full-hypothesis 4 129 Simple atomic 4 129 Structured atomic 4 129 Full 12 methods 12 409 
+
+Table 6: Feature variants compared during AVE-LS training. K is the number of candidates included. 
+
+AVE-LS uses XGBoost, selected against HistGra-dientBoosting across four feature variants by val-idation macro-F1 (Table 7). Training uses a fixed stratified 80/20 split of the training subset with seed 42. 
+
+HistGB XGBoost Feature variant Acc. F1 Acc. F1 Full-hypothesis 0.790 0.787 0.788 0.785 Simple atomic 0.792 0.788 0.794 0.792 Structured atomic 0.793 0.790 0.793 0.791 Full 12 methods 0.798 0.796 0.801 0.798 
+
+Table 7: Validation accuracy and macro-F1 for AVE-LS across classifier families and feature variants. 
+
+Table 8 reports the resulting hyperparameters for the selected XGBoost configuration. 
+
+Parameter Value objective multi:softprob eval_metric mlogloss n_estimators 1,100 max_depth 3learning_rate 0.025 subsample 0.88 colsample_bytree 0.88 reg_lambda 3.5 reg_alpha 0.25 min_child_weight 1.5 gamma 0.02 tree_method hist random_state 42 
+
+Table 8: XGBoost hyperparameters for AVE-LS, chosen by validation macro-F1. 
+
+D Data Efficiency 
+
+Figure 6 shows validation macro-F1 against train-ing size for the four feature variants, averaged over three random training subsamples at each size. The full pool leads at every size and gains the most from additional data, while the single-family vari-ants plateau sooner and at a lower macro-F1. At 5,000 examples, the full pool already exceeds the full-hypothesis-only variant trained on all 37,762. The full pool continues to improve across the entire range without flattening, unlike the single-family 11 variants, which level off well before the largest training sizes. 25k 30k 35k Full        
+
+> examples
+> n accuracy
+> 5k 10k 15k 20k 25k 30k 35k Full
+> Training examples
+> 0.775 0.780 0.785 0.790 0.795 0.800
+> Validation macro-F1
+> Validation macro-F1
+> Full hypothesis Simple atomic Structured atomic Full 12 methods
+
+Figure 6: Validation macro-F1 against selector training size for the four feature variants. Error bars show one standard deviation across three random training subsam-ples at each size. 
+
+E Confusion Matrices E N CPredicted label ENCGold label 0.805 0.150 0.045 0.200 0.595 0.205 0.022 0.083 0.895 
+
+Best individual 
+
+0.0 0.2 0.4 0.6 0.8 1.0 Proportion 
+
+Figure 7: Row-normalised confusion matrix for the best individual candidate on the test set. E N CPredicted label ENCGold label 0.832 0.119 0.049 0.213 0.551 0.236 0.022 0.055 0.923 
+
+AVE-MV inter 
+
+0.0 0.2 0.4 0.6 0.8 1.0 Proportion 
+
+Figure 8: Row-normalised confusion matrix for AVE-MV inter on the test set. E N CPredicted label ENCGold label 0.857 0.114 0.029 0.199 0.682 0.119 0.034 0.096 0.871 
+
+AVE-LS 
+
+0.0 0.2 0.4 0.6 0.8 1.0 Proportion 
+
+Figure 9: Row-normalised confusion matrix for AVE-LS on the test set. 
+
+Figures 7–9 give the full confusion matrices be-hind the per-class recall comparison in Section 4.3. Across all three methods, neutral is substantially confused with both other labels, while entailment and contradiction are rarely confused with each other. Errors therefore concentrate on neutral rather than between the two label extremes. 
+
+F Hypothesis Complexity 1 atom 2 atoms 3 atoms 4+ atoms Atom-count bucket 0.50 0.55 0.60 0.65 0.70 0.75 0.80 Accuracy 
+
+> Full-hypothesis Atomic prediction Self-decomposed atomic Independent atomic
+
+Figure 10: Prediction accuracy by atom-count bucket for each method family on the test set. 
+
+Figure 10 shows accuracy by atom-count bucket for each method family. Full-hypothesis prediction declines from 0.774 at one atom to 0.637 at four or more. Independent atomic prediction falls be-hind the other methods from two atoms onward. Atomic and self-decomposed prediction stay ahead of full-hypothesis prediction up to three atoms, af-ter which atomic prediction falls behind while self-decomposed prediction remains strongest. 12 G Prompts 
+
+Figures 11–16 give the full text of every prompt used. Placeholders in braces are replaced at infer-ence time. 13 Prompt 1: Hypothesis decomposition 
+
+Break down the Claim into simple Atomic Claims. 
+
+Steps: 
+
+1. Check if the Claim is simple. If yes, return it as is. 2. If complex, identify key components and break into distinct Atomic Claims. 3. Ensure Atomic Claims cover the full meaning without redundancy. 4. Preserve named entities and replace unclear pronouns with explicit noun phrases when needed. 5. Verify each fact is clear, distinct, and self-contained. 
+
+Rules: 
+
+- Use only information explicitly stated in the Claim. - Do not add ages, locations, motivations, intentions, causes, scene details, or implications unless explicitly stated. - Keep subject, main verb, object/location together if they form one event. - Do not create overlapping or duplicate Atomic Claims. - Do not split a Claim into one general atom and one more specific atom that repeats the same event. - Keep a clause whole if splitting it would distort the meaning. - Use the fewest Atomic Claims needed. - Output only the Atomic Claims inside <answer> . . . </answer> .- Do not add explanation outside <answer> tags. 
+
+Figure 11: Prompt used for hypothesis decomposition. 
+
+Prompt 2: Full-hypothesis, simple prompt 
+
+Look at the image and evaluate the statement. 
+
+Statement: {hypothesis} 
+
+Choose exactly one label from: entailment , neutral , contradiction .Also, give a short explanation based only on what is visible in the image. 
+
+Return only JSON: {"label": "...", "reason": "..."} 
+
+Prompt 3: Full-hypothesis, structured prompt 
+
+Look at the image and evaluate the statement. 
+
+Statement: {hypothesis} 
+
+First identify only the visible evidence relevant to the statement. Then explain whether that evidence supports the statement, contradicts it, or is insufficient. Choose exactly one label from: entailment , neutral , contradiction .
+
+Return only JSON: {"label": "...", "visual_evidence": "...", "reasoning": "..."} 
+
+Figure 12: Full-hypothesis prediction prompts: simple prompt (top) and structured prompt (bottom). 
+
+Prompt 4: Atomic, simple prompt 
+
+Look at the image and perform visual entailment using the atomic facts below. The atomic facts are connected parts of one complete hypothesis, so use them together. 
+
+Atomic facts: {atomic_facts} 
+
+Choose exactly one final label from: entailment , neutral , contradiction .Also give a short explanation based only on what is visible in the image. 
+
+Return only JSON: {"label": "...", "explanation": "..."} 
+
+Prompt 5: Atomic, structured prompt 
+
+Look at the image and perform visual entailment using the atomic facts below. The atomic facts are connected parts of one complete hypothesis, so do not treat them as fully independent. Use them together to decide whether the complete meaning formed by these facts is entailed, neutral, or contradicted by the image. 
+
+Atomic facts: {atomic_facts} 
+
+Decision rules: 
+
+- Choose entailment if the image clearly supports all important atomic facts together. - Choose contradiction if at least one important atomic fact clearly conflicts with the image. - Choose neutral if the image does not provide enough evidence for one or more important atomic facts, and nothing clearly conflicts. For each atom, briefly state whether it is entailment , neutral , or contradiction . Then explain how the atoms combine into one complete hypothesis. Choose exactly one final label. 
+
+Return only JSON: {"atom_observations": [{"atom": "...", "label": "...", "reason": "..."}], "bridge_reasoning": "...", "label": "..."} 
+
+Figure 13: Atomic prediction prompts: simple prompt (top) and structured prompt (bottom). 
+
+14 Prompt 6: Self-decomposed atomic, simple prompt 
+
+Look at the image and perform visual entailment. 
+
+Hypothesis: {hypothesis} 
+
+First, break the hypothesis into small atomic claims that can be checked against the image. Then label each atomic claim entailment , neutral , contradiction .Use only what is visible in the image. 
+
+Label meanings: 
+
+- entailment : the image clearly supports the claim. - neutral : the image does not provide enough evidence, and nothing clearly conflicts. - contradiction : the image clearly shows an incompatible alternative. 
+
+Return only JSON: {"decomposed_atoms": [{"atom": "...", "label": "...", "reason": "..."}], "explanation": "...", "label": "..."} 
+
+Prompt 7: Self-decomposed atomic, structured prompt 
+
+Look at the image and perform visual entailment. 
+
+Hypothesis: {hypothesis} 
+
+Use the following steps: 
+
+Step 1: Decompose the hypothesis into small atomic claims. Each atomic claim should preserve the original meaning and should be directly checkable against the image. Do not add new claims that are not in the hypothesis. 
+
+Step 2: For each atomic claim, choose exactly one label from: entailment, neutral, contradiction. Use only visible evidence from the image. Do not infer hidden intentions, future events, causes, or background facts. 
+
+Step 3: Aggregate mechanically: - If any important atomic claim is contradiction, final label is contradiction. - Else if all important atomic claims are entailment, final label is entailment. - Else final label is neutral. 
+
+Return only JSON: {"decomposed_atoms": [{"atom": "...", "label": "...", "reason": "..."}], "bridge_reasoning": "...", "label": "..."} 
+
+Figure 14: Self-decomposed atomic prediction prompts: simple prompt (top) and structured prompt (bottom). 
+
+Prompt 8: Independent atomic 
+
+The simple and structured full-hypothesis prompts (Figure 12) are reused, with {hypothesis} replaced by a single {atomic_fact} . Each fact is judged in a separate call. 
+
+Figure 15: Independent atomic prediction. Reuses the full-hypothesis prompts (Figure 12) applied to a single atomic fact per call. 
+
+Prompt 9: Grounding phrase extraction 
+
+You convert one piece of visual entailment evidence into a short phrase for visual grounding. 
+
+Return only JSON: {"can_ground": true or false, "phrase": "short visual phrase" or "NONE", "match_phrase": "main visible entity" or "NONE"} 
+
+Definitions: phrase is sent to the grounding model; match_phrase is the main visible entity used later for matching Flickr30k Entities annotations. 
+
+Rules: 
+
+1. If the final label is entailment , choose visible evidence that supports the atom. 2. If the final label is contradiction , choose what is actually visible in the image that contradicts the atom. 3. For contradiction , do not describe the false hypothesis claim. 4. If the evidence is only about absence or a missing object, return NONE .5. Keep the phrase concrete and visible. 6. The phrase should be at most six words. 7. The match_phrase should be shorter than the phrase and should name the main visible entity. 8. Do not explain. Three worked examples follow in the prompt, covering entailment, contradiction, and an absence-only case that returns NONE .
+
+Figure 16: Grounding phrase-extraction prompt. 
+
+15
