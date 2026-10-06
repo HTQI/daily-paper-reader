@@ -1,0 +1,41 @@
+{
+  "date": "20261006",
+  "date_label": "",
+  "generated_at": "2026-10-06 00:35:26 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.03380v1",
+      "route": "202610/06/2610.03380v1-interpretable-deepfake-detection-in-videos-via-explicit-forensic-features-and-temporal-modeling",
+      "title": "Interpretable Deepfake Detection in Videos via Explicit Forensic Features and Temporal Modeling",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "基于显式取证特征的可解释视频深度伪造检测",
+      "first_seen_at": "2026-10-06 00:35:26 UTC",
+      "updated_at": "2026-10-06 00:35:26 UTC"
+    },
+    {
+      "paper_id": "2610.03421v1",
+      "route": "202610/06/2610.03421v1-climb-confidence-guided-complementary-evidence-for-multimodal-retrieval-augmented-generation",
+      "title": "CLIMB: Confidence-Guided Complementary Evidence for Multimodal Retrieval-Augmented Generation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "多模态检索增强生成中的互补证据池与置信度控制",
+      "first_seen_at": "2026-10-06 00:35:26 UTC",
+      "updated_at": "2026-10-06 00:35:26 UTC"
+    }
+  ]
+}

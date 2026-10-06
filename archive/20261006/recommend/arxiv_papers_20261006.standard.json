@@ -1,0 +1,94 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-06T00:34:17.427535+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2610.03380v1",
+      "source": "arxiv",
+      "title": "Interpretable Deepfake Detection in Videos via Explicit Forensic Features and Temporal Modeling",
+      "abstract": "Deepfake detection in videos remains challenging, as manipulated content may appear visually consistent at the frame level while exhibiting subtle temporal inconsistencies. This paper introduces an interpretable deepfake detection framework that models spatially and temporally coherent facial features in video sequences. Unlike end-to-end deep models relying on implicit representations, the proposed approach explicitly encodes physically grounded forensic cues, enabling transparent analysis and improved multi-dataset generalization. The pipeline transforms videos into identity-consistent facial trajectories, segments them into fixed-length temporal windows, and represents each frame using 68 structured descriptors spanning four complementary domains: photometric, textural, geometric, and compression-based features. These descriptors provide a compact multi-domain representation of manipulation artifacts and are processed by a Long Short-Term Memory (LSTM) network to capture temporal dependencies and subtle irregularities. Evaluation on four benchmark datasets, FaceForensics++, Celeb-DF v2, a curated subset of the DeepFake Detection Challenge (DFDC), and DeeperForensics, yields strong and consistent F1-scores of 98.0%, 91.0%, 97.6%, and 96.2%, respectively. The approach also demonstrated a good cross-dataset generalization, providing a robust and interpretable solution for video deepfake detection.",
+      "authors": [
+        "Chahira Benhama",
+        "Mohand Saïd Allili",
+        "Assia Hamadene"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-02T14:34:24+00:00",
+      "link": "https://arxiv.org/pdf/2610.03380v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "interpretable video deepfake detection with explicit forensic features",
+      "llm_evidence_cn": "基于显式取证特征的可解释视频深度伪造检测",
+      "llm_evidence": "基于显式取证特征的可解释视频深度伪造检测",
+      "canonical_evidence": "基于显式取证特征的可解释视频深度伪造检测",
+      "llm_tldr_en": "Video deepfakes can look frame-consistent yet show subtle temporal inconsistencies. This framework encodes explicit physically grounded forensic cues into facial trajectories and temporal windows, yielding interpretable and better-generalizing detection.",
+      "llm_tldr_cn": "视频深度伪造在单帧上往往看起来一致，却在时序上存在细微不一致，端到端深度模型依赖隐式表征，缺乏可解释性且跨数据集泛化差。论文提出可解释检测框架，将视频转化为身份一致的人脸轨迹并切分为固定长度时序窗口，用68维结构化取证描述子显式编码物理依据的线索。该方法实现了透明分析和更强的多数据集泛化能力，为可解释、可迁移的伪造与虚假信息检测提供了新路径。",
+      "llm_tldr": "视频深度伪造在单帧上往往看起来一致，却在时序上存在细微不一致，端到端深度模型依赖隐式表征，缺乏可解释性且跨数据集泛化差。论文提出可解释检测框架，将视频转化为身份一致的人脸轨迹并切分为固定长度时序窗口，用68维结构化取证描述子显式编码物理依据的线索。该方法实现了透明分析和更强的多数据集泛化能力，为可解释、可迁移的伪造与虚假信息检测提供了新路径。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.03421v1",
+      "source": "arxiv",
+      "title": "CLIMB: Confidence-Guided Complementary Evidence for Multimodal Retrieval-Augmented Generation",
+      "abstract": "Multimodal large language models (MLLMs) have shown strong visual reasoning abilities, but knowledge-intensive visual question answering often requires external textual evidence beyond the image and the model's parametric knowledge. Existing multimodal RAG systems commonly rely on Top-$K$ retrieval or reranking, which may return redundant passages and provide limited control over whether an answer update is sufficiently supported by the retrieved evidence. We propose \\textit{CLIMB}, a training-free inference-time framework for multimodal RAG. CLIMB first constructs a compact complementary evidence pool using an MMR-style objective that balances query relevance and passage-level redundancy. It then performs confidence-controlled refinement within this fixed pool: an R/E/C critic scores passages by relevance, evidence specificity, and cross-modal alignment, while an evidence-grounded confidence estimator accepts an updated answer only when the estimated confidence increases. This design provides a simple stopping criterion and reduces unnecessary refinement without modifying the underlying retriever or MLLM. Experiments on Encyclopedic-VQA and InfoSeek show that CLIMB consistently improves over retrieval-augmented multimodal baselines. Ablations further indicate that complementary pooling, critic-based scoring, and iterative confidence-controlled refinement each contribute to the final performance.",
+      "authors": [
+        "Hang Gao",
+        "Wujiang Xu",
+        "Zhixing Zhang",
+        "Kai Mei",
+        "Jingyi Yang",
+        "Dimitris N. Metaxas"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-10-02T15:09:06+00:00",
+      "link": "https://arxiv.org/pdf/2610.03421v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multimodal RAG with complementary evidence pool and confidence control",
+      "llm_evidence_cn": "多模态检索增强生成中的互补证据池与置信度控制",
+      "llm_evidence": "多模态检索增强生成中的互补证据池与置信度控制",
+      "canonical_evidence": "多模态检索增强生成中的互补证据池与置信度控制",
+      "llm_tldr_en": "To address redundant Top-K retrieval in multimodal RAG, CLIMB builds a compact complementary evidence pool via an MMR-style objective and applies confidence-controlled answer updates, yielding more reliable evidence-supported visual QA.",
+      "llm_tldr_cn": "针对多模态大模型在知识密集型视觉问答中依赖外部文本证据、而现有Top-K检索易返回冗余段落且难以控制证据支持度的问题，本文提出免训练的推理期框架CLIMB。它先用MMR式目标构建紧凑的互补证据池，再通过置信度控制决定是否更新答案。实验显示该方法能减少冗余检索并提供更可控的证据支持。其贡献在于为多模态检索增强生成提供了可控制证据充分性的推理范式。",
+      "llm_tldr": "针对多模态大模型在知识密集型视觉问答中依赖外部文本证据、而现有Top-K检索易返回冗余段落且难以控制证据支持度的问题，本文提出免训练的推理期框架CLIMB。它先用MMR式目标构建紧凑的互补证据池，再通过置信度控制决定是否更新答案。实验显示该方法能减少冗余检索并提供更可控的证据支持。其贡献在于为多模态检索增强生成提供了可控制证据充分性的推理范式。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

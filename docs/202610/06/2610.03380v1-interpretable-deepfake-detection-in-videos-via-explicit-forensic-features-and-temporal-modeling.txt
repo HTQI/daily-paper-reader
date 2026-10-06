@@ -1,0 +1,1361 @@
+Interpretable Deepfake Detection in Videos via
+Explicit Forensic Features and Temporal Modeling
+Chahira Benhama
+LARIVIA laboratory
+Dep. of Computer science and Eng.
+University of Quebec in Outaouais
+Gatineau, QC, Canada
+Email: benc28@uqo.ca.
+Mohand Sa¨ıd Allili
+LARIVIA laboratory
+Dep. of Computer science and Eng.
+University of Quebec in Outaouais
+Gatineau, QC, Canada
+Email: mohandsaid.allili@uqo.ca.
+Assia Hamadene
+LARIVIA laboratory and
+Mixed Research Unit INRS-UQO
+University of Quebec in Outaouais
+Gatineau, QC, Canada
+Email: assia.hamadene@uqo.ca
+Abstract—Deepfake detection in videos remains challenging, as
+manipulated content may appear visually consistent at the frame
+level while exhibiting subtle temporal inconsistencies. This paper
+introduces an interpretable deepfake detection framework that
+models spatially and temporally coherent facial features in video
+sequences. Unlike end-to-end deep models relying on implicit
+representations, the proposed approach explicitly encodes phys-
+ically grounded forensic cues, enabling transparent analysis and
+improved multi-dataset generalization. The pipeline transforms
+videos into identity-consistent facial trajectories, segments them
+into fixed-length temporal windows, and represents each frame
+using 68 structured descriptors spanning four complementary do-
+mains: photometric, textural, geometric, and compression-based
+features. These descriptors provide a compact multi-domain
+representation of manipulation artifacts and are processed by a
+Long Short-Term Memory (LSTM) network to capture temporal
+dependencies and subtle irregularities. Evaluation on four bench-
+mark datasets, FaceForensics++, Celeb-DF v2, a curated subset of
+the DeepFake Detection Challenge (DFDC), and DeeperForensics,
+yields strong and consistent F1-scores of 98.0%, 91.0%, 97.6%,
+and 96.2%, respectively. The approach also demonstrated a good
+cross-dataset generalization, providing a robust and interpretable
+solution for video deepfake detection.
+Index Terms—Deepfake detection in videos, forensic features,
+Temporal modelling, LSTM, Explainable AI.
+I. INTRODUCTION
+The rapid evolution of generative models, particularly
+GANs and diffusion models, has significantly increased the
+realism and accessibility of deepfake videos, posing major
+challenges for multimedia forensics [1]. Modern pipelines
+generate highly realistic faces even under real-world con-
+ditions such as compression, resizing, and motion, making
+frame-level detection increasingly unreliable [2]. The deep-
+fake landscape now spans diverse forgery types and post-
+processing conditions, exposing the limitations of methods
+tailored to narrow benchmarks. Consequently, recent research
+has shifted toward modeling temporal consistency, improving
+cross-domain generalization, and enhancing explainability for
+trustworthy forensic analysis [3], [4].
+Recent studies show that while spatial artifacts can be
+minimized at the frame level, deepfake generation often
+fails to preserve temporal consistency in videos, leading to
+subtle irregularities in motion, appearance transitions, and
+identity coherence across frames [5], [6]. These inconsisten-
+cies, unstable facial dynamics, illumination shifts, geometric
+distortions, or evolving compression traces, make temporal
+modeling essential for robust detection [7]. However, many
+existing approaches rely on end-to-end deep representations
+that lack interpretability and may overfit to dataset-specific
+artifacts, limiting forensic reliability and cross-dataset gener-
+alization [8], [9]. Furthermore, temporal models commonly
+process independently sampled frames without preserving
+identity-consistent facial trajectories, introducing background
+variations and unrelated visual content into the learned rep-
+resentation [6], [10], [11]. These limitations highlight a key
+weakness: manipulated frames may appear realistic in isola-
+tion, while their inconsistencies become apparent only when
+forensic cues are analyzed coherently over time.
+Motivated by these limitations, we propose a contextual
+deepfake detection framework that models spatiotemporal con-
+sistency through structured and interpretable representations.
+Instead of relying on fully end-to-end processing, the pipeline
+is decomposed into principled stages: faces are first detected
+and tracked into identity-consistent trajectories, segmented
+into fixed-length temporal windows, and encoded at each
+frame using 68 semantically grounded features spanning pho-
+tometric, textural, geometric, and compression characteristics.
+These feature categories are deliberately selected to capture
+complementary traces of face manipulation. They also encom-
+pass the principal visual inconsistencies commonly associated
+with face synthesis, blending, and post-processing [6], [12].
+Photometric descriptors characterize inconsistencies in color,
+illumination, and local intensity statistics; textural features
+capture abnormal skin patterns and fine-scale artifacts result-
+ing from generative reconstruction [13]; geometric descrip-
+tors encode distortions or instabilities in facial structure and
+landmark relationships [14]; and compression features reveal
+discrepancies caused by repeated encoding, resampling, and
+manipulation-specific post-processing.
+Temporal dependencies among frame-level representations
+are then modeled using an LSTM to identify persistent incon-
+sistencies, abrupt variations, and unnatural temporal evolution
+[15]. The originality of the proposed approach lies in com-
+arXiv:2610.03380v1  [cs.CV]  2 Oct 2026
+
+
+bining explicit forensic descriptors with temporal sequence
+learning over identity-consistent trajectories. This enables the
+model to capture coherent temporal patterns overlooked by
+frame-based methods while reducing overfitting to dataset-
+specific visual cues. Moreover, the use of physically mean-
+ingful features improves interpretability by linking detection
+decisions to observable forensic inconsistencies. Our contribu-
+tions are summarized as follows:
+• A complete pipeline that transforms raw videos into ho-
+mogeneous, identity-preserving face sequences, ensuring
+temporal coherence and avoiding frame-level ambiguities.
+The method introduces a compact set of 68 interpretable
+forensic features across photometric, textural, geometric,
+and compression cues, providing a structured and phys-
+ically grounded representation of manipulation traces,
+with improved robustness and interpretability.
+• A unified spatiotemporal framework that encodes each
+identity-consistent track as a fixed T × 68 matrix, stan-
+dardizing variable-length videos while preserving tempo-
+ral dynamics. An LSTM model is used capture subtle
+inconsistencies beyond frame-level analysis. Extensive
+evaluation on FaceForensics++, Celeb-DF v2, DFDC, and
+DeeperForensics demonstrates strong and consistent per-
+formance across diverse conditions. Cross-dataset evalu-
+ation on ForgeryNet and WildDeepfake further demon-
+strates the framework ability to generalize to real-world
+deepfake distributions.
+The rest of this paper is organized as follows: Section II
+presents a literature review. Section III introduces the proposed
+framework. Section V presents the experimental results. We
+end the paper with a conclusion and future work perspectives.
+II. RECENT LITERATURE AND POSITIONING
+Recent work has shifted deepfake video detection toward
+more realistic and comprehensive evaluation settings. Recent
+benchmarking efforts unify tasks, datasets, and metrics, high-
+lighting the need for robust evaluation under rapidly evolving
+generative models [1]. Similarly, Celeb-DF++ emphasizes
+cross-dataset testing across diverse forgery types, compres-
+sion levels, and visual qualities [16]. These studies demon-
+strate that performance on a single benchmark is insufficient,
+as detection difficulty varies considerably across generation
+pipelines and post-processing conditions. In parallel, several
+approaches explicitly address cross-dataset generalization [17],
+[18]. Overall, these works establish generalization and multi-
+benchmark evaluation as central requirements for reliable
+deepfake detection.
+A second major trend is the shift from static spatial analysis
+toward temporal and contextual modeling. Recent approaches
+exploit global and local temporal consistency, spatiotemporal
+patterns, and frequency-based cues to capture artifacts that
+remain invisible at the frame level [8], [9], [19]. These studies
+reinforce the view that videos should be treated as dynamic
+signals rather than collections of independent frames. Beyond
+temporal cues, contextual modeling has gained importance,
+with methods incorporating multi-face and scene-level rela-
+tionships or combining multi-view and temporal inconsisten-
+cies for detection and localization [20], [21]. These works
+highlight the importance of relational and contextual informa-
+tion in realistic scenarios. Finally, interpretability is emerging
+as a key requirement, with recent work combining temporal
+modeling with more transparent decision mechanisms [22].
+In this context, the present work positions itself at the
+intersection of temporal modeling and explainability, propos-
+ing a sequence-based framework that operates on explicit,
+semantically meaningful features. Rather than replacing end-
+to-end architectures, it offers a complementary and more
+interpretable paradigm for deepfake video forensics.
+III. OVERALL FRAMEWORK
+Let a video be represented as a sequence V = {It}Tv
+t=1,
+where It ∈RH×W ×3 is the t-th RGB frame and Tv is
+the number of extracted frames after temporal harmonization
+[23]. If the original frame rate is fsrc and the target frame
+rate is ftar = 25, a standard temporal resampling map is
+tk =
+j
+k fsrc
+ftar
+k
+, k = 1, . . . , Tv. This step ensures that all videos
+contribute to the sequence model under the same temporal
+resolution. For every frame It, we apply the Retina Face
+detector [24] to produce a set of candidate faces: Dt =
+n
+d(1)
+t , d(2)
+t , . . . , d(nt)
+t
+o
+, where each detection is represented by
+a vector d(i)
+t
+=
+
+x(i)
+t , y(i)
+t , w(i)
+t , h(i)
+t , s(i)
+t
+T
+.
+Here,
+(x(i)
+t , y(i)
+t )
+denotes
+the
+upper-left
+box
+corner,
+(w(i)
+t , h(i)
+t ) its width and height, and s(i)
+t
+the detection confi-
+dence. Note that to preserve facial geometry, each detected
+face crop is resized to 224 × 224 using an aspect-ratio-
+preserving strategy: the crop is first scaled so that its longest
+side fits within 224 pixels, then padded with black pixels
+(value 0) on the remaining sides to fill the target resolution.
+A. Face Tracking Formulation
+To ensure temporal consistency, detected faces are linked
+across frames into identity-preserving tracks, each represented
+at time t by a state vector:
+xt = (ut, vt, at, ht, ˙ut, ˙vt, ˙at, ˙ht)T ,
+(1)
+where ut and vt denote the center coordinates of the bounding
+box, at is the aspect ratio, ht is the box height, and ˙ut,
+˙vt, ˙at, and ˙ht are their temporal velocities. The track state
+is predicted at the next frame using a linear motion model
+[25]: xt|t−1 = Fxt−1|t−1, where F is the state transition
+matrix. The uncertainty of the prediction is represented by the
+covariance matrix Pt|t−1. A face detection is represented by
+the measurement vector zt = (ut, vt, at, ht)T , which contains
+only the observed bounding-box location and size parameters.
+The observation model is defined by matrix H, which maps
+the predicted state to the measured variables. After associating
+a detection with a track, the state is updated as
+xt|t = xt|t−1 + Kt(zt −Hxt|t−1),
+(2)
+
+
+where Kt is the Kalman gain, controlling how much the
+prediction is corrected by the new observation. P is the state
+covariance matrix, F the motion model, H the observation
+matrix, and Kt the update gain. This allows robust and smooth
+temporal tracking of facial regions across the video.
+B. Identity Association Cost
+For each face detection i and active track k, the identity
+assignment cost is defined as:
+C(i, k) = λmCm(i, k) + λaCa(i, k),
+(3)
+where λm + λa = 1. The term Cm(i, k) is the motion consis-
+tency term defined by the Mahalanobis distance Cm(i, k) =
+r
+z(i)
+t
+−ˆz(k)
+t
+T
+S−1
+t
+
+z(i)
+t
+−ˆz(k)
+t
+
+, where St is the covari-
+ance matrix of the prediction error associated with the Kalman
+filter, capturing the uncertainty of the predicted state at time
+t, and ˆz(k)
+t
+= Hx(k)
+t|t−1 is the predicted observation. The
+term Ca(i, k) is the appearance consistency term given by the
+cosine distance between the current embedding and the track
+embedding:
+Ca(i, k) = 1 −
+r(i)
+t
+· ¯r(k)
+∥r(i)
+t ∥2∥¯r(k)∥2
+.
+(4)
+The optimal assignment is then obtained via the Hungarian
+algorithm: π⋆= arg minπ
+P
+(i,k)∈π C(i, k).
+A valid temporal sequence is constructed by enforcing strict
+consistency constraints for reliable spatiotemporal analysis.
+Each sequence contains 20 consecutive frames from the same
+tracked face, preserving identity coherence. Temporal order
+is maintained to capture facial dynamics, and all frames are
+normalized to 224 × 224 for consistent feature extraction.
+Finally, multiple overlapping sequences are generated using
+a sliding-window strategy with a fixed length T = 20 and
+stride s = 10. This approach increases the number of training
+samples while preserving temporal continuity.
+IV. EXPLICIT PER-FRAME FEATURE FAMILIES
+Each cropped face is represented as a feature vector
+xt ∈R68, comprising descriptors from four complementary
+families, 18 photometric, 24 textural, 14 geometric, and 12
+compression-related, as detailed in Table I and illustrated in
+Fig. 1. This decomposition ensures the representation captures
+diverse forensic cues rather than relying on a single source.
+A. Photometric Family (18 Variables)
+For each facial region F, we explicitly represent color in
+the RGB, HSV, and YCrCb spaces [26] and compute the mean
+of each channel c ∈R, G, B, H, S, V, Y, Cr, Cb as follows:
+µc
+=
+1
+|F|
+X
+p∈F
+Ip(c)
+(5)
+In addition to the mean, we also compute the standard devia-
+tion for each the RGB channel c ∈{R, G, B}
+std c
+=
+
+1
+|F|
+X
+p∈F
+(Ip(c) −µc)2
+
+
+1/2
+(6)
+Fig. 1.
+Facial analyzed area: (Left) Original input face image, (Middle)
+Segmented facial region (green overlay) where color and texture features
+are extracted. Automatically detected landmarks (red dots) used to compute
+geometric features. The midline divides the face into left (L) and right (R)
+halves, enabling quantitative assessment of facial symmetry. (Right) is the
+analyzed regions covering hair-skin contact and jaws.
+The color ratios are used to capture relative chromatic rela-
+tionships, and are given as follows:
+ratioR G =
+µR
+µG + ε,
+ratioB G =
+µB
+µG + ε
+(7)
+To analyze symmetry, the face is partitioned into left and right
+halves, denoted IL and IR, respectively. ε is a small constant
+that prevents division by 0. Let µL
+Y and µR
+Y be the mean
+luminance values computed over the left and right regions,
+and µL
+S and µR
+S the corresponding mean saturation values
+(e.g., in the HSV color space). The illumination and saturation
+asymmetry measures are then defined as:
+light asym =
+µL
+Y −µR
+Y
+ ; sat asym =
+µL
+S −µR
+S
+
+(8)
+Here, Y and S denote the luminance and saturation channels
+in the YCrCb and HSV color spaces, respectively.
+The highlight proportion is defined as
+highlight prop =
+1
+|F|
+X
+p∈F
+I (Y (p) ≥τhigh) .
+(9)
+where τhigh denotes the luminance threshold above which a
+pixel is considered a highlight pixel within the facial region.
+Finally, although the different color spaces are mathemati-
+cally related, their explicit inclusion provides complementary
+chromatic and luminance views, making manipulation-induced
+inconsistencies more directly accessible and reducing the need
+for the model to discover such transformations implicitly.
+These features quantify whether color balance, luminance,
+saturation, and local illumination remain consistent across
+the face. As shown in Fig. 2, deepfake manipulations tend
+to preserve global appearance while introducing subtle per-
+channel variations and illumination asymmetries.
+B. Textural Family (24 Variables)
+To characterize face texture, we first extract statistical
+features derived from the normalized gray-level co-occurrence
+matrix (GLCM), denoted by P(i, j) where i and j are gray
+levels, computed for a given inter-pixel displacement ∆. From
+this matrix, we consider the following standard descriptors:
+contrast, energy, homogeneity, correlation, and entropy [26].
+To capture facial asymmetries, all features are computed
+over the left and right regions of the face. Let IL and IR
+
+
+TABLE I
+COMPLETE FEATURE SET ORGANIZED BY FORENSIC FAMILIES
+Photometric
+Textural
+Geometric
+Compression
+Idx
+Variable
+Idx
+Variable
+Idx
+Variable
+Idx
+Variable
+1
+mean R
+19
+GLCM contrast L
+43
+inter eye dist
+57
+ELA mean face
+2
+mean G
+20
+GLCM contrast R
+44
+nose to mouth dist
+58
+ELA std face
+3
+mean B
+21
+GLCM corr L
+45
+mouth width
+59
+ELA mean mouth
+4
+std R
+22
+GLCM corr R
+46
+mouth opening
+60
+ELA std mouth
+5
+std G
+23
+GLCM energy L
+47
+face ratio
+61
+jpeg res face
+6
+std B
+24
+GLCM energy R
+48
+jaw width
+62
+jpeg res boundary
+7
+mean H
+25
+GLCM homogeneity L
+49
+brow eye dist L
+63
+block h
+8
+mean S
+26
+GLCM homogeneity R
+50
+brow eye dist R
+64
+block v
+9
+mean V
+27
+entropy skin L
+51
+eye open L
+65
+jaw contour break
+10
+mean Y
+28
+entropy skin R
+52
+eye open R
+66
+hair contour break
+11
+mean Cr
+29
+lap var L
+53
+mouth symmetry
+67
+dct hf face
+12
+mean Cb
+30
+lap var R
+54
+nose center shift
+68
+dct hf boundary
+13
+global contrast
+31
+hf energy L
+55
+head yaw
+14
+light asym LR
+32
+hf energy R
+56
+head pitch
+15
+sat asym LR
+33
+lbp mean L
+16
+ratio R G
+34
+lbp mean R
+17
+ratio B G
+35
+grad mag L
+18
+highlight prop
+36
+grad mag R
+37
+wavelet LH L
+38
+wavelet LH R
+39
+wavelet HL L
+40
+wavelet HL R
+41
+wavelet HH L
+42
+wavelet HH R
+denote the left and right facial regions, respectively, obtained
+by partitioning the face along a vertical axis passing through its
+center. For each region, we compute a corresponding GLCM,
+denoted by PL(i, j) and PR(i, j), from which the above
+statistical descriptors are derived.
+Let ∇I and ∇2I denote the gradient and Laplacian of
+image I. For each facial region, we compute the gradient
+magnitudes |∇IL| and |∇IR| to measure edge strength, and
+the Laplacian variances Var(∇2IL) and Var(∇2IR) to cap-
+ture high-frequency content. In addition, local binary pattern
+(LBP) features are extracted per region, and their mean values
+serve as compact descriptors of micro-texture [27]. Multi-scale
+texture is further captured via wavelet subband energies (HL,
+LH, HH) for left and right regions (see Fig. 1-middle), rep-
+resenting horizontal, vertical, and diagonal components [29].
+Fig. 2 shows that fake samples exhibit broader distributions
+and higher variability, reflecting unstable texture synthesis and
+imperfect skin detail reproduction [28].
+C. Geometric Family (14 Variables)
+To characterize the geometric structure of the face, we
+extract a set of landmark-based features derived from pairwise
+distances and simple geometric ratios. Let la = (xa, ya) and
+lb = (xb, yb) denote two facial landmarks. Their Euclidean
+distance is defined as
+d(la, lb) =
+p
+(xa −xb)2 + (ya −yb)2.
+(10)
+Such distances provide a direct measure of spatial relationships
+between key facial components. For instance, the inter-eye
+distance
+dinter-eye = d(lleft eye, lright eye)
+(11)
+captures the face scale, while the nose-to-mouth distance
+dnose-mouth = d(lnose tip, lmouth center)
+(12)
+encodes vertical facial proportions. Similarly, the mouth width
+wmouth = d(lmouth left, lmouth right)
+(13)
+and mouth opening
+omouth = d(lupper lip, llower lip)
+(14)
+describe articulation patterns and local deformations asso-
+ciated with speech or expressions. To capture global facial
+proportions, we define the face aspect ratio as
+rface = Wface
+Hface
+,
+(15)
+where Wface and Hface denote the width and height of the
+face bounding box, respectively. This ratio provides a coarse
+descriptor of facial shape and pose variations.
+In addition, we quantify bilateral symmetry through a mouth
+symmetry score
+Smouth = |d(lleft mouth corner, lc) −d(lright mouth corner, lc)| , (16)
+where lc is a reference facial center (e.g., the midpoint between
+the eyes or the nose tip). This measure reflects deviations
+
+
+from ideal symmetry, which are informative in detecting subtle
+inconsistencies. These geometric features describe structural
+consistency, facial proportions, articulation dynamics, symme-
+try, and coarse pose. While synthetic faces may appear visually
+convincing, they often exhibit slight geometric inconsistencies
+or instabilities, particularly across frames. Capturing these
+variations provides a complementary cue to appearance-based
+features, enabling more robust analysis of facial authenticity.
+As illustrated in Fig. 2, geometric features highlight subtle
+inconsistencies in facial structure and symmetry that are not
+always perceptible visually.
+D. Compression-Related Family (12 Variables)
+Here, we extract a set of features designed to capture
+inconsistencies introduced by image recompression, blending
+operations, and block-based coding mechanisms. These fea-
+tures are computed over semantically meaningful regions of
+the face, such as the full facial area, the mouth region, and
+boundary zones (e.g., jawline and hair contour), where artifacts
+are more likely to appear.
+Let ˆIQ denote the image recompressed at a given JPEG
+quality factor Q. The error-level analysis (ELA), or residual,
+is defined as
+E = |I −ˆIQ|,
+(17)
+which highlights discrepancies between the original image I
+and its recompressed version. For a region R, we compute
+the mean µELA(R) and standard deviation σELA(R) of the
+ELA residual. These statistics capture the average intensity
+and variability of recompression artifacts, respectively, and
+are evaluated separately over the face and mouth regions to
+detect localized inconsistencies. In addition, we compute a
+JPEG residual energy over region R:
+EJPEG(R) =
+1
+|R|
+X
+p∈R
+r(p)2,
+(18)
+where r(p) is the local recompression residual. This measure
+reflects the strength of compression-induced distortions.
+To capture block-based artifacts inherent to JPEG encoding,
+we define horizontal and vertical blocking scores:
+Bh =
+1
+Nh
+X
+(p,q)∈Bh
+|I(p) −I(q)|,
+(19)
+Bv = 1
+Nv
+X
+(p,q)∈Bv
+|I(p) −I(q)|.
+(20)
+where Bh and Bv denote sets of pixel pairs located across
+horizontal and vertical block boundaries, respectively. These
+measures quantify discontinuities introduced by block-based
+compression. Furthermore, contour-based features such as
+jaw contour break and hair contour break are designed to
+detect structural discontinuities along facial boundaries, which
+may arise from imperfect blending or compositing. Finally,
+high-frequency components are analyzed through the energy
+of discrete cosine transform (DCT) coefficients in selected
+regions (face and boundary), capturing fine-scale compression
+artifacts that are often altered in synthetic content. Collectively,
+these features identify traces left by manipulation processes,
+blending, recompression, and block-structured coding artifacts,
+which tend to concentrate around regions of high motion
+or semantic importance such as the mouth, jawline, and
+facial boundaries. As shown in Fig. 2, feature distributions
+differ significantly between real and fake samples, confirming
+that each family captures complementary forensic evidence,
+with compression-based features providing particularly strong
+discriminative signals even in visually high-quality deepfakes.
+E. LSTM-Based Deepfake Prediction
+Given the structured temporal representation X ∈R20×68,
+the prediction task consists in modeling the temporal evolution
+of explicit forensic variables to identify inconsistencies indica-
+tive of deepfake generation. Unlike frame-based approaches,
+the objective here is not only to detect anomalous values, but
+to capture their dynamics over time, such as instability, drift,
+or incoherent co-evolution across feature families.
+To this end, we employ a Long Short-Term Memory
+(LSTM) network, which is well-suited for sequential data with
+temporal dependencies. The LSTM processes the sequence
+frame by frame, allowing the model to learn both short-
+term variations and longer-range temporal patterns within
+the tracked face trajectory. This is particularly relevant in
+our setting, where deepfake artifacts often manifest as subtle
+temporal inconsistencies rather than strong spatial distortions.
+Each frame is represented by a structured feature vector
+xt =
+h
+x(p)
+t , x(tx)
+t
+, x(g)
+t , x(c)
+t
+i
+∈R68,
+(21)
+where the components correspond to 18 photometric, 24
+textural, 14 geometric, and 12 compression-related descriptors.
+A temporal sample is constructed by stacking 20 consecutive
+frames from the same tracked face, yielding a matrix X ∈
+R20×68, where rows encode temporal evolution and columns
+correspond to explicit forensic variables. This representation
+preserves both temporal coherence and semantic structure,
+enabling the analysis of feature dynamics across time.
+The classification model operates directly on this structured
+sequence. The architecture consists of a two-stage temporal
+encoder followed by a compact decision head:
+X →LSTM(128) →LSTM(64) →Dense(32) →Sigmoid
+(22)
+The first LSTM layer (128 units) returns full sequences,
+allowing the second LSTM layer (64 units) to capture higher-
+level temporal dependencies. The second LSTM layer returns
+the final hidden state, which is then passed to the fully
+connected layers. Both LSTM layers are unidirectional and
+include dropout regularization (rate = 0.2) to improve gener-
+alization and reduce overfitting.
+This design captures both short-term fluctuations and long-
+range dependencies within the sequence, while preserving
+interactions across feature families. By modeling the temporal
+evolution of explicit variables rather than latent embeddings,
+the network focuses on interpretable forensic patterns such as
+instability, drift, and cross-feature inconsistencies. The model
+
+
+is trained using the Adam optimizer with a learning rate of
+10−3, a batch size of 32, and a maximum of 35 epochs, with
+early stopping (patience of 5) based on validation loss. The
+final classification uses a sigmoid activation optimized with
+binary cross-entropy loss. The full pipeline runs in real time,
+processing each video frame within the latency budget required
+for live deployment.
+V. EXPERIMENTAL RESULTS
+A. Dataset-Wise Corpus Construction and Standardization
+The protocol uses four widely adopted deepfake video
+datasets: FaceForensics++ [3], Celeb-DF v2 [30], a subset
+of the DeepFake Detection Challenge dataset (DFDC) [31],
+and DeeperForensics [32]. Unlike a merged-corpus protocol,
+the proposed methodology is applied independently to each
+dataset. Each dataset therefore undergoes the same preprocess-
+ing, tracking, sequence construction, feature extraction, and
+LSTM-based classification pipeline, but the reported results
+are dataset-specific.
+Having multiple datasets reflects different manipulation
+pipelines, acquisition conditions, compression levels, and vi-
+sual realism. It also avoids hiding dataset-specific difficulty
+behind a single aggregate score. The method is therefore eval-
+uated not only by its strongest result, but also by its behavior
+across heterogeneous data sources. The fixed parameters of
+the protocol are:
+• Harmonized frame rate: 25 fps after resampling;
+• Final face crop size: 224 × 224 pixels;
+• Sequence length: 20 consecutive frames. One sequence
+corresponds to one tracked face only
+• Sequence stride: 10 frames;
+For each dataset, preprocessing converts raw videos into
+standardized face trajectories by discarding low-quality detec-
+tions, resizing valid face crops to 224 × 224, and generating
+fixed-length temporal windows. Each retained sequence is
+encoded as a 20 × 68 matrix, and the train/validation/test split
+is performed at the video level to prevent temporal leakage.
+This pipeline transforms heterogeneous inputs, varying in
+frame rate, resolution, number of faces, and quality, into
+consistent temporal samples of a single tracked identity. Such
+standardization ensures that the temporal model receives inputs
+with fixed sequence length, uniform spatial resolution, con-
+sistent feature dimensionality, preserved temporal order, and
+identity continuity, thereby avoiding unstable or semantically
+inconsistent representations.
+To evaluate the proposed methods, we report standard
+metrics including accuracy, precision, recall, and F1-score,
+capturing both overall performance and class-wise behavior.
+Accuracy reflects global correctness, while precision and recall
+measure the reliability of positive predictions and the ability
+to detect all relevant instances, particularly important in im-
+balanced settings. The F1-score balances this trade-off. We
+also report the Area Under the ROC Curve (AUC), which
+assesses discriminative ability across all decision thresholds
+and provides insight into robustness under varying conditions.
+B. Dataset-wise Main Results
+Table II reports the performance obtained when the same
+proposed pipeline is applied independently to each dataset.
+Unlike the global performance reported in the ablation study
+(97.8% accuracy), which is computed over the complete test
+set, the results presented here are evaluated separately on each
+dataset and therefore reflect dataset-specific behavior rather
+than a global aggregate.
+The highest performance is observed on FaceForensics++,
+where the method reaches 98.0% accuracy and 98.0% F1-
+score, indicating that the proposed explicit feature representa-
+tion effectively captures compression inconsistencies, photo-
+metric imbalances, and fine-grained textural artifacts present
+in this benchmark. Similarly, the DFDC subset achieves strong
+performance (97.6% accuracy and 97.6% F1-score), suggest-
+ing that the learned temporal dynamics and explicit forensic
+descriptors generalize well to moderately realistic conditions.
+DeeperForensics also maintains high performance (96.2%
+accuracy and 96.2% F1-score), demonstrating robustness to
+controlled perturbations. In contrast, Celeb-DF v2 remains the
+most challenging dataset, with 91.0% accuracy and 91.0%
+F1-score. This behavior is consistent with its higher visual
+realism, where facial manipulations exhibit fewer low-level
+inconsistencies, thereby reducing the separability of photomet-
+ric, textural, geometric, and compression-related descriptors.
+These results highlight that the proposed model performs con-
+sistently across datasets while reflecting the intrinsic difficulty
+associated with increasingly realistic deepfake generation.
+However, this performance gap across datasets indicates that
+the discriminative power of explicit feature-based representa-
+tions remains dependent on the visibility of low-level artifacts,
+which progressively diminish in more advanced and visually
+realistic deepfake generation pipelines.
+TABLE II
+DATASET-WISE PERFORMANCE OF THE PROPOSED METHOD. THE LAST
+ROW REPORTS THE UNWEIGHTED ARITHMETIC AVERAGE ACROSS
+DATASETS, NOT THE GLOBAL TEST-SET PERFORMANCE.
+Dataset
+Acc.
+Prec.
+Rec.
+F1
+AUC
+FaceForensics++
+98.0%
+97.9%
+98.1%
+98.0%
+0.995
+Celeb-DF v2
+91.0%
+90.8%
+91.2%
+91.0%
+0.948
+DFDC subset
+97.6%
+97.4%
+97.8%
+97.6%
+0.991
+DeeperForensics
+96.2%
+96.0%
+96.4%
+96.2%
+0.984
+Average
+95.7%
+95.5%
+95.9%
+95.7%
+0.980
+The unweighted dataset average assigns equal importance
+to each dataset regardless of its number of test sequences. In
+contrast, the global accuracy reported in the ablation study is
+computed over the complete test set and is therefore sequence-
+level and dependent on dataset size distribution.
+Table III illustrates the behavior of the classifier over a
+balanced test subset. This confusion matrix is computed on
+a balanced illustrative subset and may slightly differ from the
+overall dataset-level performance due to sampling effects. It
+shows that 982 real sequences were correctly recognized, 18
+real sequences were misclassified as fake, 24 fake sequences
+
+
+TABLE IV
+QUANTITATIVE COMPARISON WITH RECENT DEEPFAKE DETECTION METHODS. THE TABLE REPORTS ONLY THE METRICS EXPLICITLY PROVIDED BY THE
+CORRESPONDING PAPERS. SINCE PROTOCOLS, DATASETS, AND EVALUATION SETTINGS DIFFER ACROSS WORKS, THIS TABLE IS INTENDED AS A
+QUANTITATIVE REFERENCE COMPARISON RATHER THAN A STRICT LEADERBOARD.
+Method
+Year
+Method type / Protocol
+Reported quantitative results
+Avg. AUC
+Amin et al.
+[19]
+2024
+Temporal facial pattern and coherence
+analysis; evaluated on FF++, DFD, DFDC,
+DeeperForensics
+AUC: 98.82% (FF++); 91.09% (DFD);
+86.94% (DFDC); 98.80% (DFo)
+93.91%
+Yan et al. [8]
+2025
+Video-level blending and spatiotemporal
+tuning; train FF++ c23, test CDF-v2 / DFDC
+AUC: 94.7% (CDF-v2); 84.3% (DFDC)
+89.5%
+Kim et al. [9]
+2025
+Pixel-wise temporal-frequency modeling;
+cross-dataset evaluation
+Video AUC: 89.7% (CDF); 75.2%
+(DFDC); 99.3% (FSh); 99.4% (DFo);
+97.3% (DFD)
+92.2%
+Guo et al. [17]
+2025
+Temporal forgery cue modeling; cross-dataset
+Celeb-DF / DFDC / FFIW
+Video AUC: 93.18% (Celeb-DF);
+86.05% (DFDC); 91.27% (FFIW)
+Frame AUC: 91.38% (Celeb-DF);
+85.43% (DFDC); 90.21% (FFIW)
+90.17%
+Hu et al. [20]
+2025
+Multi-face detection; human-inspired
+scene-motion, inter-face appearance, gaze,
+and face-body cues; evaluated on FFIW,
+OpenForensics, and DF-Platter
+FAU/FCAU: 95.9%/92.1% (FFIW);
+99.9%/98.9% (OpenForensics);
+98.4%/94.6% (DF-Platter)
+95.2%
+Our method
+2026
+Multi-dataset evaluation on FaceForensics++,
+Celeb-DF v2, DFDC subset, and
+DeeperForensics using tracked-face temporal
+windows and LSTM modeling
+Accuracy: 97.8%; Precision: 97.6%;
+Recall: 98.0%; F1-score: 97.8%; pooled
+AUC: 99.2%
+98.0%
+were missed, and 976 fake sequences were correctly detected.
+This confirms that the system detects the large majority of
+fake sequences while maintaining a low false-positive rate on
+real sequences.
+TABLE III
+ILLUSTRATIVE CONFUSION MATRIX ON A BALANCED TEST SUBSET
+Predicted Real
+Predicted Fake
+Real
+982
+18
+Fake
+24
+976
+C. Comparison with Recent Literature
+Table IV shows a comparison of our approach with regard
+to recent state-of-the art methods. Since not all works report
+the same evaluation metrics, the comparison is limited to
+AUC values explicitly provided in the original papers. The
+comparative methods are: 1) Amin et al. [19] which focus on
+temporal consistency patterns across frames, 2) Yan et al. [8]
+uses spatiotemporal adaptation mechanisms to improve cross-
+dataset generalization, 3)Kim et al. [9] exploits temporal-
+frequency inconsistencies at the pixel level, capturing subtle
+artifacts that are not observable in the spatial domain alone.
+Guo et al. [17] extended this direction by explicitly modeling
+temporal forgery cues, reporting both frame-wise and video-
+wise performance, 5) Hu et al. [20] which incorporate contex-
+tual information in multi-face scenarios (e.g. gaze alignment,
+inter-person interactions, and motion coherence).
+Despite differences in evaluation settings, several trends
+emerge. Temporal coherence and spatiotemporal adaptation
+methods [8], [19] perform strongly on controlled datasets but
+degrade on challenging benchmarks such as DFDC, indicating
+limited robustness to domain shifts. Frequency- and temporal-
+cue approaches [9], [17] achieve competitive results but vary
+across datasets, while context-aware methods [20] improve
+robustness in multi-face scenarios. In contrast, the proposed
+method achieves the highest average AUC (98.0%) and a
+strong pooled AUC (99.2%), with consistently high precision,
+recall, and F1-score. These results suggest that combining
+explicit forensic features with temporal modeling provides
+a complementary representation of deepfake artifacts and
+improves consistency across diverse datasets.
+D. Cross-Dataset Generalization
+To further assess robustness and generalization, we evaluate
+the proposed framework on two unseen datasets: ForgeryNet
+[33] as a validation set and WildDeepfake [34] as a held-
+out test set. The same pipeline and model weights learned
+from the original four training datasets are applied without
+retraining or fine-tuning, providing a strictly zero-shot cross-
+dataset evaluation.
+ForgeryNet contains diverse manipulation types under mod-
+erate and relatively controlled compression conditions, making
+it suitable for evaluating generalization to unseen forgery
+pipelines. In contrast, WildDeepfake comprises real-world
+deepfake videos collected from the Internet, with substan-
+tial variability in acquisition conditions, compression levels,
+video quality, and generation methods. As reported in Ta-
+ble V, the model achieves 93.8% accuracy and F1-score
+on ForgeryNet, and 89.4% accuracy and 89.5% F1-score on
+WildDeepfake, respectively. These results demonstrate strong
+cross-dataset generalization without retraining or adaptation,
+indicating that the learned temporal patterns are not limited
+to the distributions of the training datasets. The lower per-
+formance on WildDeepfake reflects the greater difficulty of
+
+
+TABLE V
+CROSS-DATASET GENERALIZATION RESULTS. FORGERYNET IS USED AS
+VALIDATION AND WILDDEEPFAKE AS TEST. NO RETRAINING IS
+PERFORMED.
+Dataset
+Acc.
+Prec.
+Rec.
+F1
+AUC
+ForgeryNet
+93.8%
+93.5%
+94.1%
+93.8%
+0.967
+WildDeepfake
+89.4%
+88.8%
+90.2%
+89.5%
+0.941
+TABLE VI
+ILLUSTRATIVE CONFUSION MATRICES FOR CROSS-DATASET EVALUATION.
+Dataset
+Ground Truth
+Pred. Real
+Pred. Fake
+ForgeryNet
+Real
+935
+65
+Fake
+59
+941
+WildDeepfake
+Real
+887
+113
+Fake
+98
+902
+in-the-wild videos, where uncontrolled acquisition, repeated
+post-processing, and compression variability can weaken or
+obscure low-level forensic cues. Nevertheless, the sustained
+performance suggests that combining complementary forensic
+descriptors with temporal modeling provides useful robustness
+under substantial distribution shifts.
+Table VI presents the illustrative confusion matrices for each
+cross-dataset evaluation. On ForgeryNet, 935 real sequences
+are correctly classified while 65 are misclassified as fake, and
+941 fake sequences are correctly detected while 59 are missed.
+On WildDeepfake, 887 real sequences are correctly classified
+with 113 false positives, and 902 fake sequences are correctly
+detected with 98 missed. These results confirm that the model
+maintains a balanced detection behavior, with no systematic
+bias toward either class.
+E. Ablation Study
+Tables VII and VIII report the feature-family ablation results
+on ForgeryNet and WildDeepfake, respectively. Across both
+datasets, the best performance is consistently achieved when
+all four feature families are jointly used, while removing any
+single family leads to a systematic degradation across all
+metrics. This confirms that the proposed representation ben-
+efits from the integration of heterogeneous forensic evidence
+rather than relying on a dominant individual cue. Moreover,
+the same importance ranking is observed on both datasets:
+compression > photometric > textural > geometric. This trend
+suggests that the relative contribution and complementarity of
+the feature families persist across different data distributions
+rather than reflecting overfitting to a particular benchmark.
+Compression and photometric features have the largest
+impact, capturing persistent traces such as recompression
+artifacts, color and illumination inconsistencies, and blending
+irregularities. Textural and geometric features contribute com-
+plementary cues related to skin micro-patterns and facial struc-
+ture, particularly when dominant artifacts are weakened by
+post-processing. Performance drops are systematically larger
+on WildDeepfake than on ForgeryNet; for instance, removing
+TABLE VII
+ABLATION ON FEATURE FAMILIES — FORGERYNET (VALIDATION).
+Configuration
+Acc.
+Prec.
+Rec.
+F1
+AUC
+All 4 families
+93.8%
+93.5%
+94.1%
+93.8%
+0.967
+Without photometric
+90.9%
+90.5%
+91.3%
+90.9%
+0.941
+Without textural
+91.6%
+91.2%
+92.0%
+91.6%
+0.948
+Without geometric
+92.0%
+91.7%
+92.4%
+92.0%
+0.953
+Without compression
+90.6%
+90.1%
+91.1%
+90.6%
+0.938
+TABLE VIII
+ABLATION ON FEATURE FAMILIES — WILDDEEPFAKE (TEST).
+Configuration
+Acc.
+Prec.
+Rec.
+F1
+AUC
+All 4 families
+89.4%
+88.8%
+90.2%
+89.5%
+0.941
+Without photometric
+85.8%
+85.0%
+86.9%
+85.9%
+0.902
+Without textural
+86.7%
+86.0%
+87.6%
+86.8%
+0.913
+Without geometric
+87.2%
+86.6%
+88.0%
+87.3%
+0.919
+Without compression
+85.4%
+84.6%
+86.6%
+85.6%
+0.899
+compression features reduces the F1-score by 3.9 and 3.2
+points, respectively. This suggests that challenging in-the-wild
+conditions reduce the reliability of individual cues, increasing
+the importance of combining heterogeneous evidence. Overall,
+the results confirm that the framework’s strength lies in
+integrating complementary forensic features whose temporal
+evolution reveals subtle manipulation traces that may remain
+ambiguous within a single domain or frame.
+VI. CONCLUSION AND DISCUSSION
+The proposed framework relies on explicitly designed
+forensic features (photometric consistency, texture statistics,
+geometric structure, and compression artifacts), which are
+interpretable, computationally lightweight, and physically intu-
+itive, making their discriminative behavior directly explainable
+without requiring any post-hoc explanation. Integrated within
+a temporally coherent tracking pipeline, these features provide
+a transparent and efficient alternative to black-box deep rep-
+resentations. Ensuring each sequence corresponds to a single
+identity allows feature variations to reflect meaningful tempo-
+ral patterns, while LSTM-based aggregation accumulates weak
+frame-level cues into a robust, interpretable representation.
+Strong results on several datasets confirm that representing
+each sequence as a matrix of explicit forensic features enables
+the model to capture temporal inconsistencies while preserving
+interpretability. The approach demonstrates that physically
+meaningful features, consistently tracked over time, provide an
+effective basis for deepfake detection. Cross-dataset general-
+ization experiments on ForgeryNet and WildDeepfake further
+confirm that the explicit forensic representation transfers to
+unseen data without retraining, yielding competitive results
+under challenging in-the-wild conditions.
+Looking ahead, several directions merit exploration. First,
+extending the framework to analyze faces across arbitrary ori-
+entations, scales, and pose variations could improve robustness
+beyond predominantly frontal views, while modeling facial
+expression dynamics may reveal unnatural affective transitions
+
+
+or temporal inconsistencies. Second, reformulating the facial
+landmark graph as an explicit graph neural network [35] would
+allow relational reasoning over facial topology, enabling the
+model to capture structural anomalies and asymmetries that
+sequential models cannot directly exploit. Third, incorporating
+multimodal signals by pairing facial features with speech [36],
+phoneme-visual alignment, or physiological cues could expose
+cross-modal inconsistencies that unimodal analysis misses.
+Fourth, replacing the LSTM with a Transformer-based se-
+quence model would enable direct long-range attention over
+facial trajectories, capturing subtle non-local temporal anoma-
+lies beyond the reach of recurrent architectures. Finally, hybrid
+architectures combining the interpretable handcrafted features
+introduced here with learned deep representations could im-
+prove robustness to unseen manipulations while preserving the
+transparency and physical grounding required for forensically
+credible analysis.
+VII. ACKNOWLEDGEMENT
+This work has been achieved thanks to the the support of the
+Natural Sciences and Engineering Research Council (RGPIN-
+2020-05653) and the Centre interdisciplinaire de recherche et
+d’innovation en cybersecurit´e et soci´et´e (CIRICS) through the
+Fonds de recherche du Qu´ebec.
+REFERENCES
+[1] G. Pei et al., Deepfake generation and detection: A benchmark and
+survey, ACM Computing Surveys, vol. 58, no. 11, Article No. 273, 2026.
+[2] S.-Y. Wang, O. Wang, R. Zhang, A. Owens, and A. A. Efros. CNN-
+generated images are surprisingly easy to spot... for now. IEEE Conf.
+on Computer Vision and Pattern Recognition, pp. 8692–8701, 2020.
+[3] A. R¨ossler, D. Cozzolino, L. Verdoliva, C. Riess, J. Thies, and M.
+Nießner. FaceForensics++: Learning to detect manipulated facial images.
+IEEE Int’l Conf. on Computer Vision, pp. 1–11, 2019.
+[4] T. Wang, X. Liao, K. P. Chow, X. Lin, and Y. Wang. Deepfake
+detection: A comprehensive survey from the reliability perspective. ACM
+Computing Surveys, vol. 57, no. 3, Article 58, pp. 1–35, 2024.
+[5] B. Liu, M. Ding, T. Zhu, and X. Yu, TI2Net: Temporal identity
+inconsistency network for deepfake detection. IEEE Winter Conf. on
+Applications of Computer Vision, pp. 4680–4689, 2023.
+[6] R. Ramanaharan, D. B. Guruge and J.I. Agbinya. DeepFake video
+detection: Insights into model generalisation-A Systematic review. Data
+and Information Management, vol. 9, no. 4, 100099, 2025.
+[7] D. Zhang, W. Zhu, X. Liao, F. Qi, G. Yang, and X. Ding, Spatiotemporal
+inconsistency learning and interactive fusion for deepfake video detec-
+tion, ACM Trans. Multimedia Computing, Commun. and Applications,
+vol. 21, no. 2, Article 48, pp. 1–24, 2024.
+[8] Z. Yan et al., Generalizing deepfake video detection with plug-and-play:
+Video-level blending and spatiotemporal adapter tuning, in IEEE Conf.
+on Computer Vision and Pattern Recognition, pp. 12615–12625, 2025.
+[9] T. Kim, J. Choi, Y. Jeong, H. Noh, J. Yoo, S. Baek, and J. Choi. Beyond
+spatial frequency: Pixel-wise temporal frequency-based deepfake video
+detection. IEEE Int’l Conf. on Computer Vision, pp. 11198–11207, 2025.
+[10] L. Deng, Y. Zhu, F. Chen, and L. Gao. Deepfake video detection based
+on improved EfficientNetV2S and transformer network. ACM Trans. on
+Privacy and Security, vol. 29, no. 1, Art. no. 10, pp. 1–19, 2026,
+[11] Y.-H. Han, T.-M. Huang, K.-L. Hua, and J.-C. Chen. Towards more
+general video-based deepfake detection through facial component guided
+adaptation for foundation model. in IEEE Conf. on Computer Vision and
+Pattern Recognition, pp. 22995–23005, 2025.
+[12] A. Malik, M. Kuribayashi, S. M. Abdullahi, and A. N. Khan. DeepFake
+detection for human face images and videos: A survey. IEEE Access,
+vol. 10, pp. 18757–18775, 2022.
+[13] A.
+Hamadene
+and
+M.S.
+Allili.
+Cross-Model
+Deepfake
+Detec-
+tion
+Through
+Contourlet-Based
+Inter-Channel
+Spectral
+Analysis.
+IEEE Trans. on Biometrics, Behavior, and Identity Science, DOI:
+10.1109/TBIOM.2026.3687469, 2026.
+[14] S. Belguesmia, M.S. Allili, A. Hamadene. Unmasking Facial Deep-
+Fakes: A Robust Multiview Detection Framework for Natural Images.
+arXiv:2510.15576[cs.CV], 2025.
+[15] R. Yang, R. Lan, Z. Deng, X. Luo, and X. Sun. Deepfake video detection
+using facial feature points and Ch-Transformer. ACM Transactions on
+Multimedia Computing, Commun. and Applications, vol. 21, no. 2, Art.
+no. 49, pp. 1–22, 2025.
+[16] Y. Li, D. Zhu, X. Cui, and S. Lyu, Celeb-DF++: A large-scale chal-
+lenging video deepfake benchmark for generalizable forensics, arXiv
+preprint arXiv:2507.18015, 2025.
+[17] Z. Guo, Y. Liu, J. Zhang, H. Zheng and S. Shan. Face Forgery
+Video Detection via Temporal Forgery Cue Unraveling. IEEE Conf.e
+on Computer Vision and Pattern Recognition, pp. 7396-7405, 2025.
+[18] A. Yermakov, J. Cech, J. Matas and M. Fritz. Deepfake Detection that
+Generalizes Across Benchmarks. IEEE Winter Conference on Applica-
+tions of Computer Vision, pp. 773-783, 2026.
+[19] M. A. Amin, Y. Hu, and J. Hu, Analyzing temporal coherence for
+deepfake video detection, Electronic Research Archive, vol. 32, no. 4,
+pp. 2621–2641, 2024.
+[20] J. Hu, S. Fan, and T. Sim. Seeing through deepfakes: A human-inspired
+framework for multi-face detection. IEEE Int’l Conf. on Computer
+Vision, pp. 14517–14527, 2025.
+[21] B. Zhang, Q. Yin, W. Lu, and X. Luo, Deepfake detection and lo-
+calization using multi-view inconsistency measurement, IEEE Trans.
+Dependable and Secure Computing, vol. 22, no. 2, pp. 1796–1809, 2025.
+[22] A. Yoshii, R. Sonoda, and R. Srinivasan. Fair and interpretable deepfake
+detection in videos, arXiv preprint arXiv:2510.17264, 2025.
+[23] H. -Z. Huang, S. -Z. Xu, J. -X. Cai, W. Liu and S. -M. Hu. Temporally
+Coherent Video Harmonization Using Adversarial Networks. IEEE
+Transactions on Image Processing, vol. 29, pp. 214-224, 2020.
+[24] J. Deng et al., RetinaFace: Single-Shot Multi-Level Face Localisation
+in the Wild. IEEE Conf. on Computer Vision and Pattern Recognition,
+pp. 5202-5211, 2020.
+[25] F. Farahi and H.S. Yazdi. Probabilistic Kalman filter for moving object
+tracking. Signal Processing: Image Commun., vol. 82, 115751, 2020.
+[26] R. Gonzalez and R. Woods. Digital Image Processing. Pearson, 2018.
+[27] T. Ojala, M. Pietik¨ainen, and D. Harwood. A Comparative Study of
+Texture Measures with Classification Based on Feature Distributions.
+Pattern Recognition, vol. 29, pp. 51-59, 1996.
+[28] D. Yapi, A. Nouboukpo, M.S. Allili. Mixture of multivariate generalized
+Gaussians for multi-band texture modeling and representation. Signal
+Processing, 209, 109011, 2023.
+[29] M.S. Allili. Wavelet modeling using finite mixtures of generalized Gaus-
+sian distributions: application to texture discrimination and retrieval.
+IEEE Trans. on Image Processing, vol. 21, no. 4, 1452-1464, 2012.
+[30] Y. Li, X. Yang, P. Sun, H. Qi, and S. Lyu, Celeb-DF: A large-scale
+challenging dataset for DeepFake forensics, in IEEE Conf. on Computer
+Vision and Pattern Recognition, pp. 3207–3216, 2020.
+[31] B. Dolhansky, J. Bitton, B. Pflaum, J. Lu, R. Howes, M. Wang, and C.
+C. Ferrer, The DeepFake Detection Challenge (DFDC) dataset, arXiv
+preprint arXiv:2006.07397, 2020.
+[32] L. Jiang, R. Li, W. Wu, C. Qian, and C. C. Loy, DeeperForensics-1.0:
+A large-scale dataset for real-world face forgery detection. IEEE Conf.
+on Computer Vision and Pattern Recognition, pp. 2889–2898, 2020.
+[33] Y. He, B. Gan, S. Chen, Y. Zhou, G. Yin, L. Song, L. Sheng, J. Shao, and
+Z. Liu, “ForgeryNet: A versatile benchmark for comprehensive forgery
+analysis,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit.
+(CVPR), pp. 4360–4369, 2021.
+[34] B. Zi, M. Chang, J. Chen, X. Ma, and Y.-G. Jiang, “WildDeepfake: A
+challenging real-world dataset for deepfake detection,” in Proc. ACM
+Int. Conf. Multimedia (ACM MM), pp. 2382–2390, 2020.
+[35] H. Attoumi, E.G. Tajeuna, M.S. Allili. Causal Graph Modeling of
+Network Traffic for Early Cyberattack Prediction. Int’l Symposium on
+Foundations and Practice of Security, pp. 167-183, 2025.
+[36] D.E. Temmar et al., Phonetic Analysis of Real and Synthetic Speech
+Using HuBERT Embeddings: Perspectives for Deepfake Detection.
+IEEE Int’l Conf. on Systems, Man, and Cybernetics, 86-91, 2025.
+
+
+Fig. 2. Distribution of selected photometrc, geometric, textural, and compression-related forensic features for real (orange) and fake (blue) samples extracted
+from the FaceForensic++ dataset.

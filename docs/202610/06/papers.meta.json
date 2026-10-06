@@ -1,0 +1,39 @@
+{
+  "label": "2026-10-06",
+  "date": "2026-10-06",
+  "generated_at": "2026-10-06T00:35:28",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202610/06/2610.03380v1-interpretable-deepfake-detection-in-videos-via-explicit-forensic-features-and-temporal-modeling",
+      "section": "quick",
+      "title_en": "Interpretable Deepfake Detection in Videos via Explicit Forensic Features and Temporal Modeling",
+      "authors": "Chahira Benhama, Mohand Saïd Allili, Assia Hamadene",
+      "date": "2026-10-02",
+      "pdf": "https://arxiv.org/pdf/2610.03380v1",
+      "score": "6.0",
+      "evidence": "基于显式取证特征的可解释视频深度伪造检测",
+      "tldr": "视频深度伪造检测在帧级看似一致，却存在细微时序不一致。本文提出可解释框架，将视频转为身份一致人脸轨迹并分窗，用68维光度、纹理、几何和压缩特征，经LSTM建模时序依赖。在FaceForensics++等四个基准上F1达98.0%、91.0%、97.6%、96.2%，并具跨数据集泛化。贡献在于显式取证线索提升透明性与鲁棒性。",
+      "tags": "query:mfnd",
+      "abstract_en": "Deepfake detection in videos remains challenging, as manipulated content may appear visually consistent at the frame level while exhibiting subtle temporal inconsistencies. This paper introduces an interpretable deepfake detection framework that models spatially and temporally coherent facial features in video sequences. Unlike end-to-end deep models relying on implicit representations, the proposed approach explicitly encodes physically grounded forensic cues, enabling transparent analysis and improved multi-dataset generalization. The pipeline transforms videos into identity-consistent facial trajectories, segments them into fixed-length temporal windows, and represents each frame using 68 structured descriptors spanning four complementary domains: photometric, textural, geometric, and compression-based features. These descriptors provide a compact multi-domain representation of manipulation artifacts and are processed by a Long Short-Term Memory (LSTM) network to capture temporal dependencies and subtle irregularities. Evaluation on four benchmark datasets, FaceForensics++, Celeb-DF v2, a curated subset of the DeepFake Detection Challenge (DFDC), and DeeperForensics, yields strong and consistent F1-scores of 98.0%, 91.0%, 97.6%, and 96.2%, respectively. The approach also demonstrated a good cross-dataset generalization, providing a robust and interpretable solution for video deepfake detection.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202610/06/2610.03421v1-climb-confidence-guided-complementary-evidence-for-multimodal-retrieval-augmented-generation",
+      "section": "quick",
+      "title_en": "CLIMB: Confidence-Guided Complementary Evidence for Multimodal Retrieval-Augmented Generation",
+      "authors": "Hang Gao, Wujiang Xu, Zhixing Zhang, Kai Mei, Jingyi Yang, Dimitris N. Metaxas",
+      "date": "2026-10-02",
+      "pdf": "https://arxiv.org/pdf/2610.03421v1",
+      "score": "6.0",
+      "evidence": "多模态检索增强生成中的互补证据池与置信度控制",
+      "tldr": "多模态大模型在知识密集型视觉问答中常需图像外的文本证据，但现有 Top-K 检索易返回冗余段落且缺乏答案更新是否被充分支持的控制。CLIMB 提出免训练推理时框架，先用 MMR 式目标构建紧凑互补证据池，再以 R/E/C 批评器打分并结合证据置信度决定是否接受更新答案。在 Encyclopedic-VQA 与 InfoSeek 上稳定优于检索增强基线，消融显示三部分均有贡献。",
+      "tags": "query:mfnd",
+      "abstract_en": "Multimodal large language models (MLLMs) have shown strong visual reasoning abilities, but knowledge-intensive visual question answering often requires external textual evidence beyond the image and the model's parametric knowledge. Existing multimodal RAG systems commonly rely on Top-$K$ retrieval or reranking, which may return redundant passages and provide limited control over whether an answer update is sufficiently supported by the retrieved evidence. We propose \\textit{CLIMB}, a training-free inference-time framework for multimodal RAG. CLIMB first constructs a compact complementary evidence pool using an MMR-style objective that balances query relevance and passage-level redundancy. It then performs confidence-controlled refinement within this fixed pool: an R/E/C critic scores passages by relevance, evidence specificity, and cross-modal alignment, while an evidence-grounded confidence estimator accepts an updated answer only when the estimated confidence increases. This design provides a simple stopping criterion and reduces unnecessary refinement without modifying the underlying retriever or MLLM. Experiments on Encyclopedic-VQA and InfoSeek show that CLIMB consistently improves over retrieval-augmented multimodal baselines. Ablations further indicate that complementary pooling, critic-based scoring, and iterative confidence-controlled refinement each contribute to the final performance.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

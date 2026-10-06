@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-10-04</span>
+      <span class="dpr-home-dashboard-kicker">2026-10-06</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 0 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 2 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>2</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-10-04 21:57:26 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-10-06 00:35:26 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,7 +69,7 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日无新推荐，系统未产出可展示论文。</p>
+<p>今日速读2篇均分6.0：视频深伪检测与多模态检索增强各占一席。前者用显式取证特征加时序建模提升可解释性，后者以置信度引导互补证据优化RAG，两篇都值得关注&quot;可解释性&quot;这一交叉思路。普通读者可先看深伪检测那篇，理解AI鉴伪如何从黑箱走向可解释。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -91,12 +91,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">0 篇</strong>
+    <strong class="dpr-home-dashboard-count">2 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Interpretable Deepfake Detection in Videos via Explicit Forensic Features and Temporal Modeling">Interpretable Deepfake Detection in Videos via Explicit Forensic Features and Temporal Modeling</span></li><li><span class="dpr-home-dashboard-paper-title" title="CLIMB: Confidence-Guided Complementary Evidence for Multimodal Retrieval-Augmented Generation">CLIMB: Confidence-Guided Complementary Evidence for Multimodal Retrieval-Augmented Generation</span></li></ul>
   </div>
-
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>2</strong></span></div>
 </section>
 </div>
 
