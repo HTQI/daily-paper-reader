@@ -1,0 +1,129 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-07T23:18:32.241313+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2610.06378v1",
+      "source": "arxiv",
+      "title": "MTOR: Generalizable AI-Generated Video Detection with Multimodal Semantics and Temporal Over-Regularity",
+      "abstract": "The rapid evolution of video generation has narrowed the perceptual gap between authentic and synthetic videos, making generalizable AI-generated video detection increasingly challenging. Existing detectors predominantly rely on visual representations, leaving caption-derived textual semantics underexplored. Meanwhile, temporal regularity in fine-grained visual representations has received limited attention. We find that caption-derived textual representations provide complementary discriminative cues to global visual representations. Our analysis further reveals that AI-generated videos exhibit stronger temporal persistence and lower temporal variability, a pattern we term temporal over-regularity (TOR). Based on these findings, we propose MTOR with a multimodal branch and a TOR component. The multimodal branch integrates global visual and caption-derived textual representations, while the TOR component models temporal over-regularity at three levels: coarse inter-frame continuity, fine-grained token correspondence, and frame-to-video stability. Extensive evaluations on five benchmarks covering 46 generator variants demonstrate state-of-the-art overall performance against 16 representative baselines, while robustness experiments confirm strong resilience to twelve real-world video perturbations. Code and models will be released at https://github.com/hwang-cs-ime/MTOR.",
+      "authors": [
+        "Hang Wang",
+        "Chao Shen",
+        "Lei Zhang",
+        "Zhi-Qi Cheng"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-05T14:09:02+00:00",
+      "link": "https://arxiv.org/pdf/2610.06378v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "generalizable AI-generated video detection fusing caption text semantics and visual temporal regularity",
+      "llm_evidence_cn": "融合字幕文本语义与视觉时间规律的AI生成视频泛化检测",
+      "llm_evidence": "融合字幕文本语义与视觉时间规律的AI生成视频泛化检测",
+      "canonical_evidence": "融合字幕文本语义与视觉时间规律的AI生成视频泛化检测",
+      "llm_tldr_en": "MTOR detects AI-generated videos by fusing caption-derived textual semantics with global visual representations and exploiting temporal over-regularity, improving generalization.",
+      "llm_tldr_cn": "视频生成技术快速发展使真假视频的感知差距缩小，现有AI生成视频检测器多依赖视觉表征，忽视了字幕文本语义与时间规律。本文提出MTOR方法，融合字幕衍生的文本语义与全局视觉表征，并利用AI生成视频表现出的时间过规则性（时间持续性强、变异性低）作为互补线索。分析验证了多模态语义与时间规则的判别力，提升了检测的泛化能力，为多模态虚假信息检测提供可迁移思路。",
+      "llm_tldr": "视频生成技术快速发展使真假视频的感知差距缩小，现有AI生成视频检测器多依赖视觉表征，忽视了字幕文本语义与时间规律。本文提出MTOR方法，融合字幕衍生的文本语义与全局视觉表征，并利用AI生成视频表现出的时间过规则性（时间持续性强、变异性低）作为互补线索。分析验证了多模态语义与时间规则的判别力，提升了检测的泛化能力，为多模态虚假信息检测提供可迁移思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.39139v1",
+      "source": "arxiv",
+      "title": "BELIEFRAG: Making Adaptive RAG State-Aware under Evolving Evidence",
+      "abstract": "Adaptive RAG uses signals such as confidence, relevance, support, and retrieval quality to decide when to search or correct evidence. In multi-step retrieval, however, these local signals must be combined into a persistent view of what the current evidence supports, what remains missing, and which action should follow. Existing methods often use such signals as separate triggers, making it difficult to preserve a coherent evidence state across a trajectory; we call this problem evidence-state fragmentation. We introduce BELIEFRAG, a closed-loop controller that updates an explicit state over sufficiency, reliability, conflict, uncertainty, evidence gaps, and acquisition cost, then chooses among retrieval, query rewriting, verification, answering, stopping, and abstention. Across six QA benchmarks with gpt-oss-120b, BELIEFRAG reaches mean token F1 0.572 with 3.89k tokens per question, outperforming fixed iterative retrieval (0.555 F1) while using 39% fewer tokens. The same quality-cost pattern transfers to Qwen3-32B, where BELIEFRAG reaches 0.552 F1 versus 0.523 for iterative retrieval while using 35% fewer tokens. Analysis shows that the main gains come from corrective re-retrieval rather than pruning alone, while several belief dimensions are redundant and calibrated answerability plays the strongest operational role. Calibration improves threshold stability across related evidence sources, although source shift can still invalidate the same decision signal.",
+      "authors": [
+        "Hongji Pu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-30T07:08:27+00:00",
+      "link": "https://arxiv.org/pdf/2609.39139v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "adaptive RAG maintains an evidence state to verify, retrieve, and resolve conflicts",
+      "llm_evidence_cn": "自适应RAG维护证据状态以验证、检索并化解冲突",
+      "llm_evidence": "自适应RAG维护证据状态以验证、检索并化解冲突",
+      "canonical_evidence": "自适应RAG维护证据状态以验证、检索并化解冲突",
+      "llm_tldr_en": "BELIEFRAG is a closed-loop controller that maintains an explicit evidence state over sufficiency, reliability, conflict and gaps, deciding when to retrieve, verify or answer.",
+      "llm_tldr_cn": "自适应检索增强生成用置信度、相关性等信号决定何时检索或修正证据，但在多步检索中这些局部信号难以形成对证据支持与缺失的一致认知，造成证据状态碎片化。本文提出BELIEFRAG闭环控制器，维护涵盖充分性、可靠性、冲突、不确定性与证据缺口的显式状态，并据此在检索、查询改写、验证、回答与停止间选择动作。该工作为证据驱动的检索增强核查提供了状态化控制思路。",
+      "llm_tldr": "自适应检索增强生成用置信度、相关性等信号决定何时检索或修正证据，但在多步检索中这些局部信号难以形成对证据支持与缺失的一致认知，造成证据状态碎片化。本文提出BELIEFRAG闭环控制器，维护涵盖充分性、可靠性、冲突、不确定性与证据缺口的显式状态，并据此在检索、查询改写、验证、回答与停止间选择动作。该工作为证据驱动的检索增强核查提供了状态化控制思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.07928v1",
+      "source": "arxiv",
+      "title": "Dynamic Alignment and Calibration for Multimodal Learning",
+      "abstract": "Dynamic multimodal learning aims to learn robust representations by adaptively modeling information discrepancies across modalities. However, existing methods still suffer from two limitations: (i) static cross-modal alignment strategies usually impose uniform constraints on all samples while overlooking sample-wise variations, potentially leading to unreasonable over-alignment; and (ii) confidence- or uncertainty-aware fusion methods often fail to adequately account for feature magnitude and confidence differences across modalities. For modality pairs with significant feature magnitude differences or small confidence gaps, it might be unreliable to strictly align fusion weights according to confidence. To address these issues, we propose an Alignment- and Calibration-driven Multimodal Learning framework (ACML). Specifically, ACML incorporates a dynamic cross-modal triplet alignment module, which enforces strong semantic consistency for high-confidence positive pairs while encouraging diverse representation learning between high- and low-confidence positive pairs according to their confidence gaps. Additionally, ACML introduces a difference-aware attention calibration strategy that adaptively adjusts attention regularization based on feature magnitude and confidence differences across modalities, thereby mitigating biases caused by unreasonable fusion constraints. Extensive experiments on multiple multimodal benchmark datasets demonstrate that ACML consistently achieves superior performance and robustness over recent state-of-the-art methods.",
+      "authors": [
+        "Jinghao Xu",
+        "Zhenhua Guo",
+        "Xiaofeng Zhu",
+        "Xiaoshuang Shi"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-10-06T08:05:46+00:00",
+      "link": "https://arxiv.org/pdf/2610.07928v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "dynamic cross-modal alignment and calibration for multimodal representation learning",
+      "llm_evidence_cn": "面向多模态表示学习的动态跨模态对齐与校准",
+      "llm_evidence": "面向多模态表示学习的动态跨模态对齐与校准",
+      "canonical_evidence": "面向多模态表示学习的动态跨模态对齐与校准",
+      "llm_tldr_en": "Dynamic multimodal learning suffers from uniform cross-modal alignment and unreliable confidence-based fusion. This work proposes sample-wise alignment and calibrated fusion that account for feature magnitude and confidence differences across modalities. Experiments show more robust multimodal representations, offering transferable machinery for cross-modal consistency tasks.",
+      "llm_tldr_cn": "动态多模态学习旨在自适应建模模态间差异，但现有方法存在两点不足：静态对齐对所有样本施加统一约束易导致过度对齐，且基于置信度的融合未充分考虑特征幅度与置信度差异。本文提出对齐与校准框架，按样本自适应对齐并校准融合权重。实验表明该框架能获得更鲁棒的多模态表示。其跨模态对齐与一致性建模思路可迁移到图文一致性判别等任务。",
+      "llm_tldr": "动态多模态学习旨在自适应建模模态间差异，但现有方法存在两点不足：静态对齐对所有样本施加统一约束易导致过度对齐，且基于置信度的融合未充分考虑特征幅度与置信度差异。本文提出对齐与校准框架，按样本自适应对齐并校准融合权重。实验表明该框架能获得更鲁棒的多模态表示。其跨模态对齐与一致性建模思路可迁移到图文一致性判别等任务。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

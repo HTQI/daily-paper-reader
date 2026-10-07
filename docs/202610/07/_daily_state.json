@@ -1,0 +1,57 @@
+{
+  "date": "20261007",
+  "date_label": "",
+  "generated_at": "2026-10-07 23:20:36 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.06378v1",
+      "route": "202610/07/2610.06378v1-mtor-generalizable-ai-generated-video-detection-with-multimodal-semantics-and-temporal-over-regularity",
+      "title": "MTOR: Generalizable AI-Generated Video Detection with Multimodal Semantics and Temporal Over-Regularity",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "融合字幕文本语义与视觉时间规律的AI生成视频泛化检测",
+      "first_seen_at": "2026-10-07 23:20:36 UTC",
+      "updated_at": "2026-10-07 23:20:36 UTC"
+    },
+    {
+      "paper_id": "2609.39139v1",
+      "route": "202610/07/2609.39139v1-beliefrag-making-adaptive-rag-state-aware-under-evolving-evidence",
+      "title": "BELIEFRAG: Making Adaptive RAG State-Aware under Evolving Evidence",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "自适应RAG维护证据状态以验证、检索并化解冲突",
+      "first_seen_at": "2026-10-07 23:20:36 UTC",
+      "updated_at": "2026-10-07 23:20:36 UTC"
+    },
+    {
+      "paper_id": "2610.07928v1",
+      "route": "202610/07/2610.07928v1-dynamic-alignment-and-calibration-for-multimodal-learning",
+      "title": "Dynamic Alignment and Calibration for Multimodal Learning",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向多模态表示学习的动态跨模态对齐与校准",
+      "first_seen_at": "2026-10-07 23:20:36 UTC",
+      "updated_at": "2026-10-07 23:20:36 UTC"
+    }
+  ]
+}

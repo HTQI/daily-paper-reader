@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-10-06</span>
+      <span class="dpr-home-dashboard-kicker">2026-10-07</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 6 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 3 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
-    <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>2 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>3</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>3</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-10-06 23:52:21 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-10-07 23:20:36 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日从6篇新论文中精选3篇精读、3篇速读，聚焦多模态谣言检测与虚假信息识别。</p>
-<p>最值得看的是SAFE-MR（9.0）用证据充分性学习实现选择性多模态谣言检测，以及No Hindsight for LLM Fact-Checkers（8.0）揭示事实核查模型中的信息泄漏通道。</p>
-<p>普通读者可先读这两篇的摘要与结论，再按需浏览速读中的PathAnchor与CLIMB，关注证据组织与置信度引导的思路。</p>
+<p>2026-10-07日报：成功速读3篇、精读0篇，MTOR以7.0分领跑今日推荐。</p>
+<p>最值得看的是MTOR——多模态语义与时间过度规律用于可泛化AI生成视频检测；BELIEFRAG和Dynamic Alignment均6.0分，分别聚焦演化证据下的自适应RAG状态感知与多模态动态对齐校准。</p>
+<p>普通读者可先读MTOR，再按兴趣速览BELIEFRAG与Dynamic Alignment，留意后续精读解读。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -80,12 +80,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">3 篇</strong>
+    <strong class="dpr-home-dashboard-count">0 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="SAFE-MR: Evidence Sufficiency Learning for Selective Multimodal Rumor Detection">SAFE-MR: Evidence Sufficiency Learning for Selective Multimodal Rumor Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="No Hindsight for LLM Fact-Checkers: Measuring Leakage Channels in Misinformation Detection">No Hindsight for LLM Fact-Checkers: Measuring Leakage Channels in Misinformation Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="Atomic Visual Entailment: Enhancing Zero-Shot Vision-Language Reasoning through Atomic Fact Decomposition and Learned Selection">Atomic Visual Entailment: Enhancing Zero-Shot Vision-Language Reasoning through Atomic Fact Decomposition and Learned Selection</span></li></ul>
+<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>3</strong></span></div>
+
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -96,7 +96,7 @@
     <strong class="dpr-home-dashboard-count">3 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="PathAnchor: Path-Structured Evidence for Scientific Agents">PathAnchor: Path-Structured Evidence for Scientific Agents</span></li><li><span class="dpr-home-dashboard-paper-title" title="Interpretable Deepfake Detection in Videos via Explicit Forensic Features and Temporal Modeling">Interpretable Deepfake Detection in Videos via Explicit Forensic Features and Temporal Modeling</span></li><li><span class="dpr-home-dashboard-paper-title" title="CLIMB: Confidence-Guided Complementary Evidence for Multimodal Retrieval-Augmented Generation">CLIMB: Confidence-Guided Complementary Evidence for Multimodal Retrieval-Augmented Generation</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="MTOR: Generalizable AI-Generated Video Detection with Multimodal Semantics and Temporal Over-Regularity">MTOR: Generalizable AI-Generated Video Detection with Multimodal Semantics and Temporal Over-Regularity</span></li><li><span class="dpr-home-dashboard-paper-title" title="BELIEFRAG: Making Adaptive RAG State-Aware under Evolving Evidence">BELIEFRAG: Making Adaptive RAG State-Aware under Evolving Evidence</span></li><li><span class="dpr-home-dashboard-paper-title" title="Dynamic Alignment and Calibration for Multimodal Learning">Dynamic Alignment and Calibration for Multimodal Learning</span></li></ul>
   </div>
   <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>3</strong></span></div>
 </section>

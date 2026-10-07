@@ -1,0 +1,54 @@
+{
+  "label": "2026-10-07",
+  "date": "2026-10-07",
+  "generated_at": "2026-10-07T23:20:40",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202610/07/2610.06378v1-mtor-generalizable-ai-generated-video-detection-with-multimodal-semantics-and-temporal-over-regularity",
+      "section": "quick",
+      "title_en": "MTOR: Generalizable AI-Generated Video Detection with Multimodal Semantics and Temporal Over-Regularity",
+      "authors": "Hang Wang, Chao Shen, Lei Zhang, Zhi-Qi Cheng",
+      "date": "2026-10-05",
+      "pdf": "https://arxiv.org/pdf/2610.06378v1",
+      "score": "7.0",
+      "evidence": "融合字幕文本语义与视觉时间规律的AI生成视频泛化检测",
+      "tldr": "视频生成技术快速进化，真实与合成视频的感知差距不断缩小，AI生成视频检测的泛化性面临严峻挑战。现有方法多依赖视觉表征，忽视字幕文本语义；同时细粒度视觉中的时间规律性也未被充分挖掘。为此，作者提出MTOR，融合全局视觉与字幕文本的多模态分支，并从帧间连续性、token对应和帧到视频稳定性三个层面建模时间过度规律性（TOR）。在覆盖46种生成器变体的五个基准上，MTOR总体性能优于16个代表性基线，并展现对12种真实视频扰动的鲁棒性。",
+      "tags": "query:mfnd",
+      "abstract_en": "The rapid evolution of video generation has narrowed the perceptual gap between authentic and synthetic videos, making generalizable AI-generated video detection increasingly challenging. Existing detectors predominantly rely on visual representations, leaving caption-derived textual semantics underexplored. Meanwhile, temporal regularity in fine-grained visual representations has received limited attention. We find that caption-derived textual representations provide complementary discriminative cues to global visual representations. Our analysis further reveals that AI-generated videos exhibit stronger temporal persistence and lower temporal variability, a pattern we term temporal over-regularity (TOR). Based on these findings, we propose MTOR with a multimodal branch and a TOR component. The multimodal branch integrates global visual and caption-derived textual representations, while the TOR component models temporal over-regularity at three levels: coarse inter-frame continuity, fine-grained token correspondence, and frame-to-video stability. Extensive evaluations on five benchmarks covering 46 generator variants demonstrate state-of-the-art overall performance against 16 representative baselines, while robustness experiments confirm strong resilience to twelve real-world video perturbations. Code and models will be released at https://github.com/hwang-cs-ime/MTOR.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202610/07/2609.39139v1-beliefrag-making-adaptive-rag-state-aware-under-evolving-evidence",
+      "section": "quick",
+      "title_en": "BELIEFRAG: Making Adaptive RAG State-Aware under Evolving Evidence",
+      "authors": "Hongji Pu",
+      "date": "2026-09-30",
+      "pdf": "https://arxiv.org/pdf/2609.39139v1",
+      "score": "6.0",
+      "evidence": "自适应RAG维护证据状态以验证、检索并化解冲突",
+      "tldr": "自适应RAG在多步检索中依赖置信度、相关性等局部信号决定检索或纠错，但这些信号彼此独立，导致证据状态碎片化。BELIEFRAG构建闭环控制器，显式维护充分性、可靠性、冲突、不确定性、证据缺口与获取成本等状态，并据此选择检索、改写、验证、回答、停止或弃答。在六个QA基准上，其以更少token取得更高F1，主要增益来自纠正性再检索。该工作将自适应RAG从局部触发推进到持续状态感知，提升了证据演化下的决策连贯性与成本效益。",
+      "tags": "query:mfnd",
+      "abstract_en": "Adaptive RAG uses signals such as confidence, relevance, support, and retrieval quality to decide when to search or correct evidence. In multi-step retrieval, however, these local signals must be combined into a persistent view of what the current evidence supports, what remains missing, and which action should follow. Existing methods often use such signals as separate triggers, making it difficult to preserve a coherent evidence state across a trajectory; we call this problem evidence-state fragmentation. We introduce BELIEFRAG, a closed-loop controller that updates an explicit state over sufficiency, reliability, conflict, uncertainty, evidence gaps, and acquisition cost, then chooses among retrieval, query rewriting, verification, answering, stopping, and abstention. Across six QA benchmarks with gpt-oss-120b, BELIEFRAG reaches mean token F1 0.572 with 3.89k tokens per question, outperforming fixed iterative retrieval (0.555 F1) while using 39% fewer tokens. The same quality-cost pattern transfers to Qwen3-32B, where BELIEFRAG reaches 0.552 F1 versus 0.523 for iterative retrieval while using 35% fewer tokens. Analysis shows that the main gains come from corrective re-retrieval rather than pruning alone, while several belief dimensions are redundant and calibrated answerability plays the strongest operational role. Calibration improves threshold stability across related evidence sources, although source shift can still invalidate the same decision signal.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202610/07/2610.07928v1-dynamic-alignment-and-calibration-for-multimodal-learning",
+      "section": "quick",
+      "title_en": "Dynamic Alignment and Calibration for Multimodal Learning",
+      "authors": "Jinghao Xu, Zhenhua Guo, Xiaofeng Zhu, Xiaoshuang Shi",
+      "date": "2026-10-06",
+      "pdf": "https://arxiv.org/pdf/2610.07928v1",
+      "score": "6.0",
+      "evidence": "面向多模态表示学习的动态跨模态对齐与校准",
+      "tldr": "多模态动态学习旨在自适应建模模态差异以获取鲁棒表征，但现有方法存在跨模态对齐静态统一、易过度对齐，以及融合时未充分考虑特征幅值与置信度差异等问题。本文提出对齐与校准驱动的多模态学习框架ACML：用动态跨模态三元组对齐按置信度差距施加不同语义约束，并以差异感知注意力校准自适应调整注意力正则。多个基准实验表明，ACML持续优于近期SOTA，并提升鲁棒性，为多模态对齐与融合提供更合理方案。",
+      "tags": "query:mfnd",
+      "abstract_en": "Dynamic multimodal learning aims to learn robust representations by adaptively modeling information discrepancies across modalities. However, existing methods still suffer from two limitations: (i) static cross-modal alignment strategies usually impose uniform constraints on all samples while overlooking sample-wise variations, potentially leading to unreasonable over-alignment; and (ii) confidence- or uncertainty-aware fusion methods often fail to adequately account for feature magnitude and confidence differences across modalities. For modality pairs with significant feature magnitude differences or small confidence gaps, it might be unreliable to strictly align fusion weights according to confidence. To address these issues, we propose an Alignment- and Calibration-driven Multimodal Learning framework (ACML). Specifically, ACML incorporates a dynamic cross-modal triplet alignment module, which enforces strong semantic consistency for high-confidence positive pairs while encouraging diverse representation learning between high- and low-confidence positive pairs according to their confidence gaps. Additionally, ACML introduces a difference-aware attention calibration strategy that adaptively adjusts attention regularization based on feature magnitude and confidence differences across modalities, thereby mitigating biases caused by unreasonable fusion constraints. Extensive experiments on multiple multimodal benchmark datasets demonstrate that ACML consistently achieves superior performance and robustness over recent state-of-the-art methods.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
