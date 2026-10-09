@@ -1,0 +1,25 @@
+{
+  "date": "20261009",
+  "date_label": "",
+  "generated_at": "2026-10-09 00:10:09 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.09952v1",
+      "route": "202610/09/2610.09952v1-msu-team-at-the-explainable-deepfake-detection-challenge-2026-grounded-artifact-evidence-for-deepfake-detection",
+      "title": "MSU Team at the Explainable Deepfake Detection Challenge 2026: Grounded Artifact Evidence for Deepfake Detection",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "带接地取证证据的可解释深度伪造检测",
+      "first_seen_at": "2026-10-09 00:10:09 UTC",
+      "updated_at": "2026-10-09 00:10:09 UTC"
+    }
+  ]
+}

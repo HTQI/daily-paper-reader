@@ -1,0 +1,56 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-09T00:09:26.795004+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2610.09952v1",
+      "source": "arxiv",
+      "title": "MSU Team at the Explainable Deepfake Detection Challenge 2026: Grounded Artifact Evidence for Deepfake Detection",
+      "abstract": "Recent advances in generative image models have made many manipulated images highly realistic, raising the need for detectors that are not only accurate but also able to provide visual evidence for their decisions. In this paper, we present our solution to the Explainable Deepfake Detection Challenge [2] on the XPlainVerse dataset [1], where systems are required to predict whether an image is real or fake and generate both complex and simple explanations grounded in visible forensic cues. Our method follows a modular detection-and-explanation design. For the real/fake decision, we build a multi-backbone detector that combines several DINOv3 models with Mesorch manipulation-localization features, bringing together pretrained visual representations, DCT-aware cues, and multi-scale forensic information. To inject explanation evidence into the detector, we use a Grounding-DINO-based pseudo-mask generation pipeline that converts local artifact descriptions from training explanations into weak patch- level supervision for an Artifact Evidence Map. We further introduce a local patch-level contrastive objective that separates artifact and authenticity evidence in the detector feature space without requiring paired images or pixel-level manipulation masks. For language output, we use class-conditional Qwen3-VL models to generate complex explanations for fake and real predictions, followed by a GRPO-optimized text simplification model. The proposed methods were trained and evaluated on the challenge subset of XPlainVerse. On the full test split, our submission achieves 0.9349 detection accuracy, 0.5571 explanation score, and a 0.7456 final challenge score.",
+      "authors": [
+        "Artem Filippov",
+        "Aleksandr Gushchin",
+        "Kirill Koltsov",
+        "Dmitriy Vatolin",
+        "Anastasia Antsiferova"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-07T12:30:04+00:00",
+      "link": "https://arxiv.org/pdf/2610.09952v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "explainable deepfake detection with grounded forensic evidence",
+      "llm_evidence_cn": "带接地取证证据的可解释深度伪造检测",
+      "llm_evidence": "带接地取证证据的可解释深度伪造检测",
+      "canonical_evidence": "带接地取证证据的可解释深度伪造检测",
+      "llm_tldr_en": "The MSU system combines multiple DINOv3 backbones with Mesorch manipulation-localization features and generates grounded explanations for the Explainable Deepfake Detection Challenge.",
+      "llm_tldr_cn": "生成式图像模型使伪造图像高度逼真，检测器不仅需准确判别真伪，还要给出基于可见取证线索的视觉证据。本文提出模块化的检测与解释方案，用多个DINOv3骨干结合Mesorch篡改定位特征完成真伪判别，并生成复杂与简单两级接地解释。该系统提交于XPlainVerse数据集上的可解释深度伪造检测挑战，说明可解释的多模态取证有助于提升虚假图像识别的可信度，对多模态错误信息检测具有参考价值。",
+      "llm_tldr": "生成式图像模型使伪造图像高度逼真，检测器不仅需准确判别真伪，还要给出基于可见取证线索的视觉证据。本文提出模块化的检测与解释方案，用多个DINOv3骨干结合Mesorch篡改定位特征完成真伪判别，并生成复杂与简单两级接地解释。该系统提交于XPlainVerse数据集上的可解释深度伪造检测挑战，说明可解释的多模态取证有助于提升虚假图像识别的可信度，对多模态错误信息检测具有参考价值。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

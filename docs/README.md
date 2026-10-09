@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-10-07</span>
+      <span class="dpr-home-dashboard-kicker">2026-10-09</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 3 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 1 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>3</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>1</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-10-07 23:20:36 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-10-09 00:10:09 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>2026-10-07日报：成功速读3篇、精读0篇，MTOR以7.0分领跑今日推荐。</p>
-<p>最值得看的是MTOR——多模态语义与时间过度规律用于可泛化AI生成视频检测；BELIEFRAG和Dynamic Alignment均6.0分，分别聚焦演化证据下的自适应RAG状态感知与多模态动态对齐校准。</p>
-<p>普通读者可先读MTOR，再按兴趣速览BELIEFRAG与Dynamic Alignment，留意后续精读解读。</p>
+<p>今日速读1篇：MSU团队在可解释深度伪造检测挑战赛2026的方案，综合评分6.0。</p>
+<p>最值得看的是它用&quot;可定位的伪造痕迹证据&quot;支撑检测结论，把深度伪造识别的解释性落到实处，而不只是给一个真假标签。</p>
+<p>普通读者可先关注这类&quot;给出证据位置&quot;的检测思路，遇到可疑视频时优先看结论是否附有可核查的痕迹依据。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -93,12 +93,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">3 篇</strong>
+    <strong class="dpr-home-dashboard-count">1 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="MTOR: Generalizable AI-Generated Video Detection with Multimodal Semantics and Temporal Over-Regularity">MTOR: Generalizable AI-Generated Video Detection with Multimodal Semantics and Temporal Over-Regularity</span></li><li><span class="dpr-home-dashboard-paper-title" title="BELIEFRAG: Making Adaptive RAG State-Aware under Evolving Evidence">BELIEFRAG: Making Adaptive RAG State-Aware under Evolving Evidence</span></li><li><span class="dpr-home-dashboard-paper-title" title="Dynamic Alignment and Calibration for Multimodal Learning">Dynamic Alignment and Calibration for Multimodal Learning</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="MSU Team at the Explainable Deepfake Detection Challenge 2026: Grounded Artifact Evidence for Deepfake Detection">MSU Team at the Explainable Deepfake Detection Challenge 2026: Grounded Artifact Evidence for Deepfake Detection</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>3</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>1</strong></span></div>
 </section>
 </div>
 
