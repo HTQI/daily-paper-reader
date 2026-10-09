@@ -1,18 +1,177 @@
 {
   "mode": "standard",
-  "generated_at": "2026-10-09T00:09:26.795004+00:00",
+  "generated_at": "2026-10-09T23:05:08.689971+00:00",
   "stats": {
     "mode": "standard",
     "tag_count": 1,
-    "deep_divecandidates": 0,
+    "deep_divecandidates": 2,
     "deep_cap": 6,
-    "deep_selected": 0,
-    "quick_candidates": 1,
+    "deep_selected": 2,
+    "quick_candidates": 4,
     "quick_skim_target": 11,
-    "quick_selected": 1
+    "quick_selected": 4
   },
-  "deep_dive": [],
+  "deep_dive": [
+    {
+      "id": "2610.11233v1",
+      "source": "arxiv",
+      "title": "MiniVer-V: Identifying Minimal Sufficient Evidence for Short Video Verification",
+      "abstract": "A core challenge in short-video fact-checking is identifying which evidence is sufficient to support a verification conclusion. Existing approaches either give the verifier all available evidence, introducing noise, or select evidence by topical relevance, which conflates relatedness with sufficiency. We identify evidential sufficiency as the selection criterion: whether a subset of evidence is adequate to support a confident verdict without redundancy. We introduce MiniVer-V, a benchmark of 195 short videos with three-way verdict annotations (supported, refuted, insufficient) and 5,510 multimodal evidence units spanning visual keyframes, speech transcripts, and web-retrieved external sources. We propose a two-layer verification framework that separates claim-video consistency, assessed from internal evidence, from factual verdict determination, which additionally requires external corroboration. On top of it, a sufficiency-driven greedy search assembles evidence until a sufficiency threshold is met and outputs insufficient when the candidate pool is exhausted, rather than forcing a verdict. With Claude Sonnet 4, the method reaches a Macro-F1 of 0.510 using 4.5 evidence units on average (16% of the full evidence set), statistically indistinguishable from the full-evidence baseline (0.518 with 27.7 units), while significantly improving recognition of insufficient cases over the same search without abstention. The efficiency result replicates with GPT-5.5 and holds only partially with an open-weight Qwen2.5-72B verifier. Ablations show that external evidence is indispensable for factual determination, while internal video evidence grounds the verdict in claim-video consistency. These findings suggest that evidence-efficient verification is achievable, and that explicit abstention is needed when evidence is genuinely inadequate.",
+      "authors": [
+        "Leran Chen",
+        "Lingnan Kong",
+        "Zile Cai"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.CL",
+        "cs.MM"
+      ],
+      "published": "2026-10-08T04:33:14+00:00",
+      "link": "https://arxiv.org/pdf/2610.11233v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "short-video fact-checking with minimal sufficient multimodal evidence",
+      "llm_evidence_cn": "短视频事实核查的最小充分多模态证据",
+      "llm_evidence": "短视频事实核查的最小充分多模态证据",
+      "canonical_evidence": "短视频事实核查的最小充分多模态证据",
+      "llm_tldr_en": "MiniVer-V identifies minimal sufficient evidence for short-video fact-checking, offering 195 videos with three-way verdicts and 5,510 multimodal evidence units from keyframes, transcripts and web sources.",
+      "llm_tldr_cn": "短视频事实核查的关键挑战在于判断哪些证据足以支撑验证结论，现有方法或给出全部证据引入噪声，或按主题相关度选择而混淆了相关性与充分性。论文以证据充分性为选择准则，构建MiniVer-V基准，包含195个短视频、支持、反驳、不足三类判决标注，以及5510个涵盖视觉关键帧、语音转写与网络外部来源的多模态证据单元。作者进一步提出两层验证框架，在冗余证据中筛选最小充分证据，为短视频事实核查提供了新的数据与方法基础。",
+      "llm_tldr": "短视频事实核查的关键挑战在于判断哪些证据足以支撑验证结论，现有方法或给出全部证据引入噪声，或按主题相关度选择而混淆了相关性与充分性。论文以证据充分性为选择准则，构建MiniVer-V基准，包含195个短视频、支持、反驳、不足三类判决标注，以及5510个涵盖视觉关键帧、语音转写与网络外部来源的多模态证据单元。作者进一步提出两层验证框架，在冗余证据中筛选最小充分证据，为短视频事实核查提供了新的数据与方法基础。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "verifying the truthfulness of a claim using both textual and visual evidence",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2610.11112v1",
+      "source": "arxiv",
+      "title": "False Claims, Credible Images: A Red-Teaming Benchmark for Commercial Image Generators",
+      "abstract": "Image-generation models can now produce text-rich, natural-looking visual artifacts that are hard to distinguish from real-world evidence, such as news reports and textbook pages. Yet, the same capability introduces a new risk: these models can just as easily fabricate visual misinformation. Even commercial models (e.g., GPT-Image-2) readily produce it. Curiously, we find that these models can recognize a claim as false when asked, yet still render that very claim as credible visual evidence. This discrepancy points to a blind spot in current alignment: safeguards judge what an image shows, not what it asserts; however, existing red-teaming benchmarks target conventional harmful content, such as violent or explicit imagery, and say little about where the alignment boundaries lie for visual misinformation, especially in commercial models. To fill this gap, we introduce EpiReal-Bench, the first systematic benchmark for evaluating visual misinformation risks in commercial image generators, comprising 10k false-claim prompts and 10k corresponding generated images that span 10 real-world claim categories and 10 credible visual formats. We further introduce EpiReal-Attack, a skill-guided black-box optimization framework that uses Pareto-based selection and multimodal feedback to identify commands that bypass alignment safeguards while preserving visual realism, textual legibility, and semantic fidelity. Experiments on four commercial models reveal that more than 70% of false-claim prompts elicit images that faithfully depict the corresponding misinformation, and EpiReal-Attack pushes this rate to 95%. Most worryingly, these models are only a click away, and their outputs are cheap to spread yet hard to disbelieve, leaving this dimension of alignment largely unguarded.",
+      "authors": [
+        "Zeyu Ye",
+        "Yanchun Li",
+        "Sibei He",
+        "Meng Xie",
+        "Hangtao Zhang",
+        "Xianlong Wang",
+        "Li Zeng",
+        "Jiahao Chen",
+        "Yichen Wang",
+        "Junhui Wang",
+        "Ziqi Zhou"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.CV"
+      ],
+      "published": "2026-10-08T02:35:39+00:00",
+      "link": "https://arxiv.org/pdf/2610.11112v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "red-teaming benchmark for fabricated visual misinformation and false claims",
+      "llm_evidence_cn": "针对伪造视觉错误信息与虚假声明的红队基准",
+      "llm_evidence": "针对伪造视觉错误信息与虚假声明的红队基准",
+      "canonical_evidence": "针对伪造视觉错误信息与虚假声明的红队基准",
+      "llm_tldr_en": "Presents a red-teaming benchmark showing commercial image generators can recognize a claim as false yet still render it as credible visual evidence, exposing a visual misinformation blind spot.",
+      "llm_tldr_cn": "图像生成模型能生成难以与真实新闻、教科书页面区分的文本丰富视觉内容，也因而可轻易伪造视觉错误信息，而现有红队基准主要针对暴力等传统有害内容。论文提出面向商用图像生成器的红队基准，发现模型被询问时能判断声明为假，却仍将其渲染为可信视觉证据。这一矛盾揭示当前对齐只判断图像展示什么而非其主张，为视觉错误信息检测提供基准。",
+      "llm_tldr": "图像生成模型能生成难以与真实新闻、教科书页面区分的文本丰富视觉内容，也因而可轻易伪造视觉错误信息，而现有红队基准主要针对暴力等传统有害内容。论文提出面向商用图像生成器的红队基准，发现模型被询问时能判断声明为假，却仍将其渲染为可信视觉证据。这一矛盾揭示当前对齐只判断图像展示什么而非其主张，为视觉错误信息检测提供基准。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    }
+  ],
   "quick_skim": [
+    {
+      "id": "2610.00833v1",
+      "source": "arxiv",
+      "title": "VERITYGATE: A Four-Gate Schema-Level Faithfulness Framework and Paired Benchmark for Grounded LLM Narrations over Structured Evidence",
+      "abstract": "Fluent LLM explanations may not follow the evidence from a structured system. We present VERITYGATE, a four-gate checker for declared evidence IDs, entities, numbers, and claim types. It checks a fixed schema; it does not verify every fact in the prose. At r=0 and r=1, we test 900 instances per setting (450 grounded-ungrounded pairs) with GPT-4o-mini, Llama-3.3-70B, and Claude Sonnet 4.6. Under this schema-level contract and before repair, 80.3% of mini claims and 47.9% of Sonnet claims fail. These are verifier rejection rates, not prose-hallucination rates. One repair pass raises claim survival from 19.7% to 28.0% for mini and from 52.1% to 54.3% for Sonnet. Verified claims per example change by +0.14 for mini, -0.71 for Llama, and -0.47 for Sonnet, so survival and output volume must be reported together. A second Sonnet pass gives no clear gain. At r=1, Gate 4 covers 97.0%, 98.7%, and 100% of failing claims for mini, Llama, and Sonnet. Small human studies support the rules but show gaps between schema checks and correct prose. A domain-specific GPT-4o judge test shows an order effect, so it is only a usefulness check. We release the code and data.",
+      "authors": [
+        "Sachin Gupta"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-09-30T23:44:51+00:00",
+      "link": "https://arxiv.org/pdf/2610.00833v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "schema-level faithfulness checker verifying LLM claims against structured evidence",
+      "llm_evidence_cn": "模式级忠实度校验，对照结构化证据核查LLM声明",
+      "llm_evidence": "模式级忠实度校验，对照结构化证据核查LLM声明",
+      "canonical_evidence": "模式级忠实度校验，对照结构化证据核查LLM声明",
+      "llm_tldr_en": "Fluent LLM explanations may not follow evidence. VERITYGATE is a four-gate checker for declared evidence IDs, entities, numbers and claim types over structured evidence, tested with three LLMs and a paired grounded-ungrounded benchmark.",
+      "llm_tldr_cn": "流畅的LLM解释未必真正遵循结构化系统的证据，需要检查声明与证据的一致性。论文提出VERITYGATE四门校验框架，针对声明的证据ID、实体、数字和声明类型进行模式级核验，并构建配对基准。在每设定900实例上，未修复前GPT-4o-mini有80.3%、Sonnet有47.9%的声明被拒，一次修复后存活率提升。其贡献在于为基于结构化证据的声明核查提供校验框架与基准，与证据驱动的事实核查方向相关。",
+      "llm_tldr": "流畅的LLM解释未必真正遵循结构化系统的证据，需要检查声明与证据的一致性。论文提出VERITYGATE四门校验框架，针对声明的证据ID、实体、数字和声明类型进行模式级核验，并构建配对基准。在每设定900实例上，未修复前GPT-4o-mini有80.3%、Sonnet有47.9%的声明被拒，一次修复后存活率提升。其贡献在于为基于结构化证据的声明核查提供校验框架与基准，与证据驱动的事实核查方向相关。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.03617v1",
+      "source": "arxiv",
+      "title": "DEPICT: Scoring Text-to-Image Alignment by Answer Agreement",
+      "abstract": "Image-text alignment is a core problem in computer vision with applications in caption evaluation, hallucination detection, data curation, and the benchmarking of text-to-image (T2I) generators. As T2I models improve, benchmarking has become demanding, requiring metrics capable of finding a series of issues like missing objects, swapped attributes, miscounts, and ignored negations. Recent work addresses this by fine-tuning evaluators on preference data or by prompting a vision-language model, either holistically with the caption or with decomposed verification questions. However, existing approaches fall short: fine-tuned metrics remain bound to one backbone and training distribution; holistic metrics miss fine-grained details; and decomposed metrics rely on a fixed-YES assumption that penalizes faithful images whenever that assumption fails. In contrast, we propose DEPICT, a training-free metric that replaces fixed reference answers with expected agreement between image-based and caption-only answers, weighting questions by how decisively the caption determines them. By replacing fixed references, our agreement rule increases negation accuracy from 19% to 88%. To recover the context lost during decomposition, DEPICT merges this agreement score with a holistic score. We evaluate DEPICT on five benchmarks and eleven backbones from three model families and find that it surpasses all training-free metrics and exceeds fine-tuned evaluators on two out of three human-correlation benchmarks.",
+      "authors": [
+        "Vasco Ramos",
+        "Sandra Godinho Silva",
+        "Joao Magalhaes",
+        "Ricardo Rei",
+        "Pedro Henrique Martins"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-02T17:13:49+00:00",
+      "link": "https://arxiv.org/pdf/2610.03617v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "image-text alignment scoring detecting missing objects, swapped attributes and mismatch",
+      "llm_evidence_cn": "图文对齐评分，检测缺失对象、属性错换与失配",
+      "llm_evidence": "图文对齐评分，检测缺失对象、属性错换与失配",
+      "canonical_evidence": "图文对齐评分，检测缺失对象、属性错换与失配",
+      "llm_tldr_en": "Image-text alignment metrics must catch fine-grained issues like missing objects and swapped attributes. DEPICT scores alignment via answer agreement across decomposed verification questions, avoiding single-backbone and coarse holistic limitations.",
+      "llm_tldr_cn": "图像文本对齐评估需发现缺失对象、属性错换、计数错误与忽略否定等细粒度问题，现有微调指标绑定单一骨干、整体指标粗糙、分解式指标依赖固定问题集。论文提出DEPICT，通过分解式验证问题的答案一致性来评分文本与图像的对齐程度。实验表明该方法相比绑定单一骨干的微调指标和粗粒度整体指标，能更细粒度地检测图文不一致。其贡献在于为跨模态语义一致性与图文失配检测提供有效指标，可迁移至虚假信息验证任务。",
+      "llm_tldr": "图像文本对齐评估需发现缺失对象、属性错换、计数错误与忽略否定等细粒度问题，现有微调指标绑定单一骨干、整体指标粗糙、分解式指标依赖固定问题集。论文提出DEPICT，通过分解式验证问题的答案一致性来评分文本与图像的对齐程度。实验表明该方法相比绑定单一骨干的微调指标和粗粒度整体指标，能更细粒度地检测图文不一致。其贡献在于为跨模态语义一致性与图文失配检测提供有效指标，可迁移至虚假信息验证任务。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
     {
       "id": "2610.09952v1",
       "source": "arxiv",
@@ -36,13 +195,57 @@
         "query:MFND"
       ],
       "llm_score": 6.0,
-      "llm_evidence_en": "explainable deepfake detection with grounded forensic evidence",
-      "llm_evidence_cn": "带接地取证证据的可解释深度伪造检测",
-      "llm_evidence": "带接地取证证据的可解释深度伪造检测",
-      "canonical_evidence": "带接地取证证据的可解释深度伪造检测",
-      "llm_tldr_en": "The MSU system combines multiple DINOv3 backbones with Mesorch manipulation-localization features and generates grounded explanations for the Explainable Deepfake Detection Challenge.",
-      "llm_tldr_cn": "生成式图像模型使伪造图像高度逼真，检测器不仅需准确判别真伪，还要给出基于可见取证线索的视觉证据。本文提出模块化的检测与解释方案，用多个DINOv3骨干结合Mesorch篡改定位特征完成真伪判别，并生成复杂与简单两级接地解释。该系统提交于XPlainVerse数据集上的可解释深度伪造检测挑战，说明可解释的多模态取证有助于提升虚假图像识别的可信度，对多模态错误信息检测具有参考价值。",
-      "llm_tldr": "生成式图像模型使伪造图像高度逼真，检测器不仅需准确判别真伪，还要给出基于可见取证线索的视觉证据。本文提出模块化的检测与解释方案，用多个DINOv3骨干结合Mesorch篡改定位特征完成真伪判别，并生成复杂与简单两级接地解释。该系统提交于XPlainVerse数据集上的可解释深度伪造检测挑战，说明可解释的多模态取证有助于提升虚假图像识别的可信度，对多模态错误信息检测具有参考价值。",
+      "llm_evidence_en": "explainable deepfake detection with grounded visual evidence and benchmarks",
+      "llm_evidence_cn": "可解释深度伪造检测，带接地视觉证据与基准",
+      "llm_evidence": "可解释深度伪造检测，带接地视觉证据与基准",
+      "canonical_evidence": "可解释深度伪造检测，带接地视觉证据与基准",
+      "llm_tldr_en": "As generative images become highly realistic, detectors must be accurate and explainable. This work builds a multi-backbone real/fake detector combining DINOv3 models with manipulation-localization features to output grounded simple and complex forensic explanations on XPlainVerse.",
+      "llm_tldr_cn": "生成式图像模型使伪造图像高度逼真，检测器不仅需准确还需提供可见的取证证据来解释其判断。论文采用模块化检测与解释设计，融合多个DINOv3骨干与Mesorch篡改定位特征构建多骨干检测器。在XPlainVerse数据集上系统可预测图像真伪并生成基于可见取证线索的复杂与简单解释。其贡献在于推动兼具准确性与可解释性的假图像识别方法，与可解释多模态虚假信息检测方向高度相关。",
+      "llm_tldr": "生成式图像模型使伪造图像高度逼真，检测器不仅需准确还需提供可见的取证证据来解释其判断。论文采用模块化检测与解释设计，融合多个DINOv3骨干与Mesorch篡改定位特征构建多骨干检测器。在XPlainVerse数据集上系统可预测图像真伪并生成基于可见取证线索的复杂与简单解释。其贡献在于推动兼具准确性与可解释性的假图像识别方法，与可解释多模态虚假信息检测方向高度相关。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.11184v1",
+      "source": "arxiv",
+      "title": "WorldFact-Bench: Beyond Image-Internal Plausibility to Image-World Consistency",
+      "abstract": "Advances in image generation have made visual authenticity increasingly difficult to assess. Although image forensics now examines both generation artifacts and higher-level visual inconsistencies, a plausible image can still contradict real-world facts or rules. We introduce WorldFact-Bench to evaluate image-world consistency from a single image, without a predefined claim or verification target. The benchmark contains 1,274 source-aligned real-fake pairs across four verification regimes and ten semantic domains. Each pair introduces a specific, evidence-supported factual conflict while seeking to preserve non-target content and visual plausibility. Images are evaluated independently, and pair accuracy requires both members of a pair to be classified correctly. We further propose PERSIST-Agent, which organizes iterative verification around a persistent state linking candidate facts, visual observations, evidence, and verification statuses. This state guides subsequent inspection and retrieval while retaining unresolved candidates. With backbone weights fixed, harness self-optimization refines the agent's prompts and execution rules through validation feedback. Experiments reveal strong label biases in several detectors and uneven gains from retrieval. On the evaluated 8B backbones, PERSIST-Agent improves pair accuracy over both direct judgment and retrieval-augmented baselines, while ablations support the role of persistent verification state. These findings highlight the value of state-guided verification and the remaining gap between visual plausibility and factual correctness.",
+      "authors": [
+        "Zhuohong Chen",
+        "Zhengxian Wu",
+        "Yunyao Yu",
+        "Hangrui Xu",
+        "Zijian Yu",
+        "Hao Tan",
+        "Zhifang Liu",
+        "Peng Jiao",
+        "Jun Lan",
+        "Haoqian Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-08T03:42:02+00:00",
+      "link": "https://arxiv.org/pdf/2610.11184v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "image-world factual consistency benchmark with real-fake pairs",
+      "llm_evidence_cn": "图像与世界事实一致性的真假对基准",
+      "llm_evidence": "图像与世界事实一致性的真假对基准",
+      "canonical_evidence": "图像与世界事实一致性的真假对基准",
+      "llm_tldr_en": "WorldFact-Bench evaluates image-world consistency from a single image, using 1,274 real-fake pairs with evidence-supported factual conflicts across four verification regimes and ten domains.",
+      "llm_tldr_cn": "图像生成技术使视觉真实性评估愈发困难，一张看似合理的图像仍可能违背现实事实或规则。论文提出WorldFact-Bench，从单张图像出发评估图像与世界的一致性，无需预设声明或验证目标。该基准包含1274对源对齐的真假图像，覆盖四种验证机制与十个语义领域，每对引入有证据支持的事实冲突并尽量保留非目标内容与视觉合理性。它把图像取证从生成痕迹扩展到图像与世界事实一致性的检验。",
+      "llm_tldr": "图像生成技术使视觉真实性评估愈发困难，一张看似合理的图像仍可能违背现实事实或规则。论文提出WorldFact-Bench，从单张图像出发评估图像与世界的一致性，无需预设声明或验证目标。该基准包含1274对源对齐的真假图像，覆盖四种验证机制与十个语义领域，每对引入有证据支持的事实冲突并尽量保留非目标内容与视觉合理性。它把图像取证从生成痕迹扩展到图像与世界事实一致性的检验。",
       "llm_tags": [
         "query:mfnd"
       ],

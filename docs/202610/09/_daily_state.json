@@ -1,10 +1,74 @@
 {
   "date": "20261009",
   "date_label": "",
-  "generated_at": "2026-10-09 00:10:09 UTC",
+  "generated_at": "2026-10-09 23:10:03 UTC",
   "recommend_exists": true,
-  "run_count": 1,
+  "run_count": 2,
   "papers": [
+    {
+      "paper_id": "2610.11233v1",
+      "route": "202610/09/2610.11233v1-miniver-v-identifying-minimal-sufficient-evidence-for-short-video-verification",
+      "title": "MiniVer-V: Identifying Minimal Sufficient Evidence for Short Video Verification",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "短视频事实核查的最小充分多模态证据",
+      "first_seen_at": "2026-10-09 23:10:03 UTC",
+      "updated_at": "2026-10-09 23:10:03 UTC"
+    },
+    {
+      "paper_id": "2610.11112v1",
+      "route": "202610/09/2610.11112v1-false-claims-credible-images-a-red-teaming-benchmark-for-commercial-image-generators",
+      "title": "False Claims, Credible Images: A Red-Teaming Benchmark for Commercial Image Generators",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 8.0,
+      "evidence": "针对伪造视觉错误信息与虚假声明的红队基准",
+      "first_seen_at": "2026-10-09 23:10:03 UTC",
+      "updated_at": "2026-10-09 23:10:03 UTC"
+    },
+    {
+      "paper_id": "2610.00833v1",
+      "route": "202610/09/2610.00833v1-veritygate-a-four-gate-schema-level-faithfulness-framework-and-paired-benchmark-for-grounded-llm-narrations-over-structured-evidence",
+      "title": "VERITYGATE: A Four-Gate Schema-Level Faithfulness Framework and Paired Benchmark for Grounded LLM Narrations over Structured Evidence",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "模式级忠实度校验，对照结构化证据核查LLM声明",
+      "first_seen_at": "2026-10-09 23:10:03 UTC",
+      "updated_at": "2026-10-09 23:10:03 UTC"
+    },
+    {
+      "paper_id": "2610.03617v1",
+      "route": "202610/09/2610.03617v1-depict-scoring-text-to-image-alignment-by-answer-agreement",
+      "title": "DEPICT: Scoring Text-to-Image Alignment by Answer Agreement",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "图文对齐评分，检测缺失对象、属性错换与失配",
+      "first_seen_at": "2026-10-09 23:10:03 UTC",
+      "updated_at": "2026-10-09 23:10:03 UTC"
+    },
     {
       "paper_id": "2610.09952v1",
       "route": "202610/09/2610.09952v1-msu-team-at-the-explainable-deepfake-detection-challenge-2026-grounded-artifact-evidence-for-deepfake-detection",
@@ -17,9 +81,25 @@
         }
       ],
       "score": 6.0,
-      "evidence": "带接地取证证据的可解释深度伪造检测",
+      "evidence": "可解释深度伪造检测，带接地视觉证据与基准",
       "first_seen_at": "2026-10-09 00:10:09 UTC",
-      "updated_at": "2026-10-09 00:10:09 UTC"
+      "updated_at": "2026-10-09 23:10:03 UTC"
+    },
+    {
+      "paper_id": "2610.11184v1",
+      "route": "202610/09/2610.11184v1-worldfact-bench-beyond-image-internal-plausibility-to-image-world-consistency",
+      "title": "WorldFact-Bench: Beyond Image-Internal Plausibility to Image-World Consistency",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "图像与世界事实一致性的真假对基准",
+      "first_seen_at": "2026-10-09 23:10:03 UTC",
+      "updated_at": "2026-10-09 23:10:03 UTC"
     }
   ]
 }
