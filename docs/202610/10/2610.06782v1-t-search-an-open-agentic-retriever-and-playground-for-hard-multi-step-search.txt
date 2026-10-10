@@ -1,0 +1,555 @@
+Title: T-Search: An Open Agentic Retriever and Playground for Hard Multi-Step Search
+
+URL Source: https://arxiv.org/pdf/2610.06782v1
+
+Published Time: Tue, 06 Oct 2026 03:28:51 GMT
+
+Number of Pages: 22
+
+Markdown Content:
+# T-Search: An Open Agentic Retriever and Playground for Hard Multi-Step Search 
+
+Olga Tsymboi, Ramil Latypov, Aleksandr Medvedev, Danil Taranets, Dmitrii Stoianov, Nikita Gulyakov , Gleb Alektorov , Anatolii Potapov 
+
+T-Tech  
+
+> Correspondence: anatolii.s.potapov@gmail.com
+
+Abstract 
+
+We present T-Search, an open-weight agentic retriever for hard multi-step search. Given a question and a search tool over a fixed corpus, it runs a bounded multi-round search and returns a ranked list of evidence chunks with short justi-fications, leaving answer generation to a down-stream model, so backend and generator can be swapped without retraining. T-Search is built on Qwen3.6-35B-A3B and trained on ad-versarially filtered synthetic search tasks with round-sliced supervised fine-tuning followed by GSPO on a recall reward. Averaged over seven English and Russian benchmarks with gold evidence annotations, it reaches 56.0 Re-call@10 with one rollout, 14.4 points above its base, and 61.3 with three fused rollouts, outperforming larger open models. We re-lease the model, harness, live demo, and three benchmarks, including TRuST, the first native-Russian hard-search benchmark. 
+
+1 Introduction 
+
+Retrieval-augmented generation (Lewis et al., 2020) assumes that the answer can be found by querying the question as posed. Multi-hop ques-tions broke this assumption with HotpotQA (Yang et al., 2018), and iterative retrieve-and-reason meth-ods followed (Press et al., 2023; Trivedi et al., 2023); BrowseComp (Wei et al., 2025) and its fixed-corpus variant BrowseComp-Plus (Chen et al., 2025) push the setting to questions whose search terms do not appear in the question, so answering requires discovering an entity the question never names and rejecting documents that look relevant but are not. Deep-research agents (Jin et al., 2025; Li et al., 2025; Tongyi DeepResearch Team, 2025) handle this with long tool-calling trajectories on large models, which is slow and expensive, and are evaluated on the final answer, which conflates retrieval with generation. T-Search targets the retrieval stage in isolation. Given a question and a search backend, it runs a bounded multi-round search and returns a ranked list of evidence chunks, each with a one-line rea-son, for a downstream model of the user’s choice to answer from. It never writes the answer, so one retriever serves many generators; it reaches docu-ments only through the search tool, so the backend can be swapped without retraining; and it returns chunk identifiers, so its quality is measured directly as recall of gold evidence rather than through an an-swer judge. Three design choices make this work: short, bounded rounds in a ReAct loop (Yao et al., 2023) that carry forward only explicitly saved ev-idence, so tool output does not accumulate and degrade the model’s judgment (Hong et al., 2025); search difficulty engineered into the training data and verified by adversarial solvers; and a recall reward on chunk identifiers with no judge model, optimized with GSPO (Zheng et al., 2025). Our contributions are: 1
+
+• T-Search, an open-weight (Apache-2.0) agen-tic retriever with 35B total and ∼3B active parameters that outperforms larger open mod-els on average over seven fixed-index bench-marks and lies on the latency–quality frontier (Section 6); • TRuST, a hand-built native-Russian hard-search benchmark, and SynthComp-En/Ru, both with fixed indices and gold evidence an-notations (Appendix C); • A web playground that runs T-Search over TRuST or BrowseComp-Plus using dense or BM25 (Robertson and Zaragoza, 2009) re-trieval, or over the live web, replays the search as a timeline of queries, saved chunks, and rejected actions with the rule each broke,         
+
+> 1Model, benchmarks, and harness: https: //huggingface.co/collections/t-tech/t-search .Live demo: https://t-search.app/ .Demo video:
+> https://youtu.be/_nkS_VJraVA?si=2LsKVReFlDfpYjtT .
+
+1arXiv:2610.06782v1 [cs.CL] 5 Oct 2026 and scores benchmark questions with the Re-call@10 of Section 6 (Section 4). The model, with FP8 and NVFP4 quantizations, and the harness 2 are released under Apache-2.0 and the benchmarks under ODC-BY. 
+
+2 Related Work 
+
+Search agents. Search-R1 (Jin et al., 2025), Web-Dancer, WebSailor, WebShaper (Wu et al., 2025; Li et al., 2025; Tao et al., 2026), and Tongyi Deep-Research (Tongyi DeepResearch Team, 2025) are trained end-to-end over a growing transcript and judged on the final answer, which conflates retrieval with generation. The concurrent Harness-1 (Jiang et al., 2026) is closest to T-Search: a 20B retrieval subagent trained with RL inside a harness that re-turns curated evidence rather than an answer. The two divide labor between environment and model in opposite directions. Harness-1 keeps a candidate pool, evidence graph, and verification records in the environment and re-renders them into the context every turn, shaping behavior through a multi-term reward; T-Search carries saved evidence, round summaries, coverage declarations, and goals into each new round, so a chunk survives only if the policy saves it, and a single trajectory-level recall reward suffices. Harness-1 is also English-only and its released search tool relies on an external embed-ding API, whereas T-Search is bilingual and treats the backend as a swappable component. Section 6 evaluates all six baseline agents over the same fixed indices. 
+
+Benchmarks and context. We adopt the fixed-index, gold-evidence design of BrowseComp-Plus (Chen et al., 2025) and SealQA (Pham et al., 2026) and contribute TRuST, the first native-Russian hard-search benchmark, and the bilingual Syn-thComp. Open Russian-language releases have so far targeted general reasoning and efficient in-ference (Stoianov et al., 2026) rather than multi-step retrieval. Short clean rounds with model-controlled saving sit between external memory (Packer et al., 2023) and summarization, avoiding both re-fetching and lossy rewrites where added context degrades judgment (Hong et al., 2025). 
+
+3 System Overview 
+
+Search and memory. Given a question and a search backend, the policy operates through three tools: search_corpus , save_and_advance , and 
+
+finalize_ranking . Within a round, it issues queries, inspects returned chunks, and follows inter-mediate entities or unresolved constraints. To con-tinue in a fresh context, it selects chunks to retain with a reason for each, records which parts of the question are covered or unresolved, and supplies a round summary and a goal for the next round. The harness constructs the next input from the original question, saved chunks, round summaries, cover-age state, and next-round goal (Figure 1). The preceding tool transcript and full reasoning history are discarded. 
+
+Budgets and stopping. The default configura-tion permits up to five rounds, each with a context budget of about 32k tokens. At 75% of that budget, search is locked. Advancing requires at least five searches and one saved chunk. Before the last al-lowed round, finalization is rejected if at least half of the declared question parts remain unresolved. In the last round, advancing is disabled and the coverage restriction on finalization is lifted. Ap-pendix F gives the complete tool schemas, prompts, and validation rules. 
+
+Output. On successful finalization, the policy supplies a ranking with reasons and coverage dec-larations, using saved evidence or chunks retrieved in the current round. The harness exports at most ten chunks; Appendix F describes fallback behav-ior when no finalization is accepted. Three parallel rollouts can be combined by reciprocal rank fusion (Cormack et al., 2009), followed by truncation to ten chunks; Section 6 evaluates the latency–recall trade-off. 
+
+4 Demonstration 
+
+The playground at https://t-search.app/ runs the released checkpoint inside the harness of Sec-tion 3 and shows what the harness sees: every query and its results, every chunk the policy kept and why, the coverage state at each round boundary, and ev-ery action the guardrails rejected (Figure 2). 
+
+Architecture. The harness runs on the server side of a Cloudflare Worker application: it holds 
+
+> 2https://github.com/turbo-llm/ t-search-harness
+
+2T-Search harness     
+
+> Search backend
+> Fixed corpus: dense / BM25 Live web (demo)
+> Question T-Search policy
+> ReAct · up to 5 rounds
+> Round memory
+> Saved chunks + reasons Summaries + coverage + next goal search_corpus Retrieved chunks save_and_advance Next round
+> 32k context / round · search lock at 75%
+> Ranked evidence
+> ≤10 chunks + reasons finalize_ranking
+> Answer model
+> Downstream
+> Answer
+> + citations
+> Optional parallel search
+> 3 rollouts → RRF → top-10
+> Playground trace Queries · saved evidence · round boundaries · rejected actions
+
+Figure 1: T-Search and its playground. The policy searches a selected backend, carries explicit memory between rounds, and returns ranked evidence. Optional parallel rollouts are fused with RRF. The playground displays the search trace, while a separate downstream model generates the answer. Fixed-index evaluation uses corpus backends; live web search is available in the demo. 
+
+the released prompt and tool schemas, enforces the rules of Section 3, calls the model over an OpenAI-compatible API with the official sampling settings, and journals progress so that a run survives a closed tab and can be stopped. The FP8 check-point is served by SGLang (Zheng et al., 2024) on one serverless H200; GPU and index contain-ers start on demand in under a minute and stop after five idle minutes. The backends are a live web-search API (five snippets per query) and a CPU service over TRuST (324 Russian questions, 2.7M passages) and BrowseComp-Plus (830 En-glish questions, 100k pages), each with the bench-mark’s own Qwen3-Embedding-8B index and with BM25. A separate instruct model (Qwen3.6-35B-A3B; Qwen Team, 2026d, reasoning off) writes the answer last from the ranked snippets through a forced submit_answer tool, with citations verified against observed sources. 
+
+Interface. The question box has selectors for the index and a time budget; a corpus index also lists its benchmark questions. The trajectory is a timeline of tool actions split by round dividers: queries with their new chunks and sources, saves with the kept chunks, reasons, and coverage lists, and the final ranking. Rejected actions stay in place, flagged with the rule they broke, and every action opens to its raw arguments and result. Three panels derive from the visible events: context growth (estimated prompt tokens per call against the 32k budget, drop-ping at each round reset), memory contribution 
+
+(ranked sources that survived a reset only because the policy saved them), and findings chain (query wording that earlier results supplied, i.e., the bridge entities). For a benchmark question, gold and ev-idence passages are badged as they arrive and the outcome line reports how many were seen and how many were ranked, the metric of Section 6 for one question; the reference answer can be revealed af-terwards, and the model sees neither the badges nor the answer. 
+
+Walkthrough. The screencast replays a com-pleted T-Search run on a BrowseComp-Plus ques-tion using the dense index. The policy searches from several angles and gold badges appear as the right passages surface; a save closes the round and the context plot drops back to the saved chunks; finalization returns the ranking, which the outcome line scores against the reference evidence docu-ments, and the answer model writes a cited answer to compare with the reference. The screencast con-cludes by showing the available search backends and switching to live web search. 
+
+5 Training Recipe 
+
+We fine-tune Qwen3.6-35B-A3B on synthetic search tasks in two stages: supervised fine-tuning (SFT) on teacher trajectories and reinforcement learning, both inside the harness of Section 3. Tasks are generated over local corpora, so the policy is trained in the loop it is evaluated in. 
+
+Task synthesis and validation. Each task con-tains a question, a short reference answer, anno-tated support chunks, and a fixed index with dis-tractors. Questions are generated natively in each language rather than translated between them, the 3Figure 2: A run in the playground on BrowseComp-Plus question #1217 over the Qwen3-Embedding-8B (Zhang et al., 2025) index. Top: the question and the benchmark picker, with gold and evidence documents marked for badging. Below, the trace around a round boundary: a search after the 75% lock is rejected and flagged with the rule it broke; the save closes round one with eight chunks, the sources shown badged as gold documents; round two opens with a fresh context and its first query with the sources it returned. 
+
+same choice Tsymboi et al. (2026) make for Rus-sian function-calling data after finding that na-tive generation matters. A taxonomy specifies the search mechanic, question form, answer type, and distractor properties. Compatible combinations are sampled as generation instructions, with weights adjusted to balance coverage across search behav-iors. To support generation with a small local model, we preselect connected chunk subgraphs us-ing named-entity annotations, mention frequencies, and co-occurrence statistics, emphasizing niche en-tities and less obvious links. Facts are extracted and paraphrased into an intermediate representation; the composer does not see the original quotations, reducing direct lexical clues. It extends a question one hop, entity, or constraint at a time, checking answerability and whether the added support intro-duces a necessary search step. An adversarial loop then probes shortcuts be-yond these local checks. It tests answerability from the full support set, answer or intermediate-entity leakage, closed-book solvability, and direct retrieval of the required evidence using the whole question as a query. Each support chunk is removed in turn to test its necessity, and superfluous chunks are pruned. Finally, the composer model runs as a search agent; answer correctness and evidence recall are used to identify tasks it solves too easily. Checks proceed from cheaper probes to full agent runs. Feedback names the redundant chunk, leaked clue, or successful shortcut query, and the com-poser revises and resubmits the task. About 40k of 67k candidates survive this process (Appendix A). 
+
+Data split and teacher trajectories. Each lan-guage contributes about 8k SFT questions and a separate pool of 2k RL questions. GLM-5.1 (GLM-5-Team et al., 2026a) collects teacher trajectories. Each is split into self-contained rounds: the input contains the question and the harness state at the start of the round; the target contains the round’s search actions and continuation or finalization de-cision. 
+
+Round selection and mixture. Invalid tool ac-tions are masked from the loss while useful recov-ery after tool feedback is retained. A save round must add previously unsaved support; finalization rounds are selected by evidence coverage. Produc-tive earlier rounds can therefore be retained when a trajectory ends with poor coverage, preserving useful supervision on difficult questions. Selec-tion balances round number, ending type, task dif-ficulty, task mechanic, and evidence completeness. Frequent cells are capped, while rare useful cells are retained, yielding about 11k rounds per lan-guage. A quarter of the mixture targets retriever ro-bustness with semantic, BM25, and hybrid search, varying embedding backends and retrieval depth (Appendix A.4). 
+
+Reinforcement learning. The RL stage starts from the merged SFT checkpoint and trains on the separate RL question pool for each language. 4BrowseComp-Plus SealQA SynthComp Model Harness En Ru En Ru En Ru TRuST Avg.                                                                                                                                                                     
+
+> T-Search (N=3 )T-Search 72.65 62.93 66.08 61.98 58.52 58.00 49.12 61.33 T-Search (N=1 )T-Search 65.35 55.95 61.16 57.72 54.52 53.13 43.92 55.96 GLM-5.1 T-Search 64.32 58.18 55.49 53.21 51.69 51.71 43.11 53.96 GLM-5.2 1T-Search 63.01 52.54 55.30 54.69 52.29 49.37 37.07 52.04 Kimi-K2.6 2T-Search 60.71 49.76 56.86 52.46 48.25 47.06 42.39 51.07 Qwen3.6-27B 3T-Search 56.69 46.81 54.01 48.95 46.82 46.99 38.12 48.34 DeepSeek-V4-Flash 4T-Search 53.27 46.30 55.70 51.12 44.83 45.68 40.40 48.19 Qwen3.5-397B-A17B 5T-Search 53.48 44.06 51.68 48.33 47.38 46.91 38.57 47.20 Qwen3.5-122B-A10B 6T-Search 47.81 40.15 51.57 44.74 42.11 42.25 30.55 42.74 Qwen3.6-35B-A3B (base) T-Search 43.66 38.58 46.07 43.26 41.82 43.88 33.53 41.54 gemma-4-26B-A4B-it 7T-Search 35.32 27.51 45.13 39.05 36.24 34.77 21.75 34.25 Harness-1 Harness-1 40.42 31.34 42.92 40.57 39.26 36.32 18.96 35.68 Tongyi DeepResearch Tongyi 58.48 38.86 70.84 57.30 60.76 43.90 37.71 52.55 WebSailor-32B WebSailor 30.50 19.70 49.83 47.00 48.17 39.32 23.99 36.93 WebDancer-32B WebDancer 23.65 16.30 52.12 49.98 37.26 34.14 18.90 33.19 WebShaper-32B WebDancer ∗23.66 17.76 48.53 48.85 37.76 35.52 18.69 32.97 Search-R1-32B Search-R1 9.32 6.75 22.09 20.52 19.25 13.30 7.47 14.10 Model sources: 1GLM-5-Team et al., 2026b; 2Moonshot AI, 2026; 3Qwen Team, 2026c; 4DeepSeek-AI, 2026; 5Qwen Team, 2026a; 6Qwen Team, 2026b; 7Gemma Team, 2026.
+
+Table 1: Retrieval results (%). Top and middle blocks report final-set Recall@10; the bottom block reports trajectory recall. Bold marks the highest final-set Recall@10 in each column. N =3 denotes three rollouts fused with RRF. 
+
+> ∗
+
+WebShaper uses the WebDancer inference recipe. 
+
+Each trajectory receives a single scalar reward, the recall of the reference support set in the finalized ranking, computed from chunk identifiers without a judge model (Eq. 1); there is no separate reward for saving and no per-round shaping. Recall is preferred over precision-based objectives, which in preliminary runs led to premature finalization with incomplete evidence. We optimize with GSPO (Zheng et al., 2025); training dynamics and hyper-parameters are reported in Appendix B. 
+
+Merging. Each stage is run separately for English and Russian, and the branches are merged back be-fore the next one: DARE (Yu et al., 2024) combines the two SFT branches into the checkpoint that ini-tializes both RL branches, and SLERP (Shoemake, 1985; Goddard et al., 2024) combines the two RL branches into the released model (Figure 5, Ap-pendix B); the same two-stage structure is used for per-capability experts in Tsymboi et al. (2026). The release is thus a single bilingual model. 
+
+6 Evaluation 
+
+Setup. We evaluate on BrowseComp-Plus, the Seal-Hard subset of SealQA, our Russian transla-tions of both, and our newly constructed TRuST and SynthComp benchmarks. TRuST contains 324 manually authored Russian questions, while Syn-thComp contains 395 synthetic questions each in English and Russian. Construction, localization, and scoring are detailed in Appendix C, includ-ing SynthComp’s separation from training data in Appendix C.3. For the main comparison, all models search the same fixed corpora with Qwen3-Embedding-8B, without reranking and with search snippets capped at 512 tokens. T-Search and general-purpose base-lines, including its base model, use the T-Search harness with a five-round cap. Harness-1 and gener-ative search agents use adapted released harnesses. The top and middle blocks of Table 1 report final-set Recall@10. The bottom block reports trajec-tory recall over all unique search results retrieved during a rollout, which is not directly comparable to final-set Recall@10 (Appendix D). Recall uses reference documents for BrowseComp-Plus and TRuST, annotated evidence chunks for our SealQA adaptation, and all reference evidence chunks for SynthComp. Each score column averages recall over the questions in the corresponding benchmark and language. Avg. is the arithmetic mean of the preceding score columns in Table 1. 
+
+Results. Table 1 presents the main results. At a single rollout, T-Search improves over its base model on every benchmark and achieves the high-est average Recall@10 among single-rollout con-figurations in the T-Search harness (55.96). It 50 100  200  300  400 
+
+> 40
+> 45
+> 50
+> 55
+> 60
+> Latency (s/query, wall-clock)
+> Average Recall@10 (%)
+> GLM-5.1
+> GLM-5.2
+> Kimi-K2.6
+> DeepSeek-V4-Flash
+> Qwen3.5-397B-A17B
+> Qwen3.5-122B-A10B
+> Qwen3.6-35B-A3B
+> r1
+> T-Search (N=1)
+> r1
+> T-Search (N=3)
+
+Figure 3: Test-time scaling. Each curve sweeps the round cap r ∈ { 1, 3, 5} for one model in the T-Search harness, left to right; the T-Search N =3 curve additionally fuses three parallel rollouts with RRF. Latency is per-query wall-clock time of the complete agent loop on 35 questions; recall is the mean final-set Recall@10 across benchmarks. 
+
+outperforms all general-purpose baselines except on Russian BrowseComp-Plus, where GLM-5.1 leads. Fusing three rollouts increases recall on every benchmark and raises the average to 61.33. With fusion, T-Search achieves the highest final-set Recall@10 on all benchmarks. Among the genera-tive agents, Tongyi DeepResearch has the highest average trajectory recall. Recall increases from the base model to SFT and from SFT to the released model on every benchmark (Appendix E, Table 3). 
+
+Test-time scaling. The round cap and the number of fused rollouts control the latency–recall trade-off. Figure 3 varies the round cap over {1, 3, 5} in the T-Search harness. Latency is measured on 35 questions using a protocol inspired by Chang et al. (2026), while recall uses all evaluation questions (Appendix E). In one round, T-Search achieves an average recall similar to Qwen3.5-397B-A17B in five rounds, at 40% of its latency. At three rounds, it approaches GLM-5.1 at five rounds using less than a third of its latency. Parallel rollout fusion further improves recall at the cost of additional inference work. 
+
+Retriever robustness. T-Search supports all tested retrievers with the same checkpoint and agent inference settings ( N =1 ), including alter-native dense retrievers, BM25, and LLM rerank-ing. Average Recall@10 ranges from 49.38 with Qwen3-Embedding-0.6B to 62.87 with an LLM reranker on top of the default retriever, compared with 55.96 for the default retriever (Table 2, Ap-pendix E). Reranking improves recall on every benchmark. Retriever choice still matters: BM25 performs best on SynthComp and TRuST, but worst on BrowseComp-Plus among the tested retrievers. 
+
+7 Conclusion 
+
+T-Search treats evidence gathering as a component in its own right. A bounded multi-round harness keeps the working window short while the search runs long, a synthetic data factory builds search difficulty into the corpus and verifies that difficulty by trying to shortcut it, and round-sliced SFT fol-lowed by GSPO on a recall reward turns a 35B mixture-of-experts into a retriever that averages 56.0 Recall@10 over seven English and Russian benchmarks, 14.4 points above its base under the same five-round cap and ahead of considerably larger open models; three-rollout fusion raises this to 61.3. Because the agent reaches documents only through a tool, practitioners can swap the backend, point the harness at their own index, and keep the generator they already run. 
+
+Limitations 
+
+The harness is part of the model. The rounds, the three-tool contract, and the guardrails are what the policy learned to operate inside, so quality can shift in a different loop. We recommend running the released harness and validating on your own index before relying on the reported numbers. 6Evidence, not answers. T-Search returns aranked evidence set with justifications and leaves generation to a downstream model, which is the intended design but means it cannot be deployed or evaluated as a standalone question-answering system. On general-purpose benchmarks, we did not observe noticeable differences from the base model. 
+
+Ethical Statement 
+
+Data provenance. TRuST questions were writ-ten by 15 annotators employed by T-Tech and are grounded in publicly accessible Russian-language web pages. The released index contains 512-token chunks of those pages together with their source URLs, is distributed under ODC-BY for research use, and we honor removal requests from page owners. Every person named in a question or its evidence appears in a public role; we veri-fied this for the whole benchmark after collection. SynthComp-En is built from Essential-Web (Essen-tial AI et al., 2025), while SynthComp-Ru uses Russian-language sources including FineWeb2 (Penedo et al., 2025) and Russian Wikipedia. The benchmark releases are licensed under ODC-BY; source texts remain subject to their original terms. 
+
+Model-generated data and text. Training tasks, teacher trajectories, and the difficulty checks for TRuST were produced by LLMs (the composer model, GLM-5.1, and GPT-5.4); every task is val-idated for answerability against its annotated sup-port chunks, which come from the corpus rather than from a model. The per-chunk reasons that T-Search returns are model-generated and can be wrong; they help a reader locate evidence and do not replace reading it. 
+
+Intended use and misuse. T-Search returns ev-idence rather than answers and is optimized for recall, so a returned list can include chunks that turn out not to support the answer; downstream sys-tems must verify claims against the returned text. Like any web search agent, it could be used to ag-gregate information about individuals. In the public playground the live-web retriever passes the five snippets returned by the search API per query di-rectly to the agent and never fetches page content, so it exposes no information that the underlying search engine does not already return for the same queries; the API’s content policies apply, runs are bounded by the round cap and a time budget, no conversations are stored, and run journals expire after two hours. The released harness lets operators restrict the backend to their own corpus, which is the intended deployment. 
+
+Licensing, coverage, and compute. The base model is released under Apache-2.0, and the har-ness and the released checkpoints, including the FP8 and NVFP4 quantizations, are distributed un-der the same license; benchmarks are ODC-BY. The model is trained and evaluated only in En-glish and Russian; behavior in other languages is untested. SFT and RL for both languages used four nodes of eight H100 GPUs for about 3k GPU-hours in total; the demo serves one on-demand GPU that stops after five idle minutes. 
+
+References                      
+
+> Mohammad Kalim Akram, Saba Sturua, Nastia Havriushenko, Quentin Herreros, Michael Günther, Maximilian Werk, and Han Xiao. 2026. jina-embeddings-v5-text: Task-targeted embedding distil-lation. Preprint , arXiv:2602.15547. Hammad Bashir, Kelly Hong, Patrick Jiang, and Zhiyi Shi. 2026. Chroma context-1: Training a self-editing search agent. Technical report, Chroma. Andrei Z Broder. 1997. On the resemblance and con-tainment of documents. In Proceedings. Compres-sion and Complexity of SEQUENCES 1997 (Cat. No. 97TB100171) , pages 21–29. IEEE. Jonathan D. Chang, Andrew Drozdov, Shubham Toshni-wal, Owen Oertell, Alexander Trott, Jacob Portes, Abhay Gupta, Pallavi Koppol, Ashutosh Baheti, Sean Kulinski, Ivan Zhou, Irene Dea, Krista Opsahl-Ong, Simon Favreau-Lessard, Sean Owen, Jose Javier Gonzalez Ortiz, Arnav Singhvi, Xabi Andrade, Cindy Wang, and 7 others. 2026. KARL: Knowl-edge agents via reinforcement learning. Preprint ,arXiv:2603.05218. Zijian Chen, Xueguang Ma, Shengyao Zhuang, Ping Nie, Kai Zou, Andrew Liu, Joshua Green, Kshama Patel, Ruoxi Meng, Mingyi Su, Sahel Shari-fymoghaddam, Yanxi Li, Haoran Hong, Xinyu Shi, Xuye Liu, Nandan Thakur, Crystina Zhang, Luyu Gao, Wenhu Chen, and Jimmy Lin. 2025. BrowseComp-Plus: A more fair and transparent eval-uation benchmark of deep-research agent. arXiv preprint arXiv:2508.06600 .Gordon V. Cormack, Charles L. A. Clarke, and Stefan Buettcher. 2009. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. In
+> Proceedings of the 32nd International ACM SIGIR Conference on Research and Development in Infor-mation Retrieval , pages 758–759.
+
+7DeepSeek-AI. 2026. DeepSeek-V4: Towards highly efficient million-token context intelligence. Essential AI, Andrew Hojel, Michael Pust, Tim Ro-manski, Yash Vanjani, Ritvik Kapila, Mohit Parmar, Adarsh Chaluvaraju, Alok Tripathy, Anil Thomas, Ashish Tanwer, Darsh J Shah, Ishaan Shah, Karl Stratos, Khoi Nguyen, Kurt Smith, Michael Calla-han, Peter Rushton, Philip Monk, and 5 others. 2025. Essential-web v1.0: 24t tokens of organized web data. 
+
+Preprint , arXiv:2506.14111. Gemma Team. 2026. Gemma 4 technical report. 
+
+Preprint , arXiv:2607.02770. GLM-5-Team, Aohan Zeng, Xin Lv, Zhenyu Hou, Zhengxiao Du, Qinkai Zheng, Bin Chen, Da Yin, Chendi Ge, Chenghua Huang, Chengxing Xie, Chenzheng Zhu, Congfeng Yin, Cunxiang Wang, Gengzheng Pan, Hao Zeng, Haoke Zhang, Haoran Wang, Huilong Chen, and 167 others. 2026a. GLM-5: from vibe coding to agentic engineering. Preprint ,arXiv:2602.15763. GLM-5-Team, Aohan Zeng, Xin Lv, Zhenyu Hou, Zhengxiao Du, Qinkai Zheng, Bin Chen, Da Yin, Chendi Ge, Chenghua Huang, Chengxing Xie, Chenzheng Zhu, Congfeng Yin, Cunxiang Wang, Gengzheng Pan, Hao Zeng, Haoke Zhang, Haoran Wang, Huilong Chen, and 167 others. 2026b. GLM-5: from vibe coding to agentic engineering. Preprint ,arXiv:2602.15763. Charles Goddard, Shamane Siriwardhana, Malikeh Ehghaghi, Luke Meyers, Vladimir Karpukhin, Brian Benedict, Mark McQuade, and Jacob Solawetz. 2024. Arcee’s MergeKit: A toolkit for merging large lan-guage models. In Proceedings of the 2024 Confer-ence on Empirical Methods in Natural Language Pro-cessing: Industry Track , pages 477–485. Association for Computational Linguistics. Kelly Hong, Anton Troynikov, and Jeff Huber. 2025. Context rot: How increasing input to-kens impacts LLM performance. Chroma Tech-nical Report, https://research.trychroma.com/ context-rot .Pengcheng Jiang, Zhiyi Shi, Kelly Hong, Xueqiang Xu, Jiashuo Sun, Jimeng Sun, Hammad Bashir, and Ji-awei Han. 2026. Harness-1: Reinforcement learning for search agents with state-externalizing harnesses. 
+
+Preprint , arXiv:2606.02373. Bowen Jin, Hansi Zeng, Zhenrui Yue, Jinsung Yoon, Sercan O Arik, Dong Wang, Hamed Zamani, and Jiawei Han. 2025. Search-R1: Training LLMs to reason and leverage search engines with reinforce-ment learning. In Second Conference on Language Modeling .Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Hein-rich Küttler, Mike Lewis, Wen tau Yih, Tim Rock-täschel, Sebastian Riedel, and Douwe Kiela. 2020. Retrieval-augmented generation for knowledge-intensive NLP tasks. In Advances in Neural Informa-tion Processing Systems 33 (NeurIPS) .Kuan Li, Zhongwang Zhang, Huifeng Yin, Liwen Zhang, Litu Ou, Jialong Wu, Wenbiao Yin, Baix-uan Li, Zhengwei Tao, Xinyu Wang, Weizhou Shen, Junkai Zhang, Dingchu Zhang, Xixi Wu, Yong Jiang, Ming Yan, Pengjun Xie, Fei Huang, and Jin-gren Zhou. 2025. WebSailor: Navigating super-human reasoning for web agent. arXiv preprint arXiv:2507.02592 .Moonshot AI. 2026. Kimi-K2.6. Official model card, 
+
+https://huggingface.co/moonshotai/Kimi-K2. 6.Charles Packer, Sarah Wooders, Kevin Lin, Vivian Fang, Shishir G. Patil, Ion Stoica, and Joseph E. Gonzalez. 2023. MemGPT: Towards LLMs as operating sys-tems. arXiv preprint arXiv:2310.08560 .Guilherme Penedo, Hynek Kydlíˇ cek, Vinko Sabolˇ cec, Bettina Messmer, Negar Foroutan, Amir Hossein Kargaran, Colin Raffel, Martin Jaggi, Leandro Von Werra, and Thomas Wolf. 2025. FineWeb2: One pipeline to scale them all — adapting pre-training data processing to every language. In Second Confer-ence on Language Modeling .Bowen Peng, Jeffrey Quesnelle, Honglu Fan, and Enrico Shippole. 2024. YaRN: Efficient context window extension of large language models. In International Conference on Learning Representations , volume 2024, pages 31932–31951. Thinh Pham, Nguyen Nguyen, Pratibha Zunjare, Weiyuan Chen, Yu-Min Tseng, and Tu Vu. 2026. SealQA: Raising the bar for reasoning in search-augmented language models. In International Con-ference on Learning Representations , volume 2026, pages 98989–99017. Ofir Press, Muru Zhang, Sewon Min, Ludwig Schmidt, Noah A. Smith, and Mike Lewis. 2023. Measuring and narrowing the compositionality gap in language models. In Findings of EMNLP , pages 5687–5711. Qwen Team. 2026a. Qwen3.5: Towards native multi-modal agents. Qwen Team. 2026b. Qwen3.5: Towards native multi-modal agents. Qwen Team. 2026c. Qwen3.6-27B: Flagship-level cod-ing in a 27B dense model. Qwen Team. 2026d. Qwen3.6-35B-A3B: Agentic cod-ing power, now open to all. Stephen Robertson and Hugo Zaragoza. 2009. The probabilistic relevance framework: BM25 and be-yond. Foundations and Trends in Information Re-trieval , 3(4):333–389. 
+
+8Guangming Sheng, Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru Zhang, Yanghua Peng, Haibin Lin, and Chuan Wu. 2025. HybridFlow: A flexible and efficient RLHF framework. In Proceedings of the Twentieth European Conference on Computer Systems (EuroSys) .Ken Shoemake. 1985. Animating rotation with quater-nion curves. In Proceedings of the 12th Annual Con-ference on Computer Graphics and Interactive Tech-niques (SIGGRAPH) , pages 245–254. Dmitrii Stoianov, Danil Taranets, Olga Tsymboi, Ramil Latypov, Almaz Dautov, Vladislav Kruglikov, Nikita Surkov, German Abramov, Pavel Gein, Dmitry Ab-ulkhanov, Mikhail Gashkov, Viktor Zelenkovskiy, Artem Batalov, Aleksandr Medvedev, and Anatolii Potapov. 2026. T-pro 2.0: An efficient Russian hybrid-reasoning model and playground. In Pro-ceedings of the 19th Conference of the European Chapter of the Association for Computational Lin-guistics (Volume 3: System Demonstrations) , pages 297–319. Association for Computational Linguistics. Zhengwei Tao, Jialong Wu, Wenbiao Yin, Pu Wu, Junkai Zhang, Baixuan Li, Haiyang SHEN, Kuan Li, Liwen Zhang, Xinyu Wang, Wentao Zhang, Yong Jiang, Pengjun Xie, Fei Huang, and Jingren Zhou. 2026. WebShaper: Agentically data synthesizing via information-seeking formalization. In International Conference on Learning Representations , volume 2026, pages 101872–101889. Tongyi DeepResearch Team. 2025. Tongyi Deep-Research technical report. arXiv preprint arXiv:2510.24701 .Harsh Trivedi, Niranjan Balasubramanian, Tushar Khot, and Ashish Sabharwal. 2023. Interleaving retrieval with chain-of-thought reasoning for knowledge-intensive multi-step questions. In Proceedings of ACL , pages 10014–10037. Olga Tsymboi, Dmitrii Stoianov, Ramil Latypov, Danil Taranets, Daniil Dryabin, Mikhail Gashkov, Viktor Zelenkovskiy, Aleksandr Fida, Gleb Alek-torov, Nikita Gulyakov, Arthur Babkin, Aleksandr Medvedev, Pavel Gein, and Anatolii Potapov. 2026. From production traffic to post-training: Building a self-hosted LLM that covers the corporate request mix. arXiv preprint arXiv:2609.01572 .Jason Wei, Zhiqing Sun, Spencer Papay, Scott McK-inney, Jeffrey Han, Isa Fulford, Hyung Won Chung, Alex Tachard Passos, William Fedus, and Amelia Glaese. 2025. BrowseComp: A simple yet challeng-ing benchmark for browsing agents. arXiv preprint arXiv:2504.12516 .Jialong Wu, Baixuan Li, Runnan Fang, Wenbiao Yin, Liwen Zhang, Zhengwei Tao, Dingchu Zhang, Zekun Xi, Gang Fu, Yong Jiang, Pengjun Xie, Fei Huang, and Jingren Zhou. 2025. WebDancer: Towards autonomous information seeking agency. arXiv preprint arXiv:2505.22648 .Zhilin Yang, Peng Qi, Saizheng Zhang, Yoshua Ben-gio, William W. Cohen, Ruslan Salakhutdinov, and Christopher D. Manning. 2018. HotpotQA: A dataset for diverse, explainable multi-hop question answer-ing. In Proceedings of EMNLP , pages 2369–2380. Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao. 2023. ReAct: Synergizing reasoning and acting in language models. In The Eleventh International Conference on Learning Representations (ICLR) .Le Yu, Bowen Yu, Haiyang Yu, Fei Huang, and Yong-bin Li. 2024. Language models are Super Mario: Absorbing abilities from homologous models as a free lunch. In Proceedings of the 41st International Conference on Machine Learning , volume 235 of 
+
+Proceedings of Machine Learning Research , pages 57755–57775. PMLR. Yanzhao Zhang, Mingxin Li, Dingkun Long, Xin Zhang, Huan Lin, Baosong Yang, Pengjun Xie, An Yang, Dayiheng Liu, Junyang Lin, Fei Huang, and Jingren Zhou. 2025. Qwen3 Embedding: Advancing text embedding and reranking through foundation models. 
+
+arXiv preprint arXiv:2506.05176 .Chujie Zheng, Shixuan Liu, Mingze Li, Xiong-Hui Chen, Bowen Yu, Chang Gao, Kai Dang, Yuqiong Liu, Rui Men, An Yang, Jingren Zhou, and Jun-yang Lin. 2025. Group sequence policy optimization. 
+
+arXiv preprint arXiv:2507.18071 .Lianmin Zheng, Liangsheng Yin, Zhiqiang Xie, Chuyue Sun, Jeff Huang, Cody Hao Yu, Shiyi Cao, Christos Kozyrakis, Ion Stoica, Joseph E. Gonzalez, Clark Barrett, and Ying Sheng. 2024. SGLang: Efficient execution of structured language model programs. In 
+
+Advances in Neural Information Processing Systems ,volume 37, pages 62557–62583. Curran Associates, Inc. 
+
+9A Synthetic data and SFT details 
+
+A.1 Task specification and controlled diversity 
+
+Figure 4 summarizes the core construction and re-vision loop. The reference answer and support annotations serve different purposes: the answer is used to validate the question, while the support set enables evidence-based checks and trajectory selection. The trained retriever returns evidence rather than answer text. Taxonomy cells describe intended search behav-ior, not merely subject matter. For example, link-ing intermediate entities differs from intersecting independent constraints or gathering candidates for comparison; temporal reasoning and calcula-tions impose further requirements on the support-ing facts. Question form, answer type, and distrac-tor properties provide additional controls. Only compatible combinations are supplied to the com-poser, and sampling weights are adjusted to cover underrepresented combinations. A specification ex-presses the intended task, but does not establish that its solution actually requires the intended searches. That is tested after composition. 
+
+A.2 Corpus-grounded, incremental composition Selecting the factual basis. The initial ex-ploratory generator, inspired by Context-1 (Bashir et al., 2026), searched the index for related facts but tended to produce entity-chain questions and choose facts accessible through broad queries or model knowledge. The final pipeline instead pre-pares candidate subgraphs before question con-struction. Connections may involve entities, events, dates, or other constraints. Niche facts and less ob-vious links help reduce trivial starting points, while preselection relieves the small composer of having to discover a suitable factual chain by exploring the entire index. 
+
+Controlling lexical shortcuts. The composer re-ceives paraphrased facts rather than source quota-tions. A distinctive phrase copied into a question could itself serve as an effective retrieval query even when the wording appears to require multi-ple reasoning steps. Paraphrasing reduces this risk but may distort a fact, so correctness is checked against the source support chunks. The intermedi-ate representation is an input to composition, not a replacement for the source evidence used in valida-tion. 
+
+Local and task-level checks. After each exten-sion, answerability and the necessity of the added support are checked before composition continues. These checks localize a broken chain or unneces-sary constraint to an individual extension. Vali-dation of the completed question then attempts to bypass the intended chain. A locally valid exten-sion may still leave a shortcut through the question wording, a broad retrieval query, or facts already known to the model. 
+
+A.3 Adversarial validation and revision 
+
+The checks use different inputs and test different failure modes: 1. Full-support answerability. Given the ques-tion and all annotated support chunks, a solver must be able to derive the reference answer. This checks that composition and paraphras-ing have not produced an unsupported task. 2. Question leakage. The wording is examined for direct or near-direct disclosure of the an-swer or a key intermediate entity. Revealing an intermediate search target can collapse a multi-step task even if the final answer is not stated. 3. Whole-question retrieval. The complete question is submitted as a search query and the top results are inspected for the required evidence. This tests whether the task can be bypassed by retrieving directly from its word-ing. 4. Support necessity. Each annotated support chunk is removed separately and answerabil-ity is checked again. A chunk that does not affect the tested solver’s ability to answer is pruned instead of being counted as an addi-tional reasoning step. 5. Closed-book solvability. The question is tested without retrieved evidence to iden-tify answers available from model knowledge rather than the intended search process. 6. Agentic difficulty. The composer model at-tempts the question through the search har-ness. Answer correctness and evidence recall are examined together to identify tasks that remain too easy. A successful agent run is not by itself the acceptance criterion. 10 Corpus preparation 
+
+> English / Russian corpora
+> NER + corpus statistics
+> Select linked chunks
+> Extract and paraphrase
+> Niche facts, less obvious links Keep original support chunks
+> Sample a taxonomy cell
+> Mechanic · form · answer type
+> Distractors · balanced sampling
+> Incremental composer
+> Use paraphrased facts Add a hop or constraint
+> After each extension:
+> Check answerability and support necessity
+> No source quotations
+
+Adversarial validation  
+
+> • Full-support answerability • Question leakage • Whole-question retrieval • Support necessity • Agentic difficulty
+> Cheap probes → full agent runs
+> Retained tasks
+> Question + answer
+> Annotated support
+> Fixed index
+> with distractors
+> Revise and recheck Feedback: leaked clue,
+> shortcut query, redundant chunk
+> Validation uses original support; redundant chunks are pruned.
+> Task construction and revision
+> Core loop · Appendix A.1–A.3
+
+Figure 4: Synthetic task construction and revision. A taxonomy specification and paraphrased corpus facts guide incremental composition. Original support chunks remain available for validation. The composer model also acts as the search agent in the difficulty check. Actionable feedback returns to the composer for revision and rechecking; retained tasks provide questions, reference answers, annotated support, and fixed retrieval indices. 
+
+Failures return actionable feedback to the com-poser, such as a support chunk that can be removed or a query that exposes the answer directly. Revised tasks are checked again. The checks are comple-mentary: answerability with all supports does not establish their individual necessity, and failure of the whole-question query does not rule out another shortcut. Support necessity is relative to the tested solver and context. Failure to answer after removing a chunk does not prove global minimality of the sup-port set or the absence of every alternative solu-tion. The aggregate retention count in Section 5 measures the output of the overall process, not the contribution of any single check. 
+
+A.4 Teacher trajectories and SFT selection Round boundaries and supervision. For rounds after the first, the incoming state contains saved ev-idence with reasons, summaries of earlier rounds, coverage declarations, and the next-round goal (Appendix F.2). The retained example therefore includes that state rather than reconstructing the entire preceding tool history. Round boundaries expose the student to initial, intermediate, and ter-minal search states, and allow selection at a finer granularity than whole trajectories. 
+
+Masking and quality checks. An invalid action is excluded from the supervised loss, but the re-sulting tool error can provide context for a useful correction. The continuation is not automatically discarded because an earlier action was invalid. Additional checks inspect tool-call structure and required arguments and remove looping or unjus-tifiably long reasoning. Local masking concerns which actions are supervised; round selection con-cerns whether the remaining search behavior is useful. 
+
+Progress-based continuation selection. Let E
+
+be the task’s reference support set, I the chunk identifiers saved in the incoming state, and S those saved at the end of a round. For a round ending in 
+
+save_and_advance , the progress criterion is 
+
+|(S ∩ E) \ I| > 0.
+
+Saving only previously preserved evidence, or issu-ing more queries without adding required support, does not satisfy this criterion. 
+
+Finalization and difficult trajectories. For a round ending in finalize_ranking , selection con-siders coverage of the reference evidence in the re-turned set. A weak terminal round can be removed while useful earlier rounds from the same trajectory remain. Filtering only by a trajectory’s final recall would also discard those productive rounds, bias-ing supervision toward questions that the teacher can already solve well. The continuation criterion above and finalization coverage are SFT selection statistics; they do not define RL rewards. 
+
+Mixture construction and retriever diversity. 
+
+Initial rounds are common, while later rounds that still acquire useful evidence are rarer. Capping fre-quent mixture cells and retaining rare useful ones 11 limits the dominance of easy initial states with-out discarding the latter. Balancing also accounts for task difficulty, search mechanic, and evidence completeness, so round position alone does not determine selection. Retriever variation changes both which evidence is returned and the distribution of search-tool out-puts seen during supervision. The collection set-tings vary the search method, embedding model, and retrieval depth. These data are used during SFT, whereas Appendix E evaluates retriever sub-stitution with the final model held fixed. Section 5 reports question counts, retained round counts, and the robustness-mixture proportion. Checks sepa-rating SynthComp from the SFT and RL pools are described in Appendix C.3. 
+
+B Reward and policy optimization 
+
+Trajectory-level learning. Starting from the merged SFT checkpoint, the policy runs its own complete searches: formulating queries, reading results, preserving chunks across rounds, and final-izing a ranked evidence set. RL therefore trains behavior under the states reached by the current policy, whereas SFT supervises selected teacher rounds. The reward compares the returned chunk identifiers with the task’s reference chunk set G. A trajectory that finalizes the ranking F receives 
+
+r = |F ∩ G||G| . (1) This is the entire training signal: one scalar per trajectory, evaluated after finalization, with no per-save or per-round terms and no shaping. GSPO consumes it at the sequence level, as a single advan-tage per trajectory normalized within the group of rollouts sampled for the same question. The reward requires neither an LLM judge nor a comparison between generated answer text and a reference an-swer. It also does not use TRuST’s document-level mapping: that mapping belongs to evaluation. 
+
+Why recall is the main signal. Exploratory pre-cision/F1 objectives encouraged a conservative pol-icy early in RL: search less, return a small set, and finalize with incomplete evidence. Recall instead rewards finding more of the required support. Pre-cision and F1 remain diagnostics; the harness limits the number of returned chunks, so the output can-not grow without bound. Set-based recall gives no extra credit for returning a required identifier re-peatedly. The reward measures evidence coverage, rather than correctness of a downstream generated answer or a preference for a particular ordering of already retrieved reference chunks. 
+
+Optimizer choice and language branches. 
+
+GSPO uses sequence-level importance ratios rather than token-level ratios. This choice is motivated by discrepancies in expert routing between rollout generation and training for a mixture-of-experts policy. The adopted recipe does not record and replay routing decisions. 
+
+Training dynamics. Figure 6 tracks both runs over about 70 optimization steps. The mean fi-nalization recall (Eq. 1) rises from 0.44 to 0.53 in English and from 0.27 to 0.40 in Russian; the number of search calls per episode increases in both languages; best-of-4 held-out answer accu-racy improves from 0.47 to 0.65 in English and from 0.37 to 0.51 in Russian; and the rollout-to-training perplexity ratio converges to about 1.01. Training runs on four nodes of eight H100 GPUs with verl (Sheng et al., 2025) and a Megatron-Core backend at a learning rate of 10 −6, a KL penalty of 
+
+10 −3 to the reference policy, asymmetric clipping 
+
+(εlo , ε hi ) = (0 .2, 0.28) , eight rollouts per question at temperature 0.7, and up to 28,672 response to-kens per episode. English and Russian SFT branches are first com-bined with DARE. That shared checkpoint initial-izes two language-specific RL branches, which are subsequently combined with SLERP. The compar-ison between the base and released models in Ta-ble 1 measures the combined result of the full train-ing recipe. Table 3 in Appendix E also reports the model after SFT. Because both trained models include language-branch merges, these results do not measure the effect of SFT or RL separately from merging, or compare alternative optimizers or merge operators. 
+
+C Benchmark construction and scoring 
+
+We release TRuST (T-Tech Russian Search Test) and the English and Russian versions of Synth-Comp under ODC-BY, with fixed retrieval indices, evidence annotations, and hard negatives. 
+
+C.1 Existing benchmarks and Russian localization 
+
+Evaluation uses fixed indices rather than live web search, keeping the corpus available to each model fixed during evaluation. BrowseComp-Plus 12 Synthetic  
+
+> search tasks
+> SFT · En
+> SFT · Ru
+> DARE
+> merge
+> RL · GSPO · En
+> RL · GSPO · Ru
+> SLERP
+> merge T-Search
+
+Figure 5: The training recipe. English and Russian are trained separately at each stage: per-language SFT is combined with DARE (Yu et al., 2024), per-language GSPO reinforcement learning with SLERP (Shoemake, 1985; Goddard et al., 2024). Reward =  fi nalize recall        
+
+> 0.2
+> 0.4
+> 0.6
+> 25 50
+> EN run
+> RU run
+> KL to reference
+> 0.05
+> 0.1
+> 25 50
+> Gradient norm
+> 0.5
+> 1
+> 25 50
+> Rollout/train ppl ratio
+> 1
+> 1.02
+> 1.04
+> 25 50
+> RL step
+> Held-out acc (best@4)
+> 0.4
+> 0.6
+> 025 50
+> RL step
+> Searches per episode
+> 20
+> 30
+> 25 50
+> RL step
+
+Figure 6: RL training diagnostics for the two GSPO runs (English, Russian), trained separately before the SLERP merge. The reward panel plots the finalization recall of Eq. 1, the only training signal; it rises over training, as does held-out accuracy; the number of search calls per episode grows; the gradient norm decays and the KL to the reference grows only modestly under the 10 −3 penalty; and the rollout/train perplexity ratio converges toward 1, indicating that the vLLM rollout and Megatron training passes stay consistent without router replay. Held-out accuracy is best-of-4 answer accuracy on training-distribution questions held out from both SFT and RL, evaluated in the fixed round-based configuration; it is not a split of any evaluation benchmark. 
+
+supplies the underlying evaluation methodology. SealQA’s Seal-Hard questions are adapted to a fixed corpus: documents are split into 512-token chunks, which are annotated for whether they pro-vide evidence needed for the answer. Thirty-three questions are removed because their documents lack useful evidence or contradict the reference an-swer, leaving 221 questions in each of the English and Russian versions. Russian localization has two parts: translat-ing the document corpus and translating question– answer pairs. Translation rules preserve named entities, numbers and units, document structure, formatting, and style. Answering from translated reference texts checks that the evidence still sup-ports the reference answer. Such a check tests preservation of the evidence–answer relation; it does not establish equivalence of retrieval difficulty after translation. Translated tasks also remain dis-tinct from tasks originally constructed from Rus-sian sources, motivating the native Russian collec-tions below. 
+
+C.2 TRuST construction Design and coverage. TRuST contains 324 man-ually constructed Russian questions with short, un-ambiguous answers, created by 15 annotators from Russian-language web sources. Each example fol-lows a hard-to-retrieve, easy-to-verify design: the answer should not be reliably recoverable from 13 model knowledge or a single surface-level search, but should be unambiguously supported once the required evidence is found. The collection covers 8 topics: business and technology, sports, news and politics, science and academic publications, me-dia and arts, regulation and law, geography, and history and archives. Five reasoning categories characterize the search difficulty: connecting mul-tiple sources, using structured evidence, tracking changes over time, disambiguating entities, and comparing candidates. These categories target com-mon challenges of the Russian web, including frag-mented evidence, inconsistent entity naming, re-gional and archived pages, official and legal docu-ments, and information distributed across multiple sites. 
+
+Question construction. Question construction starts from a seed fact or entity. Annotators pro-gressively add properties that narrow the candidate set without directly revealing the answer, and then formulate a natural-language question with a short, definite answer. For each example, they record a fi-nal source confirming the answer together with the intermediate sources needed to connect the clues in the question to that answer, preferably across different websites. Questions themselves are au-thored manually, and LLMs are used only during validation rather than for question generation. 
+
+Difficulty and evidence validation. Each candi-date passes several shortcut and difficulty checks. Annotators search the full question, paraphrased variants, and English reformulations to reject exam-ples whose answer is surfaced directly by simple retrieval. GPT-5.4 independently attempts each question in closed-book, single-query, and full agentic-search settings. Questions solved from model knowledge or with a single-query search are returned for revision. For the agentic setting, we additionally use a 3-minute search-time threshold as a heuristic for selecting difficult examples. The final 324 questions represent roughly 30% of initially authored candidates, corresponding to approximately 1.1k candidate questions. About 30% are filtered out by the difficulty checks, while a further 40% fail subsequent evidence validation, primarily because the collected sources do not es-tablish all required intermediate connections or pro-vide insufficient evidence to recover the reference answer. Items are retained only when the question, reference answer, and collected evidence form a complete and consistent evidence chain. 
+
+Corpus construction. For indexing, each col-lected reference document is split into 512-token chunks, and the subset of chunks containing evi-dence needed to establish the answer is annotated explicitly. Each question is associated with an av-erage of 6.01 gold documents and 6.32 annotated gold chunks, for 2,047 annotated gold chunks in total. Finally, following BrowseComp-Plus, each ques-tion is decomposed into subqueries and search-engine results are used to mine hard negatives. These documents are plausible retrieval candidates but do not provide the evidence required to estab-lish the answer, allowing the benchmark to test whether an agent can distinguish genuinely sup-porting evidence from realistic distractors. 
+
+C.3 SynthComp in a shared index 
+
+SynthComp-En uses Essential-Web (Essential AI et al., 2025); SynthComp-Ru draws on Russian web sources including FineWeb2 (Penedo et al., 2025) and Russian Wikipedia. Candidate tasks generated with the training factory are pooled into a shared index for each language and undergo the additional validation described below. 
+
+Cross-task interference. A task validated in its original retrieval environment may acquire a short-cut when supports from other questions enter the index. The shared-index check therefore probes the neighborhood of both the original question and the queries from agent trajectories using the eval-uation retriever. Candidates are excluded when those probes expose another task’s supports or al-ternative documents that bypass the annotated evi-dence chain. The objective is to reduce cases where low annotated-evidence recall would penalize an agent for finding a different valid route. These probes cover the explored queries and retrieved neighborhoods, not every possible query or alterna-tive proof. 
+
+Distractors and difficulty. Isolation is an admis-sibility check rather than a measure of difficulty. An isolated document can still be easy to find from a distinctive clue. Hard negatives are therefore mined again with the same subquery-based ap-proach used for TRuST, and candidates without a sufficiently challenging retrieval neighborhood are removed. Runs of a strong search agent provide evidence-recall scores used to divide questions into three difficulty levels. The final selection balances search mechanic, chain depth, and difficulty, with 14 extra emphasis on harder questions. These levels are relative to the agent used for construction, not universal difficulty labels. 
+
+Separation from training. MinHash (Broder, 1997) compares benchmark question texts with the SFT and RL question pools to remove identical and near-duplicate formulations. Additional overlap checks exclude tasks built on the same combined support sets. The text and support checks target dif-ferent leakage paths: rewording a question does not necessarily change its underlying task. This sepa-ration does not remove the shared-factory relation-ship. Appendix E therefore also summarizes the results excluding SynthComp-En and SynthComp-Ru. 
+
+Evidence versus answer-bearing chunks. The reference evidence set contains all required chunks, including the gold subset in which the answer itself occurs. Finding that subset alone is insufficient to solve the question: the remaining supports establish constraints and connections that identify the answer. Consequently, headline SynthComp recall uses the entire evidence set, not just the answer-bearing subset. 
+
+C.4 Scoring and evaluation protocol Recall and the output budget. Let C10 (q) be the final ranked list of at most ten retrieved items for question q. Let ϕb map a returned identifier to the scoring unit of benchmark b. BrowseComp-Plus uses reference document identifiers, with 
+
+Gq,b defined by its evidence annotations. For TRuST, ϕb removes the terminal chunk suffix from a docid_chunkid identifier to recover its parent document. For our SealQA adaptation and Synth-Comp, it preserves the evidence-chunk identifier. The selected set is 
+
+Sq,b = {ϕb(c) : c ∈ C10 (q)},
+
+and recall is 
+
+Rb(q) = |Sq,b ∩ Gq,b ||Gq,b | , (2) where Gq,b contains reference documents for BrowseComp-Plus and TRuST, annotated evi-dence chunks for our SealQA adaptation, and all reference evidence chunks for SynthComp. BrowseComp-Plus is scored at document level in both languages. Multiple returned chunks from the same reference document receive credit only once. The ten-item limit is applied before mapping and deduplication, so the scored set may contain fewer than ten documents. TRuST recall is not generally binary. For SynthComp, the denominator includes all evidence chunks, not only the answer-bearing gold subset. For N =3 , RRF combines three ranked lists, each containing at most ten items, and the fused ranking is truncated to ten before applying ϕb and deduplicating. Recall is averaged over questions for each benchmark. Avg. is the arithmetic mean of the corresponding table columns. 
+
+Interpreting document deduplication. As a hy-pothetical example, returned chunks A_1 , A_2 , and 
+
+B_1 map to documents {A, B }. Against reference documents {A, B, C }, TRuST recall is 2/3: the second chunk from A gives no additional docu-ment credit. 
+
+Comparison scope. Models in the T-Search block share its memory and stopping rules. The remaining blocks evaluate adapted released search-agent harnesses over the same fixed indices, as detailed in Appendix D. TRuST and SynthComp are released with fixed indices. 
+
+D Evaluation of search-agent baselines 
+
+Shared retrieval environment. For the main comparison in Table 1, all agents search the same fixed benchmark corpora using Qwen3-Embedding-8B, without reranking or public-web access. Adapters preserve the indexed retrieval units. The text snippet for each search result is capped at 512 tokens, excluding titles and tool-response formatting. For agents supporting visit operations, returned identifiers resolve to local cor-pus records rather than external URLs. We do not add citation requirements or final-source-selection instructions to generative agents. Each baseline uses one rollout per question. 
+
+Implementation provenance. Our Alibaba adapters derive from the released DeepResearch code at revision f72f75d8c3eb , including the WebDancer and WebSailor implementations under WebAgent .3 Harness-1 uses revision 
+
+8ac401216785 ,4 and Search-R1 uses revision 
+
+> 3https://github.com/Alibaba-NLP/DeepResearch/ tree/f72f75d8c3eb842f2bbbab096a12206ff66e270f
+> 4https://github.com/pat-jj/harness-1/tree/ 8ac4012167858f6478fb2a8fd840e4550e2af161
+
+15 598e61bd1d36 .5 We retain model-specific interac-tion protocols and stopping logic, subject to the adaptations below. These experiments evaluate the released agents in our retrieval environment; they do not reproduce the authors’ original benchmark settings. 
+
+WebDancer and WebShaper. WebDancer uses the released Qwen-Agent-based search-and-visit loop, with a maximum of 50 model calls and ten search results per query. For WebShaper, we adopt the same WebDancer inference recipe, as we did not identify a separate released WebShaper run-ner. Both configurations retain Qwen-Agent’s ap-proximate 58k-token input limit and a maximum of 32,768 output tokens per call. We serve both models with a 131,072-token context and fourfold YaRN (Peng et al., 2024) scaling to accommodate these limits. 
+
+WebSailor. WebSailor uses its released tagged-text search-and-visit loop, with a 40-call budget and a native 32,768-token context without YaRN. We retain its context-limit finalization procedure which may add a final generation. 
+
+Tongyi DeepResearch. We use the released Re-Act inference configuration. The available tools are local search and visit; Python execution, schol-arly search, and file parsing are not exposed. The budgets are 100 model calls, 150 minutes per episode, and at most 10k output tokens per call. The model uses its native 131,072-token context without YaRN and retains context-triggered final-ization. 
+
+Shared visit summarizer. Following the Web-Sailor setup, we use Qwen2.5-72B-Instruct for goal-conditioned extraction from visited corpus records. All four Alibaba agents access the same auxiliary-model service. The helper uses a native 32,768-token context, with at most 24k input to-kens including the visit goal and prompt format-ting, and 8,192 output tokens. Long records are truncated to fit the input budget. Decoding uses temperature zero and top-p one. T-Search uses no auxiliary language model. 
+
+Harness-1. We retain the released Harmony in-teraction protocol, stateful evidence curation, and a 40-step runtime limit. Verification uses the author’s unavailable-tool ablation: the verifier remains in 
+
+> 5https://github.com/PeterGriffinJin/Search-R1/ tree/598e61bd1d36895726d28a8d06b3a15bed19f5d3
+
+the tool schema but returns an unavailable mes-sage without invoking a verifier model. Rerank-ing and the downstream answer generator are dis-abled. The internal curated set retains its 30-item cap; our final export selects at most ten items by importance, breaking ties by insertion order. For long-record reads, the adapter supplies a prefix of at most 4,096 tokens including a truncation marker. This avoids the upstream behavior of dropping an oversized record entirely. Like T-Search, the eval-uated Harness-1 configuration uses no auxiliary language model. 
+
+Search-R1. We evaluate PeterJinGo/ SearchR1-nq_hotpotqa_train-qwen2. 5-32b-em-grpo-v0.3 using the released search loop adapted to a completions endpoint. It permits four search-capable generations followed by a final generation, uses greedy decoding with at most 500 output tokens per call, and maintains a rolling 4,096-token input. Each search returns three results, and the complete search observation is additionally truncated to 500 tokens. Search-R1 uses neither visit nor an auxiliary model. 
+
+Trajectory recall. For question q, let Hq,t be the identifiers returned by the search backend at retrieval event t. Let ϕb map these identifiers to the scoring units of benchmark b, and define 
+
+Uq = [
+
+> t
+
+{ϕb(h) : h ∈ Hq,t }.
+
+The mapping ϕb is the same as for final-set re-call in Appendix C: BrowseComp-Plus uses doc-ument identifiers, SealQA and SynthComp use evidence-chunk identifiers, and TRuST identifiers are mapped to parent documents before deduplica-tion. These scoring units apply to both language versions where available. Given the corresponding reference set Gq, trajectory recall is 
+
+TrajectoryRecall = 1
+
+|Q|
+
+X
+
+> q∈Q
+
+|Uq ∩ Gq||Gq| .
+
+This metric uses all unique search-backend results, without a ten-result cutoff, rather than sources cited or selected in the final answer. For Search-R1, this includes backend-returned hits that may be trun-cated out of the observation shown to the policy. T-Search and Harness-1 instead use their final selected lists of at most ten items, with the cut-off applied before benchmark-specific document 16 mapping and deduplication. Budget-limited roll-outs remain in the evaluation, and empty retrieval sets receive zero recall. Infrastructure failures are checked separately rather than silently scored as model failures. 
+
+Scope of comparison. The shared corpus, re-triever, and snippet cap standardize the retrieval environment. However, agents differ in interac-tion budgets, context management, auxiliary-model use, and the number of sources included in their reported metric. Trajectory recall measures accu-mulated search coverage; final-set Recall@10 addi-tionally measures source selection under a ten-item limit. 
+
+E Additional retrieval diagnostics 
+
+Training-stage comparison. Table 3 compares the base model, the model after SFT, and the re-leased model after SFT and RL, evaluated in the T-Search harness with Qwen3-Embedding-8B. On every benchmark, the SFT model scores above the base model, and the released model scores above the SFT model. Each trained model includes the merge of its English and Russian branches, so the comparison does not measure training and merging separately. 
+
+Backend substitution. Table 2 keeps the T-Search agent fixed while changing the search back-end. Qwen3-Embedding-8B with Qwen3.6-27B as the LLM reranker gives the highest macro-average. BM25 is strongest on SynthComp and TRuST among the tested backends, while its BrowseComp-Plus scores are lower. These comparisons measure sensitivity to backend choice; they do not isolate the contribution of the multi-retriever SFT subset. 
+
+Results excluding SynthComp. To check whether the average ranking depends on the benchmark generated with the training-data factory, we recompute the unweighted mean of the five non-SynthComp columns in Table 1. Single-rollout T-Search averages 56.82 Recall@10, compared with 54.86 for GLM-5.1, the highest baseline average over these columns. These are derived averages of the reported results, not additional evaluation runs. 
+
+Latency study. Latency is measured on five ran-domly selected questions from each benchmark column in Table 1, 35 in total. Each question is run 13 times per configuration, with three warm-ups and ten measured repetitions. Per-query wall-clock times cover the complete agent loop and are av-eraged first over repetitions, then over questions within each benchmark, and finally across bench-marks with equal weights. We vary the maximum number of rounds. For N =3 , the three rollouts run in parallel, so total wall-clock time includes the slowest rollout and fusion overhead. Parallel execu-tion still requires additional inference work. Recall is evaluated on the full benchmarks, not only the 35 timing questions. 
+
+F Search harness implementation details 
+
+Tool contracts. Appendix F.1 presents the re-leased function schemas as field tables and their original descriptions. The following paragraphs de-scribe runtime validation and state transitions. The harness returns error feedback for invalid tool calls and rejects plain-text replies when a tool action is required. Validation checks tool names, arguments, and transition conditions. During SFT such invalid actions are masked from the loss while the contin-uation is kept (Section 5). The default per-round budget is 32,768 tokens, and the default round cap is five. The latency study varies the round cap while retaining the same transition rules. 
+
+Transition and stopping constraints. At 75% context utilization, further search calls are locked, leaving continuation or finalization. A
+
+save_and_advance transition requires at least five searches and at least one saved chunk with an expla-nation. The five-search condition governs a round transition, not all final answers: a task solved ear-lier can finalize without making five queries. Sav-ing is disabled in the last allowed round. For saving and finalization, the model supplies lists of covered and unresolved question parts. Out-side the final round, finalization is rejected if at least half remain unresolved. This checks the sub-mitted coverage state; it does not independently verify the truth of the model’s coverage assessment. In the last round, the agent must return its best avail-able evidence even if the question remains partly unresolved. 
+
+Repeated queries and results. The harness re-jects repeated queries differing only in case or whitespace. It also filters results already seen in the current round and chunks already carried in the context. A chunk seen in a previous round but not preserved may be retrieved again: the earlier deci-17 BrowseComp-Plus SealQA SynthComp Backend En Ru En Ru En Ru TRuST Avg. Qwen3-8B + LLM reranking 75.04 66.24 64.82 59.95 62.71 62.39 48.93 62.87 Qwen3-8B (default) 65.35 55.95 61.16 57.72 54.52 53.13 43.92 55.96 Jina v5 text-small 60.52 51.41 62.46 55.60 56.37 54.56 39.31 54.32 BM25 39.49 31.97 55.33 50.00 66.87 65.15 49.18 51.14 Qwen3-0.6B 51.70 43.71 56.80 49.53 54.72 52.27 36.95 49.38 
+
+Table 2: Reported Recall@10 (%) under backend substitution, with the same T-Search agent and N =1 . Qwen3-8B and Qwen3-0.6B denote Qwen3-Embedding models; Jina denotes jina-embeddings-v5-text-small-retrieval (Akram et al., 2026).                            
+
+> Benchmark Base SFT +RL BrowseComp-Plus (En) 43.7 54.0 65.4 BrowseComp-Plus (Ru) 38.6 47.7 56.0 SealQA (En) 46.1 51.5 61.2 SealQA (Ru) 43.3 50.8 57.7 SynthComp-En 41.8 50.0 54.5 SynthComp-Ru 43.9 48.9 53.1 TRuST 33.5 40.2 43.9 Avg. 41.5 49.0 56.0
+
+Table 3: Final-set Recall@10 (%). Base is Qwen3.6-35B-A3B, SFT is the model after supervised fine-tuning, and +RL is the released model after SFT followed by reinforcement learning. Avg. is the unweighted mean across the benchmark rows. Scores and averages retain the one-decimal precision of the published stage com-parison. The Base and +RL columns report the same results as the base model and T-Search ( N =1 ) in Ta-ble 1, rounded to one decimal place. 
+
+sion to discard it does not permanently exclude it. These rules suppress unproductive repetition while allowing the agent to revisit earlier evidence after its search direction changes. 
+
+Final export and fallback. The released harness truncates the exported ranking to max_results ,which defaults to ten. If no finalize_ranking 
+
+call is accepted, it starts from the persistent saved set in insertion order and fills remaining positions with globally seen chunks ordered by cached re-trieval score. The fallback can therefore include chunks from earlier rounds that were not preserved in the current context. 
+
+F.1 Released tool schemas 
+
+Tables 4–6 present the function schemas from the released harness at revision 997a0ba1685d .6 They preserve field names, types, required-field member-ship, defaults, and the original descriptions. For nested fields, Required refers to the enclosing ob-ject; [] denotes an array item. Empty descrip- 
+
+> 6Released harness source, revision 997a0ba1685d .
+
+tion cells correspond to fields without a descrip-tion in the source schema. Descriptions in the tables are copied from the schemas, with only LaTeX typesetting applied. Before sending the schemas to the model, the harness replaces con-figuration placeholders in the descriptions with their configured values. With the release defaults, 
+
+__MIN_SEARCHES_BEFORE_SAVE__ is replaced by 5 searches, and the minimum lengths for reason ,
+
+round_summary , and next_round_goal are 20, 50, and 30 characters, respectively. The harness also validates tool calls against the transition and stopping rules described above. 
+
+F.2 System prompt and round re-entry 
+
+The system-prompt template in Table 7 is repro-duced from the same release. The harness replaces 
+
+__MAX_ROUNDS__ with the configured round cap. Round 1 pairs this system message with a user message of the form Query: {query} . Each sub-sequent round uses the same system message and the re-entry template in Table 8. Re-entry carries saved evidence, round summaries, coverage dec-larations, and the next-round goal, rather than the full preceding transcript. 
+
+Round re-entry template. The brace-delimited fields are filled from the current query and ses-sion state. The saved block contains chunk iden-tifiers, reasons, and snippets. The history block contains previous round goals, summaries, and cov-erage declarations. The coverage state aggregates declared covered and unresolved concepts. The 
+
+{save_tool_note} field contains the correspond-ing note in Table 9 depending on whether another round is available. 18 search_corpus 
+
+Semantic search over the corpus. Returns up to top_k items as {chunk_id, snippet, score}. Parallel calls allowed — issue multiple search_corpus tool calls in one assistant turn to cover independent angles. Dedup: within the current round, chunks already shown this round are filtered. Chunks in your saved set are filtered (already in context at top). Chunks seen in PREVIOUS rounds but not saved CAN resurface — re-consider them under the new angle. Field Type Required Description 
+
+query string Yes Search query string. 
+
+top_k integer No Number of results to return. Default: 5.    
+
+> Table 4: Released schema for search_corpus . Tool type: function ; parameters: object .
+
+save_and_advance 
+
+End the current round and start a new one with fresh context. Only saved chunks survive the transition. Requires ≥__MIN_SEARCHES_BEFORE_SAVE__ searches in the current round and ≥1 chunk saved. DISABLED in the last round. chunk_ids: saved come from this round’s search results or the currently-saved set (re-passing updates the reason); drop from the current saved set; no overlap between saved_ chunks and drop_from_saved. You MUST declare progress via covered_concepts and unresolved_ concepts — at least one of the two must be non-empty, and they must not overlap. Field Type Required Description 
+
+saved_chunks array of object Yes Chunks to append to / update in the saved set. 
+
+saved_chunks[].chunk_id string Yes 
+
+saved_chunks[].reason string Yes ≥__MIN_REASON_LEN__ chars. Specific fact or entity this chunk contributes. 
+
+drop_from_saved array of string No Optional. chunk_ids to remove from the saved set. Use [] if dropping nothing. 
+
+covered_concepts array of string Yes Query atoms now supported by saved chunks. Short labels (entities, dates, attributes). Can be [] if no solid evidence yet, but then unresolved_concepts must be non-empty. 
+
+unresolved_concepts array of string Yes Query atoms still without evidence. Short labels. Can be [] only if all concepts are covered (then covered_concepts must list them). 
+
+round_summary string Yes ≥__MIN_ROUND_SUMMARY_LEN__ chars. What you searched this round and what you found. 
+
+next_round_goal string Yes ≥__MIN_NEXT_GOAL_LEN__ chars. Concrete plan targeting unresolved.    
+
+> Table 5: Released schema for save_and_advance . Tool type: function ; parameters: object .
+
+19 finalize_ranking 
+
+Submit final ranked list of most relevant documents for the user query and end the session. Empty ranking rejected. chunk_ids must come from your current context (saved + this round’s seen). You MUST declare covered_concepts and unresolved_concepts — harness will reject finalize if unresolved ≥ 50% of (covered + unresolved), except in the last round (where save_and_advance is disabled). Retry allowed on reject. Field Type Required Description 
+
+ranking array of object Yes Ordered most →least relevant. 
+
+ranking[].chunk_id string Yes 
+
+ranking[].reason string Yes ≥__MIN_REASON_LEN__ chars. Specific fact or entity this chunk contributes. 
+
+covered_concepts array of string Yes Query atoms supported by evidence in the final ranking. Short labels. 
+
+unresolved_concepts array of string Yes Query atoms still without evidence at finalize time. Short labels.    
+
+> Table 6: Released schema for finalize_ranking . Tool type: function ; parameters: object .
+
+20 You are a document retrieval specialist. First stage of a two-stage pipeline: user query → YOU → ranked documents → downstream agent → answer You do NOT answer the question. You output a ranked list of documents via 
+
+`finalize_ranking ` — the only normal way to end the session. # Rounds You operate in up to __MAX_ROUNDS__ rounds (a ceiling, not a target). Each round is a fresh 32K-token context for searching the corpus. Chunks saved via 
+
+`save_and_advance ` are the only state that carries across rounds. A round ends with `save_and_advance ` (continue in a new round) or `finalize_ranking ` (end the session). **Call `finalize_ranking ` from any round the moment evidence is sufficient.** At 75% of round budget `search_corpus ` locks — you must then `save_and_advance ` or 
+
+`finalize_ranking `. In the last round only `finalize_ranking ` is available. 
+
+`finalize_ranking ` is rejected when ≥50% of declared concepts are unresolved and you aren't in the last round — use `save_and_advance ` instead. Each tool response carries: [Round N/__MAX_ROUNDS__ | Budget: X/32768 (pct%) | Saved: K chunks | Searches this round: M] # Available tools - `search_corpus ` — semantic corpus search within the current round. - `save_and_advance ` — end the round, carry the saved set to the next. - `finalize_ranking ` — submit the final ranked list and end the session. # Strategy Identify the query's key concepts. Search from distinct angles, follow up on entities and bridges you find. Finalize honestly when the corpus stops yielding new evidence. # Hard rules Every turn has ≥1 tool call — no free-text replies. Follow explicit textual evidence, not speculation. # Output format (via finalize_ranking) 
+
+``` 
+
+{"ranking": [{"chunk_id": "...", "reason": "..."}, ...], "covered_concepts": [...], "unresolved_concepts": [...] }
+
+``` 
+
+> Table 7: System-prompt template from the pinned harness release.
+
+21 # Original query {original_query} # Saved chunks (carried over) {saved_block} # Round history {history_block} # Coverage state {coverage_state} # Round {current_round} of {max_rounds} ## Goal set in round {prev_round}: {round_goal} # Task Re-read saved chunks, coverage state, and the goal. Decide: 1. **Is the goal still valid?** Adjust if new findings shifted priorities. 2. **Do saved chunks already cover most of the query?** If yes, `finalize_ranking `
+
+now — don't burn a round for marginal gain. 3. **Otherwise pursue unresolved concepts** with fresh angles. If a concept resisted 2+ rounds, evidence is likely not in the corpus — finalize honestly with it declared unresolved. Reminder: {max_rounds} is a ceiling, not a target. {save_tool_note} Budget: 32K this round. At 75% search locks — `save_and_advance ` or 
+
+`finalize_ranking `.
+
+> Table 8: Round re-entry template. Brace-delimited fields are filled from the current query and session state.
+
+Before the last round 
+
+save_and_advance is available after 5+ searches this round. Use it only when fresh context would genuinely help close remaining concepts — if another round is unlikely to add evidence, finalize_ranking is the right call. 
+
+In the last round 
+
+Last round (__MAX_ROUNDS__). save_and_advance is DISABLED — call finalize_ranking before the budget runs out. The harness does NOT reject finalize here even with many unresolved concepts — submit your best candidates with honest covered/unresolved declarations.   
+
+> Table 9: Alternative values of the {save_tool_note} field.
+
+22

@@ -1,0 +1,139 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-10T22:07:15.960769+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2610.05870v1",
+      "source": "arxiv",
+      "title": "Certification of Real Images through Calibrated Content Authentication",
+      "abstract": "Generative models can synthesize high-quality inauthentic multimedia content that is already being misused at scale. We evaluate twenty deepfake detectors against ten generators released in the last four years and find accuracy decreasing over time, from near-perfect 99.5% to 76%. Adversarial perturbations further reduce every baseline detector to below 2% accuracy, effectively inverting the detector's assigned label. We argue that this unreliability reflects a fundamental ambiguity: generators can reproduce authentic content exactly (e.g., through memorization), so content alone cannot reveal the true provenance label.For this reason, content produced by a generator must admit a faithful reconstruction by that same generator, and finding such a reconstruction makes synthetic provenance plausible and authenticity plausibly deniable.We therefore propose and evaluate a detection paradigm that outputs a calibrated prediction of whether authenticity is plausibly deniable: a faithful reconstruction by any known generator establishes plausible deniability, while calibration bounds how often content from known generators fails to be reproduced. Our evaluation shows that (i) our detector can be calibrated so that at most 1% of generated content is wrongly certified, an operating point at which most baseline detectors reach near-zero recall, including the strongest with 93% accuracy; (ii) calibrating a stricter security threshold on attacked samples preserves this bound against adaptive adversaries within the evaluated bounded-perturbation attack space, whose perturbations break every baseline, but does not cover arbitrary adversarial transformations; and (iii) post-hoc verifiability is eroding, as 1,116 of 3,000 Reddit images resist reproduction by a 2022 generator, but only 55 to 79 resist reproduction by 2024 generators.",
+      "authors": [
+        "Sarim Hashmi",
+        "Abdelrahman Elsayed",
+        "Mohammed Talha Alam",
+        "Samuele Poppi",
+        "Nils Lukas"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-05T06:36:03+00:00",
+      "link": "https://arxiv.org/pdf/2610.05870v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "content authentication and deepfake detection for image provenance",
+      "llm_evidence_cn": "面向图像来源确证的内容认证与深度伪造检测",
+      "llm_evidence": "面向图像来源确证的内容认证与深度伪造检测",
+      "canonical_evidence": "面向图像来源确证的内容认证与深度伪造检测",
+      "llm_tldr_en": "Evaluating twenty deepfake detectors, the paper shows accuracy falling from 99.5% to 76% and argues real-image certification must rely on faithful reconstruction by the source generator.",
+      "llm_tldr_cn": "生成模型能合成高质量伪造内容并被大规模滥用，但作者评测二十个深度伪造检测器对十个生成器发现准确率从近乎完美的99.5%降至76%，对抗扰动更使所有基线降至2%以下，甚至翻转标签。作者认为这源于根本歧义：生成器可精确复现真实内容，故仅凭内容无法揭示真实来源。为此提出生成器产物必须能被同一生成器忠实重构，并以重构作为内容认证依据。该工作为真实图像确证提供了校准式认证的新视角。",
+      "llm_tldr": "生成模型能合成高质量伪造内容并被大规模滥用，但作者评测二十个深度伪造检测器对十个生成器发现准确率从近乎完美的99.5%降至76%，对抗扰动更使所有基线降至2%以下，甚至翻转标签。作者认为这源于根本歧义：生成器可精确复现真实内容，故仅凭内容无法揭示真实来源。为此提出生成器产物必须能被同一生成器忠实重构，并以重构作为内容认证依据。该工作为真实图像确证提供了校准式认证的新视角。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.06782v1",
+      "source": "arxiv",
+      "title": "T-Search: An Open Agentic Retriever and Playground for Hard Multi-Step Search",
+      "abstract": "We present T-Search, an open-weight agentic retriever for hard multi-step search. Given a question and a search tool over a fixed corpus, it runs a bounded multi-round search and returns a ranked list of evidence chunks with short justifications, leaving answer generation to a downstream model, so backend and generator can be swapped without retraining. T-Search is built on Qwen3.6-35B-A3B and trained on adversarially filtered synthetic search tasks with round-sliced supervised fine-tuning followed by GSPO on a recall reward. Averaged over seven English and Russian benchmarks with gold evidence annotations, it reaches 56.0 Recall@10 with one rollout, 14.4 points above its base, and 61.3 with three fused rollouts, outperforming larger open models. We release the model, harness, live demo, and three benchmarks, including TRuST, the first native-Russian hard-search benchmark.",
+      "authors": [
+        "Olga Tsymboi",
+        "Ramil Latypov",
+        "Aleksandr Medvedev",
+        "Danil Taranets",
+        "Dmitrii Stoianov",
+        "Nikita Gulyakov",
+        "Gleb Alektorov",
+        "Anatolii Potapov"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-10-05T17:44:26+00:00",
+      "link": "https://arxiv.org/pdf/2610.06782v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic retriever returning ranked evidence chunks for multi-step search",
+      "llm_evidence_cn": "面向多步搜索返回排序证据块的智能体检索器",
+      "llm_evidence": "面向多步搜索返回排序证据块的智能体检索器",
+      "canonical_evidence": "面向多步搜索返回排序证据块的智能体检索器",
+      "llm_tldr_en": "T-Search is an open-weight agentic retriever for hard multi-step search that returns ranked evidence chunks with justifications, trained via round-sliced SFT and GSPO recall rewards, improving Recall@10 by 14.4 points over its base.",
+      "llm_tldr_cn": "针对复杂问题多步检索中证据获取不稳定的问题，本文提出T-Search开放智能体检索器，在固定语料上进行多轮有界搜索，返回带简要理由的排序证据块并将答案生成交由下游模型。该模型基于Qwen构建，采用轮次切片监督微调与召回奖励强化学习训练。在七个英俄基准上单次回放Recall@10达56.0，较基座提升14.4点，三次融合达61.3。该工作为证据驱动的事实核查提供了可灵活替换的检索组件。",
+      "llm_tldr": "针对复杂问题多步检索中证据获取不稳定的问题，本文提出T-Search开放智能体检索器，在固定语料上进行多轮有界搜索，返回带简要理由的排序证据块并将答案生成交由下游模型。该模型基于Qwen构建，采用轮次切片监督微调与召回奖励强化学习训练。在七个英俄基准上单次回放Recall@10达56.0，较基座提升14.4点，三次融合达61.3。该工作为证据驱动的事实核查提供了可灵活替换的检索组件。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.10507v1",
+      "source": "arxiv",
+      "title": "RECAST: Learning to Compute the Right Context through Adaptive Evidence Routing",
+      "abstract": "Large language models are increasingly applied to tasks grounded in long, heterogeneous information sources. Conventional Retrieval-Augmented Generation (RAG) relies on fixed similarity-based retrieval, while agentic variants adapt queries and tool use but remain largely retrieval-centric. However, in many tasks, the evidence required for a solution is not explicitly present in any single source item. Instead, it must be derived through filtering, aggregation, or computation across multiple source items. In this work, we introduce RECAST (Routing Evidence through Computation, Access, and Synthesized Tools), a learned framework that formulates evidence construction as a sequential decision process over heterogeneous retrieval and computation operations, allowing evidence to be actively derived rather than merely retrieved. A lightweight RouterLM iteratively selects and formulates primitive operations or specifies customized operations for a frozen CompilerLM to translate into executable code. Once it judges the evidence sufficient, RouterLM passes the accepted evidence to a frozen AnswerLM to produce the final solution. We train RouterLM with supervised fine-tuning (SFT) followed by group relative policy optimization (GRPO). Across six heterogeneous benchmark families, RECAST achieves a mean success rate of 75.6%, outperforming the strongest large-model baseline by 15.9%. Moreover, training enables the Qwen3.5-9B RouterLM to outperform a training-free Gemini 3.5 Flash RouterLM by 5.0%. On three held-out benchmarks, RECAST improves over the strongest baseline by 15.0% on average, demonstrating strong zero-shot generalization across tasks and heterogeneous source representations.",
+      "authors": [
+        "Yilun Hao",
+        "Krishna Sayana",
+        "Isabella Ye",
+        "James S Ren",
+        "Sukhdeep Sodhi",
+        "Craig Boutilier",
+        "Chuchu Fan"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-10-07T17:51:08+00:00",
+      "link": "https://arxiv.org/pdf/2610.10507v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "adaptive evidence routing for retrieval-augmented evidence construction",
+      "llm_evidence_cn": "面向检索增强的自适应证据路由与证据构建",
+      "llm_evidence": "面向检索增强的自适应证据路由与证据构建",
+      "canonical_evidence": "面向检索增强的自适应证据路由与证据构建",
+      "llm_tldr_en": "RECAST recasts evidence construction as a sequential decision process over heterogeneous retrieval and computation, enabling adaptive context routing beyond fixed similarity retrieval.",
+      "llm_tldr_cn": "传统检索增强生成依赖固定的相似度检索，当答案证据并不存在于单条来源、而需跨多条来源过滤聚合或计算时便力不从心。为此作者提出RECAST框架，把证据构建形式化为在异构检索与计算操作上的序列决策过程，学习如何路由到恰当的上下文。该工作面向长而异构信息源的任务，强调证据需被推导而非直接检索。其贡献在于将证据构建从被动的检索式范式推进为主动的计算式证据构造，为需要外部证据支撑的推理任务提供新思路。",
+      "llm_tldr": "传统检索增强生成依赖固定的相似度检索，当答案证据并不存在于单条来源、而需跨多条来源过滤聚合或计算时便力不从心。为此作者提出RECAST框架，把证据构建形式化为在异构检索与计算操作上的序列决策过程，学习如何路由到恰当的上下文。该工作面向长而异构信息源的任务，强调证据需被推导而非直接检索。其贡献在于将证据构建从被动的检索式范式推进为主动的计算式证据构造，为需要外部证据支撑的推理任务提供新思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

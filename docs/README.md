@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-10-09</span>
+      <span class="dpr-home-dashboard-kicker">2026-10-10</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 6 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 3 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
-    <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>2 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>2</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>4</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>3</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-10-09 23:10:03 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-10-10 22:09:57 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,7 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日围绕短视频验证与图像生成可信度，从6篇中精读2篇、速读4篇，重点拆解最小充分证据与红队基准。</p>
-<p>最值得看的是《MiniVer-V》（9.0/10）和《False Claims, Credible Images》（8.0/10），分别指向短视频核验的证据定位与商用图像生成器的虚假声明风险。</p>
-<p>普通读者可优先读这两篇摘要，抓住“证据够不够”和“图像可信不等于说法可信”，再按需查看VERITYGATE、DEPICT、MSU等速读工作。</p>
+<p>2026-10-10 日报速读 3 篇，聚焦图像内容认证、多步检索智能体与自适应证据路由。最值得关注 T-Search 的开放智能体检索器（面向硬多步搜索）和 RECAST 的自适应证据路由思路。普通读者可先挑这两篇速读，理解&quot;检索+路由&quot;如何提升复杂搜索与上下文计算效率。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -80,12 +78,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">2 篇</strong>
+    <strong class="dpr-home-dashboard-count">0 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="MiniVer-V: Identifying Minimal Sufficient Evidence for Short Video Verification">MiniVer-V: Identifying Minimal Sufficient Evidence for Short Video Verification</span></li><li><span class="dpr-home-dashboard-paper-title" title="False Claims, Credible Images: A Red-Teaming Benchmark for Commercial Image Generators">False Claims, Credible Images: A Red-Teaming Benchmark for Commercial Image Generators</span></li></ul>
+<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>2</strong></span></div>
+
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -93,12 +91,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">4 篇</strong>
+    <strong class="dpr-home-dashboard-count">3 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="VERITYGATE: A Four-Gate Schema-Level Faithfulness Framework and Paired Benchmark for Grounded LLM Narrations over Structured Evidence">VERITYGATE: A Four-Gate Schema-Level Faithfulness Framework and Paired Benchmark for Grounded LLM Narrations over Structured Evidence</span></li><li><span class="dpr-home-dashboard-paper-title" title="DEPICT: Scoring Text-to-Image Alignment by Answer Agreement">DEPICT: Scoring Text-to-Image Alignment by Answer Agreement</span></li><li><span class="dpr-home-dashboard-paper-title" title="MSU Team at the Explainable Deepfake Detection Challenge 2026: Grounded Artifact Evidence for Deepfake Detection">MSU Team at the Explainable Deepfake Detection Challenge 2026: Grounded Artifact Evidence for Deepfake Detection</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Certification of Real Images through Calibrated Content Authentication">Certification of Real Images through Calibrated Content Authentication</span></li><li><span class="dpr-home-dashboard-paper-title" title="T-Search: An Open Agentic Retriever and Playground for Hard Multi-Step Search">T-Search: An Open Agentic Retriever and Playground for Hard Multi-Step Search</span></li><li><span class="dpr-home-dashboard-paper-title" title="RECAST: Learning to Compute the Right Context through Adaptive Evidence Routing">RECAST: Learning to Compute the Right Context through Adaptive Evidence Routing</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>4</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>3</strong></span></div>
 </section>
 </div>
 

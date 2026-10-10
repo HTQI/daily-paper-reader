@@ -1,0 +1,57 @@
+{
+  "date": "20261010",
+  "date_label": "",
+  "generated_at": "2026-10-10 22:09:57 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2610.05870v1",
+      "route": "202610/10/2610.05870v1-certification-of-real-images-through-calibrated-content-authentication",
+      "title": "Certification of Real Images through Calibrated Content Authentication",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向图像来源确证的内容认证与深度伪造检测",
+      "first_seen_at": "2026-10-10 22:09:57 UTC",
+      "updated_at": "2026-10-10 22:09:57 UTC"
+    },
+    {
+      "paper_id": "2610.06782v1",
+      "route": "202610/10/2610.06782v1-t-search-an-open-agentic-retriever-and-playground-for-hard-multi-step-search",
+      "title": "T-Search: An Open Agentic Retriever and Playground for Hard Multi-Step Search",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向多步搜索返回排序证据块的智能体检索器",
+      "first_seen_at": "2026-10-10 22:09:57 UTC",
+      "updated_at": "2026-10-10 22:09:57 UTC"
+    },
+    {
+      "paper_id": "2610.10507v1",
+      "route": "202610/10/2610.10507v1-recast-learning-to-compute-the-right-context-through-adaptive-evidence-routing",
+      "title": "RECAST: Learning to Compute the Right Context through Adaptive Evidence Routing",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "mfnd"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向检索增强的自适应证据路由与证据构建",
+      "first_seen_at": "2026-10-10 22:09:57 UTC",
+      "updated_at": "2026-10-10 22:09:57 UTC"
+    }
+  ]
+}

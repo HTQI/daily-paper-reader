@@ -1,0 +1,54 @@
+{
+  "label": "2026-10-10",
+  "date": "2026-10-10",
+  "generated_at": "2026-10-10T22:09:58",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202610/10/2610.05870v1-certification-of-real-images-through-calibrated-content-authentication",
+      "section": "quick",
+      "title_en": "Certification of Real Images through Calibrated Content Authentication",
+      "authors": "Sarim Hashmi, Abdelrahman Elsayed, Mohammed Talha Alam, Samuele Poppi, Nils Lukas",
+      "date": "2026-10-05",
+      "pdf": "https://arxiv.org/pdf/2610.05870v1",
+      "score": "6.0",
+      "evidence": "面向图像来源确证的内容认证与深度伪造检测",
+      "tldr": "生成模型可合成高逼真内容并被滥用，但现有 deepfake 检测器对近四年新生成器准确率从99.5%降至76%，对抗扰动更可降至2%以下。作者指出仅凭内容无法判断来源，因为生成器可精确复现真实内容。为此提出校准式内容认证：若已知生成器能忠实重构某内容，则合成来源可信、真实性可合理否认。实验显示可将误认证率控制在1%以内，并在有界扰动下保持安全界限，但后验可验证性正随生成器迭代下降。",
+      "tags": "query:mfnd",
+      "abstract_en": "Generative models can synthesize high-quality inauthentic multimedia content that is already being misused at scale. We evaluate twenty deepfake detectors against ten generators released in the last four years and find accuracy decreasing over time, from near-perfect 99.5% to 76%. Adversarial perturbations further reduce every baseline detector to below 2% accuracy, effectively inverting the detector's assigned label. We argue that this unreliability reflects a fundamental ambiguity: generators can reproduce authentic content exactly (e.g., through memorization), so content alone cannot reveal the true provenance label.For this reason, content produced by a generator must admit a faithful reconstruction by that same generator, and finding such a reconstruction makes synthetic provenance plausible and authenticity plausibly deniable.We therefore propose and evaluate a detection paradigm that outputs a calibrated prediction of whether authenticity is plausibly deniable: a faithful reconstruction by any known generator establishes plausible deniability, while calibration bounds how often content from known generators fails to be reproduced. Our evaluation shows that (i) our detector can be calibrated so that at most 1% of generated content is wrongly certified, an operating point at which most baseline detectors reach near-zero recall, including the strongest with 93% accuracy; (ii) calibrating a stricter security threshold on attacked samples preserves this bound against adaptive adversaries within the evaluated bounded-perturbation attack space, whose perturbations break every baseline, but does not cover arbitrary adversarial transformations; and (iii) post-hoc verifiability is eroding, as 1,116 of 3,000 Reddit images resist reproduction by a 2022 generator, but only 55 to 79 resist reproduction by 2024 generators.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202610/10/2610.06782v1-t-search-an-open-agentic-retriever-and-playground-for-hard-multi-step-search",
+      "section": "quick",
+      "title_en": "T-Search: An Open Agentic Retriever and Playground for Hard Multi-Step Search",
+      "authors": "Olga Tsymboi, Ramil Latypov, Aleksandr Medvedev, Danil Taranets, Dmitrii Stoianov, Nikita Gulyakov, Gleb Alektorov, Anatolii Potapov",
+      "date": "2026-10-05",
+      "pdf": "https://arxiv.org/pdf/2610.06782v1",
+      "score": "6.0",
+      "evidence": "面向多步搜索返回排序证据块的智能体检索器",
+      "tldr": "针对困难多步搜索，现有检索器常与后端和生成器耦合，迁移困难。T-Search 是开放权重智能体检索器，基于 Qwen3.6-35B-A3B，经对抗筛选合成任务、轮次切片监督微调与 GSPO 召回奖励训练，执行有界多轮搜索并返回证据块排序及理由，答案生成留给下游模型。在七个英俄基准上单次 rollout 达 56.0 Recall@10，较基座提升14.4分，三次融合达61.3，超越更大开源模型。并发布模型、工具、演示及含首个俄语原生困难搜索基准 TRuST 的三个基准。",
+      "tags": "query:mfnd",
+      "abstract_en": "We present T-Search, an open-weight agentic retriever for hard multi-step search. Given a question and a search tool over a fixed corpus, it runs a bounded multi-round search and returns a ranked list of evidence chunks with short justifications, leaving answer generation to a downstream model, so backend and generator can be swapped without retraining. T-Search is built on Qwen3.6-35B-A3B and trained on adversarially filtered synthetic search tasks with round-sliced supervised fine-tuning followed by GSPO on a recall reward. Averaged over seven English and Russian benchmarks with gold evidence annotations, it reaches 56.0 Recall@10 with one rollout, 14.4 points above its base, and 61.3 with three fused rollouts, outperforming larger open models. We release the model, harness, live demo, and three benchmarks, including TRuST, the first native-Russian hard-search benchmark.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202610/10/2610.10507v1-recast-learning-to-compute-the-right-context-through-adaptive-evidence-routing",
+      "section": "quick",
+      "title_en": "RECAST: Learning to Compute the Right Context through Adaptive Evidence Routing",
+      "authors": "Yilun Hao, Krishna Sayana, Isabella Ye, James S Ren, Sukhdeep Sodhi, Craig Boutilier, Chuchu Fan",
+      "date": "2026-10-07",
+      "pdf": "https://arxiv.org/pdf/2610.10507v1",
+      "score": "6.0",
+      "evidence": "面向检索增强的自适应证据路由与证据构建",
+      "tldr": "面向长而异构的信息源，传统RAG依赖固定相似度检索，难以获取需要跨多个条目过滤、聚合或计算才能推导出的证据。RECAST把证据构建视为检索与计算操作的序贯决策过程，让轻量RouterLM迭代选择或定制操作，并交给冻结CompilerLM翻译为可执行代码，待证据充分后再由AnswerLM生成最终答案。训练采用SFT与GRPO，在六个异构基准族上平均成功率达75.6%，超过最强基线15.9%，并在三个留出基准上平均领先15.0%，展现出强零样本泛化能力。",
+      "tags": "query:mfnd",
+      "abstract_en": "Large language models are increasingly applied to tasks grounded in long, heterogeneous information sources. Conventional Retrieval-Augmented Generation (RAG) relies on fixed similarity-based retrieval, while agentic variants adapt queries and tool use but remain largely retrieval-centric. However, in many tasks, the evidence required for a solution is not explicitly present in any single source item. Instead, it must be derived through filtering, aggregation, or computation across multiple source items. In this work, we introduce RECAST (Routing Evidence through Computation, Access, and Synthesized Tools), a learned framework that formulates evidence construction as a sequential decision process over heterogeneous retrieval and computation operations, allowing evidence to be actively derived rather than merely retrieved. A lightweight RouterLM iteratively selects and formulates primitive operations or specifies customized operations for a frozen CompilerLM to translate into executable code. Once it judges the evidence sufficient, RouterLM passes the accepted evidence to a frozen AnswerLM to produce the final solution. We train RouterLM with supervised fine-tuning (SFT) followed by group relative policy optimization (GRPO). Across six heterogeneous benchmark families, RECAST achieves a mean success rate of 75.6%, outperforming the strongest large-model baseline by 15.9%. Moreover, training enables the Qwen3.5-9B RouterLM to outperform a training-free Gemini 3.5 Flash RouterLM by 5.0%. On three held-out benchmarks, RECAST improves over the strongest baseline by 15.0% on average, demonstrating strong zero-shot generalization across tasks and heterogeneous source representations.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
