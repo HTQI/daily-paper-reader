@@ -51,14 +51,14 @@
       <span class="dpr-home-dashboard-kicker">2026-10-13</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 5 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 6 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
-    <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>2 次</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>5</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>6</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-10-13 00:59:59 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-10-13 23:25:42 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日完成5篇速读、0篇精读，列出的3篇速读中《SharP》以7.0分领跑。</p>
-<p>最值得看低资源假新闻检测的LLM软硬提示增强，以及RAG证据依赖与多模态GraphRAG评测。</p>
-<p>普通读者可先读《SharP》，再扫《RAG-Stress》和《TopoGraphRAG-Bench》了解RAG可靠性边界。</p>
+<p>今天完成6篇速读、0篇精读，最高分是7.0的SharP低资源假新闻检测。</p>
+<p>最值得看：LLM软/硬提示增强能否缓解少样本假新闻识别，以及多模态文档QA与GraphRAG布局证据推理的评测/工具路线。</p>
+<p>普通读者可先读SharP摘要，关注提示增强在真实低资源场景的落地效果，再按需跟进多模态检索评测。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -93,12 +93,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">5 篇</strong>
+    <strong class="dpr-home-dashboard-count">6 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="SharP: Soft and Hard Prompt-Guided Augmentation with LLM for Low Resource Fake News Detection">SharP: Soft and Hard Prompt-Guided Augmentation with LLM for Low Resource Fake News Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="TopoGraphRAG-Bench: Evaluating Multimodal GraphRAG on Layout-Grounded Evidence Reasoning">TopoGraphRAG-Bench: Evaluating Multimodal GraphRAG on Layout-Grounded Evidence Reasoning</span></li><li><span class="dpr-home-dashboard-paper-title" title="RAG-Stress: Probing the Limits of Evidence Reliance in Retrieval-Augmented Generation">RAG-Stress: Probing the Limits of Evidence Reliance in Retrieval-Augmented Generation</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="SharP: Soft and Hard Prompt-Guided Augmentation with LLM for Low Resource Fake News Detection">SharP: Soft and Hard Prompt-Guided Augmentation with LLM for Low Resource Fake News Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="Locate, Judge, Read: Role-Specialized Tool Agents over a Knowledge-Point Index for Open-Domain Multimodal Document QA">Locate, Judge, Read: Role-Specialized Tool Agents over a Knowledge-Point Index for Open-Domain Multimodal Document QA</span></li><li><span class="dpr-home-dashboard-paper-title" title="TopoGraphRAG-Bench: Evaluating Multimodal GraphRAG on Layout-Grounded Evidence Reasoning">TopoGraphRAG-Bench: Evaluating Multimodal GraphRAG on Layout-Grounded Evidence Reasoning</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>5</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>6</strong></span></div>
 </section>
 </div>
 

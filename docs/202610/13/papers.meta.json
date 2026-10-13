@@ -1,8 +1,8 @@
 {
   "label": "2026-10-13",
   "date": "2026-10-13",
-  "generated_at": "2026-10-13T01:00:03",
-  "count": 5,
+  "generated_at": "2026-10-13T23:25:48",
+  "count": 6,
   "papers": [
     {
       "paper_id": "202610/13/2610.13207v1-sharp-soft-and-hard-prompt-guided-augmentation-with-llm-for-low-resource-fake-news-detection",
@@ -16,6 +16,21 @@
       "tldr": "低资源虚假新闻检测面临标注稀缺与欺骗模式隐蔽的难题，且需在固定测试协议下评估。SharP以软硬提示引导LLM生成任务特定样本，硬提示提供结构与事实约束，软提示注入学习到的语义模式。方法还引入边界感知策略与双目标优化，聚焦分类器低置信区域并对齐源数据与分类反馈。由此生成兼具领域一致性与判别力的合成数据，提升低资源场景下检测的鲁棒性与泛化。",
       "tags": "query:mfnd",
       "abstract_en": "Fake news detection under low resource conditions is challenged by the scarcity of labeled data and the difficulty of capturing subtle deceptive patterns. In this work, we focus on low resource fake news detection, where only a small labeled set is available for training, while evaluation is performed under a fixed and unchanged test protocol. This setting is motivated by costly, ambiguous fact-checking and emerging topics and domains that are poorly covered by existing benchmarks. Existing data augmentation methods, such as synonym substitution, generative adversarial networks, and large language model (LLM)-based generation, often produce fluent but overly generic content, lacking the task-specific relevance needed for accurate detection. To address this, we propose SharP, a boundary-aware text generation framework guided by soft and hard prompts, which leverages LLMs as tools adapted to produce task-specific synthetic samples. SharP employs a dual prompt mechanism: hard prompts provide structured guidance and factual constraints, while soft prompts introduce learned semantic patterns from the data. These two types of prompts are combined to guide the generation process, enabling the model to produce samples that closely align with the characteristics of news. To further enhance detection performance, we incorporate a boundary-aware strategy that steers generation toward areas where the classifier is less confident, helping to clarify subtle distinctions between real and fake content. In addition, we adopt a dual objective optimization that balances semantic alignment with the source data and classifier feedback. This encourages the generation of samples that are both domain-consistent and helpful for refining decision boundaries, ultimately improving model robustness and generalization in low resource fake news detection.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202610/13/2610.13128v1-locate-judge-read-role-specialized-tool-agents-over-a-knowledge-point-index-for-open-domain-multimodal-document-qa",
+      "section": "quick",
+      "title_en": "Locate, Judge, Read: Role-Specialized Tool Agents over a Knowledge-Point Index for Open-Domain Multimodal Document QA",
+      "authors": "Wenlin Lin, Fanzhe Wei",
+      "date": "2026-10-09",
+      "pdf": "https://arxiv.org/pdf/2610.13128v1",
+      "score": "6.0",
+      "evidence": "角色专用检索智能体与证据池用于多模态文档问答",
+      "tldr": "开放域多模态文档问答需先定位再阅读，现有检索增强智能体却让单一模型兼管搜索与阅读并自行调度。KnowForge 按职责拆分：只会搜索的 Locator、强制二跳的桥接裁判、有界证据池，以及只会读文本图像表格的 Deep Reader 与格式检查合成器。Qwen3.6-35B-A3B 在 M3DocVQA 上 F1 47.5，超 M3DocRAG 11.0；MultiHop-RAG 达 73.5。",
+      "tags": "query:mfnd",
+      "abstract_en": "Question answering over large heterogeneous document collections requires first finding the right passages and then reading them, yet current retrieval-augmented agents give one model both kinds of tools and let it schedule itself. We present KnowForge, a pipeline separated by job: a hybrid-retrieval knowledge-point index; a Locator agent that can only search; a code-scheduled bridge judge that forces the missing second hop; a typed, size-bounded evidence pool that merges every search's ranking; a Deep Reader agent that can only read text, images and tables; and a synthesizer with a format checker. With a self-hosted Qwen3.6-35B-A3B (3B active), KnowForge reaches F1 47.5 on the full open-domain M3DocVQA (2,441 questions, 3,368 PDFs), +11.0 over the published M3DocRAG system and +7.1 over one-shot retrieve-and-answer on the same index and model, and 53.5 with DeepSeek-V4-Flash. On MultiHop-RAG it reaches 73.5 accuracy, above the strongest published RAG and GraphRAG results (71.2); on the single-document MMLongBench-Doc it lifts the same model from 34.8 to 47.0, level with GPT-4o reading page images (46.3). Per-job ablations on the full benchmarks attribute the gain: the Deep Reader is worth 3.8, 9.8 and 0 points on the three corpora, tracking how visual each is; merging both agents into one with all tools and twice the rounds loses 1.9 F1 because it keeps searching instead of reading; a round-budget sweep shows a step at four Locator rounds and a plateau beyond; query latency scales with model calls rather than corpus size. We serve the three indexed benchmarks as read-only knowledge bases (free registration) and release all prompts and the runner code: https://github.com/metask-ai/knowforge-bench",
       "source": "arxiv",
       "selection_source": "fresh_fetch"
     },
