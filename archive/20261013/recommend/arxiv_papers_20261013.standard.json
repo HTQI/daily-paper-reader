@@ -1,0 +1,221 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-13T00:58:24.471571+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 5,
+    "quick_skim_target": 11,
+    "quick_selected": 5
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2610.13207v1",
+      "source": "arxiv",
+      "title": "SharP: Soft and Hard Prompt-Guided Augmentation with LLM for Low Resource Fake News Detection",
+      "abstract": "Fake news detection under low resource conditions is challenged by the scarcity of labeled data and the difficulty of capturing subtle deceptive patterns. In this work, we focus on low resource fake news detection, where only a small labeled set is available for training, while evaluation is performed under a fixed and unchanged test protocol. This setting is motivated by costly, ambiguous fact-checking and emerging topics and domains that are poorly covered by existing benchmarks. Existing data augmentation methods, such as synonym substitution, generative adversarial networks, and large language model (LLM)-based generation, often produce fluent but overly generic content, lacking the task-specific relevance needed for accurate detection. To address this, we propose SharP, a boundary-aware text generation framework guided by soft and hard prompts, which leverages LLMs as tools adapted to produce task-specific synthetic samples. SharP employs a dual prompt mechanism: hard prompts provide structured guidance and factual constraints, while soft prompts introduce learned semantic patterns from the data. These two types of prompts are combined to guide the generation process, enabling the model to produce samples that closely align with the characteristics of news. To further enhance detection performance, we incorporate a boundary-aware strategy that steers generation toward areas where the classifier is less confident, helping to clarify subtle distinctions between real and fake content. In addition, we adopt a dual objective optimization that balances semantic alignment with the source data and classifier feedback. This encourages the generation of samples that are both domain-consistent and helpful for refining decision boundaries, ultimately improving model robustness and generalization in low resource fake news detection.",
+      "authors": [
+        "Ziyu Luo",
+        "Wei Li",
+        "Haoping Huang",
+        "Kecheng Liu",
+        "Min Gao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-10-09T08:25:34+00:00",
+      "link": "https://arxiv.org/pdf/2610.13207v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "low resource fake news detection via prompt-guided augmentation",
+      "llm_evidence_cn": "基于提示引导增强的低资源虚假新闻检测",
+      "llm_evidence": "基于提示引导增强的低资源虚假新闻检测",
+      "canonical_evidence": "基于提示引导增强的低资源虚假新闻检测",
+      "llm_tldr_en": "This paper tackles low-resource fake news detection where labeled data is scarce, proposing soft and hard prompt-guided augmentation with LLMs to generate task-relevant training content.",
+      "llm_tldr_cn": "针对低资源条件下标注数据稀缺、难以捕捉细微欺骗模式的问题，本文聚焦仅少量标注可用的虚假新闻检测。作者指出现有同义词替换、生成对抗与通用大模型增强易产生流畅但泛化空洞的内容，提出软硬提示引导的大模型增强方法以生成任务相关内容。该工作在固定测试协议下提升检测性能，为面向新兴领域的事实核查提供了数据增强思路。",
+      "llm_tldr": "针对低资源条件下标注数据稀缺、难以捕捉细微欺骗模式的问题，本文聚焦仅少量标注可用的虚假新闻检测。作者指出现有同义词替换、生成对抗与通用大模型增强易产生流畅但泛化空洞的内容，提出软硬提示引导的大模型增强方法以生成任务相关内容。该工作在固定测试协议下提升检测性能，为面向新兴领域的事实核查提供了数据增强思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "detecting fake news by jointly analyzing textual content and visual information",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2610.09360v1",
+      "source": "arxiv",
+      "title": "TopoGraphRAG-Bench: Evaluating Multimodal GraphRAG on Layout-Grounded Evidence Reasoning",
+      "abstract": "Real-world documents distribute evidence across text, tables, figures, and captions within complex page layouts. Answering complex questions over such documents therefore requires more than retrieving relevant passages: systems must recover the evidence topology that connects heterogeneous evidence units. Existing GraphRAG evaluations remain largely text-centered, while multimodal document RAG benchmarks assess cross-modal retrieval and generation without directly evaluating recovery of the intended evidence topology. We introduce TOPOGRAPHRAG-BENCH, a layout-grounded benchmark for multimodal evidence reasoning in GraphRAG, comprising 2,024 questions over 201 long, visually rich documents. Questions are constructed bottom-up from text, figure, and table evidence units under three controlled topologies: single-hop retrieval, bridge-chain reasoning, and multi-source synthesis. To ensure that questions preserve their intended structure, we apply counterfactual validation for shortcut resistance, modality necessity, and evidence necessity. We evaluate text-only GraphRAG, page-level visual retrieval, and multimodal GraphRAG systems using retrieval, generation, and topology-aware reasoning metrics. Multimodal GraphRAG systems achieve the strongest overall performance, but still fail when visual-textual evidence alignment or multi-unit composition is incomplete. Text-only GraphRAG struggles when key dependencies are grounded in figures or tables, while page-level visual retrieval lacks the fine-grained structure needed for topology recovery. These findings motivate GraphRAG systems that move beyond text-derived entity relation graphs to explicitly model document layouts, cross-modal evidence alignment, and the reasoning roles of evidence units. Code and data are available at https://richardlrc.github.io/TopoGraphRAG-Bench/.",
+      "authors": [
+        "Ruochi Li",
+        "Jianzhe Lin",
+        "Haoxuan Zhang",
+        "Haihua Chen",
+        "Junhua Ding",
+        "Edward Gehringer",
+        "Yang Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-10-07T03:15:31+00:00",
+      "link": "https://arxiv.org/pdf/2610.09360v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multimodal evidence reasoning benchmark for retrieval-augmented graph RAG over heterogeneous evidence units",
+      "llm_evidence_cn": "面向多模态证据推理的图检索增强基准，评估异构证据单元的证据拓扑恢复",
+      "llm_evidence": "面向多模态证据推理的图检索增强基准，评估异构证据单元的证据拓扑恢复",
+      "canonical_evidence": "面向多模态证据推理的图检索增强基准，评估异构证据单元的证据拓扑恢复",
+      "llm_tldr_en": "A layout-grounded benchmark for multimodal GraphRAG that evaluates whether systems recover the evidence topology linking text, tables, figures and captions, comprising 2024 questions over 201 visually rich documents.",
+      "llm_tldr_cn": "现有文档问答研究多停留在文本检索，GraphRAG评测偏文本中心，多模态文档RAG又缺乏对证据拓扑恢复的直接评估。本文提出TOPOGRAPHRAG-BENCH，一个面向图检索增强生成的多模态证据推理基准，覆盖201篇富视觉文档上的2024个问题，问题自底向上从文本构建。该基准首次系统评估系统能否恢复连接异构证据单元的拓扑结构，为多模态证据驱动推理提供了可复用的评测框架。",
+      "llm_tldr": "现有文档问答研究多停留在文本检索，GraphRAG评测偏文本中心，多模态文档RAG又缺乏对证据拓扑恢复的直接评估。本文提出TOPOGRAPHRAG-BENCH，一个面向图检索增强生成的多模态证据推理基准，覆盖201篇富视觉文档上的2024个问题，问题自底向上从文本构建。该基准首次系统评估系统能否恢复连接异构证据单元的拓扑结构，为多模态证据驱动推理提供了可复用的评测框架。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.11183v1",
+      "source": "arxiv",
+      "title": "RAG-Stress: Probing the Limits of Evidence Reliance in Retrieval-Augmented Generation",
+      "abstract": "Following retrieved evidence does not guarantee factual correctness: misleading evidence can induce a model to replace an answer it previously gave correctly. Standard accuracy measures obscure this behavior by combining answer replacement with preexisting errors. We introduce RAG-Stress, a controlled diagnostic protocol for examining the limits of evidence reliance in retrieval-augmented generation. The protocol holds the question and reference answer fixed, edits one assertion to support a designated incorrect answer, and crosses two source priority policies with three positions of the answer span within the evidence text. We measure misleading rate (MR) on each model's subset of questions answered correctly without retrieval, alongside clean accuracy on the full evaluation set. We evaluate fifteen systems spanning API models, open models, and search agents trained with reinforcement learning on TriviaQA-RC, HotpotQA, and SearchQA, with additional English and Chinese MedQA evaluations. Instructions that prioritize documents consistently produce higher MR than those permitting reliance on prior knowledge. Averaged over models and positions, the gap ranges from 10.9 to 13.5 percentage points across the three QA datasets. Mean MR follows End $>$ Beginning $>$ Middle under both policies, although individual models do not uniformly follow this ordering. A separate paired audit of 500 questions and two checkpoints supports increased harmful override without establishing a corresponding improvement in beneficial correction. These findings distinguish evidence adherence from factual reliability and motivate evaluating whether retrieved evidence preserves, replaces, or corrects a model's answers.",
+      "authors": [
+        "Shunyuan Zhou",
+        "Hao Chen",
+        "Tianyu Wang",
+        "Goose Lin",
+        "Zaiyuan Wang",
+        "Haiying Zhao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-10-08T03:40:48+00:00",
+      "link": "https://arxiv.org/pdf/2610.11183v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "controlled protocol on evidence reliance and misleading retrieved evidence",
+      "llm_evidence_cn": "关于证据依赖与误导性检索证据的受控协议",
+      "llm_evidence": "关于证据依赖与误导性检索证据的受控协议",
+      "canonical_evidence": "关于证据依赖与误导性检索证据的受控协议",
+      "llm_tldr_en": "Following retrieved evidence does not guarantee correctness; RAG-Stress edits one assertion to support a wrong answer and measures misleading rate to expose fragile evidence reliance in RAG.",
+      "llm_tldr_cn": "在检索增强生成中，遵循检索到的证据并不保证事实正确，误导性证据可能诱导模型替换原本正确的答案，而常规准确率指标掩盖了这种行为。本文提出RAG-Stress受控诊断协议，固定问题与参考答案，仅编辑一条断言以支持指定错误答案，并交叉两种来源优先级与三种答案位置。实验通过误导率等指标揭示了模型对证据的脆弱依赖。该协议为评估事实核查与证据驱动问答中证据依赖的可靠性提供了可控的诊断工具。",
+      "llm_tldr": "在检索增强生成中，遵循检索到的证据并不保证事实正确，误导性证据可能诱导模型替换原本正确的答案，而常规准确率指标掩盖了这种行为。本文提出RAG-Stress受控诊断协议，固定问题与参考答案，仅编辑一条断言以支持指定错误答案，并交叉两种来源优先级与三种答案位置。实验通过误导率等指标揭示了模型对证据的脆弱依赖。该协议为评估事实核查与证据驱动问答中证据依赖的可靠性提供了可控的诊断工具。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.11666v1",
+      "source": "arxiv",
+      "title": "Autoregressive Retriever: Improving Query Understanding from Item Feedback for Universal Multimodal Retrieval",
+      "abstract": "Universal multimodal retrieval typically encodes a query once and ranks independently indexed items by embedding similarity. This design supports efficient search, but leaves the query representation unchanged even when retrieved items could help clarify the information need. We introduce the AutoRegressive Retriever (ARR), a multimodal retrieval model that learns both to select informative items and to use their content to refine subsequent retrieval. ARR alternates between retrieving an item and updating the query embedding, then uses the final embedding to rank the collection. Supervised fine-tuning teaches the encoder to use feedback through stepwise contrastive supervision. Reinforcement learning treats feedback items as actions and optimizes their selection using the final reciprocal rank of a relevant item. A query-side adapter enables this optimization against a fixed item index. ARR demonstrates strong retrieval performance on both in-domain and zero-shot benchmarks, outperforming the compared baselines on average. Further analyses show that feedback improves retrieval at inference time and that training with feedback also improves the initial query embedding, before any item is observed.",
+      "authors": [
+        "Jianfei Zhao",
+        "Yifan Wang",
+        "Feng Zhang",
+        "Xin Sun",
+        "Chong Feng",
+        "Zhixing Tan",
+        "Yang Luo",
+        "Boyuan Pan",
+        "Xu Kai",
+        "Yao Hu"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.CV"
+      ],
+      "published": "2026-10-08T10:39:17+00:00",
+      "link": "https://arxiv.org/pdf/2610.11666v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multimodal retrieval refined by item feedback, useful for evidence retrieval",
+      "llm_evidence_cn": "利用条目反馈细化的多模态检索，可用于证据检索",
+      "llm_evidence": "利用条目反馈细化的多模态检索，可用于证据检索",
+      "canonical_evidence": "利用条目反馈细化的多模态检索，可用于证据检索",
+      "llm_tldr_en": "Universal multimodal retrieval encodes a query only once; ARR alternates retrieving items with updating the query embedding, using stepwise contrastive supervision and RL feedback to refine retrieval.",
+      "llm_tldr_cn": "通用多模态检索通常只对查询编码一次，即便检索到的条目能澄清信息需求，查询表示也不会更新。本文提出自回归检索器ARR，在检索条目与更新查询嵌入之间交替，并借助逐步对比监督与强化学习利用条目反馈。该方法让最终查询嵌入能够融合反馈内容，从而更准确地排序候选集合。该框架把检索与查询理解耦合起来，为多模态证据检索与后续核查提供了可复用的方法。",
+      "llm_tldr": "通用多模态检索通常只对查询编码一次，即便检索到的条目能澄清信息需求，查询表示也不会更新。本文提出自回归检索器ARR，在检索条目与更新查询嵌入之间交替，并借助逐步对比监督与强化学习利用条目反馈。该方法让最终查询嵌入能够融合反馈内容，从而更准确地排序候选集合。该框架把检索与查询理解耦合起来，为多模态证据检索与后续核查提供了可复用的方法。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.13695v1",
+      "source": "arxiv",
+      "title": "Verifiable Retrieval for Legal Reasoning through Structure-driven Knowledge Graph",
+      "abstract": "Any automation within reliability-critical contexts such as medicine or law has to be transparent and verifiable. Despite their advantages, current LLM-based systems do not meet these requirements due to their inherent black-box nature. Retrieval Augmented Generation (RAG) attempts to ground the generative process in the relevant interpretable documents, thereby reducing the risk of AI 'hallucinations' and potentially enabling verification of the initial generation context. However, as the number and size of potential sources increases, naive retrieval approaches tend to perform worse, ignoring critical context elements. In this paper we aim to tackle this problem in the context of German Legal Code. Using structure-driven parsing to create a Knowledge Graph (KG) for the source document navigation and retrieval, we compare several KG-informed chunking and retrieval strategies and evaluate their effect on the accuracy of retrieved citations.",
+      "authors": [
+        "Ibrahim Siddig",
+        "Sviatoslav Tugeev",
+        "Munir Georges"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-10-09T14:56:31+00:00",
+      "link": "https://arxiv.org/pdf/2610.13695v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "structure-driven knowledge graph retrieval augments generation for verifiable grounding",
+      "llm_evidence_cn": "结构驱动知识图谱检索增强生成，实现可验证的证据落地",
+      "llm_evidence": "结构驱动知识图谱检索增强生成，实现可验证的证据落地",
+      "canonical_evidence": "结构驱动知识图谱检索增强生成，实现可验证的证据落地",
+      "llm_tldr_en": "The paper tackles naive retrieval degrading as sources grow in German legal code, using structure-driven parsing to build a knowledge graph that grounds retrieval-augmented generation in verifiable documents.",
+      "llm_tldr_cn": "论文关注法律等可靠性关键场景中LLM黑箱难以透明验证，而检索增强生成随来源增多时朴素检索性能下降、忽略关键上下文的问题。作者以德国法律法典为对象，利用结构驱动解析构建知识图谱，将生成过程锚定到可解释文档，从而支持验证。实验表明该方法能在大规模来源下保留关键上下文、提升检索与生成的可验证性。该工作为证据驱动的可验证事实核查提供了知识图谱增强思路。",
+      "llm_tldr": "论文关注法律等可靠性关键场景中LLM黑箱难以透明验证，而检索增强生成随来源增多时朴素检索性能下降、忽略关键上下文的问题。作者以德国法律法典为对象，利用结构驱动解析构建知识图谱，将生成过程锚定到可解释文档，从而支持验证。实验表明该方法能在大规模来源下保留关键上下文、提升检索与生成的可验证性。该工作为证据驱动的可验证事实核查提供了知识图谱增强思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
