@@ -1,0 +1,1061 @@
+Title: Flow-CLIP: Image-Conditioned Residual Scoring for CompositionalImage-Text Matching
+
+URL Source: https://arxiv.org/pdf/2610.21937v1
+
+Published Time: Fri, 16 Oct 2026 01:31:45 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+# Flow-CLIP: Image-Conditioned Residual Scoring for Compositional Image–Text Matching 
+
+Minghong Wei 1, Enguang Zhu 1, Pu Cao 1, Lu Yang 1,∗ and Qing Song 1
+
+> 1
+
+School of Intelligent Engineering and Automation, Beijing University of Posts and Telecommunications, Beijing, 100082, China 
+
+A R T I C L E I N F O 
+
+Keywords :Vision-language alignment Compositional matching Global compatibility calibration Image-conditioned evidence refinement Cross-image margin ranking 
+
+A B S T R A C T 
+
+Vision–language pre-training has enabled substantial progress in image–text retrieval and zero-shot recognition by learning transferable cross-modal representations. However, sentence-level alignment remains insufficient for compositional matching, where captions can describe the same objects and attributes while differing in how these elements are bound. To address this limitation, we propose Flow-CLIP, which refines global image–text alignment through image-conditioned changes in token– patch evidence. Global Compatibility Calibration (GCC) learns a sentence-level similarity metric, while Image-Conditioned Evidence Refinement (ICER) incorporates visual patch context into token queries and uses the resulting change in local matching evidence to adjust the global score. We further introduce Cross-Image Margin Ranking (CIMR), which compares the same positive–negative caption pair across matched and mismatched images, encouraging a larger ranking margin when the image supports the correct description. Experiments on compositional matching and attribute–object binding benchmarks show that Flow-CLIP improves binding accuracy over pretrained CLIP and learned global alignment through local evidence refinement, while cross-image ranking supervision mitigates reliance on language priors. Code will be released at link. three tennis balls in the background, with one on the ground near a fence. 
+
+> three tennis balls in the backcourt, with one on the court near a fence. three tennis balls in the background, with one on the ground near a court.
+> three tennis fences in the background, with one on the ground near a ball. three tennis courts in the background, with one on the ground near a fence.
+> three backgrounds in the tennis ball, with one on the ground near a fence.
+> three tennis balls in the background, with one on the ground near a fence.
+> three tennis balls in the backcourt, with one on the court near a fence. three tennis balls in the background, with one on the ground near a court.
+> three tennis fences in the background, with one on the ground near a ball. three tennis courts in the background, with one on the ground near a fence.
+> three backgrounds in the tennis ball, with one on the ground near a fence.
+
+Fig. 1. Compositional image–text matching with closely related caption candidates. Bars show compatibility scores, yellow outlines identify the top-ranked caption, and the curve shows the gold-caption margin. 
+
+1. Introduction 
+
+Vision–language pretraining enables zero-shot recog-nition and image–text retrieval by learning transferable representations from paired images and descriptions [1–5]. Compositional matching requires these representations to distinguish descriptions that name the same objects and attributes but assign or relate them differently. Benchmarks of attribute binding, relations and word order document persistent errors in making these distinctions [6–11]. The caption rankings in Fig. 1 illustrate how CLIP-based models [1, 7, 12] can prefer a hard-negative caption to the positive caption. The alternatives share many words but differ in object identities, attribute assignments or spatial relations. 
+
+> ∗
+
+Corresponding author. 
+
+wmh0517@bupt.edu.cn (M. Wei); 2025141266@bupt.cn (E. Zhu); 
+
+caopu@bupt.edu.cn (P. Cao); soeaver@bupt.edu.cn (L. Yang); 
+
+priv@bupt.edu.cn (Q. Song) 
+
+Targeted caption negatives expose these distinctions during training [7, 13], while dense descriptions and image–text– graph comparisons add supervision for scene details [14, 15]. FSC-CLIP [12] combines local hard-negative training with calibrated regularization to improve compositional matching while maintaining general-task performance. LABCLIP [16] shows that a learned linear transformation of text embeddings can recover attribute–object binding information in cross-modal matching. We use learned global alignment as a baseline to measure the additional contribution of image-conditioned local refinement to attribute–object binding. Local matching provides the representations needed for such refinement. FILIP [17] and DCSM [18] use token–patch similarities, ComCLIP [19] and OC-CLIP [20] introduce structured entity scores, and FLAIR [21] constructs caption-conditioned visual representations. These methods aggregate local similarities, compare structured entities or condition visual features on text. We use local interactions to measure how image context changes support for a caption, providing a correction to its calibrated global score. An incorrect attribute assignment can receive local support when its individual objects and attributes are present in the image. Strong token–patch matches alone therefore leave open whether the proposed assignment is supported. We use the image’s patch context to refine the token queries that assess this assignment, then compare the refined and original queries on the same patches. The original query supplies a reference for measuring the correction’s effect, yielding a signed adjustment that can strengthen or weaken the global compatibility score. To model this image-conditioned change, we propose Flow-CLIP, which combines Global Com-patibility Calibration (GCC) with Image-Conditioned Evidence Refinement (ICER) , as illustrated in Fig. 2. GCC learns sentence-level alignment, and ICER supplies the local 
+
+1arXiv:2610.21937v1 [cs.CV] 15 Oct 2026 Image patch 
+
+> Token states
+
+Text Encoder 
+
+Text Encoder 
+
+Image Encoder 
+
+Image Encoder 
+
+Inputs Image I 
+
+Positive caption T +Positive caption T +
+
+> A red guitar leans against a wooden chair next to a cat on the right. A red guitar leans against a wooden chair next to a cat on the right.
+
+Positive caption T +
+
+> A red guitar leans against a wooden chair next to a cat on the right.
+
+Negative captions T −Negative captions T −
+
+> A wooden guitar leans against a red chair
+> next to a cat on the right.
+
+Inputs Image I 
+
+Positive caption T +
+
+> A red guitar leans against a wooden chair next to a cat on the right.
+
+Negative captions T −
+
+> A wooden guitar leans against a red chair
+> next to a cat on the right.
+> Text embedding T
+
+t
+
+Global Compatibility Calibration j ja q p= 
+
+> res
+
+q
+
+> Query correction
+
+qWr q q Wr = + 
+
+
+
+> [wooden] [chair] [wooden] [chair]
+
+Image-Conditioned Evidence Refinement     
+
+> [red] [guitar] [red] [guitar] [A] [red] [guitar] [A] l
+
+qIpIp
+
+> flow update j
+
+e( , )token s I T ( , )token s I T 
+
+> Centered
+
+r) Tglobal Is I, =T v t( ) Tglobal Is I, =T v t( zz1q2q3qlqq1q2q3qlqq1h2h3hhlh1h2h3hhlh1p2pipIp3p1p2pipIp3p      
+
+> Image embedding IvImage embedding Iv
+> Visual Context 1
+> 1( , )
+> Njjj
+> cI T e p N=
+> =
+
+ Visual Context 1      
+
+> 1( , )
+> Njjj
+> cI T e p N=
+> =
+
+ 
+
+> Image patch
+> Token states
+
+Text Encoder 
+
+Image Encoder 
+
+Inputs Image I 
+
+Positive caption T +
+
+> A red guitar leans against a wooden chair next to a cat on the right.
+
+Negative captions T −
+
+> A wooden guitar leans against a red chair
+> next to a cat on the right.
+> Text embedding T
+
+t
+
+Global Compatibility Calibration j ja q p= 
+
+> res
+
+q
+
+> Query correction
+
+qWr q q Wr = + 
+
+
+
+> [wooden] [chair]
+
+Image-Conditioned Evidence Refinement  
+
+> [red] [guitar] [A] l
+
+qIp
+
+> flow update j
+
+e( , )token s I T 
+
+> Centered
+
+r) Tglobal Is I, =T v t( z1q2q3qlqq1h2h3hhlh1p2pipIp3p      
+
+> Image embedding Iv
+> Visual Context 1
+> 1( , )
+> Njjj
+> cI T e p N=
+> =
+
+ Fig. 2. Flow-CLIP combines Global Compatibility Calibration (GCC) with Image-Conditioned Evidence Refinement (ICER). The global and token maps produce normalized representations. Centered patch support forms visual context, whose projection supplies the input to the learned query correction. The normalized corrected query and its original query yield a signed difference in pooled evidence, which is averaged over valid tokens and added to global compatibility. and denote frozen and learned components. 
+
+adjustment through context-dependent query correction. Both components are jointly trained for caption ranking with frozen encoders. Full-caption hard negatives supervise caption ranking on matched images, following NegCLIP [7]. The construction of these alternatives also matters: SugarCrepe [22] iden-tifies plausibility and fluency biases that allow models to distinguish positive descriptions from negative alternatives without the image. Language priors can consequently favor plausible descriptions even when their attribute assignments are unsupported by the visual input. Supervision on matched pairs does not explicitly constrain how this preference should change across images. A caption preference that persists after replacing the image can satisfy the matched-pair objective without reflecting the visual evidence for the attribute assign-ment. We introduce Cross-Image Margin Ranking (CIMR) 
+
+to compare the same positive–negative caption margin on the matched image and one donor shared by both captions. By encouraging a larger margin on the matched image, this objective rewards a change in preference tied to visual input while holding the captions and their linguistic cues fixed. GCC and ICER are optimized jointly with the hard-negative and CIMR objectives. Independently trained global-only heads account for much of the caption-order improvement, while training with the local branch yields additional attribute–object binding gains. Paired predictions identify corrected binding errors and new spatial errors. Image-replacement tests measure changes in caption preference when the visual match is removed. Comparisons across training sources and encoders show how binding gains vary alongside changes in spatial and retrieval accuracy. The contributions of this work are: • We propose Flow-CLIP, combining Global Compati-bility Calibration (GCC) and Image-Conditioned Evi-dence Refinement (ICER) with frozen encoders. The local branch refines token queries using visual patch context and adjusts global compatibility by the signed change in pooled patch evidence. • We introduce Cross-Image Margin Ranking (CIMR), which compares the same positive–negative caption margin on matched and shared donor images. This objective encourages caption preference to depend on the matched image using full-caption supervision. • Our experiments separate the binding gains of local refinement from the sentence-level gains of global calibration and identify the contribution of cross-image supervision to mitigating reliance on language priors. 
+
+2. Related Work 
+
+2.1. Compositional Evaluation 
+
+Compositional benchmarks evaluate image–text match-ing through controlled semantic changes. Winoground [6] pairs two images with captions that share their words but differ in composition, requiring scores to recover both image– caption assignments. ARO [7] separates attribution, relation and caption-order judgments. VL-CheckList [8] organizes object, attribute and relation edits, while VALSE [9] evaluates linguistic phenomena using positive descriptions and edited foils. What’s Up? [11] focuses on spatial relations. These distinctions matter for local scoring: recognizing the concepts 
+
+2present in an image can support object discrimination, whereas attribute reassignment and relation reversal require resolving how those concepts are associated. CLEVR [23] and PUG [24] provide rendered scenes with known attribute–object assignments. Swapping those assign-ments produces caption alternatives that preserve the scene’s object and attribute inventory, isolating the assignment distinction relevant to token-level refinement. CREPE [25] tests systematicity and productivity with candidate sets of increasing compositional complexity, and BiVLC [26] evaluates both retrieval directions. These evaluations extend the comparison to competition among multiple descriptions and to the consistency of image–text matching across retrieval directions. Caption construction determines which cues can support a correct ranking. SugarCrepe [22] uses fluent semantic edits to reduce linguistic artifacts, and SugarCrepe++ [27] distinguishes semantic sensitivity from lexical variation. NegBench [28] evaluates negation, whereas Half-Truths [29] adds plausible but incorrect content to an otherwise valid description. Controlling the caption alternatives limits cues introduced by their construction. Image-replacement controls address the complementary question of whether the resulting preference depends on the visual match while keeping those alternatives fixed. 
+
+2.2. Image–Text Matching 
+
+Global scoring compares pooled image and text embed-dings, as used in CLIP [1] and ALIGN [2]. LiT [4] studies alignment with a locked image encoder. LABCLIP [16] evaluates binding within each modality using linear probes, increasing object counts and conjunctive search, then learns a text-embedding transformation for cross-modal matching. These experiments separate the information represented by each encoder from the information accessible through the cross-modal scoring function. Work on concept-to-object mappings [30] further ex-amines how embeddings represent binding functions. The distinction relevant to our comparison is the granularity of the learned alignment: LABCLIP transforms the pooled text em-bedding, while ICER updates individual token queries using image patches. GCC retains the sentence-level transformation, allowing the experiments to assess the additional effect of training with the local branch under matched conditions. Fine-grained alignment preserves visual and textual units within the matching score. RegionCLIP [31] learns region–text representations, and FILIP [17] aggregates token-wise maximum similarities for cross-modal late interaction. FLAIR [21] uses text-conditioned attention pooling over image tokens for detailed retrieval, while Beta-CLIP [32] develops text-conditioned alignment at multiple granularities. The conditioning differs across these methods: late interaction selects matching responses, whereas text-conditioned pooling changes the visual representation. DCSM [18] learns a scoring function over dense token– patch cosine similarities, including functional rows for spatial relationship words. ICER scores the change in pooled support after query correction. Structured matching specifies the semantic units used for comparison. ComCLIP [19] computes separate scores for subject, object and action subimages, then combines these scores at inference. OC-CLIP [20] associates scene-graph nodes with visual slots and scores relational compat-ibility, while ABE-CLIP [33] introduces attribute-binding operations during inference. VQAScore [34] scores image– text compatibility through visual question answering. Flow-CLIP uses contextual token and patch states as its local comparison units, without requiring explicit scene-graph or subimage decomposition. Full-caption supervision trains the contribution of these interactions to the final compatibility score. 
+
+2.3. Training Objectives 
+
+Compositional training exposes distinctions that ordi-nary image–caption pairs may leave implicit. NegCLIP [7] uses caption perturbations and hard image negatives, and TSVLC [13] manipulates language structure to teach at-tributes, relations and states from paired data. DAC [14] supplies dense, image-aligned descriptions. Coarse-to-fine image–text–graph learning [15] decomposes and augments parsed scene graphs to align descriptions of different struc-tural complexities with an image. TripletCLIP [35] and SPARCL [36] add synthetic visual and textual comparisons. Flow-CLIP trains its global and local terms through the same image–caption score using full-caption hard negatives. The objective determines which relationships those train-ing examples constrain. CE-CLIP [37] introduces intra-modal contrast and cross-modal hard-negative ranking. FSC-CLIP [12] combines local hard-negative loss with selective calibrated regularization to balance compositional supervi-sion and general multimodal capabilities. Its design addresses the degradation of pretrained multimodal representations caused by hard-negative fine-tuning. READ-CLIP [38] cou-ples token reconstruction with paraphrase alignment, while concept-centric learning [39] aligns caption concepts with visual content through auxiliary contrasts. These objectives constrain feature alignment or its preservation during adapta-tion. CLIC [40] constructs training comparisons from com-binations of multiple images and their captions. CIMR evaluates the same caption pair on both the matched image and a shared donor image. Caption identity remains fixed when the two margins are compared, so an additive text-only term cancels and the objective constrains the score change induced by replacing the image. 
+
+3. Method 
+
+For an image 𝐼 and caption 𝑇 , Flow-CLIP adds an ICER local term to GCC global compatibility. The local term measures the signed change in pooled patch support after image-conditioned token-query correction: 
+
+𝑠 (𝐼, 𝑇 ) = 𝑠 global (𝐼, 𝑇 ) + 𝛼𝑠 token (𝐼, 𝑇 ). (1) 
+
+> 3
+
+Algorithm 1 Flow-CLIP scoring with GCC and ICER 
+
+Input: Image 𝐼 , caption 𝑇 ; image and text encoders; learned mappings 𝑀, 𝑀 tok , 𝑊 ; pooling temperature 𝜏 𝑝 > 0 and local scale 𝛼 ≥ 0.
+
+Output: Compatibility score 𝑠 (𝐼, 𝑇 ).
+
+Feature extraction and GCC  
+
+> 1:
+
+Extract global image embedding 𝒗 𝐼 and patch embeddings 𝑃 
+
+from 𝐼 . 
+
+> 2:
+
+Extract sentence embedding 𝒕 𝑇 and projected token states 𝐻 
+
+from 𝑇 . 
+
+> 3:
+
+𝒗 𝐼 ← norm( 𝒗 𝐼 ); 𝒕 𝑇 ← norm( 𝒕 𝑇 ). 
+
+> 4:
+
+𝒑 𝑗 ← norm( 𝒑 𝑗 ), 𝑗 = 1 , … , 𝑁 . 
+
+> 5:
+
+𝒉 𝓁 ← norm( 𝒉 𝓁 ), 𝓁 = 1 , … , 𝐿 . 
+
+> 6:
+
+Obtain 𝑇 by excluding special and padding tokens.  
+
+> 7:
+
+𝒛 ← norm( 𝑀 𝒕 𝑇 ). 
+
+> 8:
+
+𝑠 global ← 𝒗 ⊤𝐼 𝒛 using Eq. (2).  
+
+> 9:
+
+if 𝑇 = ∅ then  
+
+> 10:
+
+return 𝑠 global . 
+
+> 11:
+
+end if 
+
+ICER: image-conditioned token correction  
+
+> 12:
+
+for 𝓁 ∈ 𝑇 do  
+
+> 13:
+
+𝒒 𝓁 ← norm( 𝑀 tok 𝒉 𝓁 ). 
+
+> 14:
+
+𝑎 𝓁 𝑗 ← 𝒒 ⊤ 
+
+> 𝓁
+
+𝒑 𝑗 , 𝑗 = 1 , … , 𝑁 .
+
+> 15:
+
+̄ 𝑎 𝓁 ← 1
+
+> 𝑁
+
+∑𝑁 𝑗 =1 𝑎 𝓁 𝑗 . 
+
+> 16:
+
+𝑒 𝓁 𝑗 ← max( 𝑎 𝓁 𝑗 −̄𝑎 𝓁 , 0) . 
+
+> 17:
+
+𝒄 𝓁 ← 1
+
+> 𝑁
+
+∑𝑁 𝑗 =1 𝑒 𝓁 𝑗 𝒑 𝑗 . 
+
+> 18:
+
+𝒓 𝓁 ← 𝒄 𝓁 − ( 𝒒 ⊤ 
+
+> 𝓁
+
+𝒄 𝓁 )𝒒 𝓁 .
+
+> 19:
+
+̃ 𝒒 𝓁 ← 𝒒 𝓁 + 𝑊 𝒓 𝓁 . 
+
+> 20:
+
+𝒒 res  
+
+> 𝓁
+
+← norm( ̃𝒒 𝓁 ). 
+
+> 21:
+
+𝜌 𝓁 ← 𝜏 𝑝 (𝒒 𝓁 , 𝑃 ) using Eq. (6).  
+
+> 22:
+
+𝜌 res  
+
+> 𝓁
+
+← 𝜏 𝑝 (𝒒 res  
+
+> 𝓁
+
+, 𝑃 ). 
+
+> 23:
+
+Δ𝓁 ← 𝜌 res  
+
+> 𝓁
+
+− 𝜌 𝓁 using Eq. (7).  
+
+> 24:
+
+end for 
+
+Score aggregation  
+
+> 25:
+
+𝑠 token ← 1
+
+|𝑇 |∑
+
+> 𝓁 ∈𝑇
+
+Δ𝓁 . 
+
+> 26:
+
+return 𝑠 global + 𝛼𝑠 token .
+
+Here 𝑠 global denotes global compatibility, 𝑠 token denotes the local evidence change, and 𝛼 scales the local contribution. The main configuration freezes both encoders; encoder-adapted configurations use the same score. Global-𝑀 denotes the global-only GCC scorer. 
+
+3.1. Global Compatibility Calibration 
+
+For an image–caption pair (𝐼, 𝑇 ), the image encoder produces a global embedding 𝒗 𝐼 ∈ ℝ𝑑 and 𝑁 patch embeddings 𝑃 = [ 𝒑 1, … , 𝒑 𝑁 ]⊤ ∈ ℝ𝑁 ×𝑑 . The text encoder produces a sentence embedding 𝒕 𝑇 ∈ ℝ𝑑 and projected states for a sequence of 𝐿 tokens, 𝐻 = [ 𝒉 1, … , 𝒉 𝐿 ]⊤ ∈ ℝ𝐿 ×𝑑 .Here 𝑑 is the shared projection dimension. We 𝓁 2-normalize 
+
+𝒗 𝐼 , 𝒕 𝑇 and every row of 𝑃 and 𝐻 before scoring, writing 
+
+norm( 𝒙 ) = 𝒙 ∕‖𝒙 ‖2.As in LABCLIP [16], we apply a learned linear trans-formation 𝑀 ∈ ℝ𝑑 ×𝑑 to the sentence embedding before computing global cosine similarity: 
+
+𝒛 = norm( 𝑀 𝒕 𝑇 ), 𝑠 global (𝐼, 𝑇 ) = 𝒗 ⊤𝐼 𝒛 . (2) Global-𝑀 uses this score alone. Flow-CLIP jointly trains 
+
+𝑀 , the token map 𝑀 tok and the residual map 𝑊 , defined below. We initialize 𝑀 and 𝑀 tok as identity matrices and 
+
+𝑊 as zero, so the initial score equals the pretrained global cosine similarity. 
+
+3.2. Image-Conditioned Evidence Refinement 
+
+ICER constructs visual context from each token query’s responses to the patches of the current image. Let 𝑇 ⊆
+
+{1 , … , 𝐿 } contain the non-special, non-padding token posi-tions, so |𝑇 | is the number of valid tokens. A learned matrix 
+
+𝑀 tok ∈ ℝ𝑑 ×𝑑 defines the unit query 
+
+𝒒 𝓁 = norm( 𝑀 tok 𝒉 𝓁 ). (3) The valid-token set includes function words, punctuation and subwords. For token 𝓁 and patch 𝑗 , let 𝑎 𝓁 𝑗 = 𝒒 ⊤ 
+
+> 𝓁
+
+𝒑 𝑗 
+
+denote their cosine similarity. We subtract the mean response across patches and retain its positive part, using above-mean responses to construct visual context: 
+
+𝑒 𝓁 𝑗 =
+
+[
+
+𝑎 𝓁 𝑗 − 1
+
+𝑁 
+
+> 𝑁
+
+∑
+
+> 𝑘 =1
+
+𝑎 𝓁 𝑘 
+
+]
+
+> +
+
+,
+
+𝒄 𝓁 = 1
+
+𝑁 
+
+> 𝑁
+
+∑
+
+> 𝑗 =1
+
+𝑒 𝓁 𝑗 𝒑 𝑗 .
+
+(4) Here [𝑥 ]+ = max( 𝑥, 0) , and 𝑒 𝓁 𝑗 weights patch 𝑗 in the context vector 𝒄 𝓁 ∈ ℝ𝑑 . Uniform patch responses yield zero context, and centering makes the weights invariant to a common offset in patch similarity. The factor 1∕ 𝑁 averages the weighted patch features without normalizing the weights to sum to one. Consequently, small deviations above the mean produce a small context vector, preserving the strength of the token’s spatially varying response. For a fixed caption, the original token queries remain unchanged across images, while the patch weights and features determine the image-dependent input to the correction. We project the visual context onto the tangent space at the unit token query before applying the learned residual map: 
+
+𝒓 𝓁 = 𝒄 𝓁 − ( 𝒒 ⊤ 
+
+> 𝓁
+
+𝒄 𝓁 )𝒒 𝓁 ,̃ 
+
+𝒒 𝓁 = 𝒒 𝓁 + 𝑊 𝒓 𝓁 ,
+
+𝒒 res  
+
+> 𝓁
+
+= norm( ̃𝒒 𝓁 ).
+
+(5) The projection removes the component of 𝒄 𝓁 parallel to the unit query, giving 𝒒 ⊤ 
+
+> 𝓁
+
+𝒓 𝓁 = 0 . The learned map 𝑊 ∈ ℝ𝑑 ×𝑑 
+
+transforms this projected context into a residual update, yield-ing the intermediate query ̃ 𝒒 𝓁 . Its normalization produces 
+
+𝒒 res  
+
+> 𝓁
+
+on the unit sphere, placing the original and corrected patch responses on the same cosine scale. The local score measures the change in pooled patch evidence caused by query correction. For a unit query 𝒒 ,define 
+
+𝜏 𝑝 (𝒒 , 𝑃 ) = 𝜏 𝑝 log 
+
+[
+
+1
+
+𝑁 
+
+> 𝑁
+
+∑
+
+> 𝑗 =1
+
+exp( 𝒒 ⊤𝒑 𝑗 ∕𝜏 𝑝 )
+
+]
+
+. (6) The temperature 𝜏 𝑝 > 0 controls the smooth maximum over patch responses. We write 𝜌 𝓁 = 𝜏 𝑝 (𝒒 𝓁 , 𝑃 ) and 𝜌 res  
+
+> 𝓁
+
+=
+
+4𝜏 𝑝 (𝒒 res  
+
+> 𝓁
+
+, 𝑃 ) for pooled evidence before and after correction. Both queries are evaluated against the same patch set: 
+
+Δ𝓁 (𝐼, 𝑇 ) = 𝜏 𝑝 (𝒒 res  
+
+> 𝓁
+
+, 𝑃 ) − 𝜏 𝑝 (𝒒 𝓁 , 𝑃 ),𝑠 token (𝐼, 𝑇 ) = 1
+
+|𝑇 |∑
+
+> 𝓁 ∈𝑇
+
+Δ𝓁 (𝐼, 𝑇 ). (7) The sign of Δ𝓁 indicates whether correction strengthens or weakens pooled support relative to the original query. Subtraction retains this distinction even when both queries have high absolute patch similarity. Token increments within a caption can have opposite signs. Averaging them over 𝑇 
+
+yields the local term added to global compatibility in Eq. (1). An empty valid-token set contributes zero; 𝑊 = 𝟎 or 𝛼 = 0 
+
+recovers the global branch. 
+
+3.3. Training Objective 
+
+Training jointly optimizes 𝑀 , 𝑀 tok and 𝑊 through the image–caption score. A mini-batch  = {( 𝐼 𝑖 , 𝑇 + 
+
+> 𝑖
+
+, 𝑇 − 
+
+> 𝑖
+
+, 𝑔 𝑖 )} 𝐵 𝑖 =1 
+
+contains 𝐵 records, each with a matched image and caption, a full-caption hard negative, and image identity 𝑔 𝑖 . The indicator 𝑦 𝑖𝑗 = 𝟏 [𝑔 𝑖 = 𝑔 𝑗 ] marks positive captions belonging to the same image. With contrastive temperature 𝜏 𝑐 > 0,define 
+
+𝑢 ± 
+
+> 𝑖𝑗
+
+= 𝑠 (𝐼 𝑖 , 𝑇 ± 
+
+> 𝑗
+
+)∕ 𝜏 𝑐 . (8) For image 𝐼 𝑖 , the image-to-text comparison uses logits 𝑢 +
+
+> 𝑖𝑗
+
+and 𝑢 − 
+
+> 𝑖𝑗
+
+over all captions. For caption 𝑇 + 
+
+> 𝑖
+
+, the text-to-image comparison uses 𝑢 + 
+
+> 𝑗𝑖
+
+over all in-batch images. This asymmetry makes hard negatives compete with positive descriptions of an image, while retaining positive captions as the queries for image retrieval. The bidirectional multi-positive losses are 
+
+𝐼 2𝑇 = − 1
+
+𝐵 
+
+> 𝐵
+
+∑
+
+> 𝑖 =1
+
+log 
+
+∑𝐵 𝑗 =1 𝑦 𝑖𝑗 exp( 𝑢 + 
+
+> 𝑖𝑗
+
+)
+
+∑𝐵 𝑗 =1 
+
+[
+
+exp( 𝑢 + 
+
+> 𝑖𝑗
+
+) + exp( 𝑢 − 
+
+> 𝑖𝑗
+
+)
+
+] ,
+
+𝑇 2𝐼 = − 1
+
+𝐵 
+
+> 𝐵
+
+∑
+
+> 𝑖 =1
+
+log 
+
+∑𝐵 𝑗 =1 𝑦 𝑖𝑗 exp( 𝑢 +
+
+> 𝑗𝑖
+
+)
+
+∑𝐵 𝑗 =1 exp( 𝑢 +
+
+> 𝑗𝑖
+
+) .
+
+(9) We denote the bidirectional contrastive objective with full-caption hard negatives by HNB = 12 (𝐼 2𝑇 + 𝑇 2𝐼 ), abbrevi-ated as HNB. Summing over shared image identities in the numerators accommodates multiple positive captions for an image. CIMR compares the positive–negative caption margin across visual inputs. For each eligible record 𝑖 , donor image 
+
+𝐽 𝑖 has a different source identity and is used for both 𝑇 +
+
+> 𝑖
+
+and 𝑇 − 
+
+> 𝑖
+
+. Known positive matches are excluded from donor comparisons. Let  ⊆ {1 , … , 𝐵 } contain records with an eligible hard-negative caption and donor, and define 
+
+𝑚 𝑖 (𝐼 ) = 𝑠 (𝐼, 𝑇 + 
+
+> 𝑖
+
+) − 𝑠 (𝐼, 𝑇 − 
+
+> 𝑖
+
+). (10) The Cross-Image Margin Ranking loss is 
+
+CIMR = 1
+
+||∑
+
+> 𝑖 ∈
+
+sof tplus 
+
+(
+
+− 𝑚 𝑖 (𝐼 𝑖 ) − 𝑚 𝑖 (𝐽 𝑖 )
+
+𝜏 𝑐 
+
+)
+
+, (11) Here sof tplus( 𝑥 ) = log(1+exp 𝑥 ). Increasing 𝑚 𝑖 (𝐼 𝑖 )− 𝑚 𝑖 (𝐽 𝑖 )
+
+lowers the loss, encouraging a larger caption margin on the matched image than on the donor. An additive text-only scoring term cancels because the same caption pair is used for both images. An additive image-only scoring term likewise cancels within each caption margin. CIMR therefore acts on score changes that depend jointly on image and caption content. For an empty eligible set, CIMR = 0 .The complete training objective is 
+
+ = HNB + 𝜆 CIMR CIMR (12) We set 𝜆 CIMR = 0 .1. Algorithm 1 summarizes the scoring procedure. 
+
+4. Experiments 
+
+4.1. Experimental Setup Training data. We train on COCO [41] train2014 with the Karpathy restval split [42], using 113,287 training im-ages, 566,435 image–caption records and 25,000 valida-tion records. Each training record pairs a human-written COCO caption [43] with a full-caption hard negative. For the training-source comparison, we use Conceptual Cap-tions (CC3M) [44] with the CC3M-100K protocol of FSC-CLIP [12]: 101,830 source records partitioned into 97,734 training and 4,096 validation records. CoCa [45] supplies positive captions, and the negative-generation schedule uses phrase swaps, WordNet replacements and bigram shuffling. The released training and validation partitions share nine images, represented by 138 training and 16 validation records. 
+
+Evaluation datasets and metrics. We evaluate attri-bution, relations and caption order separately. ARO [7] contains four subsets: VG-Attribution (4,517 images and 28,748 pairs), VG-Relation (5,316 images and 23,937 pairs), Flickr30k Order (1,000 images and 5,000 five-caption sets), and COCO Order (5,000 images and 25,010 five-caption sets). SugarCrepe [22] contains 7,511 fluent positive–negative pairs with Add, Replace and Swap edits. CREPE-Productivity [25] evaluates Atomic and Swap candidate sets at complexity levels 4–12. Attribute–object binding evaluation uses ABC-6K [46] (3,213 comparison pairs), PUG:SPAR [24] (19,840 attribute-assignment pairs), and a two-object evaluation set derived from CLEVR [23]. We abbreviate ABC-6K and PUG:SPAR as ABC and PUG in the result tables. The CLEVR combination-based partition contains 470 records, including 449 valid pairs with non-equivalent captions; the larger CLEVR evaluation pool contains 4,449 unambiguous pairs. The ablation table reports the 449-pair split, and results on the 4,449-pair pool are identified separately in the text. COCO-Spatial and GQA-Spatial contain 2,687 and 1,451 records, respectively, and follow the spatial-relation protocol of What’s Up? [11]. Retrieval evaluation uses Flickr30k [47] and COCO [41] with the Karpathy 1K and 5K splits [42], respectively: 1,000/5,000 images and 5,000/25,000 captions. Zero-shot 
+
+> 5
+
+classification uses CIFAR-10/CIFAR-100 [48] (10,000 test images each) and ImageNetV2 [49] (10,000 images with 1,000 class prompts). We retain each benchmark’s task-level aggregation and specify the members of every cross-task mean in its caption. Pairwise accuracy tests the gold caption against one foil; candidate-set accuracy requires it to rank first among all alternatives. Retrieval extends this competition to the complete evaluation gallery, testing whether the learned score separates the correct match from many alternatives beyond the constructed foils. Image and comparison counts are reported separately because an image can appear in several evaluation records. 
+
+Implementation details. The main configuration freezes CLIP ViT-B/32 [1] and trains 𝑀 , 𝑀 tok and 𝑊 , totaling 786,432 parameters. For both head-only and encoder-adapted training, we use AdamW [50] with learning rate 8 × 10 −5 ,weight decay 10 −4 , (𝛽 1, 𝛽 2) = (0 .9, 0.999) and gradient clipping at a maximum norm of 1. Each batch contains 32 image–caption records and 32 full-caption negatives. COCO training uses five full epochs with a hard-negative pool of 501,921 eligible records. CC3M training uses three epochs, with 96,463, 97,394 and 97,734 valid records for phrase swaps, WordNet replacements and bigram shuffling, respectively. We set 𝜏 𝑐 = 0 .01 , 𝛼 = 1 and 𝜆 CIMR = 0 .1, with 
+
+𝜏 𝑝 = 0 .05 for COCO and 0.06 for CC3M. Experiments use NVIDIA RTX 3090 and A800 GPUs. In the encoder-adapted variants, both the image and text encoders are trainable together with 𝑀 , 𝑀 tok and 𝑊 under the HNB and CIMR objectives. Their COCO and CC3M results are evaluated after five and three training epochs, respectively. The scoring equations and objectives remain the same in both variants, allowing the comparison to assess the effect of updating encoder representations alongside the scoring maps. 
+
+Feature extraction. Scoring uses FP32 with autocast and TF32 disabled; normalized global and patch features are first rounded to FP16. CLIP [1] inputs follow the OpenAI image preprocessing pipeline. Patch states pass through vision post-layer normalization and visual projection. Text token states use the text projection and the valid-token mask defined in the method. SigLIP [5] retains its learned image-pooling operation and 196 patch embeddings, with a maximum text sequence length of 64 tokens in our evaluation. BLIP [3] uses 256-dimensional image–text contrastive (ITC) projections and 576 patch embeddings, with a maximum text sequence length of 35 tokens. 
+
+4.2. Main Results 
+
+The COCO-trained frozen Flow-CLIP scorer in Tab. 1 reaches 78.15% on ABC, exceeding NegCLIP [7], LAB-CLIP [16] and FSC-CLIP [12], with a 3.39-percentage-point gain over FSC-CLIP. Because the ABC alternatives exchange attribute assignments while preserving the scene concepts, this gain reflects better discrimination between competing bindings. Its ARO average of 85.94% combines attribution, relation and caption-order accuracy; the individual tasks show how these improvements are distributed. 4 6 8 10 12      
+
+> Scene complexity
+> 020 40
+> R@1 (%)
+> Atomic +0.2
+> Swap +7.2
+> COCO
+> 46810 12
+> Scene complexity
+> Atomic +8.5
+> Swap +5.7
+> CC3M-100K
+> LABCLIP Atomic Flow-CLIP Atomic LABCLIP Swap Flow-CLIP Swap
+> Fig. 3. CREPE Recall@1 for HNB-trained Flow-CLIP and LABCLIP [16] across complexity levels 4–12. Solid and dashed curves denote atomic and swap foils. Endpoint labels show gains over LABCLIP in percentage points at complexity 12.
+
+The comparison with FSC-CLIP separates attribute-assignment gains from caption-order performance. Frozen Flow-CLIP scores higher on VG-Attribution, VG-Relation and Swap-Attribute, but lower on both caption-order tasks and Swap-Object. VG-Attribution, Swap-Attribute and ABC test which object has a named attribute, making their gains directly relevant to binding. The matched ablations in Sec. 4.3 test the contribution of the local scoring architecture under a common training protocol. With CC3M training, frozen Flow-CLIP exceeds CC3M-trained LABCLIP [16] on all four ARO tasks and on Swap-Attribute, ABC and GQA-Spatial, but scores lower on Swap-Object and COCO-Spatial. Its 84.01% ARO average falls within the range of the encoder-tuned methods in the table, while both binding swap scores remain below FSC-CLIP [12]. These results extend the comparison to generated captions under the CC3M recipe and show that the binding advantage varies by task and comparator. DCSM [18] has the highest spatial scores in this com-parison: 72.47% on COCO-Spatial and 68.45% on GQA-Spatial. It combines box-derived spatial descriptions, op-posite arrangements generated with CutMix and functional rows for spatial words in the scoring map. Flow-CLIP learns from full-caption negatives and computes local support from image patches. The spatial comparison therefore includes differences in both supervision and scoring architecture. Encoder adaptation yields ARO averages of 86.43% with COCO and 86.96% with CC3M, exceeding the frozen results in Tab. 1 by 0.49 and 2.95 percentage points. 
+
+Composition complexity. Fig. 3 compares Flow-CLIP and LABCLIP [16] on CREPE [25] atomic and swap foils across complexity levels 4–12. For the HNB-trained Flow-CLIP configurations shown, the gains over LABCLIP at complexity 12 are 0.2 and 7.2 Recall@1 percentage points on COCO atomic and swap foils, and 8.5 and 5.7 points on CC3M-100K. The COCO atomic curves converge at high complexity, while the swap curves retain a larger separation. On CC3M-100K, Flow-CLIP retains gains for both foil types at the highest tested complexity. 
+
+> 6
+
+Tab. 1 
+
+Compositional matching and fine-grained binding accuracy (%). ARO Avg. is the mean across four tasks; Swap-A/O denote SugarCrepe attribute/object swaps. ✓/× indicate frozen/jointly tuned encoders. Bold/underline indicate the best/second-best results within each training-source block. 
+
+Method Backbone Training data Frozen? ARO Attribute/Object Binding Spatial Relations VG-A VG-R Flickr Ord. COCO Ord. Avg. Swap-A Swap-O ABC COCO-Sp. GQA-Sp. CLIP [1] ViT-B/32 – – 63.21 63.36 58.88 47.60 58.26 63.96 61.63 64.11 46.88 46.69 
+
+COCO-trained models 
+
+NegCLIP [7] ViT-B/32 COCO14-HN × 70.50 81.12 90.50 86.97 82.27 75.23 75.51 73.58 46.54 45.91 LABCLIP [16] ViT-B/32 COCO14 ✓ 68.32 81.45 82.90 79.95 78.15 75.08 72.24 69.97 48.24 45.18 FSC-CLIP [12] ViT-B/32 COCO-100K × 70.67 80.53 95.50 94.08 85.19 78.23 76.73 74.76 47.91 46.17 DCSM [18] ViT-B/16 COCO17-curated ✓ 56.59 61.80 30.40 32.63 45.36 59.76 53.06 61.53 72.47 68.45 
+
+CE-CLIP [37] ViT-B/32 COCO2014+2M × 76.30 83.86 79.18 80.91 80.06 77.03 73.06 73.36 47.50 47.38 Flow-CLIP ViT-B/32 COCO ✓ 74.10 86.76 92.12 90.78 85.94 79.28 75.92 78.15 46.12 45.01 Flow-CLIP ViT-B/32 COCO × 79.02 87.36 90.22 89.12 86.43 82.88 75.92 81.92 48.04 48.41 
+
+CC3M-trained models 
+
+TSVLC [13] ViT-B/32 CC3M × 72.89 81.76 92.80 83.34 82.70 63.06 62.45 71.15 46.21 45.91 DAC-LLM [14] ViT-B/32 CC3M × 72.80 83.60 92.76 89.73 84.72 73.27 71.43 70.59 45.38 49.53 DAC-SAM [14] ViT-B/32 CC3M × 69.15 83.65 94.72 88.50 84.00 71.77 70.20 70.21 47.65 48.66 LABCLIP [16] ViT-B/32 CC3M ✓ 68.01 78.45 83.16 72.73 75.59 67.42 68.16 67.88 51.70 43.55 FSC-CLIP [12] ViT-B/32 CC3M-100K × 69.49 80.47 90.98 90.40 82.83 75.53 73.88 73.48 46.87 46.86 Flow-CLIP ViT-B/32 CC3M-100K ✓ 72.45 78.96 93.02 91.63 84.01 70.57 67.76 72.49 47.35 47.76 Flow-CLIP ViT-B/32 CC3M-100K × 70.66 83.99 96.96 96.25 86.96 71.17 70.20 74.95 52.93 49.87 
+
+Tab. 2 
+
+Component and objective ablation on COCO (%). Checks indicate learned mappings and the CIMR loss. All trained rows use HNB. Lower lines show changes from CLIP [1] in percentage points; Avg. is the mean across the 11 tasks. The gray configuration is complete Flow-CLIP.                                                                                                                                        
+
+> 𝑀 𝑀 tok 𝑊 CIMR ARO Fine-grained binding Avg. VG-A VG-R Flickr Ord. COCO Ord. Swap-A Swap-O ABC COCO-Sp. GQA-Sp. PUG CLEVR ––––63.21 63.36 58.88 47.60 63.96 61.63 64.11 46.88 46.69 51.04 48.11 55.95 71.04 84.23 91.24 90.20 76.43 72.24 71.12 49.91 43.03 50.63 44.99 67.73
+> ✓–––(+7.83) (+20.88) (+32.36) (+42.61) (+12.46) (+10.61) (+7.00) (+3.03) (-3.65) (-0.41) (-3.12) (+11.78) 71.42 84.78 91.28 90.25 75.98 72.65 71.46 49.25 43.38 50.85 46.33 67.97
+> ✓––✓(+8.21) (+21.43) (+32.40) (+42.65) (+12.01) (+11.02) (+7.35) (+2.37) (-3.31) (-0.19) (-1.78) (+12.01) 76.22 85.50 91.40 89.90 78.68 75.51 78.56 48.98 45.18 54.20 53.67 70.71
+> ✓✓✓–(+13.00) (+22.14) (+32.52) (+42.30) (+14.71) (+13.88) (+14.44) (+2.10) (-1.50) (+3.16) (+5.57) (+14.76) 76.03 86.16 91.42 90.04 77.93 77.55 78.34 48.53 44.97 55.05 56.12 71.10
+> ✓✓✓✓(+12.82) (+22.80) (+32.54) (+42.44) (+13.96) (+15.92) (+14.22) (+1.65) (-1.72) (+4.01) (+8.02) (+15.15)
+
+4.3. Ablation Studies 
+
+We independently train Global-𝑀 and the global/local scorers with the same data and optimization settings, eval-uating all heads at COCO epoch 5. Means and standard deviations across three runs quantify training variability. 
+
+Component effects. Global calibration accounts for much of the improvement over pretrained CLIP [1] in Tab. 2. With matched COCO data and optimization at epoch 5, Global-
+
+𝑀 raises the 11-task mean from 55.95% to 67.73%. Its largest gains occur on caption order, with accuracy above 90% on both Flickr30k Order and COCO Order. Flow-CLIP reaches 71.10%, adding 3.37 percentage points to the mean. The binding tasks distinguish this additional benefit from the caption-order gains already obtained through global calibration. The seven-task binding mean covers Swap-A, Swap-O, ABC, COCO-Spatial, GQA-Spatial, PUG and the CLEVR 449-pair split. It rises from 54.63% for CLIP to 58.34% for Global-𝑀 and 62.64% for Flow-CLIP: global calibration adds 3.70 percentage points, and the joint scorer adds another 4.30 points. This group tests attribute assignments, object identity and spatial relations. The 11-task mean additionally includes all four ARO tasks, where global calibration already achieves high caption-order accuracy. For a fixed global mapping, the local contribution in Eq. (7) changes the caption-pair margin by 𝛼 [𝑠 token (𝐼, 𝑇 +) − 
+
+𝑠 token (𝐼, 𝑇 −)] . Ranking therefore depends on the difference between the two evidence changes. Equal increments leave the margin unchanged; unequal increments can increase or decrease it. In the trained ablations, each scorer learns its own global mapping, jointly with the local maps where present. The HNB and CIMR comparisons measure the effect of training the global/local architecture under each objective. Controlled assignment tasks preserve the objects and attributes mentioned in the captions while changing which attribute belongs to each object. Under HNB, training the local branch with the global map raises accuracy on the CLEVR [23] 449-pair split from 44.99% to 53.67% and on PUG:SPAR [24] from 50.63% to 54.20%. With CIMR in both heads, Flow-CLIP exceeds Global-𝑀 +CIMR by 9.80 and 4.20 percentage points, respectively. Training with the local branch improves both assignment tasks under either objective. On the CLEVR 4,449-pair evaluation pool, HNB-
+
+7trained Global-𝑀 achieves 51.29%, while Flow-CLIP trained with HNB and CIMR achieves 56.06%. Flow-CLIP exceeds Global-𝑀 by 5.31 percentage points on Swap-Object and 7.22 points on ABC, while COCO-Spatial [11] decreases by 1.38 points. The local architecture’s gains on binding thus differ from its effect on spatial-relation discrimination. Paired predictions distinguish corrected se-lections from new errors. 
+
+Encoder adaptation. The encoder-update ablation com-pares the fully trainable Flow-CLIP models in Tab. 1 with sep-arate frozen Flow-CLIP runs on the corresponding training source. The frozen controls achieve 85.91% on COCO and 83.85% on CC3M, giving adaptation gains of 0.52 and 3.11 points, respectively. Within the matched COCO comparison, Flickr30k Order, COCO Order, Swap-Object and COCO-Spatial decrease by 1.20, 0.91, 1.63 and 0.49 points. The ARO increase comes from attribution and relation gains despite lower caption-order accuracy. 
+
+Training variability. Across three independently trained COCO runs, mean ARO accuracy and its sample standard deviation are 84 .31 ± 0 .19 for Global-𝑀 , 84 .47 ± 0 .21 for Global-𝑀 +CIMR, 85 .77 ± 0 .25 for Flow-CLIP (HNB) and 
+
+85 .90 ± 0 .04 for Flow-CLIP with CIMR. Flow-CLIP exceeds Global-𝑀 in every run. 
+
+Confidence intervals. We estimate 95% percentile con-fidence intervals for three-run mean accuracy with 10,000 paired image-cluster bootstrap draws at fixed final check-points. Each draw uses the same image resampling weights across methods, tasks and training runs. The intervals for the Flow-CLIP minus Global-𝑀 accuracy difference are [1.26, 2.31] percentage points on SugarCrepe, [5.95, 8.13] on ABC and [ −3 .20 , −0 .04 ] on COCO-Spatial. They support a gain on SugarCrepe and ABC and a decline on COCO-Spatial under this evaluation protocol. Standard deviations across runs measure training vari-ability, while the paired bootstrap estimates image-sampling uncertainty in the three-run mean at fixed checkpoints. Each bootstrap draw must retain all benchmark aggregation groups. Some VG-Relation groups contain only one unique image, so we omit intervals for VG-Relation and the ARO mean under this protocol. We also omit GQA and image-replacement intervals because image-cluster membership, including shared donor groups, cannot be fully determined from the evaluation records. 
+
+Decision changes. Paired predictions show which Global-
+
+𝑀 errors Flow-CLIP corrects and which correct predictions it loses. These transitions expose changes hidden by average accuracy when repairs and regressions offset each other. On 7,511 SugarCrepe [22] records, Flow-CLIP repairs 366 errors and introduces 231, yielding 135 additional correct decisions. On the 3,213 ABC [46] pairs, it repairs 352 and introduces 120 errors. In both comparisons, repairs exceed regressions on identical images and candidate captions, with a larger net gain on ABC’s attribute-assignment task.                                                  
+
+> Tab. 3
+> ARO accuracy across CIMR weight 𝜆 CIMR , pooling temperature 𝜏 𝑝 and local scale 𝛼 (%). Avg. is the mean across four tasks; the gray row is the reference configuration.
+> 𝜆 CIMR 𝜏 𝑝 𝛼 VG-A VG-R Flickr Ord. COCO Ord. Avg. 0.05 0.03 1.00 76.00 86.40 91.54 90.14 86.02 0.05 0.05 1.00 76.06 86.02 91.38 90.04 85.88 0.05 0.03 0.75 75.75 86.37 91.48 90.09 85.92 0.05 0.05 0.75 76.03 86.16 91.42 90.04 85.91 0.10 0.03 1.00 75.65 86.75 91.54 90.08 86.00 0.10 0.05 1.00 76.05 86.45 91.78 90.22 86.12
+> 0.10 0.03 0.75 75.61 86.54 91.90 90.04 86.02 0.10 0.05 0.75 75.84 86.67 91.74 90.13 86.09
+
+COCO-Spatial shows the reverse balance: 155 repairs and 213 regressions. Its official score decreases by 1.38 percentage points with equal weighting of the one- and two-object subsets. This weighting differs from pooling correct decisions across all records, so the score difference and net repair count use different aggregations. Here, training the joint scorer introduces more spatial errors than it corrects. Among records correctly ranked by Global-𝑀 , Flow-CLIP produces smaller gold–foil margins on 68.06% of COCO-Spatial and 67.66% of GQA-Spatial records across the three runs, using the benchmarks’ subset weights. A smaller margin can remain positive, leaving the pairwise ranking correct. 
+
+Hyperparameter sensitivity. Mean ARO accuracy ranges from 85.88% to 86.12% across the eight configurations in Tab. 3. We vary 𝜆 CIMR ∈ {0 .05 , 0.10} , 𝜏 𝑝 ∈ {0 .03 , 0.05} 
+
+and 𝛼 ∈ {0 .75 , 1.00} using frozen CLIP [1] ViT-B/32 and five COCO epochs. The default is (0 .10 , 0.05 , 1.00) .The effect of pooling temperature depends on the CIMR weight. Increasing 𝜏 𝑝 from 0.03 to 0.05 lowers the ARO mean at 𝜆 CIMR = 0 .05 but raises it at 𝜆 CIMR = 0 .10 for both local scales. Temperature controls emphasis on the highest patch responses, while 𝛼 scales the signed local correction. Similar ARO means mask opposing changes in the constituent tasks: increasing the CIMR weight raises VG-Relation and lowers VG-Attribution in all four matched 
+
+(𝜏 𝑝 , 𝛼 ) pairs. Increasing 𝛼 at fixed CIMR weight and pooling temperature raises VG-Attribution in each tested comparison and leaves COCO Order unchanged or improves it. Flickr30k Order changes in both directions. 
+
+4.4. Image Replacement 
+
+The controls in Tab. 4 change the visual input while keep-ing caption candidates fixed. Real uses the matched image and measures accuracy with the intended visual evidence. 
+
+Shuffle permutes image assignments, giving all candidates for a record the same replacement image. It disrupts image– caption correspondence while retaining variation in visual input across records. Fixed uses one anchor image for all records within a task, removing this variation as well. The two replacement conditions test whether preference for the original gold caption persists across different replacement images or under one constant visual input. 
+
+> 8
+
+Tab. 4 
+
+Image-replacement controls for compositional matching (%). FSC-CLIP and the four matched scoring controls each use one checkpoint across all three conditions. Real uses matched images; Shuffle uses a shared permutation; Fixed uses one anchor. The 6-task average covers SugarCrepe Add/Replace/Swap, ABC, COCO-Spatial and GQA-Spatial.                                                                                                                                                                                                                                                                                                                 
+
+> Method Image control ARO SugarCrepe ABC Spatial 6-task VG-A VG-R Flickr Ord. COCO Ord. Avg. Add Repl. Swap COCO-Sp. GQA-Sp. Avg.
+> Reference methods
+> Real 63.21 63.36 58.88 47.60 58.26 75.09 80.76 63.34 64.11 46.88 46.69 62.81 Shuffle 47.66 41.11 10.36 7.52 26.66 62.27 46.72 43.25 44.69 46.45 50.17 48.93 CLIP [1] Fixed 48.63 51.87 5.54 8.33 28.59 55.16 46.57 44.02 43.67 46.01 50.82 47.71 Real 68.32 81.45 82.90 79.95 78.15 81.02 83.25 73.66 69.97 48.24 45.18 66.89 Shuffle 54.35 64.92 47.30 34.50 50.27 54.33 48.35 53.16 50.58 50.21 48.84 50.91 LABCLIP [16] Fixed 55.05 66.15 35.42 49.32 51.49 54.38 45.08 52.43 50.17 43.61 48.28 48.99 Real 70.50 81.12 90.50 86.97 82.27 85.80 85.02 75.37 73.58 46.54 45.91 68.70 Shuffle 52.30 54.69 29.66 20.45 39.28 76.30 50.04 52.64 50.20 48.12 48.63 54.32 NegCLIP [7] Fixed 56.26 66.38 17.70 33.51 43.46 69.79 47.09 48.95 49.02 47.50 49.40 51.96 Real 70.67 80.53 95.50 94.08 85.19 88.98 87.32 77.48 74.76 47.91 46.17 70.44 Shuffle 47.47 34.20 23.20 14.48 29.84 77.82 49.34 45.50 45.04 48.97 49.23 52.65 FSC-CLIP [12] Fixed 50.12 45.79 7.26 17.95 30.28 71.48 45.24 41.65 44.26 46.95 49.01 49.77
+> Matched scoring controls
+> Real 71.04 84.23 91.24 90.20 84.18 79.23 82.01 75.30 71.12 49.91 43.03 66.77 Shuffle 57.47 64.16 48.96 38.22 52.20 58.17 47.50 54.99 52.32 49.51 49.96 52.08 Global-𝑀
+> Fixed 58.19 71.94 43.82 49.76 55.93 50.87 44.62 50.71 50.39 53.15 48.75 49.75 Real 71.42 84.78 91.28 90.25 84.43 79.96 82.16 75.08 71.46 49.25 43.38 66.88 Shuffle 53.45 52.80 25.28 14.12 36.41 58.90 48.47 46.43 48.43 50.62 48.37 50.20 Global-𝑀 +CIMR Fixed 53.37 63.66 19.20 21.06 39.32 50.80 44.93 44.57 46.69 50.45 48.54 47.66 Real 76.22 85.50 91.40 89.90 85.75 80.79 83.02 77.83 78.56 48.98 45.18 69.06 Shuffle 57.52 67.22 40.72 29.52 48.75 61.11 46.96 53.90 51.45 47.88 49.27 51.76 Flow-CLIP (HNB) Fixed 56.94 70.47 36.60 36.67 50.17 55.85 43.11 51.92 50.82 46.82 49.36 49.65 Real 76.03 86.16 91.42 90.04 85.91 81.66 83.18 77.83 78.34 48.53 44.97 69.08 Shuffle 52.57 58.21 21.04 10.83 35.66 59.22 46.67 47.09 49.49 50.12 49.66 50.38 Flow-CLIP Fixed 51.75 65.78 15.82 15.50 37.21 55.08 43.40 46.21 46.03 46.48 49.61 47.80
+
+FSC-CLIP [12] uses its COCO-trained checkpoint across all three image conditions. Each of the four matched scoring controls likewise uses the same checkpoint across conditions. The HNB and CIMR comparisons within each architecture therefore measure how the training objective affects responses to image replacement. Accuracy after replacement measures how often a scorer retains the gold-caption preference with a different image. Gold labels remain tied to the original images; interpreting this retention therefore requires the corresponding matched-image accuracy. HNB-trained Flow-CLIP achieves mean ARO accuracy of 85.75% on matched images, 48.75% under Shuffle and 50.17% under Fixed. Adding CIMR during training yields 85.91% on matched images and lowers Shuffle and Fixed accuracy to 35.66% and 37.21%, decreases of 13.08 and 12.96 percentage points. Adding CIMR to Global-𝑀 also lowers ARO accuracy under image replacement, with little change in matched-image accuracy. For both architectures, caption-order tasks show larger reductions under Shuffle and Fixed than attribution or relation tasks. The caption candidates and their linguistic cues remain unchanged across these conditions. CIMR thus mitigates reliance on language priors in compositional matching, reducing the gold-caption preference retained under image replacement while maintaining matched-image accuracy. For Flow-CLIP with the CIMR objective in Eq. (11), image replacement produces a larger accuracy drop on ARO than on the six-task average over SugarCrepe, ABC and spatial-relation tasks, which remains 50.38% under Shuffle. The matched-image ablation in Tab. 2 shows that adding CIMR to the HNB-trained global/local scorer raises CLEVR and PUG accuracy by 2.45 and 0.85 percentage points, while Swap-Attribute, ABC, COCO-Spatial and GQA-Spatial decrease by 0.75, 0.22, 0.45 and 0.21 points. Lower caption-preference retention under image replace-ment coexists with gains and losses across the matched-image binding tasks. 
+
+4.5. Encoder Comparisons 
+
+Flow-CLIP’s gains occur in different task groups for SigLIP [5] and BLIP [3] in Tab. 5. Both learned heads improve ARO over the unadapted encoders. Relative to Global-𝑀 , Flow-CLIP increases SigLIP’s ARO mean from 88.91% to 89.92%, while binding decreases from 68.30% to 68.03%. BLIP exhibits the opposite pattern: ARO decreases from 91.50% to 90.85%, while binding increases from 70.56% to 71.10%. 
+
+9Tab. 5 
+
+Frozen encoder families with COCO-trained scoring heads (%). Base denotes pretrained scoring. The 5-task binding average covers Swap-A, Swap-O, ABC, COCO-Spatial and GQA-Spatial; Sugar Avg. is the mean across Add, Replace and Swap. T2I/I2T report COCO Recall@1 in the two retrieval directions. Bold/underline indicate the best/second-best scores within each backbone. 
+
+Backbone Scorer ARO Fine-grained binding SugarCrepe COCO retrieval VG-A VG-R Flickr Ord. COCO Ord. Avg. Swap-ASwap-O ABC COCO-Sp. GQA-Sp. 5-task Avg. Add Repl. Swap Sugar Avg. T2I I2T CLIP ViT-B/32 [1] Base 63.21 63.36 58.88 47.60 58.26 63.96 61.63 64.11 46.88 46.69 56.66 75.09 80.76 63.34 73.06 30.22 50.44 
+
+Global-𝑀 71.04 84.23 91.24 90.20 84.18 76.43 72.24 71.12 49.91 43.03 62.55 79.23 82.01 75.30 78.85 38.06 49.60 Flow-CLIP 76.03 86.16 91.42 90.04 85.91 77.93 77.55 78.34 48.53 44.97 65.46 81.66 83.18 77.83 80.89 38.28 50.14 SigLIP ViT-B/16 [5] Base 55.87 32.04 41.44 33.07 40.60 71.47 60.41 72.49 47.55 48.36 60.06 87.69 84.56 68.50 80.25 47.84 65.76 
+
+Global-𝑀 78.77 86.52 95.50 94.87 88.91 85.74 74.69 81.57 50.76 48.75 68.30 88.05 87.62 82.77 86.15 49.50 60.50 Flow-CLIP 80.77 86.99 95.98 95.94 89.92 85.74 73.47 81.95 51.44 47.55 68.03 88.38 88.14 82.44 86.32 48.97 61.58 BLIP ITC-Base [3] Base 81.83 53.17 28.22 21.80 46.26 84.38 75.10 86.49 45.72 49.14 68.17 95.53 90.54 81.89 89.32 57.08 73.98 
+
+Global-𝑀 86.31 88.97 94.76 95.97 91.50 87.99 79.59 88.45 49.40 47.38 70.56 93.03 92.80 85.73 90.52 56.99 71.02 Flow-CLIP 83.98 88.62 94.64 96.17 90.85 89.04 80.41 88.80 50.10 47.16 71.10 92.92 92.93 86.72 90.86 56.83 69.88 
+
+Tab. 6 
+
+Frozen CLIP [1] backbones with COCO-trained scoring heads (%). ARO Avg. is the mean across four tasks; the 5-task binding average covers Swap-A, Swap-O, ABC, COCO-Spatial and GQA-Spatial; SugarCrepe Avg. is the mean across Add, Replace and Swap. T2I/I2T denote COCO text-to-image/image-to-text Recall@1. Bold/underline indicate the best/second-best scores within each backbone. 
+
+Backbone Scorer ARO Binding (5-task) SugarCrepe COCO retrieval VG-A VG-R Flickr Ord. COCO Ord. Avg. Avg. Avg. T2I I2T ViT-B/32 [1] Base 63.21 63.36 58.88 47.60 58.26 56.66 73.06 30.22 50.44 
+
+Global-𝑀 71.04 84.23 91.24 90.20 84.18 62.55 78.85 38.06 49.60 Global-𝑀 +CIMR 71.42 84.78 91.28 90.25 84.43 62.54 79.07 38.16 48.68 Flow-CLIP 76.03 86.16 91.42 90.04 85.91 65.46 80.89 38.28 50.14 ViT-B/16 [1] Base 62.56 63.91 57.06 49.78 58.33 57.70 73.39 32.97 52.46 Global-𝑀 71.87 83.86 92.56 92.10 85.10 64.45 79.62 41.28 53.30 Global-𝑀 +CIMR 71.53 84.27 92.48 92.25 85.13 63.98 79.49 41.33 51.94 Flow-CLIP 73.34 85.13 92.48 92.19 85.78 65.57 81.53 41.26 53.54 
+
+ViT-L/14 [1] Base 61.87 64.63 55.80 46.56 57.22 56.29 72.97 36.14 56.20 Global-𝑀 69.38 84.67 93.70 93.21 85.24 64.79 79.84 43.51 55.44 Global-𝑀 +CIMR 68.74 84.12 94.02 93.27 85.04 64.23 79.55 43.46 54.28 Flow-CLIP 73.61 83.81 93.26 92.90 85.90 67.09 82.99 45.19 57.26 
+
+All heads are trained on COCO using their frozen encoder’s features, which differ in image pooling, patch resolution and projection dimension. Relative to unadapted BLIP, both learned heads improve ARO accuracy but reduce COCO image-to-text Recall@1. Binding gains over Global-𝑀 persist across the three CLIP [1] backbones in Tab. 6, but their size does not increase monotonically with backbone capacity. For ViT-B/32, ViT-B/16 and ViT-L/14, the five-task mean increases by 2.91, 1.12 and 2.30 percentage points, respectively, while Flow-CLIP’s ARO averages range from 85.78% to 85.91%. On ViT-L/14, the binding and SugarCrepe means improve alongside both retrieval directions, despite decreases in several ARO tasks. 
+
+4.6. Classification and Retrieval 
+
+The results in Tab. 7 evaluate the learned score with class-name prompts and caption queries. Relative to pretrained CLIP [1], training on either COCO or CC3M improves text-to-image retrieval on Flickr30k and COCO, with larger gains after COCO training. Top-1 classification decreases on all three datasets, while COCO-trained Flow-CLIP nearly preserves COCO image-to-text retrieval. 
+
+Tab. 7 
+
+Zero-shot Top-1 classification and Recall@1 retrieval (%). T2I retrieves im-ages from captions; I2T retrieves captions from images. Colored parentheses report percentage-point changes from frozen CLIP (blue: gain; red: loss). 
+
+Dataset CLIP NegCLIP Global-𝑀 Flow-CLIP COCO CC3M COCO CC3M 
+
+Classification (Top-1) 
+
+CIFAR-10 88.3 89.0 86.1 85.2 86.5 (−1 .8) 86.4 (−1 .9) 
+
+CIFAR-100 64.5 63.0 58.9 58.9 58.0 (−6 .5) 59.3 (−5 .2) 
+
+ImageNetV2 54.7 48.7 45.3 50.1 47.0 (−7 .7) 50.0 (−4 .7) 
+
+Retrieval (R@1) 
+
+Flickr30k T2I 59.1 71.0 63.3 62.2 63.4 (+4 .3) 61.5 (+2 .4) 
+
+Flickr30k I2T 78.5 85.0 75.5 73.7 76.0 (−2 .5) 73.1 (−5 .4) 
+
+COCO T2I 30.2 45.0 38.1 33.9 38.3 (+8 .1) 32.7 (+2 .5) 
+
+COCO I2T 50.4 59.0 49.6 43.6 50.1 (−0 .3) 43.1 (−7 .3) 
+
+Relative to Global-𝑀 , COCO-trained Flow-CLIP im-proves all four retrieval scores, whereas CC3M-trained Flow-CLIP reduces them. Classification changes vary across datasets. The retrieval effect thus differs between the COCO and CC3M adaptation settings, which also differ in caption generation, training budget and pooling temperature. 
+
+10 Foil: A river flows in the background of a picture with a clock tower standing above palm trees. Positive: Palm trees are in the foreground of a picture with a clock tower standing above them. 
+
+Foil: A carriage pulling a horse on a narrow path. Positive: A horse pulling a carriage on a narrow path. Positive: fries on plate Foil: plate on fries 
+
+Positive: a small blue plane sitting on top of a field. 
+
+Foil: field plane sitting on a small blue top of a. 
+
+Positive: a small blue plane sitting on top of a field. 
+
+Foil: field plane sitting on a small blue top of a. 
+
+Input CLIP NegCLIP LABCLIP Flow-CLIP Input CLIP NegCLIP LABCLIP Flow-CLIP Input CLIP NegCLIP LABCLIP Flow-CLIP Input CLIP NegCLIP LABCLIP Flow-CLIP 
+
+Foil: A river flows in the background of a picture with a clock tower standing above palm trees. Positive: Palm trees are in the foreground of a picture with a clock tower standing above them. 
+
+Foil: A carriage pulling a horse on a narrow path. Positive: A horse pulling a carriage on a narrow path. Positive: fries on plate Foil: plate on fries 
+
+Positive: a small blue plane sitting on top of a field. 
+
+Foil: field plane sitting on a small blue top of a. 
+
+Input CLIP NegCLIP LABCLIP Flow-CLIP Input CLIP NegCLIP LABCLIP Flow-CLIP Pair Margin Pair Margin Fig. 4. Compositional evidence across models. Word-order, object-replacement, relation-binding, and object-binding cases compare evidence maps and gold–foil score margins. Warm and cool colors indicate responses above and below the within-image reference. Margins are reported on each method’s native scoring scale. grass anlylosaurus and stone rhinoceros 
+
+grass rhinoceros and stone anlylosaurus red anlylosaurus and blue squirrel blue anlylosaurus and red squirrel 
+
+blue anlylosaurus and red armadillo 
+
+red armadillo and blue anlylosaurus 
+
+grass anlylosaurus and stone rhinoceros 
+
+grass rhinoceros and stone anlylosaurus red anlylosaurus and blue squirrel blue anlylosaurus and red squirrel 
+
+blue anlylosaurus and red armadillo 
+
+red armadillo and blue anlylosaurus 
+
+> blue anlylosaurus and red cattle red anlylosaurus and blue cattle
+> blue anlylosaurus and red cattle red anlylosaurus and blue cattle
+> blue anlylosaurus and red rhinoceros red rhinoceros and blue anlylosaurus
+> blue anlylosaurus and red rhinoceros red rhinoceros and blue anlylosaurus
+
+blue anlylosaurus and red pig 
+
+red anlylosaurus and blue pig 
+
+blue anlylosaurus and red pig 
+
+red anlylosaurus and blue pig 
+
+blue anlylosaurus and red pig 
+
+red anlylosaurus and blue pig 
+
+> blue anlylosaurus and red cattle red anlylosaurus and blue cattle
+> blue anlylosaurus and red rhinoceros red rhinoceros and blue anlylosaurus
+
+blue anlylosaurus and red pig 
+
+red anlylosaurus and blue pig 
+
+blue anlylosaurus and red rmadillo blue armadillo and red anlylosaurus 
+
+blue anlylosaurus and red rmadillo blue armadillo and red anlylosaurus 
+
+> blue anlylosaurus and red gianttortoise red gianttortoise and blue anlylosaurus
+
+blue anlylosaurus and red cattle red anlylosaurus and blue cattle blue anlylosaurus and red rmadillo blue armadillo and red anlylosaurus 
+
+> blue anlylosaurus and red gianttortoise red gianttortoise and blue anlylosaurus
+
+blue anlylosaurus and red cattle red anlylosaurus and blue cattle 
+
+grass anlylosaurus and stone rhinoceros 
+
+grass rhinoceros and stone anlylosaurus red anlylosaurus and blue squirrel blue anlylosaurus and red squirrel 
+
+blue anlylosaurus and red armadillo 
+
+red armadillo and blue anlylosaurus 
+
+> blue anlylosaurus and red cattle red anlylosaurus and blue cattle
+> blue anlylosaurus and red rhinoceros red rhinoceros and blue anlylosaurus
+
+blue anlylosaurus and red pig 
+
+red anlylosaurus and blue pig 
+
+blue anlylosaurus and red rmadillo blue armadillo and red anlylosaurus 
+
+> blue anlylosaurus and red gianttortoise red gianttortoise and blue anlylosaurus
+
+blue anlylosaurus and red cattle red anlylosaurus and blue cattle 
+
+Fig. 5. PUG:SPAR color–object binding repairs. Each example pairs an official PUG:SPAR image with a gold color–object assignment and a swapped foil. Bars show the gold–foil score margin for CLIP [1] and Flow-CLIP. Positive values indicate that the gold binding is ranked higher. In these selected cases, Flow-CLIP ranks the gold assignment above the foil, reversing the CLIP decision. 
+
+Caption CLIP Flow-CLIP 
+
+✓ cracks in pavement and another pavement #4 #2 
+
+× cracks across pavement and another pavement #3 #5 
+
+× mouths in pavement and another pavement #2 #6 
+
+× cracks in stand and another pavement #6 #3 
+
+× cracks under pavement and another pavement #5 #4 
+
+× dips in pavement and another pavement #1 #1 
+
+Caption CLIP Flow-CLIP 
+
+✓ man wearing gray shorts. there is a racket. #5 #1 
+
+× man wearing racket. there is a gray shorts. #1 #2 
+
+× shorts wearing gray man. there is a racket. #6 #6 
+
+× racket wearing gray shorts. there is a man. #3 #4 
+
+× gray shorts wearing man. there is a racket. #4 #5 
+
+× man wearing gray racket. there is a shorts. #2 #3 
+
+Caption CLIP Flow-CLIP 
+
+✓ boy playing with ball, ball2 in field #5 #1 
+
+× boy playing with ball, ball2 in right #3 #4 
+
+× boy playing with game, ball2 in field #4 #2 
+
+× boy playing with ball, ball2 in short #6 #3 
+
+× boy playbyg with ball, ball2 in field #2 #6 
+
+× player playing with ball, ball2 in field #1 #5 
+
+Caption CLIP Flow-CLIP 
+
+✓ sheep eating grass in a field #3 #1 
+
+× sheep eating peanut in a field #5 #5 
+
+× sheep eating bean in a field #4 #6 
+
+× sheep eatbyg grass in a field #2 #3 
+
+× sheep eatnearg grass in a field #1 #4 
+
+× sheep eating grass in a desert #6 #2 
+
+Fig. 6. Caption rankings for four CREPE [25] examples. Each image has one gold caption and five foils. Columns give CLIP [1] and Flow-CLIP ranks, with rank 1 best. Green checks identify gold captions and red crosses identify foils. 
+
+11 Pair Margin Gold: the green door and the abandoned building Hard foil: the abandoned door and the green building Gold: the pink wall and the blue pillow Hard foil: the blue wall and the pink pillow Gold: the green door and the abandoned building Hard foil: the abandoned door and the green building Gold: the pink wall and the blue pillow Hard foil: the blue wall and the pink pillow Input Top residual patches Pair Margin Input Top residual patches Input Top residual patches Pair Margin Input Top residual patches VG-Attribution VG-Attribution VG-Relation VG-Relation Gold ： the man is on the hill Hard foil: the hill is on the man Gold: the cat is to the left of the floor Hard foil: the floor is to the left of the cat Gold ： the man is on the hill Hard foil: the hill is on the man Gold: the cat is to the left of the floor Hard foil: the floor is to the left of the cat                             
+
+> COCO Order COCO Order Gold ：two men, one wearing white and the other
+> wearing blue, are wrestling
+> Hard foil: and the other two men, are wrestling wearing blue, one wearing white two people drive a jeep while a lady sits on the top of it Hard foil: a lady sits a jeep while of it two people drive on the top Gold ：two men, one wearing white and the other
+> wearing blue, are wrestling
+> Hard foil: and the other two men, are wrestling wearing blue, one wearing white two people drive a jeep while a lady sits on the top of it Hard foil: a lady sits a jeep while of it two people drive on the top Gold ：red train on its tracks in a green field Hard foil: green train on its tracks in a red field Gold ：a red boat pulls up to a mossy shore Hard foil: pulls up to a mossy shore a red boat Gold ：red train on its tracks in a green field Hard foil: green train on its tracks in a red field Gold ：a red boat pulls up to a mossy shore Hard foil: pulls up to a mossy shore a red boat
+> Gold: the green door and the abandoned building Hard foil: the abandoned door and the green building Gold: the pink wall and the blue pillow Hard foil: the blue wall and the pink pillow Input Top residual patches Pair Margin Input Top residual patches VG-Attribution VG-Relation Gold ：the man is on the hill Hard foil: the hill is on the man Gold: the cat is to the left of the floor Hard foil: the floor is to the left of the cat
+> COCO Order Gold ：two men, one wearing white and the other
+> wearing blue, are wrestling
+> Hard foil: and the other two men, are wrestling wearing blue, one wearing white two people drive a jeep while a lady sits on the top of it Hard foil: a lady sits a jeep while of it two people drive on the top Gold ：red train on its tracks in a green field Hard foil: green train on its tracks in a red field Gold ：a red boat pulls up to a mossy shore Hard foil: pulls up to a mossy shore a red boat
+> Flickr30k Order
+
+Fig. 7. Cross-model residual-evidence atlas on ARO. The eight examples cover VG-Attribution, VG-Relation, Flickr30k Order, and COCO Order. For each example, the input image is followed by patches selected by Flow-CLIP’s centered-feature sensitivity and the gold–hard-foil score margins of CLIP [1], NegCLIP [7], LABCLIP [16], and Flow-CLIP. Positive margins indicate correct pairwise rankings. 
+
+4.7. Qualitative Analysis Local evidence. The four examples in Fig. 4 compare token–patch responses and gold–foil margins for word order, object replacement, relation binding and object binding. Warm and cool regions indicate responses above and below the within-image mean. They locate patch support for each caption, while the adjacent margins show which caption the final score prefers. LABCLIP and Flow-CLIP both select the gold caption in all four pairs. Their respective margins are 0.063 and 0.134 for the aircraft example, and 0.019 and 0.054 for the plate example. Positive signs indicate correct pairwise rankings; the magnitudes are specific to each scoring function. The aircraft captions differ in word order, while the plate captions reverse an object relation. 
+
+Attribute assignments. The PUG:SPAR [24] examples illustrated in Fig. 5 hold the object inventory and scene templates fixed while exchanging color assignments. CLIP [1] assigns a negative gold–foil score margin to every displayed pair, whereas Flow-CLIP assigns a positive margin. 
+
+Caption rankings. In the four CREPE [25] examples in Fig. 6, Flow-CLIP selects the gold caption in three cases where CLIP [1] selects a foil. In the racket scene, the selected caption correctly identi-fies the man’s clothing, while CLIP prefers a description that treats the racket as clothing. In the football and sheep scenes, Flow-CLIP ranks the gold descriptions above alternatives that substitute the described object or location. The pavement example shows a partial improvement: the gold caption rises from fourth to second, but an alternative describing a different pavement feature remains first. The higher gold-caption rank still leaves another candidate as the final selection. 
+
+Patch sensitivity. The eight cases in Fig. 7 compare patch sensitivity and caption-pair margins across attribution, relation and word-order tasks. Patch selection uses the first-order change in the gold–foil evidence increment along the centered patch-feature direction, highlighting regions to which this local comparison is sensitive. In the attribution cases, the selected regions cover the door, building, wall and pillow whose properties distinguish the captions. The adjacent margins report the final caption preference. 
+
+Margin changes. In Fig. 8, gold–foil margins increase for 47 of 48 illustrative pairs and decrease for one. After excluding two order cases with duplicate gold captions, correct top-1 selections increase from 17 to 45 of 46 cases, 
+
+12 with 28 repairs and no correct-to-incorrect reversals. A COCO Order case remains incorrect: its gold rank worsens from 3 to 4 as another caption outranks it despite the improved margin over the displayed foil. These order-task candidate sets differ from the full benchmark. −0.01 0.00 0.02 0.04 0.06 
+
+Gold-minus-foil margin   
+
+> VG-A VG-R Flickr COCO
+> incorrect correct
+> Global-MFlow-CLIP
+
+Fig. 8. Changes in caption-pair margins. Each arrow connects the Global-𝑀 
+
+and Flow-CLIP gold–foil score margins for the same image and caption pair. The zero boundary separates incorrect and correct rankings. Enlarged markers show the task means. 
+
+5. Conclusion 
+
+We presented Flow-CLIP to improve attribute–object binding and mitigate reliance on language priors in com-positional image–text matching. GCC calibrates global align-ment, ICER adjusts this score through image-conditioned changes in token–patch evidence, and CIMR supervises caption-pair margins across matched and replacement im-ages. Experiments show improved binding beyond learned global alignment and reduced reliance on language priors. These findings support using image-conditioned evidence refinement to resolve binding ambiguities that persist after sentence-level alignment. 
+
+AI USE STATEMENT 
+
+Generative AI tools were used only to assist with manuscript writing. 
+
+References 
+
+[1] A. Radford, J. W. Kim, C. Hallacy, A. Ramesh, G. Goh, S. Agarwal, G. Sastry, A. Askell, P. Mishkin, J. Clark, G. Krueger, I. Sutskever, Learning transferable visual models from natural language supervision, in: Proceedings of the 38th International Conference on Machine Learning, Vol. 139 of Proceedings of Machine Learning Research, PMLR, 2021, pp. 8748–8763. [2] C. Jia, Y. Yang, Y. Xia, Y.-T. Chen, Z. Parekh, H. Pham, Q. Le, Y.-H. Sung, Z. Li, T. Duerig, Scaling up visual and vision-language representation learning with noisy text supervision, in: Proceedings of the 38th International Conference on Machine Learning, Vol. 139 of Proceedings of Machine Learning Research, PMLR, 2021, pp. 4904– 4916. [3] J. Li, D. Li, C. Xiong, S. Hoi, Blip: Bootstrapping language-image pre-training for unified vision-language understanding and generation, in: International conference on machine learning, PMLR, 2022, pp. 12888–12900. [4] X. Zhai, X. Wang, B. Mustafa, A. Steiner, D. Keysers, A. Kolesnikov, L. Beyer, LiT: Zero-shot transfer with locked-image text tuning, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2022, pp. 18123–18133. [5] X. Zhai, B. Mustafa, A. Kolesnikov, L. Beyer, Sigmoid loss for language image pre-training, in: Proceedings of the IEEE/CVF in-ternational conference on computer vision, 2023, pp. 11975–11986. [6] T. Thrush, R. Jiang, M. Bartolo, A. Singh, A. Williams, D. Kiela, C. Ross, Winoground: Probing vision and language models for visio-linguistic compositionality, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2022, pp. 5238–5248. [7] M. Yuksekgonul, F. Bianchi, P. Kalluri, D. Jurafsky, J. Zou, When and why vision-language models behave like bags-of-words, and what to do about it?, in: 11th International Conference on Learning Representations, ICLR 2023, International Conference on Learning Representations, ICLR, 2023. [8] T. Zhao, T. Zhang, M. Zhu, H. Shen, K. Lee, X. Lu, J. Yin, VL-CheckList: Evaluating pre-trained vision-language models with ob-jects, attributes and relations, arXiv preprint arXiv:2207.00221 (2022). [9] L. Parcalabescu, M. Cafagna, L. Muradjan, A. Frank, I. Calixto, A. Gatt, VALSE: A task-independent benchmark for vision and language models centered on linguistic phenomena, in: Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Association for Computational Linguistics, Dublin, Ireland, 2022, pp. 8253–8280. doi:10.18653/v1/2022.acl-long. 567 .[10] M. Lewis, N. Nayak, P. Yu, J. Merullo, Q. Yu, S. Bach, E. Pavlick, Does CLIP bind concepts? probing compositionality in large image models, in: Findings of the Association for Computational Linguistics: EACL 2024, Association for Computational Linguistics, St. Julian’s, Malta, 2024, pp. 1487–1500. doi:10.18653/v1/2024.findings-eacl.101 .[11] A. Kamath, J. Hessel, K.-W. Chang, What’s “up” with vision-language models? investigating their struggle with spatial reasoning, in: Pro-ceedings of the 2023 Conference on Empirical Methods in Natural Language Processing, Association for Computational Linguistics, Singapore, 2023, pp. 9161–9175. doi:10.18653/v1/2023.emnlp-main. 568 .[12] Y. Oh, J. W. Cho, D.-J. Kim, I. S. Kweon, J. Kim, Preserving multi-modal capabilities of pre-trained VLMs for improving vision-linguistic compositionality, in: Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing, Association for Computational Linguistics, Miami, Florida, USA, 2024, pp. 19060– 19076. doi:10.18653/v1/2024.emnlp-main.1062 .[13] S. Doveh, A. Arbelle, S. Harary, E. Schwartz, R. Herzig, R. Giryes, R. Feris, R. Panda, S. Ullman, L. Karlinsky, Teaching structured vision & language concepts to vision & language models, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2023, pp. 2657–2668. [14] S. Doveh, A. Arbelle, S. Harary, R. Herzig, D. Kim, P. Cascante-Bonilla, A. Alfassy, R. Panda, R. Giryes, R. Feris, S. Ullman, L. Karlinsky, Dense and Aligned Captions (DAC) Promote Composi-tional Reasoning in VL Models, in: Advances in Neural Information Processing Systems, Vol. 36, Curran Associates, Inc., 2023, pp. 76137– 76150. doi:10.52202/075280-3327 .[15] H. Singh, P. Zhang, Q. Wang, M. Wang, W. Xiong, J. Du, Y. Chen, Coarse-to-fine contrastive learning in image-text-graph space for im-proved vision-language compositionality, in: Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing, Association for Computational Linguistics, Singapore, 2023, pp. 869– 893. doi:10.18653/v1/2023.emnlp-main.56 .[16] D. Koishigarina, A. Uselis, S. J. Oh, Clip behaves like a bag-of-words model cross-modally but not uni-modally, in: International Conference on Learning Representations, 2026, pp. 96106–96127. [17] L. Yao, R. Huang, L. Hou, G. Lu, M. Niu, H. Xu, X. Liang, Z. Li, X. Jiang, C. Xu, FILIP: Fine-grained Interactive Language-Image Pre-Training, in: International Conference on Learning Representations, 2022. [18] R. Kang, Y. Song, G. Gkioxari, P. Perona, Is clip ideal? no. can we fix it? yes!, in: Proceedings of the IEEE/CVF International Conference on Computer Vision, 2025, pp. 22436–22446. [19] K. Jiang, X. He, R. Xu, X. Wang, ComCLIP: Training-free composi-tional image and text matching, in: Proceedings of the 2024 Conference 
+
+13 of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers), Association for Computational Linguistics, Mexico City, Mexico, 2024, pp. 6639–6659. doi:10.18653/v1/2024.naacl-long.370 .[20] R. Assouel, P. Astolfi, F. Bordes, M. Drozdzal, A. Romero-Soriano, Object-centric binding in Contrastive Language-Image Pretraining, in: Advances in Neural Information Processing Systems, Vol. 38, Curran Associates, Inc., 2025, pp. 131418–131458. doi:10.52202/ 085713-4375 .[21] R. Xiao, S. Kim, M.-I. Georgescu, Z. Akata, S. Alaniz, Flair: Vlm with fine-grained language-informed image representations, in: 2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), IEEE Computer Society, 2025, pp. 24884–24894. [22] C.-Y. Hsieh, J. Zhang, Z. Ma, A. Kembhavi, R. Krishna, SugarCrepe: Fixing Hackable Benchmarks for Vision-Language Compositionality, in: Advances in Neural Information Processing Systems, Vol. 36, Curran Associates, Inc., 2023, pp. 31096–31116. doi:10.52202/ 075280-1355 .[23] J. Johnson, B. Hariharan, L. van der Maaten, L. Fei-Fei, C. L. Zitnick, R. Girshick, CLEVR: A diagnostic dataset for compositional language and elementary visual reasoning, in: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 2901–2910. [24] F. Bordes, S. Shekhar, M. Ibrahim, D. Bouchacourt, P. Vincent, A. Morcos, PUG: Photorealistic and semantically controllable synthetic data for representation learning, in: Advances in Neural Information Processing Systems, Vol. 36, Curran Associates, Inc., 2023, pp. 45020– 45054. doi:10.52202/075280-1952 .[25] Z. Ma, J. Hong, M. O. Gul, M. Gandhi, I. Gao, R. Krishna, CREPE: Can vision-language foundation models reason compositionally?, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2023, pp. 10910–10921. [26] I. Miranda, A. Salaberria, E. Agirre, G. Azkune, BiVLC: Extending Vision-Language Compositionality Evaluation with Text-to-Image Retrieval, in: Advances in Neural Information Processing Systems, Vol. 37, Curran Associates, Inc., 2024, pp. 101880–101904. doi: 10.52202/079017-3232 .[27] S. H. Dumpala, A. Jaiswal, C. Sastry, E. Milios, S. Oore, H. Sajjad, SUGARCREPE++ Dataset: Vision-Language Model Sensitivity to Semantic and Lexical Alterations, in: Advances in Neural Information Processing Systems, Vol. 37, Curran Associates, Inc., 2024, pp. 17972– 18018. doi:10.52202/079017-0571 .[28] K. Alhamoud, S. Alshammari, Y. Tian, G. Li, P. H. Torr, Y. Kim, M. Ghassemi, Vision-language models do not understand negation, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025, pp. 29612–29622. [29] B. Kargi, A. Uselis, S. J. Oh, Half-truths break similarity-based retrieval, arXiv preprint arXiv:2602.23906 (2026). [30] A. Uselis, D. Koishigarina, S. J. Oh, How can embedding models bind concepts?, in: Proceedings of the 43rd International Conference on Machine Learning, Vol. 306 of Proceedings of Machine Learning Research, PMLR, 2026, pp. 123108–123135. [31] Y. Zhong, J. Yang, P. Zhang, C. Li, N. Codella, L. H. Li, L. Zhou, X. Dai, L. Yuan, Y. Li, J. Gao, Regionclip: Region-based language-image pretraining, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2022, pp. 16793–16803. [32] F. Zohra, C. Zhao, H. Itani, B. Ghanem, 𝛽 -CLIP: Text-Conditioned Contrastive Learning for Multi-Granular Vision-Language Alignment, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2026, pp. 680–689. [33] Q. Zhang, Y. Chen, L. Deng, L. Shen, Abe-clip: Training-free attribute binding enhancement for compositional image-text matching, arXiv preprint arXiv:2512.17178 (2025). [34] Z. Lin, D. Pathak, B. Li, J. Li, X. Xia, G. Neubig, P. Zhang, D. Ramanan, Evaluating Text-to-Visual Generation with Image-to-Text Generation, arXiv preprint arXiv:2404.01291 (2024). URL https://arxiv.org/abs/2404.01291 
+
+[35] M. Patel, A. Kusumba, S. Cheng, C. Kim, T. Gokhale, C. Baral, Y. Yang, TripletCLIP: Improving Compositional Reasoning of CLIP via Synthetic Vision-Language Negatives, in: Advances in Neural Information Processing Systems, Vol. 37, Curran Associates, Inc., 2024, pp. 32731–32760. doi:10.52202/079017-1029 .[36] H. Li, B. Li, Enhancing vision-language compositional understanding with multimodal synthetic data, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025, pp. 24849–24861. [37] L. Zhang, R. Awal, A. Agrawal, Contrasting intra-modal and ranking cross-modal hard negatives to enhance visio-linguistic compositional understanding, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2024, pp. 13774–13784. [38] J. Kwon, K. Min, J.-y. Sohn, Enhancing Compositional Reasoning in CLIP via Reconstruction and Alignment of Text Descriptions, in: Advances in Neural Information Processing Systems, Vol. 38, Curran Associates, Inc., 2025, pp. 13939–13966. doi:10.52202/085713-0468 .[39] H. X. Pham, D. T. Hoffmann, R. Guerrero, B. Martinez, No Hard Neg-atives Required: Concept Centric Learning Leads to Compositionality without Degrading Zero-shot Capabilities of Contrastive Models, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2026, pp. 33901–33910. [40] A. Peleg, N. D. Singh, M. Hein, Advancing Compositional Awareness in CLIP with Efficient Fine-Tuning, in: Advances in Neural Information Processing Systems, Vol. 38, Curran Associates, Inc., 2025, pp. 56959– 56998. doi:10.52202/085713-1908 .[41] T.-Y. Lin, M. Maire, S. Belongie, J. Hays, P. Perona, D. Ramanan, P. Dollár, C. L. Zitnick, Microsoft coco: Common objects in context, in: European conference on computer vision, Springer, 2014, pp. 740– 755. [42] A. Karpathy, L. Fei-Fei, Deep visual-semantic alignments for gener-ating image descriptions, in: Proceedings of the IEEE conference on computer vision and pattern recognition, 2015, pp. 3128–3137. [43] X. Chen, H. Fang, T.-Y. Lin, R. Vedantam, S. Gupta, P. Dollár, C. L. Zitnick, Microsoft coco captions: Data collection and evaluation server, arXiv preprint arXiv:1504.00325 (2015). [44] P. Sharma, N. Ding, S. Goodman, R. Soricut, Conceptual captions: A cleaned, hypernymed, image alt-text dataset for automatic image captioning, in: Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), 2018, pp. 2556–2565. [45] J. Yu, Z. Wang, V. Vasudevan, L. Yeung, M. Seyedhosseini, Y. Wu, CoCa: Contrastive captioners are image-text foundation models, Transactions on Machine Learning Research (2022). URL https://arxiv.org/abs/2205.01917 
+
+[46] W. Feng, X. He, T.-J. Fu, V. Jampani, A. R. Akula, P. Narayana, S. Basu, X. E. Wang, W. Y. Wang, Training-free structured diffusion guidance for compositional text-to-image synthesis, in: The Eleventh International Conference on Learning Representations, 2023. URL https://openreview.net/forum?id=PUIqjT4rzq7 
+
+[47] P. Young, A. Lai, M. Hodosh, J. Hockenmaier, From image descriptions to visual denotations: New similarity metrics for semantic inference over event descriptions, Transactions of the association for computa-tional linguistics 2 (2014) 67–78. [48] A. Krizhevsky, Learning Multiple Layers of Features from Tiny Images, Tech. rep., University of Toronto (2009). URL https://www.cs.toronto.edu/~kriz/learning-features-2009-TR. pdf 
+
+[49] B. Recht, R. Roelofs, L. Schmidt, V. Shankar, Do imagenet classifiers generalize to imagenet?, in: International conference on machine learning, PMLR, 2019, pp. 5389–5400. [50] I. Loshchilov, F. Hutter, Decoupled weight decay regularization, in: International Conference on Learning Representations, 2019. URL https://arxiv.org/abs/1711.05101 
+
+14

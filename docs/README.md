@@ -4,24 +4,24 @@
     <a class="dpr-home-notice-tutorial" href="#/tutorial/README">使用教程 <span aria-hidden="true">›</span></a>
   </div>
   <div class="dpr-home-notice-entry">
-    <time class="dpr-home-notice-date" datetime="2026-09-05">09.05</time>
+    <time class="dpr-home-notice-date" datetime="2026-10-05">10.05</time>
     <div>
-      <strong class="dpr-home-notice-entry-title">CVPR 2026 已更新</strong>
-      <span class="dpr-home-notice-entry-summary">已收录 CVPR 2026 官方 Open Access 论文 4,042 篇，可在会议检索中查看。EMNLP 2026 预计于 10 月中下旬更新，具体以官方论文集开放时间为准。</span>
+      <strong class="dpr-home-notice-entry-title">medRxiv 自动更新已恢复</strong>
+      <span class="dpr-home-notice-entry-summary">修复超长摘要导致的向量生成失败，维护任务现会限制单条 embedding 文本长度并分片写入。受影响范围已重新同步，公开读取、关键词检索与语义检索均已验证。</span>
     </div>
   </div>
   <div class="dpr-home-notice-entry">
-    <time class="dpr-home-notice-date" datetime="2026-08-28">08.28</time>
+    <time class="dpr-home-notice-date" datetime="2026-09-16">09.16</time>
     <div>
-      <strong class="dpr-home-notice-entry-title">区间日报可正常点开</strong>
-      <span class="dpr-home-notice-entry-summary">长时间窗日报会挂在结束日那天的日历格上，此前点击没有反应，现在可以正常展开查看。</span>
+      <strong class="dpr-home-notice-entry-title">日报跨日重复推荐已修复</strong>
+      <span class="dpr-home-notice-entry-summary">历史推荐现按原始召回标签与 arXiv 论文标识去重，暂停词条不再参与评分；同一专题次日不会重复推荐相同论文。已有历史页面保留，不自动删除。</span>
     </div>
   </div>
   <div class="dpr-home-notice-entry">
-    <time class="dpr-home-notice-date" datetime="2026-07-20">07.20</time>
+    <time class="dpr-home-notice-date" datetime="2026-09-09">09.09</time>
     <div>
-      <strong class="dpr-home-notice-entry-title">反馈功能上线</strong>
-      <span class="dpr-home-notice-entry-summary">新增反馈功能，欢迎大家踊跃反馈各种建议，我们会第一时间查看并协调处理。</span>
+      <strong class="dpr-home-notice-entry-title">90天/365天 arXiv 专题回溯</strong>
+      <span class="dpr-home-notice-entry-summary">支持分片召回、断点评审与分页查看，核心论文与待复核结果分开展示。DeepSeek 费用按实际用量计算，不下载全量 PDF。</span>
     </div>
   </div>
   <div class="dpr-home-site-stats" data-dpr-site-stats hidden aria-live="polite">
@@ -48,17 +48,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-10-13</span>
+      <span class="dpr-home-dashboard-kicker">2026-09-22 ~ 2026-10-21</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 6 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 11 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
-    <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>2 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>6</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>1</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>10</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-10-13 23:25:42 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-10-21 09:14:38 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -69,9 +69,9 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今天完成6篇速读、0篇精读，最高分是7.0的SharP低资源假新闻检测。</p>
-<p>最值得看：LLM软/硬提示增强能否缓解少样本假新闻识别，以及多模态文档QA与GraphRAG布局证据推理的评测/工具路线。</p>
-<p>普通读者可先读SharP摘要，关注提示增强在真实低资源场景的落地效果，再按需跟进多模态检索评测。</p>
+<p>本期跨一个月筛读 11 篇论文（精读 1 篇、速读 10 篇），聚焦 LLM 智能体事实核查与多模态内容风险识别。</p>
+<p>最值得看的是精读 8.0 分的《Standing on the Shoulders of Giants》：把人类专家技能注入 LLM 智能体以提升自动事实核查；速读中“MemeLogos”的有害模因检测与“VisualTrust”的屏幕声明框架下视频推理也可顺带关注。</p>
+<p>普通读者可先读这篇精读了解事实核查智能体的思路，再按兴趣挑 1 篇多模态检测速读，留意这些方法在真实平台内容审核中的适用边界。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -80,12 +80,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">0 篇</strong>
+    <strong class="dpr-home-dashboard-count">1 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Standing on the Shoulders of Giants: Enhancing LLM Agents for Automated Fact-Checking with Human Expert Skills">Standing on the Shoulders of Giants: Enhancing LLM Agents for Automated Fact-Checking with Human Expert Skills</span></li></ul>
   </div>
-
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>1</strong></span></div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -93,12 +93,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">6 篇</strong>
+    <strong class="dpr-home-dashboard-count">10 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="SharP: Soft and Hard Prompt-Guided Augmentation with LLM for Low Resource Fake News Detection">SharP: Soft and Hard Prompt-Guided Augmentation with LLM for Low Resource Fake News Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="Locate, Judge, Read: Role-Specialized Tool Agents over a Knowledge-Point Index for Open-Domain Multimodal Document QA">Locate, Judge, Read: Role-Specialized Tool Agents over a Knowledge-Point Index for Open-Domain Multimodal Document QA</span></li><li><span class="dpr-home-dashboard-paper-title" title="TopoGraphRAG-Bench: Evaluating Multimodal GraphRAG on Layout-Grounded Evidence Reasoning">TopoGraphRAG-Bench: Evaluating Multimodal GraphRAG on Layout-Grounded Evidence Reasoning</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="MemeLogos: Knowledge-Driven Retrieval-Augmented Reasoning for Harmful Meme Detection">MemeLogos: Knowledge-Driven Retrieval-Augmented Reasoning for Harmful Meme Detection</span></li><li><span class="dpr-home-dashboard-paper-title" title="VisualTrust: Video Reasoning under On-Screen Claim Framing">VisualTrust: Video Reasoning under On-Screen Claim Framing</span></li><li><span class="dpr-home-dashboard-paper-title" title="Media Intelligence Platform: Multimodal Detection of Synthetic and Manipulated Content">Media Intelligence Platform: Multimodal Detection of Synthetic and Manipulated Content</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>6</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">mfnd <strong>10</strong></span></div>
 </section>
 </div>
 

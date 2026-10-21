@@ -1,0 +1,274 @@
+Title: Leveraging LLM-Generated Explanations for Detecting Emotionally Rewritten Fake News
+
+URL Source: https://arxiv.org/pdf/2610.08835v1
+
+Published Time: Thu, 08 Oct 2026 00:01:42 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Leveraging LLM-Generated Explanations for Detecting Emotionally Rewritten Fake News 
+
+Yupei Guo 
+
+The University of Osaka Osaka, Japan yupei@ im.sanken.osaka-u.ac.jp 
+
+Jiajun He 
+
+Alibaba Inc Hangzhou, China kakashun.hjj@alibaba-inc.com 
+
+Xiaohan Shi 
+
+Nagoya University Nagoya, Japan xiaohan.shi@g.sp.m.is.nagoya-u.ac.jp 
+
+Tomoki Toda 
+
+Nagoya University Nagoya, Japan toda.tomoki.v6@f.mail.nagoya-u.ac.jp 
+
+Zekun Yang 
+
+Tokyo University of Science Tokyo, Japan yang.zekun@ rs.tus.ac.jp 
+
+Bowen Wang 
+
+The University of Osaka Osaka, Japan wang@ im.sanken.osaka-u.ac.jp 
+
+Yukinobu Taniguchi 
+
+Tokyo University of Science Tokyo, Japan taniguchi.yukinobu@ rs.tus.ac.jp 
+
+Abstract —The spread of fake news may cause severe social consequences. Existing fake news detection methods mainly focus on stylistic variations or incorporate external information such as explanations. However, news articles are often rewritten under different emotional backgrounds while preserving their underlying factual claims, which may affect the robustness of detection models. In this work, we investigate fake news detec-tion under fact-preserving emotional variations. To study this problem, we construct emotion-rewritten test sets and generate explanations from the original news articles as stable background knowledge. We then propose a Gated Cross Attention (GCA) framework that adaptively integrates emotionally rewritten news with the corresponding explanations, enabling the model to focus on informative explanation content while reducing potential mismatches caused by emotional reframing. Experiments on PolitiFact, GossipCop, and LUN demonstrate that the proposed method achieves notable improvements under multiple emotional conditions on PolitiFact and LUN, while maintaining competitive performance on GossipCop. We further analyze the effects of explanation guidance and gating mechanisms under different emotional conditions. Our code and data are available at: https://github.com/Flulike/fakenews gca . 
+
+Index Terms —Fake news detection, Gated cross attention, Emotional rewriting. 
+
+I. I NTRODUCTION 
+
+News is an important medium for people to know what is happening. With the rapid development of social network plat-forms, a large amount of news is produced and disseminated every day. However, the open and decentralized nature of these platforms also facilitates the spread of false or misleading information, which can be called fake news [1], [2]. Such fake news influences people’s decisions, undermines social credibility, and may even cause severe consequences [3], [4]. Moreover, it is often difficult for ordinary users to verify the authenticity of online content, allowing fake news gain traction [4], [5]. Therefore, developing accurate fake news detection systems remains an important research problem. Recent research on automated fake news detection mainly follows two complementary directions: studying the influence Sports Reporter      
+
+> “REAL MADRID finalized a deal to hire Jose Mourinho as coach … He replaces Manuel Pelligrini, who was fired on Wednesday.”
+> Emotional Rewritten Contents
+> (e.g. SNS Reposts )
+> “REAL MADRID has made an infuriating move by finalizing a
+> deal to hire Jose Mourinho … showing
+> the club’s impulsiveness .”
+> Fake News Detector Jose Mourinho's Career Real Madrid's Ambitions Challenges and Expectations …
+> LLM
+> GCA
+> Our Met hod Explanation
+
+Fig. 1. Overview of fake news detection framework under different emotional backgrounds. Red text indicates emotion-related modifications introduced during rewriting. 
+
+of style variations [6]–[14], and leveraging external infor-mation as supplementary evidence [15]–[23]. For example, Przybyla et al. [6] detect fake news based on stylistic charac-teristics, while Wu et al. [8] propose a style-robust detector that emphasizes content-related features. Wang et al. [12] introduce MegaFake, a theory-driven dataset constructed by simulating socio-psychological style variations and deceptive mechanisms in LLM-generated fake news. Xie et al. [15] combine knowledge graphs, large language models, and graph neural networks; Hu et al. [16] design an Adaptive Rationale Guidance (ARG) network; and Nan et al. [19] augment fake news detection with generated comments. Ma et al. [24] further demonstrate that extracting structured semantic infor-mation such as entities and topics with large language models can improve fake news detection compared with directly using LLM embeddings. Lu et al. [22] propose a method that simulate user discussions to alleviate data scarcity. Other studies have also demonstrated that fake news often leverages emotionally charged language to influence readers. For instance, fabricators of false information deliberately employ specific emotional tones to mask unverified content arXiv:2610.08835v1 [cs.CL] 29 Sep 2026 and accelerate dissemination [25]. Consequently, incorporating emotional signals has become an important research direction in fake news detection. Recent studies have explored advanced emotional representations that capture nuanced publisher and social emotions as complementary features [26]. However, treating emotion primarily as a detection cue may introduce a potential vulnerability. In real-world scenarios, news articles are often rewritten under different emotional backgrounds to reflect certain stances or tendencies while largely pre-serving their underlying claims. As a result, detectors that rely heavily on emotional cues may be misled by altered emotional expressions. Such emotional perturbations make it more difficult to separate emotional presentation from factual content, posing challenges to fake news detection even when auxiliary information is available. Therefore, it is necessary to develop methods that robustly utilize external evidence while remaining resilient to changes under different emotional backgrounds. In this work, we investigate fake news detection under fact-preserving emotional variations, where the underlying factual content remains unchanged while the emotional background of the news varies. The setting is shown in Fig. 1. Following prior work on style-preserving news rewriting [8], we adopt this setting to isolate the influence of emotional variations from changes in factual content. To study this problem, we construct emotionally rewritten versions of news articles and pair them with explanations generated from the corresponding original articles. These explanations serve as stable background knowl-edge across different emotional variants. Although such expla-nations may not always be available in real-world deployment scenarios, they are used here as a reference to examine how auxiliary information interacts with emotionally altered inputs. This design enables us to analyze whether fake news detectors can maintain consistent judgments when exposed to different emotional expressions of the same content. Based on this setting, we propose a Gated Cross Attention (GCA) framework to integrate emotionally rewritten news with explanation signals. Unlike SheepDog [8], which uses style-preserving rewriting to improve robustness without incorporat-ing auxiliary explanations, our method introduces explanations generated from the original news as contextual information for emotionally rewritten inputs. Unlike ARG [16], which uses rationales for general fake news detection, our method further models the varying relevance between an explanation and its emotionally rewritten news through gated cross attention. Specifically, the gate adaptively regulates the contribution of text explanation according to the input representation, rather than treating the explanation as uniformly relevant. This provides a methodological extension from explanation augmentation to adaptive explanation-guided detection under emotional rewriting. We evaluate our approach on PolitiFact, GossipCop, and LUN. The proposed method achieves improvements under multiple emotional conditions on PolitiFact and LUN while remaining competitive on GossipCop. Ablation studies further examine the contributions of explanation augmentation and the                           
+
+> TABLE I STATISTICS OF THE BENCHMARK DATASETS USED IN THIS WORK . T HE THREE DATASETS COVER DIFFERENT DATA SCALES ,PROVIDING A COMPREHENSIVE EVALUATION UNDER MULTIPLE EMOTIONAL REWRITING SETTINGS .
+> Dataset Training Test
+> Total True Fake Total True Fake PolitiFact 360 180 180 90 45 45 GossipCop 6,332 3,166 3,166 1,584 792 792 LUN 6,000 3,000 3,000 1,500 750 750
+
+gating mechanism. II. D ATASET CREATION 
+
+A. Data Source 
+
+We follow SheepDog [8] and use three widely adopted datasets: PolitiFact [27], GossipCop [27], and LUN [28]. PolitiFact and LUN mainly contain political news, whereas GossipCop focuses on entertainment and celebrity-related news. Following SheepDog, all datasets are formulated as binary fake news detection tasks with 0 for true news and 1 for fake news. Table I summarizes the original train/test split of the three datasets. The datasets cover both small-scale (PolitiFact) and large-scale (GossipCop and LUN) settings. For all datasets, the numbers of true and fake news are balanced in both the training and test sets, minimizing potential bias caused by class imbalance and enabling a fair comparison across different emotional rewriting settings. During training, each original news article is accompanied by style-preserving rewritings. Specifically, objective and professional and neutral rewritings are treated as reliable variants, while emotionally triggering and sensational rewritings are regarded as unreliable variants, following the setting of SheepDog [8]. 
+
+B. Explanation Generation 
+
+In real-world news consumption, authenticity judgments are often supported by background knowledge beyond the news article itself. To simulate such contextual information in a controlled manner, we employ GPT-4o [29] to generate explanations based on the original news text. For each article, we use the following prompt: 
+
+Prompt for Explanation Generation 
+
+Please give extra information to the following article: [news article] The generated explanations provide complementary seman-tic context related to the news content and are incorporated as auxiliary information during our detection. Since all emotion-ally rewritten variants originate from the same source article, re-annotating the authenticity of every rewritten variant is generally impractical, as the rewritten articles do not naturally occur in real-world datasets and no independent ground-truth labels are available. Following our fact-preserving rewriting assumption, the rewritten variants therefore inherit the authen-ticity label of the original article. Consequently, explanations are generated only once from the original article and reused for all rewritten variants. This design ensures that all variants share identical contextual information, allowing the experiments to isolate the influence of emotional expression while minimizing additional factors from repeated explanation generation. It should be noted that these explanations are not intended to serve as independently verified external evidence. Instead, they function as contextual priors for evaluating robustness under controlled fact-preserving emotional rewriting. The use of GPT-4o is intended to provide a controlled and consistent way of constructing such priors, rather than to prescribe LLM-based explanation generation as a necessary deployment strategy. This setting enables us to investigate whether fake news detection models can maintain consistent predictions when only the emotional framing changes while the underlying semantic content remains unchanged. 
+
+C. Test Set Emotional Rewritings 
+
+Recent work explores robustness-oriented fake news detec-tion through style rewriting while preserving the authenticity labels of the original articles [8]. Following this setting, we construct emotion-based rewritings to investigate the influence of emotional framing on fake news detection. Specifically, we consider four commonly observed emo-tions: Joy , Anger , Sadness , and Happiness . GPT-4o [29] is employed to rewrite each test article using the prompt: 
+
+Prompt for Emotional Rewriting 
+
+Rewrite the following article using the [emotion class] emotion: [news article] Note that explanations and different emotional rewritings are generated independently through separate GPT-4o queries. Both procedures only used the original news article as input and did not access each other’s outputs. Following previous work [8], we assume that emotionally rewritten articles inherit the authenticity label of the original news article. This assumption enables us to isolate the influ-ence of emotional expression while keeping the underlying factual content unchanged. For the training set, we retain the original setting of [8], which contains the original articles together with reliable and unreliable style rewritings. In contrast, the test set is fully reconstructed using emotion-based rewritings. Therefore, the reliable and unreliable rewritings in training are independent of the emotion-based rewritings in evaluation. To ensure the quality of the generated data, we manually inspected a subset of the rewritten articles and verified that the major factual claims were generally preserved while the emotional expressions were modified. We note that this label inheritance assumption may not fully capture real-world situations where emotional framing and factual content change simultaneously. Nevertheless, LLM-based rewriting provides a controllable approximation that enables systematic evaluation of robustness under different emotional backgrounds. More realistic scenarios involving human-authored rewritings and simultaneous factual modifi-cations are left for future work. III. P ROPOSED METHOD 
+
+We propose a Gated Cross Attention framework (GCA) that integrates news content with LLM-generated explanations for fake news detection, as illustrated in Fig. 2. Our method extends Sheepdog [8] by incorporating explanations as contex-tual priors derived from the original news article. Specifically, following Sheepdog, each news piece is associated with three style-based variants: the original article, one reliable rewriting, and one unreliable rewriting. These variants share the same underlying content and authenticity label while differing in emotional and stylistic expressions, enabling controlled eval-uation of robustness against emotional reframing. In addition to these news variants, we associate each article with an explanation generated from the original news article. The explanation provides topic-related contextual information that may support authenticity judgment beyond surface-level expressions. However, directly combining explanation and news representations may introduce irrelevant or inconsistent information. Therefore, we design a gated cross-attention module to adaptively control the contribution of explanation features according to their relevance to the current news representation. Specifically, we employ four pre-trained language models with identical architectures but independent parameters to en-code the three news variants and the explanation, respectively. The gated cross-attention module then performs information interaction between news and explanation representations, where the learned gate dynamically adjusts the amount of explanation-aware information incorporated into the final rep-resentation. Finally, the fused representation is used to predict the authenticity label of the news article. 
+
+A. News Rewritings and Explanation 
+
+Following Sheepdog [8], we use three versions of each news article: the original article No, one reliable rewriting Nr ,and one unreliable rewriting Nu. Unlike conventional retrieval systems, Nr and Nu are not external articles. Instead, they are stylistic rewritings of the same news piece released by Sheepdog and therefore share the same authenticity label as 
+
+No.For each news article, we additionally use the generated explanation E described in Section II. The explanation is derived from the original news article and reused across all rewritten versions of the same news piece. It serves as a contextual prior that provides supplementary background information beyond the news text itself. This design enables us to examine whether explanation-based reasoning remains effective when the emotional framing of the news changes while the underlying content remains largely unchanged. 
+
+B. GCA Fusion 
+
+To incorporate such contextual priors into news represen-tations, we employ a cross-attention mechanism where the NuNr
+
+> Retrieve
+
+Original News Explanation News 
+
+> Encoder Explanation
+> Encoder Linear  Linear
+> Cross Attention
+> Q K VLinear
+
+LLM 
+
+REN 
+
+> Linear
+
+QN
+
+KE
+
+VE
+
+R' EN 
+
+Zn
+
+Ze
+
+> Linear tanh Linear
+> S
+
+g
+
+> Classifier
+
+R
+
+GCA 
+
+No
+
+ENu
+
+Nr
+
+ENo
+
+InfoNCE Fig. 2. Overview of the proposed Gated Cross Attention (GCA) framework. The original article, one reliable rewriting, one unreliable rewriting, and explanation generated from the original article are encoded independently. GCA adaptively integrates explanation-aware contextual information to detect fake news. 
+
+news representation acts as the query and the explanation representation serves as the key and value. Let Zn ∈ RL×d denote the hidden representation of the news encoder and Ze ∈ RLe×d denote the hidden representa-tion of the explanation encoder, where L and Le are sequence lengths and d is the hidden dimension. Linear projections are first applied with WQ, WK , and WV ∈ Rd×d being trainable projection matrices: 
+
+QN = ZnWQ, K E = ZeWK , V E = ZeWV (1) Cross-attention is then performed with REN representing explanation-aware news features: 
+
+REN = CA( QN , K E , V E ), (2) Explanations are generated from the original article and reused across emotionally rewritings, their relevance may vary under different emotional contexts. Directly injecting explanation information may therefore introduce irrelevant or misleading information when the emotional rewriting changes the surface expression of the news. To mitigate this issue, we introduce a token-level gate g ∈ RL×d to dynamically regulate the contribution of explanation-aware features: 
+
+g = σ(G2tanh( G1(Zn|| REN ) + b1) + b2), (3) where || denotes concatenation, σ is the element-wise sigmoid function, G1 ∈ R2d×d and G2 ∈ Rd×d are trainable matrices, 
+
+b1 and b2 are trainable bias terms. To align feature dimensions, we apply a trainable projection where Wen ∈ Rd×d:
+
+R′ 
+
+> EN
+
+= REN Wen , (4) The final fused representation is obtained by 
+
+R = g ⊙ R′ 
+
+> EN
+
++ (1 − g) ⊙ Zn, (5) where ⊙ denotes element-wise multiplication. The fused representation is mean-pooled and conveyed into a dropout layer and a fully connected classifier to obtain the final authenticity prediction. 
+
+C. Loss Function 
+
+In addition to the original training objectives of Sheep-dog [8], we introduce a contrastive loss to encourage con-sistency between explanations and their corresponding news representations. We use InfoNCE [30] loss with temperature hyper parameter τ , where sequence-level representations are obtained by mean pooling over token embeddings. This loss maximizes the cosine similarity sim( ·,·) between an explana-tion E and its corresponding news representations ( No, Nr ,
+
+Nu), while minimizing the similarity to other explanations 
+
+E′ in the same batch. Note that when the gating module and contrastive loss are removed, the framework reduces to a straightforward explanation-enhanced variant of Sheepdog. This will be further discussed in our ablation study. InfoNCE (N, E ) = − log exp( sim ( ¯N , ¯E)/τ )
+
+P 
+
+> E′∈B
+
+exp( sim ( ¯N , ¯E′)/τ ) . (6) 
+
+Lcon is represented as: 
+
+Lcon = 13 (InfoNCE (No, E ) + InfoNCE (Nr , E )+ 
+
+InfoNCE (Nu, E )) .
+
+(7) TABLE II EXPERIMENTAL RESULTS OF OUR METHOD ON THE THREE BENCHMARK DATASETS (IN %). A CCURACY AND F1 SCORE ARE REPORTED UNDER THE ORIGINAL NEWS SETTING AS WELL AS DIFFERENT EMOTIONAL REWRITING CONDITIONS .PolitiFact GossipCop LUN Method Orig Joy Anger Sad Happy Orig Joy Anger Sad Happy Orig Joy Anger Sad Happy 
+
+Accuracy 
+
+ENDEF 88.89 73.33 82.22 80.00 73.33 67.99 63.13 68.50 66.35 61.81 77.67 76.13 73.40 75.13 75.73 ARG 85.56 69.44 74.44 73.33 70.00 73.23 69.67 66.79 68.75 69.88 85.40 78.50 78.93 80.00 80.10 Sheepdog 88.77 76.11 84.22 79.89 71.67 75.89 75.11 75.95 76.03 74.66 92.61 85.90 88.43 86.71 87.41 Ours 90.56 77.11 83.56 81.11 75.56 76.72 76.29 75.38 76.10 76.18 93.96 87.29 90.01 88.20 88.55 
+
+F1 Score 
+
+ENDEF 88.37 65.71 83.33 75.68 65.71 61.33 46.72 64.18 57.46 42.55 73.56 77.70 77.13 74.47 75.73 ARG 85.54 67.41 73.38 72.09 68.09 73.13 69.67 66.35 68.66 69.88 85.31 78.39 78.84 79.80 80.30 Sheepdog 88.74 75.66 84.17 79.64 70.20 75.85 74.97 75.83 76.01 74.51 92.59 85.87 88.40 86.67 87.41 Ours 90.51 76.14 83.36 79.41 74.70 76.28 76.27 75.05 76.03 76.14 93.95 87.27 90.01 88.15 88.53 
+
+IV. E XPERIMENTS 
+
+A. Experiment Setting 
+
+We conduct all experiments on a computer with AMD EPYC 7313 CPU, 128 GB memory, a 4 TB HDD, and an NVIDIA RTX A4000 GPU. Our implementation is based on Python 3.12 and PyTorch 2.5.1 under Ubuntu 20.04. We use RoBERTa [31] as the backbone encoder and initial-ize four independent roberta-base models to encode the original news article, reliable rewriting, unreliable rewriting, and explanation, respectively. The maximum sequence length is set to 512 tokens for both news articles and explanations, with longer sequences being truncated. We use AdamW as the optimizer with a learning rate of 2 × 10 −5, a weight decay of 0.01, and a batch size of 4. A linear learning-rate scheduler is applied with 0 warm-up steps and 10,000 total training steps. The models are trained for 5 epochs without early stopping. The temperature parameter τ in the contrastive loss is set to 0.1. Following previous work [8], we evaluate models on both the original test set and the emotion-rewritten test sets. Each experiment is repeated 10 times using random seeds from 0 to 9, and we report the mean Accuracy and F1 Score. We compare our method with Sheepdog [8], ENDEF [32], and ARG [16]. Sheepdog is trained with the original text-only setting, while ENDEF uses both the news content and explanations. The ARG rationale inputs are replaced with explanations generated in Section II to make use of external information. Experiments are conducted on PolitiFact [27], GossipCop [27], and LUN [28] datasets. 
+
+B. Experimental Results 
+
+We evaluate our method using accuracy and F1 score on both the original news articles and their emotionally rewrit-ten variants. The results are reported in Table II. Overall, the proposed GCA framework improves fake news detection performance on PolitiFact and LUN while maintaining com-petitive performance on GossipCop under different emotional backgrounds. The magnitude of the performance change after emotional rewriting varies substantially across datasets and emotional conditions, with relatively small changes on Gos-sipCop and more pronounced changes on PolitiFact and LUN. These results suggest that explanation-based contextual priors can improve robustness against emotional reframing without requiring modifications to the rewritten text. On PolitiFact , our method achieves the best performance on the original news set as well as most emotionally rewritten variants. The improvements are consistently observed across different emotional conditions, suggesting that the generated explanations provide complementary semantic context that remains useful even when the surface expressions of the news articles change. This indicates that the proposed gated fusion mechanism can effectively utilize contextual information while suppressing less relevant explanation features. On LUN , our method obtains the best overall performance among all evaluated settings. Compared with PolitiFact, the performance improvements are generally more pronounced. One possible explanation is that LUN mainly contains political news with relatively stable factual structures, making the gen-erated contextual explanations more semantically consistent with the rewritten articles. Consequently, explanation-aware fusion becomes more effective under controlled emotional perturbations. For GossipCop , the performance improvements are rela-tively modest. GossipCop consists primarily of entertainment and celebrity news, where the original articles already contain stronger emotional expressions and richer stylistic variations. As a result, emotional rewritings introduce comparatively smaller semantic changes, reducing the additional benefit pro-vided by explanation-based contextual information. Neverthe-less, our method remains competitive across all evaluated emo-tional backgrounds without causing noticeable performance degradation. Another observation is that the proposed framework per-forms consistently across different emotional categories rather than improving only a specific rewriting style. This suggests that the explanation representations capture relatively stable semantic information that is less sensitive to stylistic varia-tion, allowing the gating mechanism to selectively incorporate TABLE III ABLATION STUDY RESULTS OF OUR METHOD ON THREE DATASETS (IN %). N OTE THAT REMOVING THE GATING MECHANISM ALSO DISABLES Lcon ,
+
+> SINCE THE CONTRASTIVE LOSS IS COMPUTED FROM GATED REPRESENTATIONS .
+
+PolitiFact GossipCop LUN Method Joy Anger Sad Happy Joy Anger Sad Happy Joy Anger Sad Happy 
+
+Accuracy 
+
+with BERT 76.56 80.11 79.44 75.44 75.42 75.04 75.70 74.99 85.20 85.61 86.07 85.49 w/o Lcon 76.11 82.29 81.11 75.05 74.85 75.68 75.87 74.99 86.40 89.93 88.10 88.33 w/o Gate 77.78 80.00 76.22 73.33 75.51 75.63 75.82 76.12 83.27 84.93 86.14 84.27 Ours 77.11 83.56 80.11 75.56 76.29 75.38 76.10 76.18 87.29 90.01 88.20 88.55 
+
+F1 Score 
+
+with BERT 76.32 80.08 79.32 76.05 75.27 74.89 75.65 74.82 85.12 85.52 86.03 86.24 w/o Lcon 75.99 82.33 81.07 74.63 74.75 75.61 75.61 74.86 86.39 89.93 88.08 88.32 w/o Gate 77.78 79.96 76.19 73.32 75.49 75.60 75.90 71.18 83.15 84.77 85.99 84.27 Ours 76.14 83.36 79.41 74.70 76.27 75.05 76.03 76.14 87.27 90.01 88.15 88.53 
+
+useful contextual knowledge during prediction. Overall, these results demonstrate that integrating explanation-based contextual priors through the proposed GCA framework improves fake news detection under controlled emotional reframing. Rather than relying solely on surface textual features, the model benefits from stable semantic context provided by explanations, leading to more robust predictions across different emotional backgrounds. 
+
+C. Ablation Studies 
+
+To investigate the contribution of different components, we conduct ablation studies on the backbone encoder, the contrastive loss Lcon , and the gating mechanism g. Note that these components are not fully independent in our framework because Lcon is computed from gated representations. Specif-ically, we replace RoBERTa with BERT, remove Lcon , and remove the gating module. Since Lcon is applied on gated representations, removing g also disables Lcon . The results are summarized in Table III. The model without the gating mechanism and contrastive loss can be regarded as a simplified explanation-enhanced baseline, where the generated explanations are directly fused with the news representations without adaptive filtering. This setting provides a reference for evaluating whether the full GCA framework offers benefits beyond simply introducing LLM-generated explanations. 
+
+Effect of the Backbone Encoder: Replacing RoBERTa with BERT generally reduces performance across datasets and emotional backgrounds. This observation suggests that stronger contextual representations facilitate more effective semantic interaction between news articles and explanations, leading to more reliable explanation-aware fusion. 
+
+Effect of the Contrastive Loss Lcon : Removing Lcon 
+
+results in relatively modest but consistent performance degra-dation. Although the influence is smaller than that of the gating mechanism, the overall results indicate that contrastive learn-ing improves the alignment between news articles and their corresponding explanations, making the fused representations more robust under different emotional rewritings. 
+
+Effect of the Gating Mechanism: Removing the gating mechanism, which also removes Lcon due to the dependency described above, causes the largest performance degrada-tion, particularly on LUN, and this trend remains consistent across most emotional backgrounds. The comparison therefore evaluates the combined effect of adaptive gating and the associated contrastive alignment objective, rather than the gating mechanism in complete isolation. These results indicate that directly incorporating explanation representations without adaptive filtering can introduce irrelevant information into the final representation. The gating mechanism helps regulate the contribution of explanation-aware features according to their relevance to the current news representation, thereby reducing such interference. Compared with the explanation-enhanced baseline, the com-plete GCA framework generally achieves better performance across different datasets. This observation suggests that the observed gains cannot be attributed solely to the availability of LLM-generated explanations. Instead, the combination of adaptive gating and contrastive alignment provides additional benefits beyond direct explanation fusion, although their in-dividual effects cannot be completely separated due to the dependency between g and Lcon .V. D ISCUSSION 
+
+A. Gating Strength 
+
+To further examine the gating mechanism, we visualize the distribution of gating values on the GossipCop and LUN test sets in Fig. 3. Both datasets contain larger test sets and provide more representative distributions, whereas the PolitiFact test set contains only 90 samples. 0.42 0.44 0.46 0.48 0.50 0.52 0.54 0.56                          
+
+> Gate strength
+> 010 20 30
+> Density
+> GossipCop
+> (a) Token-level gate
+> 0.42 0.44 0.46 0.48 0.50 0.52 0.54 0.56
+> Gate strength
+> 010 20 30 40 50 GossipCop
+> (b) Sample-level gate
+> 0.38 0.40 0.42 0.44 0.46 0.48 0.50 0.52
+> Gate strength
+> 020 40 60
+> Density
+> LUN
+> (c) Token-level gate
+> 0.38 0.40 0.42 0.44 0.46 0.48 0.50 0.52
+> Gate strength
+> 020 40 60 LUN
+> (d) Sample-level gate
+> Real Fake Fig. 3. Gating values for real and fake news on GossipCop (a, b) and LUN (c, d) test sets. The left column shows token-level gating distributions, while the right column presents the mean gating value for each news sample.
+
+For real news , gating values tend to concentrate in relatively higher ranges, suggesting that the model often assigns greater importance to explanation-based contextual information. In contrast, for fake news , gating values are distributed over a wider range, indicating greater variation in the contribution of explanation information across samples. This behavior is consistent with our design motivation that explanation signals may be more or less informative depending on their relevance to the rewritten news. This visualization provides qualitative evidence that the gating mechanism does not apply a uniform contribution of explanation information across samples. Its effectiveness is further supported by the ablation results in Table III, where removing the gating mechanism leads to a noticeable performance degradation. Together, these results suggest that adaptive gating contributes to the effective integration of explanation information under emotional rewriting. 
+
+B. Limitations 
+
+This work focuses on a controlled fact-preserving emotional rewriting setting to analyze the robustness of fake news detec-tion models under different emotional backgrounds. The main assumption in this setting is that emotionally rewritten articles inherit the authenticity labels of their original articles. The main consideration here is that manually assigning authenticity labels to a large number of rewritten samples is difficult to scale in practice. Although this assumption enables large-scale evaluation without requiring manual annotation for every generated variant, it may not fully reflect real-world scenarios, where emotional reframing can occasionally be accompanied by factual modifications. In addition, the emotional rewritings in this study are generated by GPT-4o, which may introduce model-specific linguistic patterns. Moreover, LLM generation introduces addi-tional token consumption and computational overhead, which may limit the practicality of our framework in large-scale or latency-sensitive cases; human-authored alternatives, while potentially more diverse, would also require substantial effort and face scalability challenges. Future work will explore multi-LLM and human-authored rewritings, as well as settings with simultaneous changes in expressive style and factual content. 
+
+C. Future Work 
+
+Several directions deserve further investigation. First, con-structing larger and more diverse benchmarks with human-authored or human-verified emotional rewritings would pro-vide a more realistic robustness evaluation schema. Second, richer forms of contextual knowledge, such as retrieval-based external evidence or structured knowledge bases, may provide complementary information beyond LLM-generated explana-tions. Third, future studies may consider more realistic sce-narios where emotional reframing is accompanied by partial factual modifications, allowing robustness under both expres-sive and semantic perturbations to be investigated. Finally, we plan to extend the proposed framework to multimodal fake news detection under both textual and visual perturbations. VI. C ONCLUSION 
+
+In this work, we investigated fake news detection under fact-preserving emotional rewritings, a controlled textual setting for evaluating robustness against expressive variations. We proposed a Gated Cross Attention (GCA) framework that incorporates explanation-based contextual priors. Experiments showed improvements on PolitiFact and LUN while main-taining competitive performance on GossipCop. These results support the effectiveness of our approach in the controlled textual emotional rewriting setting. Future work will look into richer contextual knowledge and multimodal perturbations. REFERENCES [1] A. Zubiaga, A. Aker, K. Bontcheva, M. Liakata, and R. Procter, “Detection and resolution of rumours in social media: A survey,” Acm Computing Surveys , vol. 51, no. 2, pp. 1–36, 2018. [2] Z. Guo, M. Schlichtkrull, and A. Vlachos, “A survey on automated fact-checking,” Transactions of the association for computational linguistics ,vol. 10, pp. 178–206, 2022. [3] D. N. Rapp and N. A. Salovich, “Can’t we just disregard fake news? the consequences of exposure to inaccurate information,” Policy Insights from the Behavioral and Brain Sciences , vol. 5, no. 2, pp. 232–239, 2018. [4] K. Shu, A. Sliva, S. Wang, J. Tang, and H. Liu, “Fake news detection on social media: A data mining perspective,” ACM SIGKDD explorations newsletter , vol. 19, no. 1, pp. 22–36, 2017. [5] X. Pu, H. Wu, X. Bi, Y. Wu, and X. Gao, “Dear: Disentangled event-agnostic representation learning for early fake news detection,” 
+
+Transactions of the Association for Computational Linguistics , vol. 13, pp. 343–356, 2025. [6] P. Przybyla, “Capturing the style of fake news,” in Proceedings of the AAAI conference on artificial intelligence , vol. 34, no. 01, 2020, pp. 490–497. [7] M. Potthast, J. Kiesel, K. Reinartz, J. Bevendorff, and B. Stein, “A stylometric inquiry into hyperpartisan and fake news,” in Proceedings of the 56th annual meeting of the association for computational linguistics ,2018, pp. 231–240. [8] J. Wu, J. Guo, and B. Hooi, “Fake news in sheep’s clothing: Robust fake news detection against llm-empowered style attacks,” in Proceedings of the 30th ACM SIGKDD conference on knowledge discovery and data mining , 2024, pp. 3367–3378. [9] G. Ren, L. Jiang, T. Huang, Y. Yang, and R. Xie, “Llm-enhanced multi-task joint learning model for misinformation detection,” Information Processing & Management , vol. 62, no. 6, p. 104305, 2025. [10] Z. Yan, P. Qi, W. Hsu, and M. L. Lee, “Mitigating genai-powered evidence pollution for out-of-context multimodal misinformation detec-tion,” arXiv preprint arXiv:2501.14728 , 2025. [11] S. Park, S. Han, X. Xie, J.-G. Lee, and M. Cha, “Adversarial style augmentation via large language model for robust fake news detection,” in Proceedings of the ACM on Web Conference 2025 , 2025, pp. 4024– 4033. [12] L. Z. Wang, K. C. Ng, Y. Ma, and W. Fan, “Megafake: a theory-driven dataset of fake news generated by large language models,” Decision Support Systems , p. 114676, 2026. [13] S. Tahmasebi, E. M¨ uller-Budack, and R. Ewerth, “Robust fake news detection using large language models under adversarial sentiment attacks,” in Proceedings of the ACM Web Conference 2026 , 2026, pp. 1717–1726. [14] P. Wu, H. Zhang, Z. Guo, X. Liu, Y. Wang, and L. Pan, “Opend: An open-domain evidence-driven fake news detection framework based on llms,” Information Processing & Management , vol. 64, no. 1, p. 105085, 2027. [15] B. Xie, X. Ma, X. Shan, A. Beheshti, J. Yang, H. Fan, and J. Wu, “Multiknowledge and llm-inspired heterogeneous graph neural network for fake news detection,” IEEE Transactions on Computational Social Systems , vol. 12, no. 2, pp. 682–694, 2024. [16] B. Hu, Q. Sheng, J. Cao, Y. Shi, Y. Li, D. Wang, and P. Qi, “Bad actor, good advisor: Exploring the role of large language models in fake news detection,” in Proceedings of the AAAI conference on artificial intelligence , vol. 38, no. 20, 2024, pp. 22 105–22 113. [17] J. Chen, L. Liu, and F. Zhou, “Do not wait: Preemptive rumor detec-tion with cooperative llms and accessible social context,” Information Processing & Management , vol. 62, no. 3, p. 103995, 2025. [18] S. Tahmasebi, E. M¨ uller-Budack, and R. Ewerth, “Multimodal misinfor-mation detection using large vision-language models,” in Proceedings of the 33rd ACM International Conference on Information and Knowledge Management , 2024, pp. 2189–2199. [19] Q. Nan, Q. Sheng, J. Cao, B. Hu, D. Wang, and J. Li, “Let silence speak: Enhancing fake news detection with generated comments from large language models,” in Proceedings of the 33rd ACM international conference on information and knowledge management , 2024, pp. 1732– 1742. [20] Q. Nan, Q. Sheng, J. Cao, Y. Zhu, D. Wang, G. Yang, and J. Li, “Exploiting user comments for early detection of fake news prior to users’ commenting,” Frontiers of Computer Science , vol. 19, no. 10, p. 1910354, 2025. [21] S. K. Hamed, M. J. Ab Aziz, and M. R. Yaakub, “Fake news detection model on social media by leveraging sentiment analysis of news content and emotion analysis of users’ comments,” Sensors , vol. 23, no. 4, p. 1748, 2023. [22] M. Lu, Z. He, Y. Guo, S. Liu, J. Huang, Y. Zhao, Z. Tian, X. Zhao, C. Shao, L. Deng et al. , “Llm-driven adversarial example synthesis for emerging topic rumor detection on social media,” IEEE Transactions on Knowledge and Data Engineering , 2026. [23] J. He, H. Zhang, Y. Xiao, W. Guo, S. Yao, and R. Liu, “Factguard: Event-centric and commonsense-guided fake news detection,” in Proceedings of the AAAI Conference on Artificial Intelligence , vol. 40, no. 1, 2026, pp. 363–371. [24] X. Ma, Y. Zhang, K. Ding, J. Yang, J. Wu, and H. Fan, “On fake news detection with llm enhanced semantics mining,” in Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing , 2024, pp. 508–521. [25] Z. Liu, T. Zhang, K. Yang, P. Thompson, Z. Yu, and S. Ananiadou, “Emotion detection for misinformation: A review,” Information Fusion ,vol. 107, p. 102300, 2024. [26] Y. Toughrai, D. Langlois, and K. Sma¨ ıli, “Fake news detection via intermediate-layer emotional representations,” in Companion Proceed-ings of the ACM on Web Conference 2025 , 2025, pp. 2680–2684. [27] K. Shu, D. Mahudeswaran, S. Wang, D. Lee, and H. Liu, “Fakenewsnet: A data repository with news content, social context, and spatiotemporal information for studying fake news on social media,” Big data , vol. 8, no. 3, pp. 171–188, 2020. [28] H. Rashkin, E. Choi, J. Y. Jang, S. Volkova, and Y. Choi, “Truth of varying shades: Analyzing language in fake news and political fact-checking,” in Proceedings of the 2017 conference on empirical methods in natural language processing , 2017, pp. 2931–2937. [29] A. Hurst, A. Lerer, A. P. Goucher, A. Perelman, A. Ramesh, A. Clark, A. Ostrow, A. Welihinda, A. Hayes, A. Radford et al. , “Gpt-4o system card,” arXiv preprint arXiv:2410.21276 , 2024. [30] A. v. d. Oord, Y. Li, and O. Vinyals, “Representation learning with contrastive predictive coding,” arXiv preprint arXiv:1807.03748 , 2018. [31] Y. Liu, M. Ott, N. Goyal, J. Du, M. Joshi, D. Chen, O. Levy, M. Lewis, L. Zettlemoyer, and V. Stoyanov, “Roberta: A robustly optimized bert pretraining approach,” arXiv preprint arXiv:1907.11692 , 2019. [32] Y. Zhu, Q. Sheng, J. Cao, S. Li, D. Wang, and F. Zhuang, “Generalizing to the future: Mitigating entity bias in fake news detection,” in Proceed-ings of the 45th international ACM SIGIR conference on research and development in information retrieval , 2022, pp. 2120–2125.

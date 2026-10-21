@@ -1,0 +1,456 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-10-21T09:12:12.754443+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 10,
+    "quick_skim_target": 11,
+    "quick_selected": 10
+  },
+  "deep_dive": [
+    {
+      "id": "2610.25777v1",
+      "source": "arxiv",
+      "title": "Standing on the Shoulders of Giants: Enhancing LLM Agents for Automated Fact-Checking with Human Expert Skills",
+      "abstract": "Automated fact-checking (AFC) systems powered by large language model (LLM) agents still face challenges in evidence retrieval and claim verification. Existing approaches improve their capabilities through computationally costly post-training or human-in-the-loop feedback that is difficult to scale. To transfer professional fact-checking expertise to LLM agents efficiently, we distill publicly available guidelines published by Agence France-Presse (AFP) Fact Check into a reusable, modular Professional Fact-Checking Skill (PFC-Skill). We then present SkillCheck, the first AFC system that gives LLM agents dynamic access to PFC-Skill to guide evidence retrieval and claim verification at inference time. Extensive experiments demonstrate that SkillCheck improves upon skill-free DEFAME baselines across multiple LLM backbones, with gains of 2.2--4.8 pp. in Accuracy and 1.5--6.3 pp. in Macro-F1 on the AVeriTeC benchmark. Notably, SkillCheck with GPT-4o-Mini exceeds DEFAME with GPT-4o by 3.4 pp. in Accuracy while cutting inference cost by roughly 61%. The performance gains also extend to open-web retrieval. Ablations show that incorporating the skill during evidence retrieval provides most of the gains, while incorporation into both stages yields the best overall performance. Case studies show that PFC-Skill enables more targeted search and closer scrutiny of evidence. To conclude, our work shows that LLM agents can \"stand on the shoulders of giants\" by drawing on the best practices of professional fact-checkers, substantially enhancing AFC performance without extra training or continuous human supervision.",
+      "authors": [
+        "Xinwen Chen",
+        "Haorui He",
+        "Yupeng Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-10-19T04:44:26+00:00",
+      "link": "https://arxiv.org/pdf/2610.25777v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "LLM agent automated fact-checking with evidence retrieval and claim verification",
+      "llm_evidence_cn": "基于LLM智能体的证据检索与论断验证自动事实核查",
+      "llm_evidence": "基于LLM智能体的证据检索与论断验证自动事实核查",
+      "canonical_evidence": "基于LLM智能体的证据检索与论断验证自动事实核查",
+      "llm_tldr_en": "LLM fact-checking agents struggle with evidence retrieval and claim verification without costly post-training; SkillCheck distills AFP fact-checking guidelines into a reusable skill that agents invoke at inference to guide retrieval and verification.",
+      "llm_tldr_cn": "由大模型智能体驱动的自动事实核查系统在证据检索与论断验证上仍面临困难，现有改进依赖昂贵的后训练或难以扩展的人工反馈。本文将法新社发布的事实核查指南蒸馏为可复用的模块化专业技能PFC-Skill，并提出SkillCheck系统，使智能体在推理时动态调用该技能来指导证据检索与论断验证。大量实验表明该方法在多个核查场景中提升了检索与验证表现，为低成本、可扩展的专业化自动事实核查提供了新路径。",
+      "llm_tldr": "由大模型智能体驱动的自动事实核查系统在证据检索与论断验证上仍面临困难，现有改进依赖昂贵的后训练或难以扩展的人工反馈。本文将法新社发布的事实核查指南蒸馏为可复用的模块化专业技能PFC-Skill，并提出SkillCheck系统，使智能体在推理时动态调用该技能来指导证据检索与论断验证。大量实验表明该方法在多个核查场景中提升了检索与验证表现，为低成本、可扩展的专业化自动事实核查提供了新路径。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "checking misinformation by retrieving external sources and evidence to support or refute claims",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2610.15463v2",
+      "source": "arxiv",
+      "title": "MemeLogos: Knowledge-Driven Retrieval-Augmented Reasoning for Harmful Meme Detection",
+      "abstract": "With the rapid proliferation of social media, harmful memes have become a growing threat to online ecosystems. Their harmfulness is often implicitly conveyed through complex interactions among visual, textual, and contextual cues, making accurate detection challenging. Recent studies have introduced Retrieval-Augmented Generation (RAG) and external knowledge into harmful meme detection. However, existing methods mainly retrieve similar instances or auxiliary information, limiting their ability to capture reusable harmfulness knowledge and underlying reasoning mechanisms, and thus constraining both detection performance and interpretability. To address these challenges, we propose MemeLogos, a knowledge-driven retrieval-augmented reasoning framework for harmful meme detection. MemeLogos abstracts recurring harmfulness patterns and reasoning structures from diverse harmful cases into reusable knowledge units and organizes them into a dedicated star-shaped knowledge graph. By combining structured knowledge retrieval with an explicit multi-stage reasoning process inspired by cognitive mechanisms, MemeLogos leverages retrieved knowledge to guide harmfulness reasoning, improving both detection reliability and interpretability. Extensive experiments show that MemeLogos consistently outperforms existing harmful meme detection methods while generating more coherent and interpretable reasoning, demonstrating the effectiveness of structured harmfulness knowledge for multimodal content understanding.",
+      "authors": [
+        "Hexiang Gu",
+        "Saihui Hou",
+        "Changlan Liu",
+        "Min Ren",
+        "Huijia Wu",
+        "Hongxun Gu",
+        "Zhaofeng He"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-10-11T09:02:32+00:00",
+      "link": "https://arxiv.org/pdf/2610.15463v2",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "knowledge-driven retrieval-augmented multimodal reasoning for harmful meme detection",
+      "llm_evidence_cn": "面向有害模因检测的知识驱动检索增强多模态推理",
+      "llm_evidence": "面向有害模因检测的知识驱动检索增强多模态推理",
+      "canonical_evidence": "面向有害模因检测的知识驱动检索增强多模态推理",
+      "llm_tldr_en": "MemeLogos grounds harmful meme detection in retrieved reusable knowledge and explicit reasoning over visual, textual and contextual cues, improving both detection accuracy and interpretability over instance-similarity retrieval baselines.",
+      "llm_tldr_cn": "有害模因的危害性往往隐含在图文与语境线索的复杂交互之中，而现有检索增强方法仅取相似实例或辅助信息，难以复用可迁移的危害知识与推理机制，且可解释性受限。论文提出MemeLogos，以知识驱动的检索增强推理框架显式建模图文语境交互并生成可解释判断。实验表明该方法在检测性能与可解释性上均优于既有检索增强基线。其意义在于把外部知识检索与多模态推理结合，为社交媒体多模态有害内容与错误信息识别提供可复用路径。",
+      "llm_tldr": "有害模因的危害性往往隐含在图文与语境线索的复杂交互之中，而现有检索增强方法仅取相似实例或辅助信息，难以复用可迁移的危害知识与推理机制，且可解释性受限。论文提出MemeLogos，以知识驱动的检索增强推理框架显式建模图文语境交互并生成可解释判断。实验表明该方法在检测性能与可解释性上均优于既有检索增强基线。其意义在于把外部知识检索与多模态推理结合，为社交媒体多模态有害内容与错误信息识别提供可复用路径。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "evidence based and retrieval augmented multimodal fact checking with external knowledge graphs and web sources",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2610.08835v1",
+      "source": "arxiv",
+      "title": "Leveraging LLM-Generated Explanations for Detecting Emotionally Rewritten Fake News",
+      "abstract": "The spread of fake news may cause severe social consequences. Existing fake news detection methods mainly focus on stylistic variations or incorporate external information such as explanations. However, news articles are often rewritten under different emotional backgrounds while preserving their underlying factual claims, which may affect the robustness of detection models. In this work, we investigate fake news detec- tion under fact-preserving emotional variations. To study this problem, we construct emotion-rewritten test sets and generate explanations from the original news articles as stable background knowledge. We then propose a Gated Cross Attention (GCA) framework that adaptively integrates emotionally rewritten news with the corresponding explanations, enabling the model to focus on informative explanation content while reducing potential mismatches caused by emotional reframing. Experiments on PolitiFact, GossipCop, and LUN demonstrate that the proposed method achieves notable improvements under multiple emotional conditions on PolitiFact and LUN, while maintaining competitive performance on GossipCop. We further analyze the effects of explanation guidance and gating mechanisms under different emotional conditions. Our code and data are available at: https://github.com/Flulike/fakenews gca .",
+      "authors": [
+        "Yupei Guo",
+        "Jiajun He",
+        "Xiaohan Shi",
+        "Tomoki Toda",
+        "Zekun Yang",
+        "Bowen Wang",
+        "Yukinobu Taniguchi"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-09-29T11:50:30+00:00",
+      "link": "https://arxiv.org/pdf/2610.08835v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "LLM-generated explanations improve robustness of fake news detection",
+      "llm_evidence_cn": "大模型生成解释提升虚假新闻检测鲁棒性",
+      "llm_evidence": "大模型生成解释提升虚假新闻检测鲁棒性",
+      "canonical_evidence": "大模型生成解释提升虚假新闻检测鲁棒性",
+      "llm_tldr_en": "News rewritten with different emotions but identical facts can fool fake news detectors; the authors use LLM explanations from original articles as stable knowledge in a gated cross-attention framework.",
+      "llm_tldr_cn": "虚假新闻常在不同情感语境下被改写，但事实主张保持不变，这会削弱现有检测模型的鲁棒性。本文研究事实保持的情感改写场景，构建情感改写测试集，并以原始新闻生成的大模型解释作为稳定背景知识。作者提出门控交叉注意力框架，自适应融合改写文本与解释知识。实验表明该框架在情感扰动下仍保持较好的检测性能，为可解释且鲁棒的虚假新闻检测提供思路。",
+      "llm_tldr": "虚假新闻常在不同情感语境下被改写，但事实主张保持不变，这会削弱现有检测模型的鲁棒性。本文研究事实保持的情感改写场景，构建情感改写测试集，并以原始新闻生成的大模型解释作为稳定背景知识。作者提出门控交叉注意力框架，自适应融合改写文本与解释知识。实验表明该框架在情感扰动下仍保持较好的检测性能，为可解释且鲁棒的虚假新闻检测提供思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.21159v1",
+      "source": "arxiv",
+      "title": "VisualTrust: Video Reasoning under On-Screen Claim Framing",
+      "abstract": "On-screen text can describe what a video shows, or it can frame what the video is supposed to mean. Current benchmarks treat both alike, testing whether a model can read the text rather than whether it should trust it. We study claim deference, multimodal large language models' tendency to let an on-screen claim override conflicting visual evidence. We introduce VisualTrust, a counterfactual benchmark with 5,063 cases across 14 claim-fact classes. Each case pairs a question with three versions of the same video: one with no claim, one with an accurate claim, and one with a misleading claim that alters a single grounded fact. The option the misleading claim supports is the trap answer. Across seven open-weight and four proprietary models, mean accuracy falls from 90.1% without a claim to 51.9% with a misleading claim. Among initially correct responses, 42.8% flip to the trap answer and only 0.6% become other errors. Strong no-claim accuracy does not ensure resistance. We also introduce DEAR (Decoupled Evidence Arbitration and Reading), a training-free agent for video question answering that separates evidence arbitration from reading. An independent check reports conflicting evidence, a selector weighs it without a fixed modality priority and blinds what it withholds, and the reader answers from the resulting video in a fresh context. On 500 videos across three proprietary models, DEAR raises accuracy under misleading claims from 47.2--64.0% to 81.8--85.2% and reduces trap-answer selection from 34.4--50.8% to 11.6--15.0%, while preserving no-claim accuracy.",
+      "authors": [
+        "Huachao Zhu",
+        "Junjielong Xu",
+        "Sicheng Li",
+        "Liang Yang",
+        "Mingtao Chen",
+        "Zhichao Hu",
+        "Li Jiang",
+        "Pinjia He"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-15T03:20:18+00:00",
+      "link": "https://arxiv.org/pdf/2610.21159v1",
+      "tags": [
+        "keyword:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "misleading on-screen claims conflicting with video evidence, cross-modal claim deference benchmark",
+      "llm_evidence_cn": "研究误导性屏幕文字与视频画面证据冲突时的判定",
+      "llm_evidence": "研究误导性屏幕文字与视频画面证据冲突时的判定",
+      "canonical_evidence": "研究误导性屏幕文字与视频画面证据冲突时的判定",
+      "llm_tldr_en": "Introduces VisualTrust, a 5,063-case counterfactual benchmark measuring claim deference when misleading on-screen text conflicts with video evidence, showing large accuracy drops across 11 MLLMs.",
+      "llm_tldr_cn": "现有视频基准只检验模型能否读懂屏幕文字，却未检验它是否应当相信该文字。作者提出VisualTrust反事实基准，包含5063个案例，为同一视频配无声明、准确声明与误导声明三个版本，并把误导声明支持的选项设为陷阱答案。对七个开源与四个闭源多模态大模型的评测显示，误导性屏幕声明使平均准确率显著下降。该工作揭示模型对文本声明的盲从，为跨模态证据冲突检测提供了可复用的评测手段。",
+      "llm_tldr": "现有视频基准只检验模型能否读懂屏幕文字，却未检验它是否应当相信该文字。作者提出VisualTrust反事实基准，包含5063个案例，为同一视频配无声明、准确声明与误导声明三个版本，并把误导声明支持的选项设为陷阱答案。对七个开源与四个闭源多模态大模型的评测显示，误导性屏幕声明使平均准确率显著下降。该工作揭示模型对文本声明的盲从，为跨模态证据冲突检测提供了可复用的评测手段。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2610.13783v1",
+      "source": "arxiv",
+      "title": "UkrMeme: Multimodal Explainable Persuasion Detection in Ukrainian Memes",
+      "abstract": "Memes play a central role in modern online communication, especially in contexts of political conflict where visual and textual cues combine to convey persuasive messages. We study persuasive technique detection in Ukrainian memes using vision-language models (VLMs). We introduce UkrMeme, a dataset of 200 organically produced Ukrainian wartime memes annotated for persuasion techniques, and PTM-UA, a Ukrainian translation of a subset of the Propaganda 950 benchmark that preserves original visual content while translating meme text. We evaluate VLMs in a zero-shot prompting setup across image, text, and multimodal inputs using hierarchical F1 metrics. Finally, we compare Layer-wise Relevance Propagation (LRP) and model-generated token attributions and analyze the semantic categories of evidence emphasized by each explanation method.",
+      "authors": [
+        "Nazar Andrushko",
+        "Vera Schmitt",
+        "Veronika Solopova"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.CV"
+      ],
+      "published": "2026-10-09T16:03:27+00:00",
+      "link": "https://arxiv.org/pdf/2610.13783v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "explainable multimodal detection of persuasion techniques in memes with VLMs",
+      "llm_evidence_cn": "用视觉语言模型可解释地检测模因说服手法",
+      "llm_evidence": "用视觉语言模型可解释地检测模因说服手法",
+      "canonical_evidence": "用视觉语言模型可解释地检测模因说服手法",
+      "llm_tldr_en": "UkrMeme introduces 200 Ukrainian wartime memes annotated for persuasion techniques plus a translated Propaganda 950 subset, evaluating vision-language models zero-shot across image, text and multimodal inputs with LRP-based explainability comparisons.",
+      "llm_tldr_cn": "在政治冲突语境中，模因常把视觉与文本线索结合以传递说服信息，但缺乏可解释的多模态说服手法检测资源。作者构建UkrMeme数据集，包含200条有机产生的乌克兰战时模因并标注说服手法，同时发布保留原始图像、仅翻译文本的PTM-UA。研究以零样本提示评测视觉语言模型在图像、文本与多模态输入下的层级F1表现，并比较LRP与模型自生成词元归因。结果揭示了各输入设置与解释方法的差异，为可解释的多模态宣传分析提供基准。",
+      "llm_tldr": "在政治冲突语境中，模因常把视觉与文本线索结合以传递说服信息，但缺乏可解释的多模态说服手法检测资源。作者构建UkrMeme数据集，包含200条有机产生的乌克兰战时模因并标注说服手法，同时发布保留原始图像、仅翻译文本的PTM-UA。研究以零样本提示评测视觉语言模型在图像、文本与多模态输入下的层级F1表现，并比较LRP与模型自生成词元归因。结果揭示了各输入设置与解释方法的差异，为可解释的多模态宣传分析提供基准。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.27974v1",
+      "source": "arxiv",
+      "title": "Media Intelligence Platform: Multimodal Detection of Synthetic and Manipulated Content",
+      "abstract": "The rapid progress of generative artificial intelligence has led to a significant increase in manipulated multimedia content, including synthetic faces, forged videos, AI-generated images, fake audio, and locally edited images. Existing detection approaches are typically designed for a single manipulation type, limiting their applicability in real-world scenarios involving heterogeneous media sources. In this work, we present the Media Intelligence Platform (MIP), a unified web-based framework for multimodal media forensics integrating specialized modules for fake video detection, face morphing detection, AI-generated image detection, audio deepfake detection, localized image manipulation detection, and text analysis. Its modular architecture enables flexible integration of heterogeneous models and supports future extensions for emerging manipulation techniques. Experimental results on representative benchmark datasets demonstrate reliable detection performance across multiple media modalities while providing a practical and user-friendly interface for forensic investigations. The platform highlights the potential of unified multimodal systems for comprehensive deepfake detection in real-world environments, and is accompanied by a public demonstrator released with this workshop submission to support reproducibility and community evaluation.",
+      "authors": [
+        "David Fischinger",
+        "Marcel Hasenbalg",
+        "Silvia Poletti",
+        "Davide Antonutti",
+        "Mina Schütz",
+        "Lam Pham",
+        "Justin Ilyes",
+        "Péter Rjabcsenkó",
+        "Simon Freitter",
+        "Martin Boyer"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.MM"
+      ],
+      "published": "2026-10-20T10:18:49+00:00",
+      "link": "https://arxiv.org/pdf/2610.27974v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "unified multimodal framework detecting synthetic and manipulated images, video, audio and text",
+      "llm_evidence_cn": "统一检测合成与篡改图像、视频、音频与文本的多模态框架",
+      "llm_evidence": "统一检测合成与篡改图像、视频、音频与文本的多模态框架",
+      "canonical_evidence": "统一检测合成与篡改图像、视频、音频与文本的多模态框架",
+      "llm_tldr_en": "Presents a unified web-based Media Intelligence Platform integrating modules for fake video, face morphing, AI-generated image, audio deepfake, localized manipulation and text analysis.",
+      "llm_tldr_cn": "生成式AI的进步使合成人脸、伪造视频、AI生成图像、假音频与局部编辑图像等篡改内容大幅增加，而现有检测方法通常只针对单一篡改类型，难以应对异构媒体来源。作者提出媒体智能平台MIP，一个基于网页的统一多模态媒体取证框架，集成假视频检测、人脸变形检测、AI生成图像检测、音频深度伪造检测、局部图像篡改检测与文本分析等专用模块。模块化架构使其能在真实场景中统一处理多种伪造类型。该平台为多模态虚假信息识别与媒体取证提供了一体化工具。",
+      "llm_tldr": "生成式AI的进步使合成人脸、伪造视频、AI生成图像、假音频与局部编辑图像等篡改内容大幅增加，而现有检测方法通常只针对单一篡改类型，难以应对异构媒体来源。作者提出媒体智能平台MIP，一个基于网页的统一多模态媒体取证框架，集成假视频检测、人脸变形检测、AI生成图像检测、音频深度伪造检测、局部图像篡改检测与文本分析等专用模块。模块化架构使其能在真实场景中统一处理多种伪造类型。该平台为多模态虚假信息识别与媒体取证提供了一体化工具。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2610.16879v1",
+      "source": "arxiv",
+      "title": "EviStress: Evidence Stress Learning for Generalizable Face Forgery Detection with Textual Explanations",
+      "abstract": "The rapid spread of face forgeries on the Web challenges the credibility of visual content. In practical Web environments, manipulated media originate from evolving generation pipelines and undergo diverse processing during dissemination, making reliable authenticity assessment under unseen manipulations and visual changes a critical challenge. We observe that a standard LoRA-adapted CLIP detector exhibits uneven patch-level decision dependence, concen trating a disproportionate share of class-specific relevance on a small fraction of visual patches. To improve robustness to variations in such highly dependent evidence, we propose EviStress, a two-stage framework for generalizable face forgery detection with textual explanations. In the first stage, Evidence-Targeted Patch Perturbation (ETPP) estimates patch dependence from global, relational, and semantic cues and assigns positively correlated perturbation probabilities, explicitly stress-testing highly dependent visual evidence during training. We further introduce Discriminative Variation Preservation (DVP), which constrains the residual between clean and perturbed representations to retain authenticity discriminative information. In the second stage, Intrinsic Evidence Instruction Tuning (IEIT) transfers the adapted CLIP encoder into LLaVA as its vision tower and performs parameter-efficient multimodal instruction tuning, enabling authenticity prediction and textual explanation directly from the learned forgery-sensitive representation without an external detector. Experiments demonstrate improved cross-dataset and cross-method generalization and corruption robustness, with the multimodal model providing authenticity predictions and human-readable explanations.",
+      "authors": [
+        "Jiuyao Jing",
+        "Xuanyu Yi",
+        "Yu Zheng",
+        "Chunlei Peng"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-12T14:41:54+00:00",
+      "link": "https://arxiv.org/pdf/2610.16879v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "generalizable visual forgery detection with textual explanations",
+      "llm_evidence_cn": "可泛化的视觉伪造检测与文本解释",
+      "llm_evidence": "可泛化的视觉伪造检测与文本解释",
+      "canonical_evidence": "可泛化的视觉伪造检测与文本解释",
+      "llm_tldr_en": "Face forgeries spread on the web under evolving generators and post-processing; EviStress observes uneven patch-level reliance in a LoRA-adapted CLIP detector and uses two-stage evidence stress learning for more generalizable detection with textual explanations.",
+      "llm_tldr_cn": "网络上面部伪造内容快速传播，在生成方式不断演进与传播处理下，可靠的真实性判定仍是难题。本文发现经LoRA适配的CLIP检测器在图像块层面的决策依赖分布不均，少数图像块承担了过多类别相关性，据此提出EviStress两阶段框架，通过证据压力学习提升模型对依赖证据变化的鲁棒性，并输出文本解释。实验表明该方法在未见篡改类型与视觉变化下具有更好的泛化性与可解释性。",
+      "llm_tldr": "网络上面部伪造内容快速传播，在生成方式不断演进与传播处理下，可靠的真实性判定仍是难题。本文发现经LoRA适配的CLIP检测器在图像块层面的决策依赖分布不均，少数图像块承担了过多类别相关性，据此提出EviStress两阶段框架，通过证据压力学习提升模型对依赖证据变化的鲁棒性，并输出文本解释。实验表明该方法在未见篡改类型与视觉变化下具有更好的泛化性与可解释性。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.19267v1",
+      "source": "arxiv",
+      "title": "MemeTrace: A Multimodal LLM-Based Agent for Safety-Aware Meme Provenance Analysis",
+      "abstract": "Online memes are often carriers of unsafe content such as disinformation and propaganda. Their rapid evolution in response to news events and strong dependence on contextual information make it difficult for platforms and moderators to detect and moderate them effectively. Moreover, existing moderation studies typically classify memes as safe or unsafe based on individual images, lacking the ability to perform broader provenance analysis, i.e., where a meme originates, how it spreads, what cultural symbolism it represents, whether it poses potential risks to society, etc. To bridge this gap, we introduce MemeTrace, a multimodal LLM-based agent that automatically traces the provenance and potential risks of emerging memes. We evaluate MemeTrace on Meme100, a dataset of 100 real-world memes, using both human annotation and automatic metrics. The results demonstrate that MemeTrace substantially outperforms the VLM baseline. More importantly, MemeTrace achieves higher accuracy in detecting unsafe memes, especially those involving disinformation and sensitive content, and remains robust under visual perturbations.",
+      "authors": [
+        "Bo Shao",
+        "Yihan Ma",
+        "Yiting Qu",
+        "Michael Backes",
+        "Yang Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.CY"
+      ],
+      "published": "2026-10-13T22:38:06+00:00",
+      "link": "https://arxiv.org/pdf/2610.19267v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multimodal LLM agent tracing disinformation-carrying memes",
+      "llm_evidence_cn": "追踪承载虚假信息的模因的多模态大模型智能体",
+      "llm_evidence": "追踪承载虚假信息的模因的多模态大模型智能体",
+      "canonical_evidence": "追踪承载虚假信息的模因的多模态大模型智能体",
+      "llm_tldr_en": "MemeTrace is a multimodal LLM agent that traces meme provenance, spread, cultural symbolism and societal risk, moving beyond per-image safe/unsafe classification to broader disinformation-aware moderation of memes.",
+      "llm_tldr_cn": "网络模因常被用作虚假信息与宣传的载体，其随新闻事件快速演化且高度依赖语境，现有审核方法多把单张图片判为安全或不安全，缺乏对来源与传播的溯源分析。作者提出MemeTrace，一个基于多模态大模型的智能体，自动追踪新兴模因的来源、传播路径、文化象征与潜在社会风险。评测显示其在模因溯源与风险判定上优于仅做安全分类的基线。该工作把多模态虚假信息治理从单条判定推进到溯源层面。",
+      "llm_tldr": "网络模因常被用作虚假信息与宣传的载体，其随新闻事件快速演化且高度依赖语境，现有审核方法多把单张图片判为安全或不安全，缺乏对来源与传播的溯源分析。作者提出MemeTrace，一个基于多模态大模型的智能体，自动追踪新兴模因的来源、传播路径、文化象征与潜在社会风险。评测显示其在模因溯源与风险判定上优于仅做安全分类的基线。该工作把多模态虚假信息治理从单条判定推进到溯源层面。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "automatically identifying misinformation from posts containing images, text, and video",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.21937v1",
+      "source": "arxiv",
+      "title": "Flow-CLIP: Image-Conditioned Residual Scoring for CompositionalImage-Text Matching",
+      "abstract": "Vision--language pre-training has enabled substantial progress in image--text retrieval and zero-shot recognition by learning transferable cross-modal representations. However, sentence-level alignment remains insufficient for compositional matching, where captions can describe the same objects and attributes while differing in how these elements are bound. To address this limitation, we propose Flow-CLIP, which refines global image-text alignment through image-conditioned changes in token--patch evidence. Global Compatibility Calibration (GCC) learns a sentence-level similarity metric, while Image-Conditioned Evidence Refinement (ICER) incorporates visual patch context into token queries and uses the resulting change in local matching evidence to adjust the global score. We further introduce Cross-Image Margin Ranking (CIMR), which compares the same positive--negative caption pair across matched and mismatched images, encouraging a larger ranking margin when the image supports the correct description. Experiments on compositional matching and attribute--object binding benchmarks show that Flow-CLIP improves binding accuracy over pretrained CLIP and learned global alignment through local evidence refinement, while cross-image ranking supervision mitigates reliance on language priors. Code will be released at link.",
+      "authors": [
+        "Minghong Wei",
+        "Enguang Zhu",
+        "Pu Cao",
+        "Lu Yang",
+        "Qing Song"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-15T14:12:30+00:00",
+      "link": "https://arxiv.org/pdf/2610.21937v1",
+      "tags": [
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "fine-grained image-text compositional matching via token-patch evidence",
+      "llm_evidence_cn": "基于词元与图块证据的细粒度图文组合匹配",
+      "llm_evidence": "基于词元与图块证据的细粒度图文组合匹配",
+      "canonical_evidence": "基于词元与图块证据的细粒度图文组合匹配",
+      "llm_tldr_en": "Flow-CLIP refines global image-text alignment with image-conditioned changes in token-patch evidence, improving compositional matching where captions bind the same objects differently.",
+      "llm_tldr_cn": "视觉语言预训练在图文检索上进展显著，但句子级对齐难以处理组合式匹配：同一组物体与属性可能以不同绑定方式表述。本文提出Flow-CLIP，通过图像条件下的词元与图块证据变化来细化全局对齐，其中全局兼容性校准学习句子级相似度，图像条件证据精炼将视觉图块上下文注入词元查询。方法提升了细粒度局部匹配的判别力。这为跨模态语义一致性与图文不匹配检测提供了可迁移的技术思路。",
+      "llm_tldr": "视觉语言预训练在图文检索上进展显著，但句子级对齐难以处理组合式匹配：同一组物体与属性可能以不同绑定方式表述。本文提出Flow-CLIP，通过图像条件下的词元与图块证据变化来细化全局对齐，其中全局兼容性校准学习句子级相似度，图像条件证据精炼将视觉图块上下文注入词元查询。方法提升了细粒度局部匹配的判别力。这为跨模态语义一致性与图文不匹配检测提供了可迁移的技术思路。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.23248v1",
+      "source": "arxiv",
+      "title": "Can the Parts Fool the Test? Counterfactual Pairing Cycles for Relational OOD",
+      "abstract": "Relational out-of-distribution errors are easy to describe and hard to evaluate cleanly. An image may be natural, a caption may be fluent, and all mentioned objects may be common, yet the caption may describe the wrong relation in the image. Many evaluations intended to test this behavior can be solved without checking the pairing at all, because negatives differ in caption style, template, length, object frequency, or image statistics. We propose counterfactual pairing cycles, a blocked evaluation primitive that reuses the same two images and the same two captions on both sides of the comparison, changing only which image is paired with which caption. This makes image-only, text-only, and additive component shortcuts cancel exactly in finite samples. The same contrast also gives a training loss for relational outlier exposure and a diagnostic for bilinear vision-language scores. Across synthetic controls, GQA, and COCO, cycles separate coarse image-caption matching from directional role-binding failures, while also identifying geometric size relations that remain strongly visible in global features. In a shortcut-contaminated COCO outlier-exposure stress test, a model selected by a near-perfect shortcut validation AUROC retains substantial relational signal but remains below cycle training on exact cycles; cycle training improves CycleAcc from 0.882 to 0.927. The main lesson is simple: to test whether a model understands a pairing, the benchmark should keep the parts fixed, change the pairing, and ask only about coupling. The official implementation is available online.",
+      "authors": [
+        "Yibo Zhou",
+        "Yirong Xiang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-10-16T10:22:00+00:00",
+      "link": "https://arxiv.org/pdf/2610.23248v1",
+      "tags": [
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "counterfactual image-caption pairing cycles isolating relational image-text mismatch",
+      "llm_evidence_cn": "反事实图文配对循环用于检测图文关系不匹配",
+      "llm_evidence": "反事实图文配对循环用于检测图文关系不匹配",
+      "canonical_evidence": "反事实图文配对循环用于检测图文关系不匹配",
+      "llm_tldr_en": "Proposes counterfactual pairing cycles, a blocked evaluation primitive that reuses the same two images and captions and swaps only the pairing, cancelling unimodal shortcuts in relational image-caption mismatch tests.",
+      "llm_tldr_cn": "图文关系错误容易描述却难以干净评测，因为负样本常在标题风格、长度、物体频率或图像统计上与正样本不同，模型可绕过配对检查走捷径。作者提出反事实配对循环这一区组评测原语，在比较两侧复用同一对图像与同一对文本，仅改变谁与谁配对，使图像单模态、文本单模态与加性组件捷径在有限样本下精确抵消。该设计能更可靠地暴露模型真实的关系匹配能力，为跨模态语义一致性评测提供更严谨的实验范式。",
+      "llm_tldr": "图文关系错误容易描述却难以干净评测，因为负样本常在标题风格、长度、物体频率或图像统计上与正样本不同，模型可绕过配对检查走捷径。作者提出反事实配对循环这一区组评测原语，在比较两侧复用同一对图像与同一对文本，仅改变谁与谁配对，使图像单模态、文本单模态与加性组件捷径在有限样本下精确抵消。该设计能更可靠地暴露模型真实的关系匹配能力，为跨模态语义一致性评测提供更严谨的实验范式。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "cross modal semantic consistency and image text mismatch detection for misinformation verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2610.28087v1",
+      "source": "arxiv",
+      "title": "WildAIGC-Bench: Can AI Image Detectors Handle the Wild? A Benchmark of Generated and Edited Images in Online Circulation",
+      "abstract": "AI-generated images linked to news events and online claims can mislead audiences, enable fraud, or cause public controversy. We introduce WildAIGC-Bench, built through recurring collection across news websites, fact-checking sources, and related social media content. The pipeline combines broad coverage, timely updates, and human-verified labels through scheduled discovery, automatic screening and preliminary annotation, and human review of image-specific evidence. The benchmark contains 407 verified AI-generated or edited images, each accompanied by a source webpage link and an evidence summary. Images retain the conditions encountered online, including compression, screenshots, and recapture. Evaluation of dedicated visual detectors, multimodal large language models, and a simple Perception Encoder baseline reveals substantial recall gaps relative to existing benchmarks. WildAIGC-Bench provides both a practical detection challenge and a basis for continued data expansion and source-based verification. The dataset is released at https://github.com/YuZijian/WildAIGC-Bench.",
+      "authors": [
+        "Zijian Yu",
+        "Hangwei Zhang",
+        "Jun Lan",
+        "Huijia Zhu",
+        "Weiqiang Wang",
+        "Jianfu Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-10-20T12:07:16+00:00",
+      "link": "https://arxiv.org/pdf/2610.28087v1",
+      "tags": [
+        "keyword:MFND",
+        "query:MFND"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark of AI-generated images in online circulation with evidence summaries",
+      "llm_evidence_cn": "在线传播中AI生成图像的基准与证据摘要",
+      "llm_evidence": "在线传播中AI生成图像的基准与证据摘要",
+      "canonical_evidence": "在线传播中AI生成图像的基准与证据摘要",
+      "llm_tldr_en": "AI-generated images tied to news and online claims can mislead audiences; WildAIGC-Bench collects 407 verified generated or edited images from news sites, fact-checking sources and social media, retaining real-world compression and recapture conditions for detector evaluation.",
+      "llm_tldr_cn": "与新闻事件和网络论断相关的AI生成图像可能误导公众，但现有检测器在真实传播环境下的表现尚不清楚。本文构建WildAIGC-Bench基准，通过定期从新闻网站、事实核查来源与社交媒体采集，经自动筛选与人工复核标注，收录407张经验证的AI生成或编辑图像及其来源链接与证据摘要。图像保留压缩、截图、翻拍等真实条件，为评测生成图像检测器的鲁棒性提供了贴近实际的基准。",
+      "llm_tldr": "与新闻事件和网络论断相关的AI生成图像可能误导公众，但现有检测器在真实传播环境下的表现尚不清楚。本文构建WildAIGC-Bench基准，通过定期从新闻网站、事实核查来源与社交媒体采集，经自动筛选与人工复核标注，收录407张经验证的AI生成或编辑图像及其来源链接与证据摘要。图像保留压缩、截图、翻拍等真实条件，为评测生成图像检测器的鲁棒性提供了贴近实际的基准。",
+      "llm_tags": [
+        "query:mfnd"
+      ],
+      "matched_query_tag": "query:mfnd",
+      "matched_query_text": "explainable and domain generalizable multimodal misinformation detection methods and benchmarks",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-13T23:24:41.627009+00:00",
-  "updated_date": "20261013",
+  "generated_at": "2026-10-21T09:12:12.755281+00:00",
+  "updated_date": "20260922-20261021",
   "carryover_days": 9,
   "tag_states": {
     "MFND": {
-      "updated_date": "20261013",
+      "updated_date": "20260922-20261021",
       "carryover_days": 9,
       "items": []
     }
